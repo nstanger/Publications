@@ -9,11 +9,11 @@ IwC_paper.pdf: IwC_paper.ps
 
 IwC_paper.ps: IwC_paper.dvi
 
-IwC_paper.dvi: IwC_paper.tex $(GRAPHICS)
+IwC_paper.dvi: IwC_paper.tex
 	latex $<
 	latex $<
 
-IwC_paper.tex: IwC_paper.bbl
+IwC_paper.tex: $(GRAPHICS) IwC_paper.bbl
 
 
 test-screenshot.eps: test-screenshot.tif
