@@ -1,0 +1,71 @@
+#musthave field1
+#musthave field2
+#musthave label1
+#musthave label2
+
+#proc settings
+	units: cm
+#endproc
+
+#proc getdata
+	delim: comma
+	fieldnameheader: yes
+	data:
+		block, combo_mouse_move, combo_touch_move, check_mouse_move, check_touch_move
+		1, 2.194583333, 3.220412037, 1.31625463, 4.07544213
+		2, 2.149467593, 2.544164352, 1.301625, 2.293645833
+		3, 2.167368056, 2.374134259, 1.277354167, 2.002578704
+		4, 2.107435185, 2.729488426, 1.260993056, 3.019840278
+		5, 2.108939815, 2.52312037, 1.232050926, 1.88675463
+		6, 2.068502315, 2.191631944, 1.216634259, 2.059671296
+
+#proc areadef
+	#if @field1 = "combo_mouse_move"
+		title: Combo box
+	#else
+		title: Check box
+	#endif
+	titledetails: size=10 style=B align=C
+	areaname: standard
+	yrange: 1 4.25
+	xrange: 0.5 6.5
+	autowidth: 0.33
+	autoheight: 0.66
+
+#proc yaxis:
+	stubs: inc
+	stubformat: %2.1f
+	stubdetails: size=10
+	label: Movement time (s)
+	labeldetails: style=B size=10 adjust=-0.1,0
+	grid: color=gray(0.7)
+
+#proc xaxis:
+	stubs: datafields=block
+	stubdetails: size=10
+	label: Test block
+	labeldetails: style=B size=10 adjust=0,-0.1
+	//adjust=-0.1,0
+
+#proc lineplot
+	xfield: block
+	yfield: @field1
+	linedetails: color=red
+	pointsymbol: shape=diamond linecolor=red fillcolor=red
+	legendlabel: @label1
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: block
+	yfield: @field2
+	linedetails: color=blue
+	pointsymbol: shape=square linecolor=blue fillcolor=blue
+	legendlabel: @label2
+	legendsampletype: line+symbol
+
+#proc legend
+	format: multiline
+	location: max-1.2 max-0.3
+	textdetails: size=10
+	seglen: 0.25
+	reverseorder: yes

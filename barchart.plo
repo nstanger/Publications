@@ -1,6 +1,6 @@
 #musthave yrange
 #musthave ylabel
-#musthave fieldname
+#musthave field
 #musthave ystubfmt
 
 #proc settings
@@ -9,23 +9,25 @@
 #proc getdata
 	delim: comma
 	fieldnameheader: yes
-	data:	target_type, throughput, movement_time, error_rate
-			Text Box, 0.958, 0.972, 7.767
-			Button, 1.505, 1.035, 7.333
-			Check Box, 1.967, 1.638, 78.467
-			Combo Box, 0.501, 2.130, 33.467
+	data:
+		target_type, throughput, movement_time, error_rate
+		Text box, 0.958, 0.972, 7.767
+		Button, 1.505, 1.035, 7.333
+		Check box, 1.967, 1.638, 78.467
+		Combo box, 0.501, 2.130, 33.467
 
 #proc areadef
 	areaname: slide
+	autowidth: 0.9
 	yrange: @yrange
-	xrange: 0 5
+	xrange: 0.25 4.75
 
 #proc yaxis:
 	stubs: inc
 	stubformat: @ystubfmt
 	stubdetails: size=10
 	label: @ylabel
-	labeldetails: style=B size=10 adjust=-0.2,0
+	labeldetails: style=B size=10 adjust=-0.1,0
 	grid: color=gray(0.7)
 
 #proc xaxis:
@@ -34,7 +36,7 @@
 	tics: none
 
 #proc bars
-	lenfield: @fieldname
+	lenfield: @field
 	color: blue
 	labelword: @@N
 	labeldetails: size=10 adjust=0,0.2
