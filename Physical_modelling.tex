@@ -9,94 +9,297 @@
 \maketitle
 
 \begin{abstract}
-In this paper we describe a graphical notation for modelling physical database structures. Such a notation will provide database administrators with a means to model the physical structures of new and existing databases, and thus enable them to make more proactive and informed tuning decisions, compared to existing database monitoring tools.
+In this paper we describe a graphical notation for modelling physical
+database structures. Such a notation will provide database
+administrators with a means to model the physical structures of new and
+existing databases, and thus enable them to make more proactive and
+informed tuning decisions, compared to existing database monitoring
+tools.
 \end{abstract}
 
 
 \section{Introduction}
 
-The design and implementation of a database system, as with most information systems, typically goes through several phases \cite{BeDa-P-2003}, including requirements analysis, conceptual modelling, logical modelling, physical modelling and implementation. Conceptual, logical and physical modelling are of particular interest here, as each represents a step in a progression from a higher to a lower level of abstraction \cite{Tsic-D-1978}. Conceptual models are typically very high-level and abstract, using techniques such as entity-relationship modelling, and are derived from the requirements. Logical level models represent the structure of a database in a form that is closer to the final physical representation, yet still sufficiently abstract to isolate application from the physical representation details (ref). Logical level models are typically derived from the corresponding conceptual models by some transformation process (ref), and use formalisms such as the relational model.
+The design and implementation of a database system, as with most
+information systems, typically goes through several phases
+\cite{BeDa-P-2003}, including requirements analysis, conceptual
+modelling, logical modelling, physical modelling and implementation.
+Conceptual, logical and physical modelling are of particular interest
+here, as each represents a step in a progression from a higher to a
+lower level of abstraction \cite{Tsic-D-1978}. Conceptual models are
+typically very high-level and abstract, using techniques such as
+entity-relationship modelling, and are derived from the requirements.
+Logical level models represent the structure of a database in a form
+that is closer to the final physical representation, yet still
+sufficiently abstract to isolate application from the physical
+representation details (ref). Logical level models are typically derived
+from the corresponding conceptual models by some transformation process
+(ref), and use formalisms such as the relational model.
 
-Physical level models represent the structure of a database in terms of the physical storage structures provided by a specific database management system (DBMS) such as Oracle or DB2. Once again, the physical model for a database can be derived from the logical level model by some form of transformation \cite{Bato-DS-1985,Conn-TM-2002}. Because of it's low level of abstraction, modelling the physical level of a database is typically one of the last phases of implementation, and tends to be very product-specific. Consequently, physical level structures are not typically modelled using graphical notations, unlike models at the higher levels of abstraction. (refs?)
+Physical level models represent the structure of a database in terms of
+the physical storage structures provided by a specific database
+management system (DBMS) such as Oracle or DB2. Once again, the physical
+model for a database can be derived from the logical level model by some
+form of transformation \cite{Bato-DS-1985,Conn-TM-2002}. Because of it's
+low level of abstraction, modelling the physical level of a database is
+typically one of the last phases of implementation, and tends to be very
+product-specific. Consequently, physical level structures are not
+typically modelled using graphical notations, unlike models at the
+higher levels of abstraction. (refs?)
 
-Physical modelling is, however, equally as important as, if not \emph{more} important than the higher levels of modelling, because it is the physical level that has the greatest impact on the performance of a database \cite{BeDa-P-2003}. It is therefore somewhat surprising that there have been relatively few attempts to devise a graphical physical modelling notation that can be used to represent the physical structures of a database. Use of such a notation provides several advantages \cite{BeDa-P-1992-PDD,Conn-TM-2002,Will-J-1992}:
+Physical modelling is, however, equally as important as, if not
+\emph{more} important than the higher levels of modelling, because it is
+the physical level that has the greatest impact on the performance of a
+database \cite{BeDa-P-2003}. It is therefore somewhat surprising that
+there have been relatively few attempts to devise a graphical physical
+modelling notation that can be used to represent the physical structures
+of a database. Use of such a notation provides several advantages
+\cite{BeDa-P-1992-PDD,Conn-TM-2002,Will-J-1992}:
 
 \begin{itemize}
 
-	\item it can reduce complexity and thus aid communication and improve understandability \cite{Tuft-ER-1997};
+	\item it can reduce complexity and thus aid communication and
+	improve understandability \cite{Tuft-ER-1997};
 
-	\item it can provide a more complete and integrated display of tables and performance tuning techniques in a database;
-	
-	\item database developers can be more confident about the design decisions that they make for the performance of the database;
-	
-	\item database performance problems are more easily visaualised using a graphical notation; and
-	
-	\item a specific methodology is developed and used, thus allowing the developer to resolve physical performance issues in a more systematic manner.
+	\item it can provide a more complete and integrated display of
+	tables and performance tuning techniques in a database;
+
+	\item database developers can be more confident about the design
+	decisions that they make for the performance of the database;
+
+	\item database performance problems are more easily visaualised
+	using a graphical notation; and
+
+	\item a specific methodology is developed and used, thus allowing
+	the developer to resolve physical performance issues in a more
+	systematic manner.
 
 \end{itemize}
 
-These benefits are embodied in database performance monitoring tools such as Quest's SpotLight (ref), which provides a higher-level visualisation of a database's structures in order to easily identify and highlight performance problems. Such tools, however, are primarily intended as \emph{monitoring} tools rather than as \emph{design} tools. They may therefore unintentionally encourage database administrators (DBAs) into a \emph{reactive} mode of continually ``tweaking'' the database to resolve performance issues, rather than a \emph{proactive} mode of anticipating problems, by means of prior analysis and modelling. It may also be difficult for a DBA using such tools to gain a clear and comprehensive overview of all the tuning techniques that are in use within a particular database \cite{Core-MJ-1997-OracleDW}.
+These benefits are embodied in database performance monitoring tools
+such as Quest's SpotLight (ref), which provides a higher-level
+visualisation of a database's structures in order to easily identify and
+highlight performance problems. Such tools, however, are primarily
+intended as \emph{monitoring} tools rather than as \emph{design} tools.
+They may therefore unintentionally encourage database administrators
+(DBAs) into a \emph{reactive} mode of continually ``tweaking'' the
+database to resolve performance issues, rather than a \emph{proactive}
+mode of anticipating problems, by means of prior analysis and modelling.
+It may also be difficult for a DBA using such tools to gain a clear and
+comprehensive overview of all the tuning techniques that are in use
+within a particular database \cite{Core-MJ-1997-OracleDW}.
 
-In this paper we propose a graphical notation for modelling the physical structures of a database system, which builds upon a methodology for physical database design proposed by Beynon-Davies \cite{BeDa-P-1992-PDD}. In Section~\ref{sec-techniques}, we provide a brief overview of current commonly used physical tuning techniques. We then proceed in Section~\ref{sec-previous} to discuss prior approaches to physical modelling and design. Section~\ref{sec-notation} introduces our proposed notation, and Section~\ref{sec-future} discusses possible future work. The paper concludes in Setion~\ref{sec-conclusion}.
+In this paper we propose a graphical notation for modelling the physical
+structures of a database system, which builds upon a methodology for
+physical database design proposed by Beynon-Davies
+\cite{BeDa-P-1992-PDD}. In Section~\ref{sec-techniques}, we provide a
+brief overview of current commonly used physical tuning techniques. We
+then proceed in Section~\ref{sec-previous} to discuss prior approaches
+to physical modelling and design. Section~\ref{sec-notation} introduces
+our proposed notation, and Section~\ref{sec-future} discusses possible
+future work. The paper concludes in Setion~\ref{sec-conclusion}.
 
 
 \section{Physical tuning techniques}
 \label{sec-techniques}
 
-DBMSs tend to be I/O bound, so the main bottleneck in any database system is usually the speed of offline storage such as disk drives. Retrieving data from a hard disk is theoretically about six orders of magnitude slower than retrieving the same data from RAM\footnote{On the order of milliseconds (\(10^{-3}\)) for disk versus nanoseconds (\(10^{-9}\)) for RAM.}, although in practice the difference is usually less due to many factors \cite{Eric-Schmidt-Google}. The ultimate aim of any physical tuning strategy is thus to minimise the impact of slow storage, either by directly reducing the number of physical disk accesses required, or by parallelising access to the disk in order to reduce contention for a limited resource.
+DBMSs tend to be I/O bound, so the main bottleneck in any database
+system is usually the speed of offline storage such as disk drives.
+Retrieving data from a hard disk is theoretically about six orders of
+magnitude slower than retrieving the same data from RAM\footnote{On the
+order of milliseconds (\(10^{-3}\)) for disk versus nanoseconds
+(\(10^{-9}\)) for RAM.}. The ultimate aim of any physical tuning
+strategy is thus to minimise the impact of slow storage, either by
+directly reducing the number of physical disk accesses required, or by
+parallelising access to the disk in order to reduce contention for a
+limited resource.
 
-These considerations have led to the development of five general physical tuning techniques, which have been implemented to various degrees by most of the mainstream DBMS products: indexes, hashing, clustering, partitioning and replication.
+These considerations have led to the development of five general
+physical tuning techniques, which have been implemented to various
+degrees by most mainstream DBMS products:
 
-\subsection{Indexes}
+% following sections way too long --- shorten considerably
 
-A common database operation is to request a specific data record identified by a some key value. When such a request occurs, the DBMS must locate this record on disk (assuming that it is not already cached elsewhere). If we assume that the records are randomly ordered with respect to the chosen key value, then the DBMS has no option but to perform a sequential scan of all the records, which will require on average\(n/2b\) disk accesses, where \(n\) is the number of records and \(b\) is the number of records per database block (the worst case is \((n - 1)(b)\)). Sorting the records on the key value will obviously help for searches based on that key value, but will not help for searches based on a different key value.
+\begin{description}
 
-One solution is to build a separate index structure that associates key values with their corresponding physical record. Because indexes are stored separately, we can provide multiple indexes on different key values for the same set of records. In addition, by choosing an appropriate data structure for the index, we can improve the efficiency of searching and thus reduce the number of physical disk accesses required \cite{Roti-S-1996}. Most modern DBMSs use some variant of the \emph{B+-tree} structure \cite{Knut-DE-1997-Art}. This structure has average and worst case performance of (formula) and (formula), respectively.
+	\item[Indexes] reduce the number of physical disk accesses required
+	to retrieve a specific record, most typically by building a B+-tree 
+	\cite{Knut-DE-1997-Art} based on some key value. Without any
+	indexes, a DBMS often has little choice but to perform a sequential
+	scan in order to locate a specific record.
 
-Indexes are a ``pure'' disk access minimisation technique, that is, they reduce the number of physical disk accesses required, but do not provide any form of paralellism. B-tree indexes perform well for a wide range of typical database queries (ref), but can suffer in high update environments due to the need to also update the index.
+% A common database operation is to request a specific data record
+% identified by a some key value. When such a request occurs, the DBMS
+% must locate this record on disk (assuming that it is not already cached
+% elsewhere). If we assume that the records are randomly ordered with
+% respect to the chosen key value, then the DBMS has no option but to
+% perform a sequential scan of all the records, which will require on
+% average\(n/2b\) disk accesses, where \(n\) is the number of records and
+% \(b\) is the number of records per database block (the worst case is
+% \((n - 1)(b)\)). Sorting the records on the key value will obviously
+% help for searches based on that key value, but will not help for
+% searches based on a different key value.
+% 
+% One solution is to build a separate index structure that associates key
+% values with their corresponding physical record. Because indexes are
+% stored separately, we can provide multiple indexes on different key
+% values for the same set of records. In addition, by choosing an
+% appropriate data structure for the index, we can improve the efficiency
+% of searching and thus reduce the number of physical disk accesses
+% required \cite{Roti-S-1996}. Most modern DBMSs use some variant of the
+% \emph{B+-tree} structure \cite{Knut-DE-1997-Art}. This structure has
+% average and worst case performance of (formula) and (formula),
+% respectively.
+% 
+% Indexes are a ``pure'' disk access minimisation technique, that is, they
+% reduce the number of physical disk accesses required, but do not provide
+% any form of paralellism. B-tree indexes perform well for a wide range of
+% typical database queries (ref), but can suffer in high update
+% environments due to the need to also update the index.
 
 
-\subsection{Hashing}
+	\item[Hashing] is a method of quickly locating specific records by
+	passing a key value through a \emph{hash function}. This function
+	returns the physical location of a hash bucket, which contains a
+	pointer to the associated physical record (check). Hashing schemes
+	typically require only a single disk access to retrieve a specific
+	record.
 
-Hashing is another pure disk access minimisation technique that performs well for exact key queries on very large tables. Rather than build a separate index structure, a key value is passed to a \emph{hash function}. This function returns the physical location of a hash bucket, which contains a pointer to the associated physical record (check). Hashing schemes typically require only a single disk access to retrieve a specific record, but perform poorly for queries that require the retrieval of multiple records.
-
-
-\subsection{Clustering}
-
-Clustering is a disk access minimisation technique that can be applied when two different record types are logically related, and thus commonly retrieved together; for example, an order header and its order lines. Without any further optimisation, such an operation could at worst require one disk access for the order header and one disk access for each of its order lines.
-
-To improve this situation, we \emph{cluster} the two record types, so that related physical records are physically adjacent to each other \cite{Chan-N-2003-clustering}. This usually means that all the records will be stored in the same database block, and can thus all be retrieved with a single disk access. Clustering can, however, be expensive to maintain in a high update environment.
-
-
-\subsection{Partitioning}
-
-In a typical untuned database, all data will be stored on the same disk. If the database is heavily accessed, then contention for the single I/O channel to this disk becomes a major bottleneck. Partitioning reduces this contention by splitting the database into disjoint partitions, each of which is assigned to a different disk. This approach is particularly advantageous in situations where multiple users wish to access different subsets of a set of records, because it provides a disjoint physical access paths to each of the partitions. This reduces I/O channel contention and thus improves performance. Partitioning is thus primarily an access parallelism technique.
-
-Partitioning can also provide some disk access minimisation benefits, because the amount of data to be searched in each partition is smaller than if the database were not partitioned.
+% Hashing is another pure disk access minimisation technique that performs
+% well for exact key queries on very large tables. Rather than build a
+% separate index structure, a key value is passed to a \emph{hash
+% function}. This function returns the physical location of a hash bucket,
+% which contains a pointer to the associated physical record (check).
+% Hashing schemes typically require only a single disk access to retrieve
+% a specific record, but perform poorly for queries that require the
+% retrieval of multiple records.
 
 
-\subsection{Replication}
+	\item[Clustering] minimises disk access by ensuring that related
+	records (such as an order header and its assocaited order lines) are
+	physically adjacent to each other on disk
+	\cite{Chan-N-2003-clustering}. This usually means that related
+	records will be stored in the same database block, and can thus all
+	be retrieved with a single disk access.
 
-Replication is an access parallelism technique in which multiple copies of the same records are placed on different disks, thus providing multiple physical access paths to the same data.
+% Clustering is a disk access minimisation technique that can be applied
+% when two different record types are logically related, and thus commonly
+% retrieved together; for example, an order header and its order lines.
+% Without any further optimisation, such an operation could at worst
+% require one disk access for the order header and one disk access for
+% each of its order lines.
+% 
+% To improve this situation, we \emph{cluster} the two record types, so
+% that related physical records are physically adjacent to each other
+% \cite{Chan-N-2003-clustering}. This usually means that all the records
+% will be stored in the same database block, and can thus all be retrieved
+% with a single disk access. Clustering can, however, be expensive to
+% maintain in a high update environment.
 
 
-\subsection{Discussion}
+	\item[Partitioning] provides parallel access paths to data by
+	physically splitting a table into disjoint parts and ideally placing
+	them on separate disks. This is particularly advantageous in
+	situations where multiple users wish to access different subsets of
+	a set of records, because it provides a separate physical access
+	path to each of the partitions. Partitioning can also reduce the
+	number of disk accesses required, because the amount of data to be
+	searched in each partition is smaller than if the table were not
+	partitioned.
 
-The physical tuning techniques described above are normally used in different parts of the database to achieve different effects. To choose an appropriate physical tuning technique, the DBA must consider various factors that will either benefit the users of the database or improve the performance of the database as a whole. While most of the techniques can be combined to varying degrees, simply applying all techniques is usually not an optimal solution, because each technique has different conditions in which it excels. What are optimal conditions for one technique may be the exact opposite for another, so the DBA needs to be able to model all the available information in order to develop an appropriate physical design.
+% In a typical untuned database, all data will be stored on the same disk.
+% If the database is heavily accessed, then contention for the single I/O
+% channel to this disk becomes a major bottleneck. Partitioning reduces
+% this contention by splitting the database into disjoint partitions, each
+% of which is assigned to a different disk. This approach is particularly
+% advantageous in situations where multiple users wish to access different
+% subsets of a set of records, because it provides a disjoint physical
+% access paths to each of the partitions. This reduces I/O channel
+% contention and thus improves performance. Partitioning is thus primarily
+% an access parallelism technique.
+% 
+% Partitioning can also provide some disk access minimisation benefits,
+% because the amount of data to be searched in each partition is smaller
+% than if the database were not partitioned.
+
+
+	\item[Replication] provides parallel access to data by making
+	multiple copies of the same records and ideally placing them on
+	separate disks. This is particularly advantageous if multiple users
+	need to access the same sets of records, but is more complex to
+	manage due to the need to keep replicas synchronised.
+
+% Replication is an access parallelism technique in which multiple copies
+% of the same records are placed on different disks, thus providing
+% multiple physical access paths to the same data.
+
+\end{description}
+
+
+% \subsection{Discussion}
+
+The physical tuning techniques described above are normally used in
+different parts of the database to achieve different effects. To choose
+an appropriate physical tuning technique, the DBA must consider various
+factors that will either benefit the users of the database or improve
+the performance of the database as a whole. While most of the techniques
+can be combined to varying degrees, simply applying all techniques is
+usually not an optimal solution, because each technique has different
+conditions in which it excels. What are optimal conditions for one
+technique may be the exact opposite for another, so the DBA needs to be
+able to model all the available information in order to develop an
+appropriate physical design.
 
 
 
 \section{Prior physical modelling techniques}
 \label{sec-previous}
 
-To achieve an effective physical design requires a large amount of information, particularly with regard to the (predicted or actual) volume and usage of data within the database \cite{BeDa-P-2003}. Incorporating this information into a graphical model can provides a more concise and clearer overview of the physical aspects of a database system. In this section we discuss three previous efforts at modelling such information in a graphical manner.
+To achieve an effective physical design requires a large amount of
+information, particularly with regard to the (predicted or actual)
+volume and usage of data within the database \cite{BeDa-P-2003}.
+Incorporating this information into a graphical model can provides a
+more concise and clearer overview of the physical aspects of a database
+system. In this section we discuss three previous efforts at modelling
+such information in a graphical manner.
 
 
 \subsection{Agile modeling (Ambler)}
 
-The notation suggested by Ambler \cite{Ambl-SW-2003-ADT,Ambl-SW-2004-ObjPrimer3} is a type of model that can be developed in UML using class boxes. He states that since Unified Modelling Language (UML) does not cover data (i.e., ER) modelling yet, he presents the solution in this paper. Ambler has argued for some time for the presence of data modelling in UML \cite{Ambl-SW-1998-BOA}, and has suggested various ways that it should be done. It is enlightening to know that Ambler is not alone in his quest for adopting an industry standard in data modelling. Other methodologies like \cite{Naib-EJ-2001-UMLDD} have recognized the need as well. This model type is built on the practice of UML 2.0 of separating core methodology. Ambler admits that the methodology that he has presented is not perfect and it focuses on the physical modelling of a relational database. In this model he also tries to stress style issues that according to him are not appropriate for a proper UML profile \cite{Ambl-SW-2003-ADT}.
+The notation suggested by Ambler
+\cite{Ambl-SW-2003-ADT,Ambl-SW-2004-ObjPrimer3} is a type of model that
+can be developed in UML using class boxes. He states that since Unified
+Modelling Language (UML) does not cover data (i.e., ER) modelling yet,
+he presents the solution in this paper. Ambler has argued for some time
+for the presence of data modelling in UML \cite{Ambl-SW-1998-BOA}, and
+has suggested various ways that it should be done. It is enlightening to
+know that Ambler is not alone in his quest for adopting an industry
+standard in data modelling. Other methodologies like
+\cite{Naib-EJ-2001-UMLDD} have recognized the need as well. This model
+type is built on the practice of UML 2.0 of separating core methodology.
+Ambler admits that the methodology that he has presented is not perfect
+and it focuses on the physical modelling of a relational database. In
+this model he also tries to stress style issues that according to him
+are not appropriate for a proper UML profile \cite{Ambl-SW-2003-ADT}.
 
-This model suggests that a class box without a stereotype in a physical database design is a table. It also represents views that have dependencies on the table structures. Tables, entities and views are all modelled using class boxes. The class boxes that appear on the logical and conceptual model are entities so the stereotype is optional. Similarly, it is assumed that any class box without a stereotype on a physical data model is a table. Ambler's methodology seems to be limited in terms of annotations. All representations whether tables or indices are modelled using class boxes. This representation can sometimes be confusing and exact identification of tables and indices in the system has to be known by the database designer. In this model, relationships are modelled using associations that are derived from the logical data model. He further discusses his methodology for modelling attributes and columns, keys, constraints and triggers, stored procedures and sections. Ambler states that requirements for something should be identified before it is built. He states the requirements of each model, e.g., requirements that are needed to model entities and tables, requirements that are needed to model relationships, etc.
+This model suggests that a class box without a stereotype in a physical
+database design is a table. It also represents views that have
+dependencies on the table structures. Tables, entities and views are all
+modelled using class boxes. The class boxes that appear on the logical
+and conceptual model are entities so the stereotype is optional.
+Similarly, it is assumed that any class box without a stereotype on a
+physical data model is a table. Ambler's methodology seems to be limited
+in terms of annotations. All representations whether tables or indices
+are modelled using class boxes. This representation can sometimes be
+confusing and exact identification of tables and indices in the system
+has to be known by the database designer. In this model, relationships
+are modelled using associations that are derived from the logical data
+model. He further discusses his methodology for modelling attributes and
+columns, keys, constraints and triggers, stored procedures and sections.
+Ambler states that requirements for something should be identified
+before it is built. He states the requirements of each model, e.g.,
+requirements that are needed to model entities and tables, requirements
+that are needed to model relationships, etc.
 
 An example of Ambler's notation is shown in Figure~\ref{fig-Ambler}.
 
@@ -105,26 +308,142 @@ An example of Ambler's notation is shown in Figure~\ref{fig-Ambler}.
 	\label{fig-Ambler}
 \end{figure}
 
-Even though a lot of detail is covered in his suggestion, Ambler's methodology somehow seems relatively weak. It is much too general in annotations and has no specific description. The methodology seems to consistently confuse the logical and physical design. For example: both are modelled using class boxes but are later explained as representing different objects. However, this model will definitely be useful as a stepping-stone to work towards an official UML data modelling profile.
+Even though a lot of detail is covered in his suggestion, Ambler's
+methodology somehow seems relatively weak. It is much too general in
+annotations and has no specific description. The methodology seems to
+consistently confuse the logical and physical design. For example: both
+are modelled using class boxes but are later explained as representing
+different objects. However, this model will definitely be useful as a
+stepping-stone to work towards an official UML data modelling profile.
 
 
 \subsection{Physical design using an entity model (Beynon-Davies)}
 
-The closest model that demonstrates the link between conceptual, logical and physical design work is by Beynon-Davies \cite{BeDa-P-1992-PDD}. He suggests a method that can be used for the physical design process. The paper defines physical modelling as ``the transformation of the logical model into a definition of the physical model suitable for a specific software/hardware configuration'' \cite{BeDa-P-1992-PDD}.
+The closest model that demonstrates the link between conceptual, logical
+and physical design work is by Beynon-Davies \cite{BeDa-P-1992-PDD}. He
+suggests a method that can be used for the physical design process. The
+paper defines physical modelling as ``the transformation of the logical
+model into a definition of the physical model suitable for a specific
+software/hardware configuration'' \cite{BeDa-P-1992-PDD}.
 
-According to Beynon-Davies one of the first steps that must be taken to move from logical to physical database design is to establish estimates of the average and maximum number of instances per entity (volume analysis).
-Volatility analysis is represented in the same way. Similar to volume analysis, volatility analysis cannot be used as a measure if a table is continually growing. It is most effective if the size of the table is static.
-Figure 9 summarizes Beynon-Davies's final modelling method; he does not model all the individual annotations but generalizes the entity relationship diagrams into a general model. 
+According to Beynon-Davies one of the first steps that must be taken to
+move from logical to physical database design is to establish estimates
+of the average and maximum number of instances per entity (volume
+analysis). Volatility analysis is represented in the same way. Similar
+to volume analysis, volatility analysis cannot be used as a measure if a
+table is continually growing. It is most effective if the size of the
+table is static. Figure 9 summarizes Beynon-Davies's final modelling
+method; he does not model all the individual annotations but generalizes
+the entity relationship diagrams into a general model.
 
-It is understandable that the reason behind this generalization is to minimize complexity and since individual annotations are developed in the beginning, references can be made to them if needed. This might be effective for small systems that have a limited number of tables. However, for medium to large-scale projects, Beynon-Davies suggests that a systematic analysis of volatility and usage should be done. This analysis would constitute a map of the database application that would be maintained by the DBA. This meets the objective of providing an overview of all the performance tuning techniques and data in place.
+It is understandable that the reason behind this generalization is to
+minimize complexity and since individual annotations are developed in
+the beginning, references can be made to them if needed. This might be
+effective for small systems that have a limited number of tables.
+However, for medium to large-scale projects, Beynon-Davies suggests that
+a systematic analysis of volatility and usage should be done. This
+analysis would constitute a map of the database application that would
+be maintained by the DBA. This meets the objective of providing an
+overview of all the performance tuning techniques and data in place.
 
 
 \section{A new physical notation}
 \label{sec-notation}
 
+In this section we discuss a new notation for graphically representing
+physical database models. While Ambler's notation is in many ways closer
+to a physical modelling notation, the evident confusion between the
+physical and logical levels diminishes its usefulness. Beynon-Davies'
+notation, on the other hand, simply adds information relevant to
+physical tuning to a standard entity-relationship diagram. Our
+experience in teaching this technique at undergraduate level is that the
+designer can quickly become overwhelemed by a ``mountain of numbers''.
+In addition, Beynon-Davies' method does not provide any conclusions as
+to which physical tuning methods should be implemented---rather it
+provides the information required in order to draw these conclusions.
+Beynon-Davies' method is thus more of a notation for summarising the
+physical usage of a database, rather than a notation for representing
+physical database structures.
+
+We have therefore taken Beynon-Davies' work one step further and
+developed a graphical notation for representing the physical database
+tuning techniques discussed in Section~\ref{sec-techniques}.
+
+The graphical notations use in this model is not complex and cluttered.
+This is to enable a database designer to simplify the physical design in
+a notation that will be easy to understand but comprehensive. Some of
+the graphical notations use in this model was adapted from other models
+and a few were modified by the author to suit the model.
+
+The table below illustrates some of the graphical representations that
+were available to choose from.
+
+Clustering is represented by nesting one entity inside another, as shown
+in Figure~\ref{fig-notation} (adapted from \cite{BeDa-P-1992-PDD}). This
+notation is intuitive, and clearly indicates the field(s) on which the
+records are clustered.
+
+Partitioning is represented by splitting an entity into either vertical
+or horizontal partitions, as shown in Figure~\ref{fig-notation} (adapted
+from \cite{Silb-A-2002-4E}). Once again, the notation is intuitive, and
+allows the partition definitions to be easily listed.
+
+Replication is indicated by including multiple copies of the same
+entity, with a diagonal bar across the corner of each replica (adapted
+from a notation used in data flow diagrams \cite{Gane-C-1979}).
+
+Indexes are represented by a small tree-like symbol within an entity.
+The index key is listed next to this symbol. Hashing is represented in a
+similar way, but using an ``H'' symbol instead of a tree symbol.
+
+\begin{figure}
+	\caption{Graphical representations for physical structures}
+	\label{fig-notation}
+\end{figure}
+
+
+\subsection{Example of use}
+
+Consider the entity-relationship diagram shown in Figure~\ref{fig-ERD},
+which depicts a database system for a consumer electronics manufacturer.
+A corresponding Beynon-Davies' annotated model is shown in
+Figure~\ref{fig-Beynon-Davies}. Analysis of this figure enables us to
+draw certain conclusions about the physical characteristics of this
+database:
+
+\begin{itemize}
+
+	\item conclusions\ldots (see 321 assignment material)
+
+\end{itemize}
+
+\begin{figure}
+	\caption{ERD of the example database}
+	\label{fig-ERD}
+\end{figure}
+
+\begin{figure}
+	\caption{Beynon-Davies annotated model for the example database}
+	\label{fig-Beynon-Davies}
+\end{figure}
+
+Figure~\ref{fig-physical-model} shows a physical model of this database
+system using our proposed notation.
+
+\begin{figure}
+	\caption{Physical database model for the example database}
+	\label{fig-physical-model}
+\end{figure}
+
 
 \section{Future research}
 \label{sec-future}
+
+- symbols for different types of index (reverse-key, index-organised
+tables, R-trees, bitmap indexes).
+
+- evaluation of the notation with undergraduate students \& comparison
+with Beynon-Davies (preliminary results by time of publication).
 
 
 \section{Conclusion}
