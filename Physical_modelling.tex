@@ -1,0 +1,103 @@
+\documentclass{llncs}
+
+\title{A Graphical Notation for Modelling Physical Database Structures}
+\author{Antonia Pillay \and Nigel Stanger}
+\institute{Department of Information Science, University of Otago, Dunedin, New Zealand \email{nstanger@infoscience.otago.ac.nz}}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+In this paper we describe a graphical notation for modelling physical database structures. Such a notation will provide database administrators with a means to model the physical structures of new and existing databases, and thus enable them to make more proactive and informed tuning decisions, compared to existing database monitoring tools.
+\end{abstract}
+
+
+\section{Introduction}
+
+The design and implementation of a database system, as with most information systems, typically goes through several phases (\ref{BeDa-P-2003}), including requirements analysis, conceptual modelling, logical modelling, physical modelling and implementation. Conceptual, logical and physical modelling are of particular interest here, as each represents a step in a progression from a higher to a lower level of abstraction (\ref{Tsic-D-1978}). Conceptual models are typically very high-level and abstract, using techniques such as entity-relationship modelling, and are derived from the requirements. Logical level models represent the structure of a database in a form that is closer to the final physical representation, yet still sufficiently abstract to isolate application from the physical representation details (ref). Logical level models are typically derived from the corresponding conceptual models by some transformation process (ref), and use formalisms such as the relational model.
+
+Physical level models represent the structure of a database in terms of the physical storage structures provided by a specific database management system (DBMS) such as Oracle or DB2. Once again, the physical model for a database can be derived from the logical level model by some form of transformation (\ref{Bato-DS-1985}, \ref{Conn-TM-2002}). Because of it's low level of abstraction, modelling the physical level of a database is typically one of the last phases of implementation, and tends to be very product-specific. Consequently, physical level structures are not typically modelled using graphical notations, unlike models at the higher levels of abstraction. (refs?)
+
+Physical modelling is, however, equally as important as, if not \emph{more} important than the higher levels of modelling, because it is the physical level that has the greatest impact on the performance of a database (\ref{BeDa-P-2003}). It is therefore somewhat surprising that there have been relatively few attempts to devise a graphical physical modelling notation that can be used to represent the physical structures of a database. Use of such a notation provides several advantages (\ref{BeDa-P-1992-PDD}, \ref{Conn-TM-2002}, \ref{Will-J-1992}):
+
+\begin{itemize}
+
+	\item it can reduce complexity and thus aid communication and improve understandability (\ref{Tuft-ER-1997});
+
+	\item it can provide a more complete and integrated display of tables and performance tuning techniques in a database;
+	
+	\item database developers can be more confident about the design decisions that they make for the performance of the database;
+	
+	\item database performance problems are more easily visaualised using a graphical notation; and
+	
+	\item a specific methodology is developed and used, thus allowing the developer to resolve physical performance issues in a more systematic manner.
+
+\end{itemize}
+
+These benefits are embodied in database performance monitoring tools such as Quest's SpotLight (ref), which provides a higher-level visualisation of a database's structures in order to easily identify and highlight performance problems. Such tools, however, are primarily intended as \emph{monitoring} tools rather than as \emph{design} tools. They may therefore unintentionally encourage database administrators (DBAs) into a \emph{reactive} mode of continually ``tweaking'' the database to resolve performance issues, rather than a \emph{proactive} mode of anticipating problems, by means of prior analysis and modelling. It may also be difficult for a DBA using such tools to gain a clear and comprehensive overview of all the tuning techniques that are in use within a particular database (\ref{Core-MJ-1997-OracleDW}).
+
+In this paper we propose a graphical notation for modelling the physical structures of a database system, which builds upon a methodology for physical database design proposed by Beynon-Davies (\ref{BeDa-P-1992-PDD}). In Section~\ref{sec-techniques}, we provide a brief overview of current commonly used physical tuning techniques. We then proceed in Section~\ref{sec-previous} to discuss prior approaches to physical modelling and design. Section~\ref{sec-notation} introduces our proposed notation, and Section~\ref{sec-future} discusses possible future work. The paper concludes in Setion~\ref{sec-conclusion}.
+
+
+\section{Physical tuning techniques}
+
+DBMSs tend to be I/O bound, so the main bottleneck in any database system is usually the speed of offline storage such as disk drives. Retrieving data from a hard disk is theoretically about six orders of magnitude slower than retrieving the same data from RAM\footnote{On the order of milliseconds (\(10^{-3}\)) for disk versus nanoseconds (\(10^{-9}\)) for RAM.}, although in practice the difference is usually less due to many factors (\ref{Eric-Schmidt-Google}). The ultimate aim of any physical tuning strategy is thus to minimise the impact of slow storage, either by directly reducing the number of physical disk accesses required, or by parallelising access to the disk in order to reduce contention for a limited resource.
+
+These considerations have led to the development of five general physical tuning techniques, which have been implemented to various degrees by most of the mainstream DBMS products: indexes, hashing, clustering, partitioning and replication.
+
+\subsection{Indexes}
+
+A common database operation is to request a specific data record identified by a some key value. When such a request occurs, the DBMS must locate this record on disk (assuming that it is not already cached elsewhere). If we assume that the records are randomly ordered with respect to the chosen key value, then the DBMS has no option but to perform a sequential scan of all the records, which will require on average\(n/2b\) disk accesses, where \(n\) is the number of records and \(b\) is the number of records per database block (the worst case is \((n - 1)(b)\)). Sorting the records on the key value will obviously help for searches based on that key value, but will not help for searches based on a different key value.
+
+One solution is to build a separate index structure that associates key values with their corresponding physical record. Because indexes are stored separately, we can provide multiple indexes on different key values for the same set of records. In addition, by choosing an appropriate data structure for the index, we can improve the efficiency of searching and thus reduce the number of physical disk accesses required (\ref{Roti-S-1996}). Most modern DBMSs use some variant of the \emph{B+-tree} structure (\ref{Knut-DE-1997-Art}). This structure has average and worst case performance of (formula) and (formula), respectively.
+
+Indexes are a ``pure'' disk access minimisation technique, that is, they reduce the number of physical disk accesses required, but do not provide any form of paralellism. B-tree indexes perform well for a wide range of typical database queries (ref), but can suffer in high update environments due to the need to also update the index.
+
+
+\subsection{Hashing}
+
+Hashing is another pure disk access minimisation technique that performs well for exact key queries on very large tables. Rather than build a separate index structure, a key value is passed to a \emph{hash function}. This function returns the physical location of a hash bucket, which contains a pointer to the associated physical record (check). Hashing schemes typically require only a single disk access to retrieve a specific record, but perform poorly for queries that require the retrieval of multiple records.
+
+
+\subsection{Clustering}
+
+Clustering is a disk access minimisation technique that can be applied when two different record types are logically related, and thus commonly retrieved together; for example, an order header and its order lines. Without any further optimisation, such an operation could at worst require one disk access for the order header and one disk access for each of its order lines.
+
+To improve this situation, we \emph{cluster} the two record types, so that related physical records are physically adjacent to each other (\ref{Chan-N-2003-clustering}). This usually means that all the records will be stored in the same database block, and can thus all be retrieved with a single disk access. Clustering can, however, be expensive to maintain in a high update environment.
+
+
+\subsection{Partitioning}
+
+In a typical untuned database, all data will be stored on the same disk. If the database is heavily accessed, then contention for the single I/O channel to this disk becomes a major bottleneck. Partitioning reduces this contention by splitting the database into disjoint partitions, each of which is assigned to a different disk. This approach is particularly advantageous in situations where multiple users wish to access different subsets of a set of records, because it provides a disjoint physical access paths to each of the partitions. This reduces I/O channel contention and thus improves performance. Partitioning is thus primarily an access parallelism technique.
+
+Partitioning can also provide some disk access minimisation benefits, because the amount of data to be searched in each partition is smaller than if the database were not partitioned.
+
+
+\subsection{Replication}
+
+Replication is an access parallelism technique in which multiple copies of the same records are placed on different disks, thus providing multiple physical access paths to the same data.
+
+
+\subsection{Discussion}
+
+The physical tuning techniques described above are normally used in different parts of the database to achieve different effects. To choose an appropriate physical tuning technique, the DBA must consider various factors that will either benefit the users of the database or improve the performance of the database as a whole. While most of the techniques can be combined to varying degrees, simply applying all techniques is usually not an optimal solution, because each technique has different conditions in which it excels. What are optimal conditions for one technique may be the exact opposite for another, so the DBA needs to be able to model all the available information in order to develop an appropriate physical design.
+
+
+
+\section{Prior physical modelling techniques}
+
+To achieve an effective physical design requires a large amount of information, particularly with regard to the (predicted or actual) volume and usage of data within the database (\ref{BeDa-P-2003}).
+
+
+\section{A new physical notation}
+
+
+\section{Future research}
+
+
+\section{Conclusion}
+
+
+
+\end{document}
