@@ -47,7 +47,7 @@
 % \thanks[label3]{}
 
 \title{Assessing the efficacy of a touch screen overlay as a selection
-device using typical GUI targets}
+device for typical GUI targets}
 
 % use optional labels to link authors explicitly to addresses:
 % \author[label1,label2]{}
@@ -68,21 +68,19 @@ device using typical GUI targets}
 
 \begin{abstract}
 
-Touch screens are a popular method of interacting with kiosk-based
-information systems, whereas typical desktop information systems use a
-mouse as the primary selection device. In this paper we investigate the
-efficacy of a touch screen overlay compared to a mouse, when selecting
-typical graphical user interface (GUI) items in a desktop information
-system. A series of tests were completed involving multi-directional
-point and select tasks, and the results for both devices compared. The
-results showed that the touch screen overlay was not suitable for
-selecting GUI targets smaller than \unit[4]{mm}. The touch screen
-overlay was slower and had a higher error rate than the mouse, but there
-was no significant difference in throughput. Testers rated the mouse
-easier to use and to make accurate selections, while the touch screen
-overlay resulted in greater arm, wrist and finger fatigue. These results
-suggest that a touch screen overlay is not a practical selection device
-for desktop interfaces with small GUI targets.
+In this paper we investigate the efficacy of a touch screen overlay
+compared to a mouse, when selecting typical graphical user interface
+(GUI) items in a desktop information system. A series of tests were
+completed involving multi-directional point and select tasks, and the
+results for both devices compared. The results showed that the touch
+screen overlay was not suitable for selecting GUI targets smaller than
+\unit[4]{mm}. The touch screen overlay was slower and had a higher error
+rate than the mouse, but there was no significant difference in
+throughput. Testers rated the mouse easier to use and to make accurate
+selections, while the touch screen overlay resulted in greater arm,
+wrist and finger fatigue. These results suggest that a touch screen
+overlay is not a practical selection device for desktop interfaces with
+small GUI targets.
 
 \end{abstract}
 
@@ -131,7 +129,7 @@ a mouse.
 The testing occurred in the context of a research project undertaken by
 the Department of Human Nutrition at the University of Otago. This
 project aimed to improve complementary food diets for toddlers in New
-Zealand by designing a computer program to help formulate
+Zealand, by designing a computer program to help formulate
 population-specific food-based dietary guidelines for this high risk
 group. The program was a rapid assessment decision-making tool, designed
 specifically to assist nutrition programme planners in selecting
@@ -153,25 +151,25 @@ conclusions are presented in Section~\ref{sec-conclusions}.
 \section{GUI targets}
 \label{sec-GUI}
 
-Since the 1980s much research has been put into developing human
-computer interface guidelines. Today's interfaces are made up of a
-combination of different targets that could include text boxes, check
-boxes, combo boxes, list boxes, buttons, labels, tool bars etc. Results
-of research undertaken by \citet{Sear-A-1991-IJMMS} showed that touch
-screens can be successfully used as a selection device and can have
-advantages over a mouse, even for small targets. But these results were
-based on selecting arbitrary shapes and not typical GUI items commonly
-found in today's GUIs.
+Since the 1980's much work gone into developing human computer interface
+guidelines. Today's interfaces are made up of a combination of different
+targets that include text boxes, check boxes, combo boxes, list boxes,
+buttons, labels, tool bars, etc. \citet{Sear-A-1991-IJMMS} showed that
+touch screens can be successfully used as a selection device and can
+have advantages over a mouse, even for small targets. These results
+were, however, based on selecting arbitrary shapes and not the typical
+targets found in modern GUIs.
 
 To accurately test the performance of each selection device within the
-experiment, varying sized targets were used. The sizes represent small,
-medium and large for each target.
-
-Apple has produced some guidelines for developers to follow when
-designing interfaces for software \citep{Appl-2004-HIG}. In particular,
-for each target three different sizes are given corresponding to large,
-small and mini. The sizes used in this experiment were based on these
-guidelines and are shown in Table~\ref{tab-target-sizes}.
+experiment, three different sizes of GUI target were used, corresponding
+to small, medium and large GUI items. As our experiment took place in a
+Windows environment, we would have preferred to base these sizes on
+Microsoft's user interface guidelines. However, Microsoft's guidelines
+specify only a single standard size for most GUI items \citep[pp.\
+448--450]{MS-1999-UI}. We have therefore adopted the three standard
+sizes (mini, small and large) specified in \citeauthor{Appl-2004-HIG}'s
+\citeyearpar{Appl-2004-HIG} human interface guidelines, which are shown
+in Table~\ref{tab-target-sizes}.
 
 
 \begin{table}
@@ -184,9 +182,11 @@ guidelines and are shown in Table~\ref{tab-target-sizes}.
 		Text box				&	\(\unit[63]{mm} \times \unit[11]{mm}\)	&	\(\unit[55]{mm} \times \unit[8]{mm}\)	&	\(\unit[47]{mm} \times \unit[6]{mm}\)	\\
 		Combo box				&	\(\unit[63]{mm} \times \unit[11]{mm}\)	&	\(\unit[55]{mm} \times \unit[8]{mm}\)	&	\(\unit[47]{mm} \times \unit[6]{mm}\)	\\
 		Button					&	\(\unit[28]{mm} \times \unit[13]{mm}\)	&	\(\unit[24]{mm} \times \unit[9]{mm}\)	&	\(\unit[17]{mm} \times \unit[6]{mm}\)	\\
-		Check box				&	\(\unit[9]{mm} \times \unit[9]{mm}\)	&	\(\unit[6]{mm} \times \unit[6]{mm}\)	&	\(\unit[4]{mm} \times \unit[4]{mm}\)	\\
+		Check box\(^{*}\)		&	\(\unit[9]{mm} \times \unit[9]{mm}\)	&	\(\unit[6]{mm} \times \unit[6]{mm}\)	&	\(\unit[4]{mm} \times \unit[4]{mm}\)	\\
 		\hline
 	\end{tabular}
+	
+	{\footnotesize \(^{*}\)This refers to the size of the check box itself, not the associated text label.}
 \end{table}
 
 
@@ -302,17 +302,17 @@ university level of education. All participants were unpaid volunteers.
 
 Software written in Visual Basic.Net with Microsoft Studio 2003 was used
 to implement the test as illustrated in
-Figure~\ref{fig-test-screenshot}. Each test was connected to a Microsoft
+Figure~\ref{fig-test-environment}. Each test was connected to a Microsoft
 Excel worksheet and the data corresponding to the relevant measures
 (movement time, number of errors and selection coordinates) were
 captured using the software and written to the Excel worksheet.
 
 \begin{figure}
 	\centering
-	\includegraphics{test-screenshot}
-	\caption{Screenshot of the test with the target in the top left of
-	the screen and the ``go'' button in the centre.}
-	\label{fig-test-screenshot}
+	\includegraphics{test-environment}
+	\caption{Screenshot of the test environment with the target in the
+	top left of the screen and the ``go'' button in the centre.}
+	\label{fig-test-environment}
 \end{figure}
 
 The touch screen used in testing was a 17'' Magic Touch USB overlay
@@ -359,6 +359,8 @@ combo box as illustrated in Figure~\ref{fig-combo-box}.
 
 \begin{figure}
 	\centering
+	\includegraphics{combobox-step1}\quad
+	\includegraphics{combobox-step2}
 	\caption{The two-step action required to select the combo box.}
 	\label{fig-combo-box}
 \end{figure}

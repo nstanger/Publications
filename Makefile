@@ -1,20 +1,21 @@
 SHELL=/bin/sh
 
 
-GRAPHICS:=test-screenshot.eps target-positions.eps \
+GRAPHICS:=test-environment.eps target-positions.eps \
 	throughput.eps movement-time.eps error-rate.eps \
-	combobox-learning.eps checkbox-learning.eps
+	combobox-learning.eps checkbox-learning.eps \
+	combobox-step1.eps combobox-step2.eps
 
 
 IwC_paper.pdf: IwC_paper.ps
 
 IwC_paper.ps: IwC_paper.dvi
 
-IwC_paper.dvi: IwC_paper.tex $(GRAPHICS)
+IwC_paper.dvi: IwC_paper.tex bib $(GRAPHICS)
 	latex $<
 	latex $<
 
-IwC_paper.tex: $(GRAPHICS) IwC_paper.bbl
+bib: IwC_paper.bbl
 
 
 test-screenshot.eps: test-screenshot.tif
