@@ -404,9 +404,9 @@ Sect.~\ref{sec-techniques}.
 
 The notations that we have adopted for this notation are shown in
 Fig.~\ref{fig-notation}. Some of these are adapted from other notations,
-while some we have created ourselves. The symbols have been chosen so as
-to be as intuitive as possible, while not being so complex as to produce
-a cluttered and confusing diagram. Physical models may be developed
+while some we have created ourselves. The symbols have been chosen to be
+intuitive and simple to draw, so as to produce diagrams that are as
+clear and uncluttered as possible. Physical models may be developed
 using this notation either with or without a prior Beynon-Davies style
 analysis.
 
@@ -417,19 +417,19 @@ analysis.
 	\subfigure[Indexes]{\label{fig-notation-index}\includegraphics[scale=0.9]{notation-index}}
 	\hfill
 	\subfigure[Hashing]{\label{fig-notation-hash}\includegraphics[scale=0.9]{notation-hash}}	\\
-	\hfill
 	\subfigure[Clustering]{\label{fig-notation-cluster}\includegraphics[scale=0.9]{notation-cluster}}
 	\hfill
 	\subfigure[Partitoning]{\label{fig-notation-partition}\includegraphics[scale=0.9]{notation-partition}}
-	\hfill	\\
+	\hfill
 	\subfigure[Replication]{\label{fig-notation-replica}\includegraphics[scale=0.9]{notation-replica}}
-	\caption{Notations for physical tuning techniques}
+	\caption{Proposed notations for physical tuning techniques}
 	\label{fig-notation}
 \end{figure}
 
 A physical table is represented by a simple box, as shown in
 Fig.~\ref{fig-notation-table}. This is similar to most logical and
-conceptual level ERD notations.
+conceptual level ERD notations. The fields of the physical table may be
+included, with or without physical data types, as appropriate.
 
 Indexes are represented by a small tree-like symbol within a table, as
 shown in Fig.~\ref{fig-notation-index}. The index key is listed next to
@@ -439,8 +439,11 @@ tree symbol (see Fig.~\ref{fig-notation-hash}).
 
 Clustering is represented by nesting one table inside another, as shown
 in Fig.~\ref{fig-notation-cluster} (adapted from
-\cite{BeDa-P-1992-PDD}). This notation is intuitive, and clearly
-indicates the field(s) on which the records are clustered.
+\cite{BeDa-P-1992-PDD}). The cluster key is indicated by an asterisk (*)
+attached to the appropriate field(s). Tables may be nested to as many
+levels as required in order to represent more complex clustering
+schemes. This notation is intuitive, and clearly indicates the field(s)
+on which the records are clustered.
 
 Partitioning is represented by splitting a table into either vertical or
 horizontal partitions according to the style of partitioning, as shown
@@ -448,10 +451,13 @@ in Fig.~\ref{fig-notation-partition} (adapted from
 \cite{Silb-A-2002-4E}). Once again, the notation is intuitive, and
 allows the partition definitions to be easily indicated.
 
-Replication is indicated by including multiple copies of the same table,
-with a diagonal bar across the corner of each replica, as shown in
-Fig.~\ref{fig-notation-replica}. This is adapted from a similar notation
-used in data flow diagrams \cite{Gane-C-1979}.
+Replication is indicated by placing a diagonal bar across the
+bottom-right corner of the table to be replicated, along with the total
+number of replicas, as shown in Fig.~\ref{fig-notation-replica}. This is
+adapted from a similar notation used in data flow diagrams
+\cite{Gane-C-1979}. This notation could also be used to indicate
+replication of individual table partitions, for DBMSs that permit this
+combination.
 
 % The graphical notations use in this model is not complex and cluttered.
 % This is to enable a database designer to simplify the physical design in
@@ -463,13 +469,14 @@ used in data flow diagrams \cite{Gane-C-1979}.
 % were available to choose from.
 
 Consider the entity-relationship diagram shown in Fig.~\ref{fig-ERD},
-which depicts a database for a consumer electronics manufacturer. A
-corresponding Beynon-Davies' composite usage map based on the fourteen
-most significant transactions is shown in Fig.~\ref{fig-Beynon-Davies}.
-The arrows represent physical access paths, while the number attached to
-each access path indicates the number of disk accesses per hour along
-that path. The diagram clearly highlights some potential performance
-problem areas in the database, for example:
+which uses Martin notation \cite{Mart-J-1990-IE2} to depict a database
+for a consumer electronics manufacturer. A corresponding Beynon-Davies'
+composite usage map based on the fourteen most significant transactions
+is shown in Fig.~\ref{fig-Beynon-Davies}. The arrows represent physical
+access paths, while the number attached to each access path indicates
+the number of disk accesses per hour along that path. The diagram
+clearly highlights some potential performance problem areas in the
+database, for example:
 \begin{itemize}
 
 	\item There are many disk accesses on the access paths between the
@@ -502,11 +509,13 @@ problem areas in the database, for example:
 \end{figure}
 
 The suggestions above can be represented as a physical model using our
-proposed modelling notation, as shown in Fig.~\ref{fig-physical-model}.
-Note that we have placed indexes on all primary keys as a matter of
-course.
+proposed modelling notation, as shown in Fig.~\ref{fig-physical-model}
+(some details have been omitted to save space). Note that we have placed
+indexes on all primary keys as a matter of course.
 
 \begin{figure}
+% 	\includegraphics[angle=90,scale=0.9]{Physical-Model}
+	\includegraphics[width=\columnwidth,keepaspectratio]{Physical-Model}
 	\caption{Physical database model for the example database}
 	\label{fig-physical-model}
 \end{figure}
