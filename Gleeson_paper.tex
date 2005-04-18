@@ -96,6 +96,9 @@ GUI items
 \end{frontmatter}
 
 % main text
+\newcommand{\ISOnine}{ISO 9241-9}
+
+
 \section{Introduction}
 \label{sec-introduction}
 
@@ -151,14 +154,14 @@ conclusions are presented in Section~\ref{sec-conclusions}.
 \section{GUI targets}
 \label{sec-GUI}
 
-Since the 1980's much work gone into developing human computer interface
-guidelines. Today's interfaces are made up of a combination of different
-targets that include text boxes, check boxes, combo boxes, list boxes,
-buttons, labels, tool bars, etc. \citet{Sear-A-1991-IJMMS} showed that
-touch screens can be successfully used as a selection device and can
-have advantages over a mouse, even for small targets. These results
-were, however, based on selecting arbitrary shapes and not the typical
-targets found in modern GUIs.
+Since the 1980's much work has gone into developing human computer
+interface guidelines. Today's interfaces are made up of a combination of
+different targets that include text boxes, check boxes, combo boxes,
+list boxes, buttons, labels, tool bars, etc. \citet{Sear-A-1991-IJMMS}
+showed that touch screens can be successfully used as a selection device
+and can have advantages over a mouse, even for small targets. These
+results were, however, based on selecting arbitrary shapes and not the
+typical targets found in modern GUIs.
 
 To accurately test the performance of each selection device within the
 experiment, three different sizes of GUI target were used, corresponding
@@ -166,10 +169,12 @@ to small, medium and large GUI items. As our experiment took place in a
 Windows environment, we would have preferred to base these sizes on
 Microsoft's user interface guidelines. However, Microsoft's guidelines
 specify only a single standard size for most GUI items \citep[pp.\
-448--450]{MS-1999-UI}. We have therefore adopted the three standard
-sizes (mini, small and large) specified in \citeauthor{Appl-2004-HIG}'s
-\citeyearpar{Appl-2004-HIG} human interface guidelines, which are shown
-in Table~\ref{tab-target-sizes}.
+448--450]{MS-1999-UI}, and also measure the sizes of these items in a
+resolution-independent manner, rather than by specifying fixed sizes. We
+have therefore adopted the three standard sizes (mini, small and large)
+specified by \citeauthor{Appl-2004-HIG}'s \citeyearpar{Appl-2004-HIG}
+human interface guidelines, which are listed in
+Table~\ref{tab-target-sizes}.
 
 
 \begin{table}
@@ -194,64 +199,96 @@ in Table~\ref{tab-target-sizes}.
 \label{sec-evaluation}
 
 Each selection device was assessed using a combination of performance
-and comfort measures.
+and comfort measures. The performance measures were primarily taken from
+the \ISOnine\ standard \citep{ISO-2000-9241-9}, while the comfort
+measures were derived from a questionnaire administered to test
+participants.
+
 
 \subsection{Performance}
 \label{sec-evaluation-performance}
 
-The dependent measure described by ISO 9241-9 is throughput
-\citep{ISO-2000-9241-9}. Throughput is noted by
-\citet{Mack-IS-2001-EHCI} as being a very important measure as it
-reflects the efficiency of the user completing the task and it is a
-measure of both speed and accuracy. The formula for calculating
-throughput is given in the following equation:
-\[
+ISO 9241 specifies standards for the ergonomic design of office
+computing environments. Part 9 of this standard describes different
+tests that can be used to evaluate one or more pointing devices
+\citep{ISO-2000-9241-9}. The standard describes a serial point and
+select task and recognises a dependent measure used with this test
+(\emph{throughput}). The serial test comprises moving the cursor back
+and forth between two targets using the pointing device and selecting
+each target by pressing and releasing a button on the pointing device.
+One disadvantage of this approach is that only two targets are used in
+the test and therefore interactions between more than two targets, which
+often happen in a typical information system interface, are not studied.
+
+\citet{Mack-IS-2001-EHCI} note that throughput
+is a very important measure, as it reflects the efficiency of the user
+completing the task and is a measure of both speed and
+accuracy. Throughput is calculated by the following formula:
+\begin{equation}
+	\label{eqn-throughput}
 	\mathit{throughput} = \mathit{ID}_{e} / \mathit{MT}
-\]
-where
-\[
+\end{equation}
+where \(\mathit{MT}\) is the movement time in seconds (defined as time
+taken to successfully select a target) and \(\mathit{ID}_{e}\) is the
+\emph{index of difficulty} measured in bits. Throughput is thus measured
+in bits per second (bps).
+%!! ref to Fitts here? (given that he defined the concept of IDe)
+
+The index of difficulty is calculated by the following formula:
+\begin{equation}
+	\label{eqn-IDe}
 	\mathit{ID}_{e} = \log_{2}(D / W_{e} + 1)
-\]
+\end{equation}
+where \(D\) is the distance to the target and \(W_{e}\) is the
+\emph{effective width} of the target.
 
-\(\mathit{ID}_{e}\) represents the index of difficulty and is defined in
-terms of bits whereas movement time is defined in terms of seconds.
-Therefore throughput is measured in bits per second (bps). \(D\)
-represents the distance to the target. Throughput is used by the ISO
-9241-9 standard as the performance measurement.
+The effective width \(W_{e}\) reflects spatial variability in a sequence
+of trials, and thus differs from the actual width of the target. The
+effective width of a target is calculated by the following formula:
+\begin{equation}
+	\label{eqn-We}
+	W_{e} = 4.133 \times \mathrm{SD}_{x}
+\end{equation}
+where \(\mathit{SD}_{x}\) is the standard deviation in the selection
+coordinates measured along the path to target \(x\).
 
-\(W_{e}\) is the effective width and differs from the width of the
-target. It reflects the spatial variability in the sequence of trials.
-The formula for calculating effective width is given in the following
-equation:
-\[
-	W_{e} = 4.133 \times \mathit{SD}_{x}
-\]
-	
-\(\mathit{SD}_{x}\) is the standard deviation in the selection
-coordinates measured along the path to the target
+\ISOnine\ does not provide any guidance on the range of index of
+difficulty values to use in testing. \citet{Doug-SA-1999-CHI} recommend
+using a range from 2 to 6 bits. They also recommend calculating the
+\emph{error rate}, as a separate dependent measure of accuracy. The
+error rate is defined as the ratio of incorrect to correct selections
+made on a target, so an error rate of 100\% implies that there were as
+many errors made as correct selections. Error rate is not included in
+\ISOnine, but has been used in several other studies
+\citep{Sear-A-1991-IJMMS,Sear-A-1993-BIT,Hara-H-1996,Bend-G-1999-PhD,
+Doug-SA-1999-CHI,Mack-IS-2001-EHCI,Po-BA-2004-CHI}. Computing both
+throughput and error rate gives a more detailed performance analysis for
+the selection device in question.
 
-Due to the nature of making a selection within a drop-down list, the
-throughput for a combo box was adjusted to take into account the extra
-distance to the desired list item.
 
-Movement time is defined as time taken to successfully select a target.
-Error rate is defined as the number of selections made outside of the
-intended target. The error rate is the ratio of incorrect selections to
-correct selections made, so an error rate of 100\% means as many errors
-as correct selections.
+%!! move this further down --- somewhere in the analysis?
+%
+% Due to the nature of making a selection within a drop-down list, the
+% throughput for a combo box was adjusted to take into account the extra
+% distance to the desired list item.
 
-Both movement time and error rate were left out of the ISO standard
-9241-9 in terms of performance measurements but \citet{Doug-SA-1999-CHI}
-recommend computing both measurements to give a more detailed
-performance analysis for the selection device.
 
 \subsection{Comfort}
 \label{sec-evaluation-comfort}
 
-A questionnaire was used to assess comfort and user satisfaction of each
-selection device. The selection device assessment questionnaire
-consisted of sixteen questions, eight of which were taken from the ISO
-``Independent Questionnaire for Assessment of Comfort''
+ISO 9241-9 argues that to fully evaluate a selection device requires
+assessment of user effort and comfort in addtion to performance
+measurements. Comfort is subjective and can be assessed by means of
+questionnaires, while effort can be evaluated objectively by measuring
+the biomechanical load on users as they use a device. Unfortunately,
+such measurements require reasonably sophisticated equipment
+\citep{Doug-SA-1999-CHI} that was not available to us. We therefore
+omitted effort measurements from our experiment.
+
+A questionnaire was used to assess comfort and user satisfaction for
+each selection device in our experiment. The selection device assessment
+questionnaire comprised sixteen questions, eight of which were taken
+from the ISO ``Independent Questionnaire for Assessment of Comfort''
 \citep{Doug-SA-1999-CHI}. The remaining eight questions related
 specifically to the targets tested and the size of the targets tested.
 
@@ -265,6 +302,21 @@ ordinal scale. The remaining four questions referred to the
 participant's preferred size for each target and were based on a three
 point response corresponding to the sizes tested---small, medium and
 large.
+
+
+\subsection{Other considerations}
+\label{sec-evaluation-other}
+
+\citet{Doug-SA-1999-CHI} also note that \ISOnine\ does not take into
+account any possible effects of learning, which can affect movement time
+and accuracy. For example, \citet{Mack-IS-1991} found that the movement
+times from the first of five testing sessions were significantly higher
+than in later sessions. This can be explained as a result of learning
+and shows that input device studies should take into account and test
+for learning; indeed, \citet{Doug-SA-1999-CHI} recommend applying a
+repeated measures paradigm and testing for learning effects.
+
+
 
 \section{Method}
 \label{sec-method}
@@ -309,7 +361,7 @@ captured using the software and written to the Excel worksheet.
 
 \begin{figure}
 	\centering
-	\includegraphics{test-environment}
+% 	\includegraphics{test-environment}
 	\caption{Screenshot of the test environment with the target in the
 	top left of the screen and the ``go'' button in the centre.}
 	\label{fig-test-environment}
