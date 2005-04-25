@@ -16,11 +16,11 @@ IwC_paper.pdf: IwC_paper.ps
 
 IwC_paper.ps: IwC_paper.dvi
 
-IwC_paper.dvi: IwC_paper.tex bib $(GRAPHICS)
+IwC_paper.dvi: IwC_paper.tex IwC_paper.bib $(GRAPHICS)
+	latex $<
+	bibtex $*
 	latex $<
 	latex $<
-
-bib: IwC_paper.bbl
 
 
 test-screenshot.eps: test-screenshot.tif
@@ -56,10 +56,6 @@ variation-combo-touch.eps: variation.plo
 clean:
 	rm -f *.aux *.bbl *.blg *.log *.dvi *.ps
 
-
-%.bbl: %.bib
-	latex $*
-	bibtex $*
 
 %.pdf: %.ps
 	ps2pdf -dNOCACHE $< $@
