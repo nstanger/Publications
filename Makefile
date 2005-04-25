@@ -1,10 +1,15 @@
+.SUFFIXES: .eps .dvi .ps .bbl .bib .tex .plo .tif .pdf
+
+
 SHELL=/bin/sh
 
 
 GRAPHICS:=test-environment.eps target-positions.eps \
 	throughput.eps movement-time.eps error-rate.eps \
 	combobox-learning.eps checkbox-learning.eps \
-	combobox-step1.eps combobox-step2.eps
+	combobox-step1.eps combobox-step2.eps \
+	variation-text-mouse.eps variation-text-touch.eps \
+	variation-combo-mouse.eps variation-combo-touch.eps
 
 
 IwC_paper.pdf: IwC_paper.ps
@@ -35,6 +40,18 @@ combobox-learning.eps: linechart.plo
 checkbox-learning.eps: linechart.plo
 	ploticus -eps -tightcrop -o $@ $< field1=check_mouse_move field2=check_touch_move label1=Mouse label2=Touch
 
+variation-text-mouse.eps: variation.plo
+	ploticus -eps -tightcrop -o $@ $< device=mouse target=text
+
+variation-text-touch.eps: variation.plo
+	ploticus -eps -tightcrop -o $@ $< device=touch target=text
+
+variation-combo-mouse.eps: variation.plo
+	ploticus -eps -tightcrop -o $@ $< device=mouse target=combo
+
+variation-combo-touch.eps: variation.plo
+	ploticus -eps -tightcrop -o $@ $< device=touch target=combo
+
 
 clean:
 	rm -f *.aux *.bbl *.blg *.log *.dvi *.ps
@@ -45,7 +62,7 @@ clean:
 	bibtex $*
 
 %.pdf: %.ps
-	ps2pdf $< $@
+	ps2pdf -dNOCACHE $< $@
 
 %.ps: %.dvi
 	dvips -o $@ $<
@@ -56,6 +73,3 @@ clean:
 
 %.eps: %.tif
 	convert $< $@
-
-%.eps: %.sxd
-	$(error Re-export $@ from $<)
