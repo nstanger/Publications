@@ -1,0 +1,83 @@
+#musthave device
+#musthave target
+//#musthave field2
+//#musthave field3
+//#musthave label1
+//#musthave label2
+
+#proc settings
+	units: cm
+#endproc
+
+#set field_40 = @device "_" @target "_40"
+#set field_80 = @device "_" @target "_80"
+#set field_160 = @device "_" @target "_160"
+
+#proc getdata
+	delim: comma
+	fieldnameheader: yes
+	data:
+		angle,mouse_text_40,mouse_text_80,mouse_text_160,mouse_combo_40,mouse_combo_80,mouse_combo_160,touch_text_40,touch_text_80,touch_text_160,touch_combo_40,touch_combo_80,touch_combo_160
+		45,36.1,40.2425,42.89,40.3325,40.3325,38.5675,26.72909752,25.38166745,25.94191397,30.32391975,26.10231481,27.06981481
+		135,20.7525,23.575,31.865,20.225,19.6075,19.87,23.19430419,23.81227848,24.95375293,30.40052469,32.8770679,37.77787037
+		225,19.52,23.31,27.28,21.195,23.31,21.105,19.58570636,21.33953,23.72853688,31.4591358,31.72521605,35.06466049
+		315,32.2175,39.5375,42.27,39.625,42.5375,38.8325,27.26008947,25.49955696,24.24673621,28.63228395,23.28416667,24.87274691
+
+#proc areadef
+	#if @device = "touch"
+		title: Touch screen
+	#else
+		title: Mouse
+	#endif
+	titledetails: size=10 style=B align=C
+	areaname: standard
+	yrange: 0 47
+	xrange: 0 360
+	autowidth: 0.0055555556
+	autoheight: 0.0444444444
+
+#proc yaxis:
+	stubs: inc 10
+	stubformat: %2.0f
+	stubdetails: size=10
+	label: Standard deviation
+	labeldetails: style=B size=10 adjust=-0.1,0
+	grid: color=gray(0.7)
+
+#proc xaxis:
+	selflocatingstubs: datafields=angle,angle
+	stubdetails: size=10
+	label: Target angle
+	labeldetails: style=B size=10 adjust=0,-0.1
+	//adjust=-0.1,0
+
+#proc lineplot
+	xfield: angle
+	yfield: @field_40
+	linedetails: color=red
+	pointsymbol: shape=diamond linecolor=red fillcolor=red
+	legendlabel: 40 mm
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: angle
+	yfield: @field_80
+	linedetails: color=blue
+	pointsymbol: shape=square linecolor=blue fillcolor=blue
+	legendlabel: 80 mm
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: angle
+	yfield: @field_160
+	linedetails: color=green
+	pointsymbol: shape=circle linecolor=green fillcolor=green
+	legendlabel: 160 mm
+	legendsampletype: line+symbol
+
+#proc legend
+	format: multiline
+	location: max-1.5 min+1.65
+	textdetails: size=10
+	seglen: 0.25
+	reverseorder: yes
