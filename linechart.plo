@@ -50,16 +50,16 @@
 #proc lineplot
 	xfield: block
 	yfield: @field1
-	linedetails: color=red
-	pointsymbol: shape=diamond linecolor=red fillcolor=red
+	linedetails: color=black
+	pointsymbol: shape=diamond linecolor=black fillcolor=black
 	legendlabel: @label1
 	legendsampletype: line+symbol
 
 #proc lineplot
 	xfield: block
 	yfield: @field2
-	linedetails: color=blue
-	pointsymbol: shape=square linecolor=blue fillcolor=blue
+	linedetails: color=gray(0.25)
+	pointsymbol: shape=square linecolor=gray(0.25) fillcolor=gray(0.25)
 	legendlabel: @label2
 	legendsampletype: line+symbol
 

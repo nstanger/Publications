@@ -115,11 +115,10 @@ computer.
 
 The purpose of this paper is to investigate how effective a touch screen
 overlay is compared to a mouse, when selecting typical graphical user
-interface (GUI) items used in information systems. The target types
-tested were buttons, check boxes, combo boxes and text boxes, which are
-typical of those found in an interface for an information system. Each
-target type was tested at three different sizes (see
-Section~\ref{sec-GUI}).
+interface (GUI) items. The target types tested were buttons, check
+boxes, combo boxes and text boxes, which are typical of those found in
+an interface for an information system. Each target type was tested at
+three different sizes (see Section~\ref{sec-GUI}).
 
 A typical touch screen device comprises a monitor enhanced with hardware
 for detecting touches on the screen surface. An alternative approach is
@@ -138,18 +137,17 @@ population-specific food-based dietary guidelines for this high risk
 group. The program was a rapid assessment decision-making tool, designed
 specifically to assist nutrition programme planners in selecting
 appropriate and improved home-based complementary foods
-\citep{Ferg-E-2004}. The testing for our study took place within this
-program environment.
+\citep{Ferg-E-2004}.
 
 % do we need this?
-The remainder of the paper discusses the experimental design and the
-results obtained. Section~\ref{sec-GUI} briefly describes the types of
-targets used in the experiment, while Section~\ref{sec-evaluation}
-describes the measures used to evaluate the selection devices. The
-experimental design is described in Section~\ref{sec-method}.
-Section~\ref{sec-analysis} describes how the data were analysed, and
-Section~\ref{sec-results} presents the results of the experiment. Our
-conclusions are presented in Section~\ref{sec-conclusions}.
+The remainder of the paper discusses our experiment and the results
+obtained. Section~\ref{sec-GUI} briefly describes the types of targets
+used in the experiment, while Section~\ref{sec-evaluation} describes the
+measures used to evaluate the selection devices. The experimental design
+is described in Section~\ref{sec-method}. Section~\ref{sec-analysis}
+describes how the data were analysed, and Section~\ref{sec-results}
+presents the results of the experiment. Our conclusions are presented in
+Section~\ref{sec-conclusions}.
 
 
 \section{GUI targets}
@@ -170,16 +168,18 @@ to small, medium and large GUI items. As our experiment took place in a
 Windows environment, we would have preferred to base these sizes on
 Microsoft's user interface guidelines. However, Microsoft's guidelines
 specify only a single standard size for most GUI items \citep[pp.\
-448--450]{MS-1999-UI}, and also measure the sizes of these items in a
-resolution-independent manner, rather than by specifying fixed sizes. We
-have therefore adopted the three standard sizes (mini, small and large)
-specified by \citeauthor{Appl-2004-HIG}'s \citeyearpar{Appl-2004-HIG}
-human interface guidelines, which are listed in
-Table~\ref{tab-target-sizes}.
+448--450]{MS-1999-UI}. \citeauthor{Appl-2004-HIG}'s
+\citeyearpar{Appl-2004-HIG} human interface guidelines specify three
+standard sizes (mini, small and large), but these proved to be rather
+small in our Windows-based testing environment. We therefore adjusted
+\citeauthor{Appl-2004-HIG}'s three sizes such that the ``small'' size
+was consistent with \citeauthor{MS-1999-UI}'s guidelines. The resultant
+target sizes are listed in Table~\ref{tab-target-sizes}. A screen
+resolution of \unit[81]{DPI} was assumed.
 
 
 \begin{table}
-	\caption{Target sizes (width \(\times\) height) used in the experiment.}
+	\caption{Target sizes (width \(\times\) height) used in the experiment \citep{Appl-2004-HIG}.}
 	\label{tab-target-sizes}
 	\begin{tabular}{llll}
 		\hline
@@ -219,8 +219,8 @@ back and forth between two targets using the pointing device and
 selecting each target by pressing and releasing a button on the pointing
 device. One disadvantage of this approach is that only two targets are
 used in the test and therefore interactions between more than two
-targets, which often happen in a typical information system interface,
-are not studied.
+targets---which often occur in a typical information system
+interface---are not studied.
 
 \citet{Mack-IS-2001-EHCI} note that throughput
 is a very important measure, as it reflects the efficiency of the user
@@ -230,10 +230,10 @@ accuracy. Throughput is calculated by the following formula:
 	\label{eqn-throughput}
 	\mathit{throughput} = \frac{\mathit{ID}_{e}}{\mathit{MT}}
 \end{equation}
-where \(\mathit{MT}\) is the movement time in seconds (defined as time
-taken to successfully select a target) and \(\mathit{ID}_{e}\) is Fitts'
-\citeyearpar{Fitt-PM-1954-Law} \emph{index of difficulty} measured in
-bits. Throughput is thus measured in bits per second (bps).
+where \(\mathit{MT}\) is the movement time in seconds (defined as the
+time taken to successfully select a target) and \(\mathit{ID}_{e}\) is
+Fitts' \citeyearpar{Fitt-PM-1954-Law} \emph{index of difficulty}
+measured in bits. Throughput is thus measured in bits per second (bps).
 
 The index of difficulty is calculated by the following formula:
 \begin{equation}
@@ -241,11 +241,10 @@ The index of difficulty is calculated by the following formula:
 	\mathit{ID}_{e} = \log_{2}\left(\frac{D}{W_{e}} + 1\right)
 \end{equation}
 where \(D\) is the distance to the target and \(W_{e}\) is the
-\emph{effective width} of the target.
-
-The effective width \(W_{e}\) reflects spatial variability in a sequence
-of trials, and thus differs from the actual width of the target. The
-effective width of a target is calculated by the following formula:
+\emph{effective width} of the target. The effective width reflects
+spatial variability in a sequence of trials, and thus differs from the
+actual width of the target. The effective width of a target is
+calculated by the following formula:
 \begin{equation}
 	\label{eqn-We}
 	W_{e} = 4.133 \times \mathrm{SD}_{x}
@@ -307,36 +306,36 @@ account any possible effects of learning, which can affect movement time
 and accuracy. For example, \citet{Mack-IS-1991} found that the movement
 times from the first of five testing sessions were significantly higher
 than in later sessions. This can be explained as a result of learning
-and shows that input device studies should take into account and test
-for learning; indeed, \citet{Doug-SA-1999-CHI} recommend applying a
+and shows that input device studies should take learning into account
+and test for it; indeed, \citet{Doug-SA-1999-CHI} recommend applying a
 repeated measures paradigm and testing for learning effects.
 
 One interesting aspect of using typical GUI items as targets is the
 variation in selection behaviour for different target types, compared to
 earlier studies that used simple rectangular targets. The button, check
-box and text box target types can be said to employ a ``one-step''
+box and text box target types can be said to exhibit a ``one-step''
 selection behaviour, because they require only single action (i.e., the
 user clicks on them) in order to be selected. A combo box is different,
-however, because it employs a ``two-step'' selection behaviour: first
+however, because it exhibits a ``two-step'' selection behaviour: first
 the combo box must be selected in order to show the list of items, and
-then an item must be selected from the displayed list. This behaviour is
-illustrated in Figure~\ref{fig-combo-box}. To complicate matters
-further, users may execute this two-step behaviour using either a
-``one-click'' or a ``two-click'' approach. In the former approach, the
-user clicks on the combo box, drags down to the desired list item, then
-releases. In the latter approach, the user clicks once on the combo box,
-then clicks again on the desired list item. If the list were longer than
+then an item must be selected from the displayed list, as illustrated in
+Figure~\ref{fig-combo-box}. To complicate matters further, users may
+execute this two-step behaviour using either a ``one-click'' or a
+``two-click'' approach. In the former approach, the user clicks on the
+combo box, drags down to the desired list item, then releases. In the
+latter approach, the user clicks once on the combo box, then clicks
+again on the desired list item. If the drop-down list were longer than
 what could be displayed on screen, this could even lead to a
 ``multiple-click'' approach, where the user clicks multiple times on the
-downward scroll arrow in the drop-down list. We have, however, not
-considered this possibility in our experiment.
+downward scroll arrow in the list. We have, however, not considered this
+possibility in our experiment.
 
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.8]{combobox-step1}\quad
+	\includegraphics[scale=0.8]{combobox-step1}\quad\quad\quad
 	\includegraphics[scale=0.8]{combobox-step2}
-	\caption{The two-step action required to select a combo box.}
+	\caption{The ``two-step'' action required to select a combo box.}
 	\label{fig-combo-box}
 \end{figure}
 
@@ -348,21 +347,21 @@ considered this possibility in our experiment.
 An experiment was carried out to test the effect of size for different
 GUI target types with different selection devices. The experiment
 involved participants completing a series of simple point and select
-tasks. Small, medium and large sizes were tested for a combo box, text
-box, check box and button, using either a touch screen overlay or a
-mouse. The test was multi-directional, meaning the targets appeared in
-multiple directions from the initial starting point. A variety of
-different sizes, angles and distances were used for each target
-position.
+tasks. Small, medium and large sizes (see Table~\ref{tab-target-sizes})
+were tested for combo boxes, text boxes, check boxes and buttons, using
+either a touch screen overlay or a mouse. The test was
+multi-directional, meaning the targets appeared in multiple directions
+from the initial starting point. A variety of different sizes, angles
+and distances were used for each target position.
 
-The test itself comprised a screen containing a button in the middle and
+The test itself comprised a screen containing a button in the centre and
 a target for the participant to select as illustrated in
 Figure~\ref{fig-test-environment}. When a participant clicked on the
-centre (``Go'') button, a trial was started and a target appeared on the
+centre ``Go'' button, a trial was started and a target appeared on the
 screen. The trial ended when the participant successfully clicked the
-target, which caused it to disappear. The time taken between clicking
-the ``Go'' button and successfully clicking on the target was recorded
-as well as the number of errors made during the trial. The final
+target, which then disappeared. The time taken between clicking the
+``Go'' button and successfully clicking on the target was recorded as
+well as the number of errors made during the trial. The final
 coordinates of the successful click on the target were recorded in order
 to calculate the effective width of the target.
 
@@ -370,7 +369,7 @@ to calculate the effective width of the target.
 \begin{figure}
 	\centering
  	\includegraphics[draft]{test-environment}
-	\caption{Screenshot of the test environment with the target in the
+	\caption{Screenshot of the test environment with a target in the
 	top left of the screen and the ``Go'' button in the centre.}
 	\label{fig-test-environment}
 \end{figure}
@@ -381,14 +380,12 @@ to calculate the effective width of the target.
 
 A participant sample size of twenty-four was used for the experiment.
 Each participant was allocated to one of two groups with each group
-using one selection device in testing.
-
-The allocation of groups was based upon the results of a questionnaire
-completed by each participant prior to testing. The purpose of the
-pre-test questionnaire was to establish the level of computer, mouse and
-touch screen experience of each participant. Each participant was then
-allocated to a selection device group depending on which device they had
-the least experience with.
+using one selection device in testing. The allocation of groups was
+based on the results of a questionnaire completed by each participant
+prior to testing. The purpose of the pre-test questionnaire was to
+establish the level of computer, mouse and touch screen experience of
+each participant. Participants were then allocated to a selection device
+group based on which device they had the least experience with.
 
 Due to the testing being done within the nutrition program environment
 mentioned in Section~\ref{sec-introduction}, the participants were all
@@ -407,13 +404,13 @@ time, number of errors and selection coordinates) were captured by the
 software and automatically written to a Microsoft Excel worksheet.
 
 The touch screen used in testing was a 17'' Magic Touch USB overlay
-Model KTMT-1700-USB-M. This device uses a take-off touch strategy, that
-is, a selection is not confirmed until the user's finger is removed from
-the screen. An important property of touch screen overlays is that they
-are placed over a conventional monitor and the touch surface is thus not
-coincident with the display surface. This can cause a slight discrepancy
-or parallax effect between where the user touches the overlay and where
-the cursor is positioned on the screen.
+Model KTMT-1700-USB-M \citep{Keyt-2005-Touch}. This device uses a
+take-off touch strategy, that is, a selection is not confirmed until the
+user's finger is removed from the screen. An important property of touch
+screen overlays is that they are placed over a conventional monitor and
+the touch surface is thus not coincident with the display surface. This
+can cause a slight discrepancy or parallax effect between where the user
+touches the overlay and where the cursor is positioned on the screen.
 
 The touch screen overlay was fitted to a Dell 15'' Flat Panel Model
 E151FPb monitor. A flat panel monitor was chosen because it was noticed
@@ -437,7 +434,8 @@ were:
 
 	\item Target type (text box, combo box, button and check box)
 
-	\item Target size (large, medium and small)
+	\item Target size (large, medium and small---see
+	Table~\ref{tab-target-sizes})
 
 	\item Target distance (\unit[40]{mm}, \unit[80]{mm} and
 	\unit[160]{mm}---see below)
@@ -470,8 +468,8 @@ yielded twelve possible target positions for each trial, as illustrated
 in Figure~\ref{fig-target-positions}. Three distances were used that
 represented target positions ranging from close to the initial starting
 point to very far away from the initial starting point. Four angles were
-chosen so that targets could be tested in ninety degree blocks and
-giving a good range of screen positions for the target. The first angle
+chosen so that targets could be tested in ninety degree blocks and to
+provide a good range of screen positions for the target. The first angle
 was set to \(45^{\circ}\) with \(90^{\circ}\) increments thereafter, in
 order to mimic real life user interface target selection, where targets
 are situated in different areas of the screen and therefore selections
@@ -496,36 +494,35 @@ values from \unit[0.7]{bits} (\unit[63]{mm} width and \unit[160]{mm}
 distance) to \unit[5.4]{bits} (\unit[4]{mm} width and \unit[40]{mm}
 distance). It is important to note that the combo box distance values
 were adjusted in these calculations to reflect the two-step selection
-behaviour of this target type. That is, we need to consider not just the
-distance from the initial starting point to the target, but also the
-extra distance from the main combo box to the selected list item. In our
-experiment, participants were told to always select the third list item
-in combo boxes, so the adjusted distance for a combo box was equal to
-the normal distance from the initial starting point to the target,
-\emph{plus} the additional distance to the third list item.
+behaviour of this target type (as discussed in
+Section~\ref{sec-evaluation-other}). That is, we need to consider not
+just the distance from the initial starting point to the target, but
+also the extra distance from the main combo box to the selected list
+item. In our experiment, participants were told to always select the
+third list item in combo boxes (as illustrated in
+Figure~\ref{fig-combo-box}), so the adjusted distance for a combo box
+was equal to the normal distance from the initial starting point to the
+target, \emph{plus} the additional distance to the third list item.
+Additional data about the selections made on combo boxes were recorded
+in order to account for the selection approach of the participant,
+whether it be a ``one-click'' or ``two-click'' approach.
 
 
 \subsection{Procedure}
 \label{sec-method-procedure}
 
-The participant was initially given an introduction to the test by the
-research observer. The introduction included a brief summary of the aims
-of the study and what the test involved. The participant was also given
-an instruction sheet that they had access to throughout the duration of
-the test. After reading the instruction sheet the participant had the
-opportunity to ask questions or raise any issues.
+The participant was given an introduction to the test by the research
+observer, which included a brief summary of the aims of the study and
+what the test involved. The participant was also given an instruction
+sheet that they had access to throughout the duration of the test. After
+reading the instruction sheet the participant had the opportunity to ask
+questions or raise any issues.
 
 Participants were instructed to complete each block of trials as quickly
 as possible without losing accuracy. Participants were given the
 opportunity to rest for as long as they wished between blocks. It was
 made clear to participants that a task was only complete once the target
-was successfully selected. Because of the two-step selection behaviour
-of the combo box target type, participants were instructed to always
-select the third item in the list when selecting a combo box (as
-illustrated in Figure~\ref{fig-combo-box}). Additional data about the
-selections made on combo boxes were recorded in order to account for the
-selection approach of the participant, whether it be a ``one-click'' or
-``two-click'' approach.
+was successfully selected.
 
 Before the test began, participants were instructed to complete a
 practice session involving fifteen random trials of the same point and
@@ -534,7 +531,7 @@ minimal level of experience with their selection device. This also meant
 that each participant knew how to correctly select each target type
 including the combo box.
 
-At the conclusion of the test the participant was required to fill out a
+At the conclusion of the test the participant was asked to fill out a
 questionnaire regarding comfort and user satisfaction with the selection
 device used.
 
@@ -552,14 +549,16 @@ the F-ratio was used whenever the Mauchly's test results showed that
 assumptions of sphericity were violated.
 
 Post hoc tests, for multiple comparisons, were made using the Bonferroni
-method. Due to the skew observed in the error rate data, inter-device
-difference in error rates were assessed using the Mann-Whitney U Test.
+method. Due to the skew observed in the error rate data (see
+Section~\ref{sec-results-learning}), inter-device difference in error
+rates were assessed using the Mann-Whitney U Test.
 
 The comfort questionnaire was based on a five point ordinal scale, where
-five generally indicated a bad rating. Because of the small data size, a
-Mann-Whitney (non-parametric) test was used. All statistical analyses
-were performed using SPSS version 11.0. A \emph{p}-value of \(< 0.05\)
-was considered statistically significant.
+five generally indicated a poor rating. Because of the small data size, a
+Mann-Whitney (non-parametric) test was used.
+
+All statistical analyses were performed using SPSS version 11.0. A
+\emph{p}-value of \(< 0.05\) was considered statistically significant.
 
 
 \section{Results and discussion}
@@ -569,18 +568,18 @@ was considered statistically significant.
 \subsection{Adjusting for learning}
 \label{sec-results-learning}
 
-\citet{Doug-SA-1999-CHI} recommend that input device studies should
-apply a repeated measures paradigm and test for learning effects. The
-effects of learning have been shown to affect movement time and accuracy
-\citep{Doug-SA-1999-CHI}.
+\citet{Doug-SA-1999-CHI} have shown that the effects of learning can
+affect movement time and accuracy. They therefore recommend that input
+device studies should apply a repeated measures paradigm and test for
+learning effects.
 
 From analysing the results of movement time and throughput over each
 test block, it was clear for the combo box and check box target types
 that learning occurred from the first to the second block with the touch
-screen, as seen in Figure~\ref{fig-movement-time-learning}. Due to prior
-participant experience, no learning was observed with the mouse. No
-learning occurred with the text box or button most likely due to their
-relatively large size and simple selection behaviour.
+screen overlay, as seen in Figure~\ref{fig-movement-time-learning}. Due
+to prior participant experience, no learning was observed with the
+mouse. No learning occurred with the text box or button, most likely due
+to their relatively large size and simple selection behaviour.
 
 
 \begin{figure}
@@ -598,13 +597,14 @@ out on movement time for both the check box and combo box. For movement
 time of the combo box, the effect of block \(\times\) device was
 significant \((F(1.549, 1335.219) = 4.373, p < 0.05)\). Helmhert
 contrasts showed that the differences between blocks became
-non-significant after block 1 \((p > 0.05)\).
+non-significant after block 1 \((p > 0.05)\), which implies that
+learning occurred during block 1.
 
 For movement time of the check box, the effect of block \(\times\)
-device was significant \((F(1.608, 1385.960) = 4.763, p < 0.05)\). Using
-Helmhert contrasts, the differences between blocks became
-non-significant after block 1 \((p > 0.05)\), which again shows that
-learning occurred in block 1.
+device was significant \((F(1.608, 1385.960) = 4.763, p < 0.05)\).
+Helmhert contrasts again showed that the differences between blocks
+became non-significant after block 1 \((p > 0.05)\), implying that
+learning occurred during block 1.
 
 To account for learning with the combo and check box, results from block
 6 only were used to calculate the movement time and throughput measures,
@@ -619,146 +619,151 @@ using results from all six test blocks.
 \label{sec-results-movement}
 
 The results showed that the mouse had an overall movement time of
-\unit[1.3]{s} across all target types compared to \unit[1.6]{s} for the
-touch screen overlay. Therefore we can conclude that a mouse is on average
-15.2\% faster than a touch screen overlay. This is interesting because
-\citet{Sear-A-1991-IJMMS} found that the movement times for mouse and
-touch screen monitor were similar for rectangular targets larger than
-\unit[2]{mm}. Therefore the nature of the two types of touch screen
-(overlay versus monitor) may affect the movement time associated with
-the type of touch screen. It is also likely that due to the loss of
-accuracy found with the overlay during testing, the touch screen monitor
-will have faster movement times compared to the touch screen overlay.
+\unit[1.32]{s} across all target types compared to \unit[1.57]{s} for
+the touch screen overlay. We can thus conclude that the touch screen
+overlay was on average 1.2 times slower than the mouse. This is
+interesting because \citet{Sear-A-1991-IJMMS} found that the movement
+times for mouse and touch screen monitor were similar for rectangular
+targets larger than \unit[2]{mm}. Therefore the nature of the two types
+of touch screen (overlay versus monitor) may affect the movement time
+associated with the type of touch screen. It is also likely that due to
+the loss of accuracy found with the overlay during testing, the touch
+screen monitor will have faster movement times compared to the touch
+screen overlay.
 
 The movement times for each target type showed that the text box had the
 fastest movement time, followed by the button, the check box and the
 combo box. These results are illustrated in
 Figure~\ref{fig-movement-time} and are consistent with Fitts' Law
 \citep{Fitt-PM-1954-Law}, in that the largest target (the text box) had
-the fastest movement time.
+the fastest movement time. It may appear that the combo box results
+violate Fitts' Law, as the combo box is the same size as the text box,
+yet is over twice as slow. In this case however, the slow movement times
+are not a function of the target size, but rather a result of the more
+complex two-step behaviour required to succesfully select a combo box
+(which is not considered by Fitts' Law). The extra movement of selecting
+an item from the drop-down list clearly dramatically increases the
+movement time for the combo box. As the additional distance from the
+main combo box area to the list item is relatively short, the
+significant increase in movement time is therefore most likely due to
+users making more errors.
 
 
 \begin{figure}
 	\centering
 	\includegraphics{movement-time}
-	\caption{Movement time for each target type, averaged across both
-	devices and all target sizes.}
+	\caption{Movement time by target type and device, averaged across
+	all target sizes.}
 	\label{fig-movement-time}
 \end{figure}
 
 
-As expected, the combo box had the slowest movement time due to the
-two-step behaviour involved in making a selection. The sizes of the
-combo box were exactly the same as the text box but movement time was
-119\% slower. Thus the extra movement of selecting an item from the
-drop-down list increases the movement time involved with the combo box
-dramatically. As the distance from the main combo box area to the list
-item is relatively short, the significant increase in movement time is
-therefore most likely due to users making more errors.
+The touch screen overlay was found to have similar movement time to the
+mouse for the medium and large targets, but for the small targets, the
+touch screen overlay was on average 1.5 times slower than the mouse. The
+only time that the touch screen overlay was found to be faster than the
+mouse was with the largest target type (the large text box), but the
+difference was less than one percent.
 
-A touch screen overlay has similar movement time to a mouse for the
-medium and large targets, but for the small targets, the touch screen
-overlay was 67\% slower than the mouse. The only time where the touch
-screen overlay was found to be faster than the mouse was with the
-largest target type---the large text box.
-
-The movement time for the small check box with the touch screen overlay
-was 69\% slower than that of the mouse. The small check box was the
-smallest item tested, with dimensions of \unit[4]{mm} \(\times\)
+The movement time for the small check box on the touch screen overlay
+was about 2.7 times slower than that for the mouse. The small check box
+was the smallest item tested, with dimensions of \unit[4]{mm} \(\times\)
 \unit[4]{mm}. We can conclude that the touch screen overlay was not
 efficient for selecting targets as small as \unit[4]{mm}. Compare this
-with \citet{Sear-A-1991-IJMMS}, who showed that a touch screen has
-similar movement time to a mouse for targets as small as \unit[2]{mm}.
-While a touch screen monitor can be used with targets as small as
-\unit[2]{mm}, a touch screen overlay should only be used for targets
-with a size of greater than \unit[4]{mm}. The results from the error
-rate analysis also support this conclusion (see
+with \citet{Sear-A-1991-IJMMS}, who showed that a touch screen monitor
+has similar movement time to a mouse for targets as small as
+\unit[2]{mm}. While a touch screen monitor can be used with targets as
+small as \unit[2]{mm}, a touch screen overlay should only be used for
+targets with a size of greater than \unit[4]{mm}. The results from the
+error rate analysis also support this conclusion (see
 Section~\ref{sec-results-error-rate}).
 
 
 \subsection{Throughput}
 \label{sec-results-throughput}
 
-Throughput for the mouse was \unit[1.238]{bps}, slightly higher than the
-\unit[1.215]{bps} throughput for the touch screen overlay. The selection
-device by itself was shown not to have a significant effect on
-throughput \((F(1, 22) = 0.02, p > 0.05)\). Throughput did not vary for
-size but throughput did vary depending on target type \((F(2.07, 45.55)
-= 4.77, p < 0.001)\). Check boxes had the highest throughput rate of
-\unit[1.967]{bps} (sd = 0.720). This is interesting as the check box was
-shown to have the second worst movement time and the worst error rate
-(see Figure~\ref{fig-throughput}).
+The average throughput for the mouse was \unit[1.242]{bps}, slightly
+higher than the \unit[1.214]{bps} average throughput for the touch
+screen overlay. The selection device by itself was shown not to have a
+significant effect on throughput \((F(1, 22) = 0.02, p > 0.05)\).
+Throughput did not vary for size but throughput did vary depending on
+target type \((F(2.07, 45.55) = 4.77, p < 0.001)\), as shown in
+Figure~\ref{fig-throughput}. Check boxes had the highest throughput rate
+of \unit[1.967]{bps} (sd = 0.720). This is interesting as the check box
+had the second worst movement time and the worst error rate. Upon
+further investigation it was seen that the movement time for the check
+box was in fact in the middle range of all targets, and due to its small
+size it had a high index of difficulty. These two factors are the most
+likely reason for the check box having such a high throughput rate.
 
 
 \begin{figure}
 	\centering
 	\includegraphics{throughput}
-	\caption{Throughput for each target type, averaged across both
-	devices and all target sizes.}
+	\caption{Throughput by target type and device, averaged across all
+	target sizes.}
 	\label{fig-throughput}
 \end{figure}
 
 
-Upon further investigation it was seen that the movement time for the
-check box was in fact in the middle range of all targets, and due to its
-small size it had a high index of difficulty. These two factors are the
-most likely reason for the check box having such a high throughput rate.
+The combo box had the worst average throughput of \unit[0.501]{bps} (sd
+= 0.213). The index of difficulty was not very high for the combo box,
+so its low throughput rate could be attributed to its high movement
+time.
 
-The combo box had the worst throughput of \unit[0.501]{bps} (sd =
-0.213). The index of difficulty was not very high for the combo box, so
-its low throughput rate could be attributed to its high movement time.
-
-The overall throughput rate of \unit[1.2]{bps} for the mouse is much
+The average throughput rate of \unit[1.242]{bps} for the mouse is much
 lower than that found by previous research. A study by
 \citet{Doug-SA-1994-SIGCHI} showed that a mouse had a throughput rate of
 \unit[4.15]{bps}. \citet{Mack-IS-1991} compared three devices (mouse,
 tablet and trackball) using four target sizes (8, 16, 32 and 64 pixels)
-over two different types of tasks: pointing and dragging. The throughput
-for the mouse in this case was \unit[4.5]{bps}. This may indicate that
-the level of selection difficulty in our experiment is higher than in
-previous research. This could be due to the selection of GUI targets
+over two different types of tasks (pointing and dragging), and found
+that the throughput for the mouse was \unit[4.5]{bps}. This may indicate
+that the level of selection difficulty in our experiment is higher than
+in previous research. This could be due to the selection of GUI targets
 instead of arbitrary rectangular targets.
 
 
 \subsection{Error rate}
 \label{sec-results-error-rate}
 
-The error rate for the mouse was only 2.7\% which is consistent with
-previous studies. The touch screen overlay, on the other hand, had an
-error rate of 60.7\%. \citet{Sear-A-1991-IJMMS} found that the touch
-screen monitor had an average error rate of 49\% but this was across
-much smaller targets. This suggests that there is a loss in accuracy
-from using a touch screen overlay compared to a touch screen monitor.
+The average error rate for the mouse was only 2.7\% which is consistent
+with previous studies. The touch screen overlay, on the other hand, had
+an average error rate of 60.8\%. \citet{Sear-A-1991-IJMMS} found that a
+touch screen monitor had an average error rate of 49\% but this was
+across much smaller targets. This suggests that there is a loss of
+accuracy when using a touch screen overlay as opposed to a touch screen
+monitor.
 
-The check box had a significantly high error rate: 78.5\% for all sizes
-and both devices and in particular, and 312.5\% for the small check box
-with the touch screen overlay. The touch screen overlay incurred the
-majority of the errors. With the check box the mouse had an error rate
-of 4.4\% and the touch screen overlay had an error rate of 152.5\%. The
+The check box had a significantly high average error rate of 78.5\%
+across all sizes and both devices; in particular, the small check box on
+the touch screen overlay had an error rate of 393\%. The touch screen
+overlay incurred the majority of the errors. For all sizes of the check
+box the mouse produced an average error rate of 6.7\%, while the touch
+screen overlay produced an average error rate of 178.5\%. The
 distinguishing factor of the check box compared to the other target
-types was its small size. We can conclude from this that the touch
+types is its small size, so we can conclude from this that a touch
 screen overlay is more inaccurate for selecting small targets
 (\unit[4]{mm} or less).
 
-Buttons and text boxes had much lower error rates compared to that of
-the check box and combo box (as seen in Figure~\ref{fig-error-rate}). As
-buttons and text boxes also had low movement times, we can conclude that
-these two targets have very good overall performance.
+The button and text box had much lower error rates than the check box
+and combo box (as seen in Figure~\ref{fig-error-rate}). As the button
+and text box also exhibited low movement times, we can conclude that
+these two target types have very good overall performance.
 
 
 \begin{figure}
 	\centering
 	\includegraphics{error-rate}
-	\caption{Error rate for each target type, averaged across both
-	devices and all target sizes.}
+	\caption{Error rate by target type and device, averaged across all
+	target sizes.}
 	\label{fig-error-rate}
 \end{figure}
 
 
 Note that the error rate calculation for combo boxes assumes a
 ``two-click'' selection approach, as only two of the twenty-four
-participants used the ``one-click'' approach. Both of the ``one-click''
-participants used the mouse.
+participants used the ``one-click'' approach. Both of these participants
+used the mouse.
 
 
 \subsection{Comfort}
@@ -769,7 +774,7 @@ the touch screen overlay (3.000). These differences were statistically
 significant \((p < 0.01)\). The responses regarding the question on
 neck, wrist and arm fatigue showed that the touch screen overlay had a
 high rating (4.083), whereas the mouse was rated in the midpoint range
-(3.167). These differences were statistically significant \((p < 0.5)\).
+(3.167). These differences were statistically significant \((p < 0.05)\).
 The final question rated the overall difficulty in using the selection
 device. The mouse (4.250) was rated easier to use than the touch screen
 overlay (3.333). These differences were statistically significant \((p <
@@ -778,53 +783,54 @@ overlay (3.333). These differences were statistically significant \((p <
 Participants using the touch screen overlay rated both the text box and
 button as easy to accurately select, with the large and medium sizes
 being most preferred. This feedback is consistent with the data
-collected in that text boxes and buttons have short movement time and
+collected in that the text box and button have low movement times and
 low error rates (i.e., they are easy to accurately select). The combo
 box was rated in the middle of the range, and the check box was rated as
 very hard to select. Three quarters of the touch screen overlay
 participants preferred to select large combo boxes and check boxes,
-which is consistent with the poor error rates and movement times
+which is consistent with the high error rates and movement times
 associated with these two target types on the touch screen overlay.
 
-Participants using the mouse rated the text box and button easy to
-accurately select, with the large and medium sizes being most preferred.
-Both the combo box and check box were rated harder to select than the
-button and text box with the check box having the worst rating. As with
-the touch screen overlay, participants preferred large combo boxes and
-check boxes.
+Participants using the mouse also rated the text box and button as easy
+to accurately select, with the large and medium sizes being most
+preferred. Both the combo box and check box were rated harder to select
+than the button and text box with the check box having the worst rating.
+As with the touch screen overlay, participants preferred large combo
+boxes and check boxes.
 
 In the general feedback, one participant noted the lack of arm support
-for targets at the top of the screen. This is an interesting comment,
-because the nature of using a touch screen means the user's arm might be
-raised off the desk, and thus be self-supporting when selecting items
-towards the top of the screen.
+when selecting targets at the top of the screen. This is an interesting
+comment, because the nature of using a touch screen means the user's arm
+might be raised off the desk, and thus be self-supporting when selecting
+items towards the top of the screen.
 
 Another suggestion was making the target change colour when the cursor
 is located above it. This is a similar concept to that of interactive
 rollover items commonly used in web pages. Auditory feedback has been
-shown to affect the speed and accuracy when making a selection
-\citep{Bend-G-1999-PhD}, and so it likely the visual feedback received
-from GUI targets will affect the selection performance. All the targets
-that were tested provide some form of immediate visual feedback, from
-the button being visually depressed to a tick appearing in the check
-box. Further study is needed to assess how visual feedback affects
-selection performance of GUI items and what the most effective method of
-providing feedback is.
+shown to affect speed and accuracy when making a selection
+\citep{Bend-G-1999-PhD}, so it is likely that the visual feedback
+received from GUI targets will affect the selection performance. All of
+the target types tested provide some form of immediate visual feedback,
+from the button being visually depressed to a tick appearing in the
+check box. Further study is needed to assess how visual feedback affects
+selection performance of GUI items and what is the most effective method of
+providing feedback.
 
 
 \subsection{Other findings}
 \label{sec-results-other}
 
-Calculating the standard deviation of the final selection coordinates on
-the screen revealed two interesting patterns. First, when selecting text
-boxes with the mouse, there was greater variation in final selection
-coordinates on the right side of the screen (\(45^{\circ}\) and
-\(315^{\circ}\) target angles) than on the left side of the screen
-(\(90^{\circ}\) and \(225^{\circ}\) target angles). This behaviour was
-not apparent when selecting text boxes with the touch screen overlay, as
-illustrated in Figure~\ref{fig-variation-textbox}. This would mean that
-participants using the mouse were much more careful in making selections
-with text boxes on the left side of the screen than on the right.
+Two interesting patterns emerged when we calculated the standard
+deviation of the final selection coordinates on the screen. First, when
+selecting text boxes with the mouse, there was greater variation in
+final selection coordinates on the right side of the screen
+(\(45^{\circ}\) and \(315^{\circ}\) target angles) than on the left side
+of the screen (\(90^{\circ}\) and \(225^{\circ}\) target angles). This
+behaviour was not apparent when selecting text boxes with the touch
+screen overlay, as illustrated in Figure~\ref{fig-variation-textbox}.
+This would mean that participants using the mouse were more careful when
+making selections with text boxes on the left side of the screen than on
+the right.
 
 
 \begin{figure}
@@ -840,7 +846,7 @@ with text boxes on the left side of the screen than on the right.
 Second, and even more interesting, was the observation that while
 selections made on the combo box with the mouse exhibited similar
 behaviour to the text box, the behaviour on the touch screen overlay was
-more or less the opposite, as shown in
+the opposite (although less pronounced), as shown in
 Figure~\ref{fig-variation-combobox}. That is, selections of combo boxes
 on the left side of the touch screen overlay had greater variation than
 selections made on the right.
@@ -858,22 +864,24 @@ selections made on the right.
 
 These effects were most pronounced for the large size of both the text
 box and the combo box. The variation of selection coordinates for the
-smaller targets (the button and check box) were consistent across both
+smaller targets (the button and check box) was consistent across both
 the mouse and touch screen overlay and for all target sizes.
 
-We can only speculate as to the causes of this variation. In the case of
-the combo box, one possibility is its asymmetrical appearance compared
-to the other target types, which may encourage participants to try to
-click specifically on the drop-down arrow of the combo box, rather than
-clicking on the combo box as a whole. However, this does not explain the
-variation between left and right sides of the screen, nor why the same
-behaviour was observed with the completely symmetrical text box.
+We can only speculate as to the reasons for this variation. In the case
+of the combo box, one possibility is its asymmetrical appearance
+compared to the other target types, which may encourage participants to
+try to click specifically on the drop-down arrow of the combo box,
+rather than treating the entire combo box as a target (this could also
+be another factor in the slow movement times for this target type).
+However, this does not explain the variation between left and right
+sides of the screen, nor why the same behaviour was observed with the
+completely symmetrical text box.
 
 Another possibility is the handedness of the participants, which in the
 case of a touch screen might affect how difficult it is to select
-targets on different sides of the screen. Unfortunately, we did not ask
-participants whether they were right- or left-handed and thus can draw no
-conclusions on this point.
+targets on different sides of the screen. Unfortunately we did not ask
+participants whether they were right- or left-handed, and thus can draw
+no conclusions on this point.
 
 
 \section{Conclusions}
@@ -891,19 +899,18 @@ less accurate than the mouse. The touch screen overlay was found to have
 reasonable performance with large GUI items but poor performance with
 smaller GUI items. The touch screen overlay did have comparable movement
 times to the mouse for medium and large sized targets. Throughput did
-not vary across device or size but did vary across target type. Both
-selection devices had the same user preference except with respect to
-the smallest target type---check boxes---in which the mouse had a higher
-preference. The mouse was rated easier to make accurate selections with
-than the touch screen overlay. The touch screen overlay also had worse
-arm, wrist and finger fatigue compared to the mouse. From these results
-we can conclude that the mouse had higher user satisfaction than a touch
-screen.
+not vary across device or target size but did vary across target type.
+Both selection devices had the same user preference except with respect
+to the smallest target type (check boxes), in which the mouse had a
+higher preference. The mouse was rated easier to make accurate
+selections with than the touch screen overlay. The touch screen overlay
+also had worse arm, wrist and finger fatigue compared to the mouse. From
+these results we can conclude that the mouse had higher user
+satisfaction than a touch screen.
 
 An unusual variation in final selection coordinates was noted for both
 text boxes and combo boxes. Further studies are required to establish
-whether this is a consistent phenomenon and if so, to identify why this
-variation occurs.
+why this variation occurs.
 
 In general we can conclude that a touch screen overlay with no external
 device (e.g., a pen) is not an effective selection device for targets
@@ -916,10 +923,11 @@ Although the results showed that the touch screen overlay was not
 efficient and usable for selecting GUI items with a size of \unit[4]{mm}
 or less, this may not be the case when a pen or some external device is
 used in conjunction with the touch screen overlay. In general there
-seems to a lack of research done in device assessment of touch screens
-with pens or other external devices. Further testing on touch screens
-used with an external device such as a pen may well show that a touch
-screen overlay is adequate and efficient for selecting small GUI items.
+seems to be a lack of research in device assessment of touch screen
+overlays with pens or other external devices. Further testing on touch
+screen overlays used with an external device such as a pen may well show
+that a touch screen overlay is adequate and efficient for selecting
+small GUI items.
 
 
 % The Appendices part is started with the command \appendix;

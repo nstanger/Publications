@@ -1,9 +1,5 @@
 #musthave device
 #musthave target
-//#musthave field2
-//#musthave field3
-//#musthave label1
-//#musthave label2
 
 #proc settings
 	units: cm
@@ -25,7 +21,7 @@
 
 #proc areadef
 	#if @device = "touch"
-		title: Touch screen
+		title: Touch
 	#else
 		title: Mouse
 	#endif
@@ -54,24 +50,24 @@
 #proc lineplot
 	xfield: angle
 	yfield: @field_40
-	linedetails: color=red
-	pointsymbol: shape=diamond linecolor=red fillcolor=red
+	linedetails: color=black
+	pointsymbol: shape=diamond linecolor=black fillcolor=black
 	legendlabel: 40 mm
 	legendsampletype: line+symbol
 
 #proc lineplot
 	xfield: angle
 	yfield: @field_80
-	linedetails: color=blue
-	pointsymbol: shape=square linecolor=blue fillcolor=blue
+	linedetails: color=gray(0.2)
+	pointsymbol: shape=square linecolor=gray(0.2) fillcolor=gray(0.2)
 	legendlabel: 80 mm
 	legendsampletype: line+symbol
 
 #proc lineplot
 	xfield: angle
 	yfield: @field_160
-	linedetails: color=green
-	pointsymbol: shape=circle linecolor=green fillcolor=green
+	linedetails: color=gray(0.6)
+	pointsymbol: shape=circle linecolor=gray(0.4) fillcolor=gray(0.4)
 	legendlabel: 160 mm
 	legendsampletype: line+symbol
 

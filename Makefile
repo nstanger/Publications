@@ -32,7 +32,7 @@ movement-time.eps: barchart.plo
 	ploticus -eps -tightcrop -o $@ $< yrange="0 2.25" ystubfmt="%2.1f" ylabel="Movement time (s)" field=movement_time
 
 error-rate.eps: barchart.plo
-	ploticus -eps -tightcrop -o $@ $< yrange="0 85" ystubfmt="%g" ylabel="Error rate (%)" field=error_rate
+	ploticus -eps -tightcrop -o $@ $< yrange="0 155" ystubfmt="%g" ylabel="Error rate (%)" field=error_rate
 
 combobox-learning.eps: linechart.plo
 	ploticus -eps -tightcrop -o $@ $< field1=combo_mouse_move field2=combo_touch_move label1=Mouse label2=Touch

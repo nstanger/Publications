@@ -7,15 +7,18 @@
 	units: cm
 #endproc
 
+#set field_mouse = @field "_mouse"
+#set field_touch = @field "_touch"
+
 #proc getdata
 	delim: comma
 	fieldnameheader: yes
 	data:
-		target_type, throughput, movement_time, error_rate
-		Text box, 0.958, 0.972, 7.767
-		Button, 1.505, 1.035, 7.333
-		Check box, 1.967, 1.638, 78.467
-		Combo box, 0.501, 2.130, 33.467
+		target_type, throughput_mouse, throughput_touch, movement_time_mouse, movement_time_touch, error_rate_mouse, error_rate_touch
+		Text box, 0.86, 1.016, 0.98, 0.97, 0.233, 15.3
+		Button, 1.461, 1.551, 1.02, 1.05, 1.633, 13.03
+		Check box, 2.155, 1.779, 1.22, 2.06, 4.4, 152.5
+		Combo box, 0.492, 0.51, 2.07, 2.19, 4.667, 62.27
 
 #proc areadef
 	areaname: slide
@@ -37,7 +40,25 @@
 	tics: none
 
 #proc bars
-	lenfield: @field
-	color: blue
-	labelword: @@N
-	labeldetails: size=10 adjust=0,0.2
+	lenfield: @field_mouse
+	color: gray(0.3)
+	showvalues: yes
+	labeldetails: size=8 adjust=-0.15,0.1
+	cluster: 1 / 2
+	barwidth: 0.5
+	legendlabel: Mouse
+
+#proc bars
+	lenfield: @field_touch
+	color: white
+	showvalues: yes
+	labeldetails: size=8 adjust=0.15,0.1
+	cluster: 2 / 2
+	barwidth: 0.5
+	legendlabel: Touch
+
+#proc legend
+	format: multiline
+	location: min+1 max-0.9
+	textdetails: size=9
+	outlinecolors: yes
