@@ -43,7 +43,7 @@
 #proc xaxis:
 	selflocatingstubs: datafields=angle,angle
 	stubdetails: size=10
-	label: Target angle
+	label: Target angle (degrees)
 	labeldetails: style=B size=10 adjust=0,-0.1
 	//adjust=-0.1,0
 
