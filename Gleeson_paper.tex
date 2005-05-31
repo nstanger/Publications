@@ -9,7 +9,7 @@
 
 % the natbib package allows both number and author-year (Harvard)
 % style referencing;
-\usepackage[authoryear,sort]{natbib}
+\usepackage{natbib}
 
 % if you use PostScript figures in your article
 % use the graphics package for simple commands
@@ -25,6 +25,7 @@
 
 \usepackage{units}
 \usepackage{url}
+\usepackage{flafter}
 
 
 \begin{document}
@@ -91,7 +92,7 @@ Mouse \sep
 Selection device \sep
 Fitts' Law \sep
 Performance evaluation \sep
-GUI items
+GUI item
 \end{keyword}
 
 \end{frontmatter}
@@ -173,13 +174,13 @@ specify only a single standard size for most GUI items \citep[pp.\
 \citeyearpar{Appl-2004-HIG} human interface guidelines specify three
 standard sizes (mini, small and large), but these proved to be rather
 small in our Windows-based testing environment. We therefore adjusted
-\citeauthor{Appl-2004-HIG}'s three sizes such that the ``small'' size
-was consistent with \citeauthor{MS-1999-UI}'s guidelines. The resultant
-target sizes are listed in Table~\ref{tab-target-sizes}. A screen
-resolution of \unit[81]{DPI} was assumed.
+Apple's three sizes such that the ``small'' size was consistent with
+Microsoft's guidelines. The resultant target sizes are listed in
+Table~\ref{tab-target-sizes}. A screen resolution of \unit[81]{DPI} was
+assumed.
 
 
-\begin{table}
+\begin{table}[ht]
 	\caption{Target sizes (width \(\times\) height) used in the experiment.}
 	\label{tab-target-sizes}
 	\begin{tabular}{llll}
@@ -223,35 +224,23 @@ used in the test and therefore interactions between more than two
 targets---which often occur in a typical information system
 interface---are not studied.
 
-\citet{Mack-IS-2001-EHCI} note that throughput
-is a very important measure, as it reflects the efficiency of the user
-completing the task and is a measure of both speed and
-accuracy. Throughput is calculated by the following formula:
-\begin{equation}
-	\label{eqn-throughput}
-	\mathit{throughput} = \frac{\mathit{ID}_{e}}{\mathit{MT}}
-\end{equation}
+\citet{Mack-IS-2001-EHCI} note that throughput is a very important
+measure, as it reflects the efficiency of the user completing the task
+and is a measure of both speed and accuracy. Throughput is calculated by
+the formula \(\mathit{throughput} = \mathit{ID}_{e} / \mathit{MT}\),
 where \(\mathit{MT}\) is the movement time in seconds (defined as the
 time taken to successfully select a target) and \(\mathit{ID}_{e}\) is
 Fitts' \citeyearpar{Fitt-PM-1954-Law} \emph{index of difficulty}
 measured in bits. Throughput is thus measured in bits per second (bps).
 
-The index of difficulty is calculated by the following formula:
-\begin{equation}
-	\label{eqn-IDe}
-	\mathit{ID}_{e} = \log_{2}\left(\frac{D}{W_{e}} + 1\right)
-\end{equation}
-where \(D\) is the distance to the target and \(W_{e}\) is the
-\emph{effective width} of the target. The effective width reflects
-spatial variability in a sequence of trials, and thus differs from the
-actual width of the target. The effective width of a target is
-calculated by the following formula:
-\begin{equation}
-	\label{eqn-We}
-	W_{e} = 4.133 \times \mathrm{SD}_{x}
-\end{equation}
-where \(\mathit{SD}_{x}\) is the standard deviation in the selection
-coordinates measured along the path to target \(x\).
+The index of difficulty is calculated by the formula \(\mathit{ID}_{e} =
+\log_{2}((D / W_{e}) + 1)\), where \(D\) is the distance to the target
+and \(W_{e}\) is the \emph{effective width} of the target. The effective
+width reflects spatial variability in a sequence of trials, and thus
+differs from the actual width of the target. The effective width of a
+target is calculated by the formula \(W_{e} = 4.133 \times
+\mathit{SD}_{x}\), where \(\mathit{SD}_{x}\) is the standard deviation
+in the selection coordinates measured along the path to target \(x\).
 
 \ISOnine\ does not provide any guidance on the range of index of
 difficulty values to use in testing. \citet{Doug-SA-1999-CHI} recommend
@@ -332,7 +321,7 @@ downward scroll arrow in the list. We have, however, not considered this
 possibility in our experiment.
 
 
-\begin{figure}
+\begin{figure}[ht]
 	\centering
 	\includegraphics[scale=0.8]{combobox-step1}\quad\quad\quad
 	\includegraphics[scale=0.8]{combobox-step2}
@@ -551,7 +540,7 @@ assumptions of sphericity were violated.
 
 Post hoc tests, for multiple comparisons, were made using the Bonferroni
 method. Due to the skew observed in the error rate data (see
-Section~\ref{sec-results-learning}), inter-device difference in error
+Section~\ref{sec-results-learning}), inter-device differences in error
 rates were assessed using the Mann-Whitney U Test.
 
 The comfort questionnaire was based on a five point ordinal scale, where
@@ -641,7 +630,7 @@ the fastest movement time. It may appear that the combo box results
 violate Fitts' Law, as the combo box is the same size as the text box,
 yet is over twice as slow. In this case however, the slow movement times
 are not a function of the target size, but rather a result of the more
-complex two-step behaviour required to succesfully select a combo box
+complex two-step behaviour required to successfully select a combo box
 (which is not considered by Fitts' Law). The extra movement of selecting
 an item from the drop-down list clearly dramatically increases the
 movement time for the combo box. As the additional distance from the
@@ -698,7 +687,7 @@ size it had a high index of difficulty. These two factors are the most
 likely reason for the check box having such a high throughput rate.
 
 
-\begin{figure}
+\begin{figure}[ht]
 	\centering
 	\includegraphics{throughput}
 	\caption{Throughput by target type and device, averaged across all
