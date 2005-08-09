@@ -1,107 +1,50 @@
-% Template article for preprint document class `elsart'
-% with harvard style bibliographic references
-% SP 2001/01/05
+\documentclass[a4paper]{article}
 
-\documentclass[reviewcopy]{elsart}
-
-% Use the option doublespacing or reviewcopy to obtain double line spacing
-% \documentclass[doublespacing]{elsart}
-
-% the natbib package allows both number and author-year (Harvard)
-% style referencing;
 \usepackage{natbib}
-
-% if you use PostScript figures in your article
-% use the graphics package for simple commands
-% \usepackage{graphics}
-% or use the graphicx package for more complicated commands
+\usepackage[dvips,margin=3cm]{geometry}
 \usepackage{graphicx}
-% or use the epsfig package if you prefer to use the old commands
-% \usepackage{epsfig}
-
-% The amssymb package provides various useful mathematical symbols
 \usepackage{amssymb}
-
-
 \usepackage{units}
 \usepackage{url}
 \usepackage{flafter}
 
+\title{\textbf{Assessing the efficacy of a touch screen overlay as a selection
+device for typical GUI targets}}
+\author{M.\ GLEESON\dag, N.\ STANGER\thanks{Corresponding author. Email nstanger@infoscience.otago.ac.nz.} \dag\ and E.\ FERGUSON\ddag}
+\date{\dag Department of Information Science, \\
+	\ddag Department of Human Nutrition, \\
+	University of Otago, Dunedin, New Zealand}
+
 
 \begin{document}
 
-\begin{frontmatter}
+\renewcommand{\baselinestretch}{2}
 
-% Title, authors and addresses
+\maketitle
 
-% use the thanksref command within \title, \author or \address for footnotes;
-% use the corauthref command within \author for corresponding author footnotes;
-% use the ead command for the email address,
-% and the form \ead[url] for the home page:
-% \title{Title\thanksref{label1}}
-% \thanks[label1]{}
-% \author{Name\corauthref{cor1}\thanksref{label2}}
-% \ead{email address}
-% \ead[url]{home page}
-% \thanks[label2]{}
-% \corauth[cor1]{}
-% \address{Address\thanksref{label3}}
-% \thanks[label3]{}
+\begin{quotation}
+	\noindent In this paper we investigate the efficacy of a touch
+	screen overlay compared to a mouse, when selecting typical graphical
+	user interface (GUI) items in a desktop information system. A series
+	of tests were completed involving multi-directional point and select
+	tasks, and the results for both devices compared. The results showed
+	that the touch screen overlay was not suitable for selecting GUI
+	targets smaller than \unit[4]{mm}. The touch screen overlay was
+	slower and had a higher error rate than the mouse, but there was no
+	significant difference in throughput. Testers rated the mouse easier
+	to use and to make accurate selections, while the touch screen
+	overlay resulted in greater arm, wrist and finger fatigue. These
+	results suggest that a touch screen overlay is not a practical
+	selection device for desktop interfaces with small GUI targets.
+\end{quotation}
 
-\title{Assessing the efficacy of a touch screen overlay as a selection
-device for typical GUI targets}
-
-% use optional labels to link authors explicitly to addresses:
-% \author[label1,label2]{}
-% \address[label1]{}
-% \address[label2]{}
-
-\author[info]{Matthew Gleeson},
-\ead{matt\_gleeson@xtra.co.nz}
-\author[info]{Nigel Stanger\corauthref{cor}},
-\ead{nstanger@infoscience.otago.ac.nz}
-\corauth[cor]{Corresponding author. Tel.: +64-3-479-8179; fax: +64-3-479-8311}
-\author[hunt]{Elaine Ferguson}
-\ead{elaine.ferguson@stonebow.otago.ac.nz}
-
-\address[info]{Department of Information Science,}
-\address[hunt]{Department of Human Nutrition, \\ University of Otago, PO Box 56, Dunedin, New Zealand}
-
-
-\begin{abstract}
-
-In this paper we investigate the efficacy of a touch screen overlay
-compared to a mouse, when selecting typical graphical user interface
-(GUI) items in a desktop information system. A series of tests were
-completed involving multi-directional point and select tasks, and the
-results for both devices compared. The results showed that the touch
-screen overlay was not suitable for selecting GUI targets smaller than
-\unit[4]{mm}. The touch screen overlay was slower and had a higher error
-rate than the mouse, but there was no significant difference in
-throughput. Testers rated the mouse easier to use and to make accurate
-selections, while the touch screen overlay resulted in greater arm,
-wrist and finger fatigue. These results suggest that a touch screen
-overlay is not a practical selection device for desktop interfaces with
-small GUI targets.
-
-\end{abstract}
-
-\begin{keyword}
-Touch screen overlay \sep
-Mouse \sep
-Selection device \sep
-Fitts' Law \sep
-Performance evaluation \sep
-GUI item
-\end{keyword}
-
-\end{frontmatter}
+\begin{quotation}
+	\noindent \emph{Keywords:} Touch screen overlay; Mouse; Selection
+	device; Fitts' Law; Performance evaluation; GUI item
+\end{quotation}
 
 % main text
 \newcommand{\ISOnine}{ISO 9241-9}
-
-
-\newpage
 
 
 \section{Introduction}
@@ -938,7 +881,7 @@ small GUI items.
 %   produces (e.g. Barnes et al. 1976, Ch. 2).
 
 \bibliographystyle{elsart-harv}
-\bibliography{IwC_paper}
+\bibliography{Gleeson_paper}
 % \begin{thebibliography}{}
 
 % \bibitem[Names(Year)]{label} or \bibitem[Names(Year)Long names]{label}.

@@ -12,11 +12,11 @@ GRAPHICS:=test-environment.eps target-positions.eps \
 	variation-combo-mouse.eps variation-combo-touch.eps
 
 
-IwC_paper.pdf: IwC_paper.ps
+Gleeson_paper.pdf: Gleeson_paper.ps
 
-IwC_paper.ps: IwC_paper.dvi
+Gleeson_paper.ps: Gleeson_paper.dvi
 
-IwC_paper.dvi: IwC_paper.tex IwC_paper.bib $(GRAPHICS)
+Gleeson_paper.dvi: Gleeson_paper.tex Gleeson_paper.bib $(GRAPHICS)
 	latex $<
 	bibtex $*
 	latex $<
