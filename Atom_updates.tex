@@ -8,14 +8,17 @@
 
 \title{Lightweight Update Propagation using Atom}
 \author{David W.\ Williamson \and Nigel J.\ Stanger}
-\affiliation{Department of Information Science, University of Otago, \\
+\affiliation{Department of Information Science, \\
+	University of Otago, \\
 	PO Box 56, Dunedin, New Zealand \\
 	Email:~\texttt{\{dwilliamson,nstanger\}@infoscience.otago.ac.nz}}
 
 
 \begin{document}
 
+
 \maketitle
+
 
 \begin{abstract}
 There are many situations where some form of automated update
@@ -37,15 +40,17 @@ typical data integration scenarios where the data sources are updated at
 irregular intervals, such as the aforementioned retailer example, or
 when extracting data from multiple data sources for loading into a data
 warehouse. In the paper we discuss the underlying principles and
-motivation for the approach, describe the architecture that we have
-used, and describe an early prototype implementation.
+motivation for the approach, discuss possible architectures, and
+describe an early prototype implementation.
 \end{abstract}
 \vspace{.1in}
 
 \noindent {\em Keywords:} update propagation, data integration, Atom,
 SME, lightweight architecture, Semantic Web, B2B
 
+
 \section{Introduction}
+\label{sec-intro}
 
 The ability to integrate data from multiple heterogeneous sources is
 becoming a key issue for modern businesses, and yet the number of
@@ -56,22 +61,25 @@ cost of implementing an enterprise-scale data integration solution can
 often be prohibitive
 \cite{Beck-R-2002-Bled,Guo-J-2003-DocEng,Somm-RA-2002-SIGMOD}.
 
-In this paper, we propose a lightweight data integration architecture
-based on the Atom XML syndication format, which may provide a
-cost-effective alternative technology for SME's to facilitate data
-integration rather than having to purchase expensive enterprise grade
-systems. We are currently implementing a basic proof of concept of this
-architecture, and plan to evaluate it using three case studies.
+In this paper, we propose a lightweight architecture for propagating
+updates from one database to another using the Atom XML syndication
+format. This architecture could provide a cost-effective alternative
+technology for SME's to facilitate data integration rather than having
+to purchase expensive enterprise grade systems. We have implemented a
+basic proof of concept of this architecture, and are currently
+evaluating it using three case studies.
 
-The body of this paper comprises three main sections. In Section 2 we
-provide some general background information regarding data integration
-and the Atom syndication format. In Section 3 we discuss the motivation
-behind our proposed architecture. We then discuss the proposed
-architecture and the goals of our research in Section 4, and present
-some possible directions for future work in Section 5. The paper
-concludes in Section 6.
+The body of this paper comprises four main sections. In
+Section~\ref{sec-background} we provide some general background
+information regarding data integration and the Atom syndication format.
+In Section 3 we discuss the motivation behind our proposed architecture.
+We then discuss the proposed architecture and the goals of our research
+in Section 4, and present some possible directions for future work in
+Section 5. The paper concludes in Section 6.
+
 
 \section{Background}
+\label{sec-background}
 
 In this section, we briefly discuss the concepts and technologies that
 underlie our proposed architecture. In Section 2.1 we provide a brief
@@ -80,7 +88,9 @@ attempting to implement a data integration solution. This is followed by
 a brief discussion of the development of Atom and related technologies
 such as RSS and RDF.
 
+
 \subsection{Data Integration}
+\label{sec-data-integration}
 
 Data integration is a term used to describe the combining of data
 residing in different sources to provide the user with a unified view of
@@ -138,12 +148,16 @@ specifications, other standards such as EDIFACT  and EXPRESS have been
 defined to facilitate the transmission of information from various
 sources so that it may be integrated with other data.
 
+
 \subsection{The Atom Syndication Format}
+\label{sec-atom-overview}
 
 In this section we provide a brief overview of the Atom syndication
 format and the technologies that led to its development.
 
+
 \subsubsection{RDF, RSS and the Semantic Web}
+\label{sec-rdf-rss}
 
 The World Wide Web (WWW) as it stands today consists mostly of documents
 intended for humans to read, i.e., ``\ldots{}a medium of documents for
@@ -230,7 +244,9 @@ standard named Atom, which will, according to the Atom Publishing Format
 and Protocol (Atompub) Working Group, be heavily influenced by the
 lessons learned in the evolution of RSS.
 
+
 \subsubsection{Atom}
+\label{sec-atom-detail}
 
 The Atom  specification is an XML-based document format that has been
 designed to describe lists of related information
@@ -266,7 +282,9 @@ may be adapted for other uses or content types. The Atompub Working
 Group aim to submit the Atom feed format and editing protocol to the
 IETF for consideration as a proposed standard in early April 2005.
 
+
 \section{Motivation}
+\label{sec-motivation}
 
 One of the example domains of data integration is that of Electronic
 Data Interchange (EDI), a concept used by companies to exchange
@@ -317,7 +335,9 @@ networks or e-catalogues.
 This identified need provides the motivation for our proposed
 architecture, which we will discuss in the next section.
 
+
 \section{Proposed Architecture and Research Goals}
+\label{sec-architecture}
 
 To address the issue of lack of SME adoption of data integration
 technologies, we propose a lightweight data integration architecture
@@ -327,6 +347,16 @@ community is trying to encourage different uses for the format beyond
 the traditional application of weblog syndication
 \cite{Nott-M-2005-Atom}. Although the standard has yet to be officially
 ratified, it already has a large user and development community.
+
+\begin{figure*}[htb]
+	\fbox{\parbox[b]{.99\linewidth}{%
+		\vskip 0.5cm%
+		\centerline{\includegraphics[scale=0.9]{Architecture_basic}}%
+		\vskip 0.5cm%
+	}}
+	\caption{Overview of the basic architecture}
+	\label{fig-basic}
+\end{figure*}
 
 We are currently implementing a basic proof of concept of this
 architecture, and will evaluate its cost-effectiveness and performance
@@ -381,9 +411,9 @@ cost/benefit analysis. We may also investigate measuring various
 software quality characteristics as defined by the ISO 9126 standard
 \cite{ISO-2001-9126-1}.
 
-%   Figure 1. Proposed architecture showing integration module
 
 \section{Future Work}
+\label{sec-future-work}
 
 As the initial prototype is intended as a basic proof of concept of our
 proposed architecture, it has been kept as simple as possible in order
@@ -399,6 +429,16 @@ extension would require the addition of an ontology management module
 between the Atom feed processor and the integration module. This module
 will probably be based around the W3C's Web Ontology Language (OWL)
 \cite{McGu-DL-2004-OWL}.
+
+\begin{figure*}[htb]
+	\fbox{\parbox[b]{.99\linewidth}{%
+		\vskip 0.5cm%
+		\centerline{\includegraphics[scale=0.9]{Architecture_extended}}%
+		\vskip 0.5cm%
+	}}
+	\caption{Overview of the extended architecture}
+	\label{fig-extended}
+\end{figure*}
 
 The initial prototype also assumes only a single ``author'' per Atom feed,
 that is, there is only a single database underlying each feed (as
@@ -417,7 +457,9 @@ investigate extending the architecture to allow for the possibility of
 two-way data transfers, i.e., allowing data to flow from the target back
 to the sources.
 
+
 \section{Conclusion}
+\label{sec-conclusion}
 
 In this paper, we discussed a lightweight data integration architecture
 based on the Atom XML syndication format. Cost is a major factor in the
@@ -429,7 +471,9 @@ proof-of-concept prototype system that will be evaluated using a series
 of realistic case studies. We expect to have preliminary results from
 these evaluations by June 2005.
 
+
 \section{Acknowledgements}
+\label{sec-acknowledgements}
 
 The authors would like to thank Dr. Colin Aldridge and Dr. Stephen
 Cranefield for their helpful comments on an early draft of this paper.
