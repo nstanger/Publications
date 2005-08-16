@@ -69,24 +69,33 @@ to purchase expensive enterprise grade systems. We have implemented a
 basic proof of concept of this architecture, and are currently
 evaluating it using three case studies.
 
+We should clarify at this point that we are not proposing an
+architecture for processing data streams \cite{Babc-B-2002-Streams}.
+Such architectures deal with processing continuous streams of real-time
+data, whereas our architecture provides a lightweight means to propagate
+discrete sets of ``conventional'' update operations from one database to
+another.
+
 The body of this paper comprises four main sections. In
 Section~\ref{sec-background} we provide some general background
 information regarding data integration and the Atom syndication format.
-In Section 3 we discuss the motivation behind our proposed architecture.
-We then discuss the proposed architecture and the goals of our research
-in Section 4, and present some possible directions for future work in
-Section 5. The paper concludes in Section 6.
+In Section~\ref{sec-motivation} we discuss the motivation behind our
+proposed architecture. We then discuss the proposed architecture and the
+goals of our research in Section~\ref{sec-architecture}, and present
+some possible directions for future work in
+Section~\ref{sec-future-work}. The paper concludes in
+Section~\ref{sec-conclusion}.
 
 
 \section{Background}
 \label{sec-background}
 
 In this section, we briefly discuss the concepts and technologies that
-underlie our proposed architecture. In Section 2.1 we provide a brief
-overview of data integration, especially in the context of SME's
-attempting to implement a data integration solution. This is followed by
-a brief discussion of the development of Atom and related technologies
-such as RSS and RDF.
+underlie our proposed architecture. In
+Section~\ref{sec-data-integration} we provide a brief overview of data
+integration, especially in the context of SME's attempting to implement
+a data integration solution. This is followed by a brief discussion of
+the development of Atom and related technologies such as RSS and RDF.
 
 
 \subsection{Data Integration}
@@ -124,18 +133,18 @@ integration environments:
 A typical example of data integration from heterogeneous sources can be
 found in the arena of business-to-business (B2B) commerce, where, for
 example, a manufacturer may have to interact with multiple suppliers or
-temporary contractors each of whom may have completely different data
+temporary contractors, each of whom may use completely different data
 structures and data exchange formats \cite{Ston-M-2001-SIGMOD}. With the
 introduction of cheaper web based technology, many additional
 organizations have been able to undertake projects to facilitate data
-integration, however, the costs associated with such technology are
-still quite prohibitive to the many smaller companies and organizations
-that comprise the majority of most countries' economies.
+integration, but the costs associated with such technology can still be
+quite prohibitive to the many smaller companies and organizations that
+comprise the majority of most countries' economies.
 
 Many initiatives have been put forward to try and alleviate this
 situation, one of the more recent being the OASIS Universal Business
 Language (UBL) standard \cite{Mead-B-2004-UBL}, which is a project to
-standardize common business documentation---invoices, purchase orders
+standardize common business documentation---invoices, purchase orders,
 etc.---so that it is easier for companies to establish and maintain
 automated transactions with other parties. UBL has been designed to
 operate with ebXML.
@@ -143,8 +152,8 @@ operate with ebXML.
 XML has been widely adopted as a standard platform for exchanging data
 between organizations, and many specialist standards---such as the
 aforementioned ebXML---have been developed to cater to the unique needs
-certain business sectors present. In addition to XML-based language
-specifications, other standards such as EDIFACT  and EXPRESS have been
+that certain business sectors present. In addition to XML-based language
+specifications, other standards such as EDIFACT and EXPRESS have been
 defined to facilitate the transmission of information from various
 sources so that it may be integrated with other data.
 
@@ -159,7 +168,7 @@ format and the technologies that led to its development.
 \subsubsection{RDF, RSS and the Semantic Web}
 \label{sec-rdf-rss}
 
-The World Wide Web (WWW) as it stands today consists mostly of documents
+The World Wide Web (WWW) as it stands today mostly comprises documents
 intended for humans to read, i.e., ``\ldots{}a medium of documents for
 people rather than for data and information that can be processed
 automatically\ldots'' \cite{Bern-T-2001-SciAm}, which provides minimal
@@ -167,7 +176,7 @@ opportunity for computers to perform additional interpretation or
 processing on them \cite{Bern-T-1999-WWW,Bern-T-2001-SciAm}. In essence,
 computers in use on the Web today are primarily concerned with the
 parsing of elementary layout information, for example headers, graphics
-or text and processing like user input forms
+or text, and processing like user input forms
 \cite{Bern-T-1999-W3C,Bern-T-2001-SciAm}.
 
 There are few means by which computers can perform more powerful
@@ -209,17 +218,17 @@ statement will attest:
 \begin{quotation}
 	``The Resource Description Framework (RDF) is a language designed to
 	support the Semantic Web, in much the same way that HTML is the
-	language that helped initiate the original Web. RDF is a frame work
+	language that helped initiate the original Web. RDF is a framework
 	for supporting resource description, or metadata (data about data),
 	for the Web. RDF provides common structure that can be used for
 	interoperable XML data exchange.'' \cite{Powe-S-2003-RDF}
 \end{quotation}
 
-What RDF does in the context of the Semantic Web is to provide the
-capability of recording data in a way that can be interpreted easily by
-machines, which in turn provides an avenue to ``\ldots{}more efficient and
-sophisticated data interchange, searching, cataloguing, navigation,
-classification and so on\ldots{}'' \cite{Powe-S-2003-RDF}.
+What RDF does in the context of the Semantic Web is to provide a way to
+record data so that they can be interpreted easily by machines, which in
+turn provides an avenue to ``\ldots{}more efficient and sophisticated
+data interchange, searching, cataloguing, navigation, classification and
+so on\ldots{}'' \cite{Powe-S-2003-RDF}.
 
 Since its inception in the late 1990's, the RDF specification has
 spawned several applications, RSS being but one example. RDF Site
@@ -232,9 +241,9 @@ embraced by other individuals and organizations resulting in the
 spawning of multiple versions.
 
 At its most simple, the information provided in an RSS document
-comprises the description of a ``channel'' (that could be on a specific
+comprises the description of a ``channel'' (which could be on a specific
 topic such as current events, sport or the weather, etc.) consisting of
-URL linked items. Each item consists of a title, a link to the actual
+URL linked items. Each item comprises a title, a link to the actual
 content and a brief description or abstract.
 
 Because of the proliferation of differing RSS standards and associated
@@ -248,7 +257,7 @@ lessons learned in the evolution of RSS.
 \subsubsection{Atom}
 \label{sec-atom-detail}
 
-The Atom  specification is an XML-based document format that has been
+The Atom specification defines an XML-based document format that is
 designed to describe lists of related information
 \cite{Nott-M-2005-Atom}. These lists are known as ``feeds''. Feeds are
 made up of multiple items, known as ``entries''; each entry can have an
@@ -264,23 +273,23 @@ several design objectives for the feed format and the editing protocol.
 The feed format must be able to represent the following: a resource that
 is a weblog entry or article, a feed or channel of entries, a complete
 archive of all entries within a feed, existing well formed XML
-(especially XHTML) content and additional information in a
+content (especially XHTML), and additional information in a
 user-extensible manner.
 
 The editing protocol must support creating, deleting or editing feed
 entries, multiple authors for a single feed, user authentication, user
-management and the ability to create, obtain and configure complementary
-material such as comments or templates.
+management, and the ability to create, obtain and configure
+complementary material such as comments or templates.
 
 The latest specification of Atom, which at the time of writing is still
-in a draft form, states the main purpose that Atom is intended to
+in draft form, states that the main purpose that Atom is intended to
 address is ``\ldots{}the syndication of Web content such as Weblogs and
 news headlines to Web sites as well as directly to user agents''
-\cite{Nott-M-2005-Atom}. The specification also suggests that Atom
-should not be limited to just web based content syndication but in fact
-may be adapted for other uses or content types. The Atompub Working
-Group aim to submit the Atom feed format and editing protocol to the
-IETF for consideration as a proposed standard in early April 2005.
+\cite{Nott-M-2005-Atom}. The specification also suggests, however, that
+Atom should not be limited to just web based content syndication but in
+fact could be adapted for other uses or content types. The Atompub
+Working Group aim to submit the Atom feed format and editing protocol to
+the IETF for consideration as a proposed standard in early April 2005.
 
 
 \section{Motivation}
@@ -296,10 +305,10 @@ that in surveys regarding the extent of adoption of EDI, only a fraction
 of the companies that might be perceived as beneficiaries of such
 technology have actually implemented or attempted to implement it
 \cite{Beck-R-2002-Bled,vaHe-E-1999-EDI}. This naturally raises the
-question of why? We can refine this question further by asking why so
-few smaller companies (SME's) have adopted EDI or indeed other
-technologies that rely on accurate automated data integration, such as
-data warehousing.
+question of why this is the case. We can further refine this question by
+asking why so few smaller companies (SME's) have adopted EDI or indeed
+other technologies that rely on accurate automated data integration,
+such as data warehousing.
 
 Perhaps the most important reason is that of cost: to a small company
 the perceived benefits of introducing the technology may not be
@@ -326,11 +335,11 @@ costs involved, and at best are implemented only if it is deemed vitally
 important to the continued survival of the organization in the
 marketplace.
 
-Such a situation leads us to the conclusion that there is an apparent
-need for an alternative data integration solution that is cost
-effective, enabling SME's to embrace the benefits of applications that
-use data integration technologies, such as data warehousing, EDI
-networks or e-catalogues.
+Such a situation leads us to the conclusion that there is a need for
+alternative data integration technologies that are cost effective,
+enabling SME's to embrace the benefits of applications that use data
+integration technologies, such as data warehousing, EDI networks or
+e-catalogues.
 
 This identified need provides the motivation for our proposed
 architecture, which we will discuss in the next section.
@@ -339,14 +348,15 @@ architecture, which we will discuss in the next section.
 \section{Proposed Architecture and Research Goals}
 \label{sec-architecture}
 
-To address the issue of lack of SME adoption of data integration
-technologies, we propose a lightweight data integration architecture
-based on Atom, as illustrated in Figure 1. Atom was chosen as the
+To facilitate the adoption of data integration in SME's, we propose a
+lightweight architecture for propagating database updates based on Atom,
+as illustrated in Figure~\ref{fig-basic}. Atom was chosen as the
 underlying technology because of its XML heritage, and because the Atom
 community is trying to encourage different uses for the format beyond
 the traditional application of weblog syndication
 \cite{Nott-M-2005-Atom}. Although the standard has yet to be officially
 ratified, it already has a large user and development community.
+%%!! check ratification status
 
 \begin{figure*}[htb]
 	\fbox{\parbox[b]{.99\linewidth}{%
@@ -358,58 +368,144 @@ ratified, it already has a large user and development community.
 	\label{fig-basic}
 \end{figure*}
 
-We are currently implementing a basic proof of concept of this
-architecture, and will evaluate its cost-effectiveness and performance
-compared to other data integration technologies. The prototype builds
-upon existing software available for processing Atom feeds, and adds a
-module (written in PHP) for integrating incoming data from different
-feeds.
+The ``feed consumer'' modules shown in Figure~\ref{fig-basic} take as
+input Atom feeds from client sources, which simulate incoming data from
+client or supplier data sets. Two different methods of implementation
+have been explored, categorised as ``push'' and ``pull''---the names
+referring to how the flow of feed data to the target schema is managed.
 
-The integration module takes as input Atom feeds from multiple data
-sources, which simulate incoming data from client or supplier data sets.
-(For the initial prototype we have assumed that the data feeds are
-homogeneous; obviously this will need to be extended to heterogeneous
-feeds in later versions.) After the Atom feeds have been collected, the
-integration module will integrate the data supplied by the feeds into a
-schema that matches that of the target database, as shown in Figure 1. A
-transaction simulator will be employed to simulate workload and updates
-to the source databases, in order to recreate a day-to-day production
-environment.
+Within the push method, the consumption of feed information is governed
+predominantly by changes in state of the source data, i.e., when the feed
+generator detects a change in state of the source data (for example when
+a record is updated) the feed is regenerated and the consumer module
+called to apply the new information to the target schema. The majority
+of this activity takes place at or near the source data location,
+however in practice the location of each component is not too critical as
+they are web-based.
 
-In order to evaluate the prototype, we will implement three different
-simulated scenarios derived from actual use cases of previous projects.
-All three case studies follow a similar structure whereby data will be
-exported as Atom feeds from the source database(s), which are then
-consumed by the integration module before being sent to the target
-database for insertion.
+The pull method differs from the previously described approach on two
+key points. First, the feed consumer modules operate independently of,
+and are therefore not directly influenced by, the feed generator
+component and second, the flow of feed information to the target schema
+is governed by the consumer module itself, i.e., the consumer module
+will regularly check or ``poll'' the Atom feed to see if it has changed
+or not since the last time (this is done by simply checking the Atom
+feed <modified/> content). Hence rather than forcing or pushing feed
+data, it is instead pulled down to the target.
 
-The first scenario will simulate the integration of product data from
-multiple suppliers into a vendor's product information database. The
-product information database is used to populate the vendor's online
-product catalogue, which clients use to make decisions regarding goods
-procurement. The Atom feeds in this scenario represent flows of product
-data from the supplier to the vendor.
+A further improvement to this design has been proposed, whereby the
+consumer module polls the feed generator directly at which point if the
+feed generator has changed since last time it generated a feed and
+informs the consumer module of the feed's location. It is thought that
+this method would reduce the possibility of updates being lost and allow
+feeds to be dynamically created on demand rather than the static
+feed generation approach used in the current prototype implementation.
+
+In order to evaluate the prototype, we have implemented two different
+simulated scenarios derived from actual use case of previous projects.
+Both case studies follow a similar structure whereby data will be
+exported as Atom feeds from the source database(s), which are then feed
+into the consumer module before being sent to the target.
+
+The first scenario simulates the integration of movie timetable data
+from multiple cinema databases into a vendors' movie timetable database.
+This database is used to populate an e-catalogue allowing users to query
+times and locations for movies currently screening at cinemas
+contributing data to the system. The Atom feeds in this scenario
+represent flows of data from the supplier (the cinemas) to the vendor
+(the e-catalogue provider).
 
 The second scenario follows on from an earlier research project to
-develop a kiosk system for the sale and distribution of music in digital
-format. The database the kiosk(s) use will be populated with information
-from vendors who have agreed to supply content (e.g., a record label's
-collection of music files). What is needed is a mechanism to integrate
-all the music data from each supplier into the music kiosk system's own
-database. The Atom feeds in this scenario are used to maintain an up to
-date database that has the location and description of each available
-music track for sale in the system.
+develop a kiosk-based system for the sale and distribution of music in
+digital format, e.g., MP3.
 
-The third scenario will simulate the implementation of a data
-warehousing solution for a computer components distributor.
+The database a kiosk uses is populated with information from vendors who
+have agreed to supply content, i.e., music files. In this case, the
+prototype acts as a mechanism to propagate data and changes to existing
+data from in the suppliers' data sources to the music kiosk system's own
+database---the target. The Atom feeds in this instance are used to
+maintain an up to date database that has the location and description of
+each available music track for sale in the system.
 
-Preliminary results from the case study evaluations are expected to be
-available by June 2005. Our primary goal with the initial prototype is
-to prove the feasibility of our approach. We will compare our proposed
-architecture against existing data integration solutions by means of a
-cost/benefit analysis. We may also investigate measuring various
-software quality characteristics as defined by the ISO 9126 standard
-\cite{ISO-2001-9126-1}.
+Both case studies had a varying level of complexity in terms of design
+and implementation demands, which allowed us to pursue a staged
+development of the core components by starting with the less complicated
+of the case studies first and then building on what was learned and
+extending what we had created in order to complete the second
+implementation.
+
+Essential functionality testing on the movie e-catalogue system will be
+carried out, however, more intensive testing is being focussed on the
+second case study because it not only contains all the same features as
+found in the first but also reflects more aspects of functionality that
+would be found in many other real world projects, with its added feature
+to update existing records held within the target schema. In addition,
+the volume of data involved was much greater than that in the movie
+e-catalogue system which meant that the music kiosk system provided an
+excellent opportunity to test an Atom based system under a variety of
+loading conditions.
+
+Preliminary load testing to date has yielded data for the push method
+prototype pertaining to the time taken to propagate a set of records
+that ranged in size between 5600 to over 80,000 rows. The size of the
+Atom feed and SQL generated that is sent to the target schema.
+
+Four test runs were made per result set, with another data source being
+added (with the same number of records again) at the start of the next
+run.
+
+%We are currently implementing a basic proof of concept of this
+%architecture, and will evaluate its cost-effectiveness and performance
+%compared to other data integration technologies. The prototype builds
+%upon existing software available for processing Atom feeds, and adds a
+%module (written in PHP) for integrating incoming data from different
+%feeds.
+%
+%The integration module takes as input Atom feeds from multiple data
+%sources, which simulate incoming data from client or supplier data sets.
+%(For the initial prototype we have assumed that the data feeds are
+%homogeneous; obviously this will need to be extended to heterogeneous
+%feeds in later versions.) After the Atom feeds have been collected, the
+%integration module will integrate the data supplied by the feeds into a
+%schema that matches that of the target database, as shown in Figure 1. A
+%transaction simulator will be employed to simulate workload and updates
+%to the source databases, in order to recreate a day-to-day production
+%environment.
+%
+%In order to evaluate the prototype, we will implement three different
+%simulated scenarios derived from actual use cases of previous projects.
+%All three case studies follow a similar structure whereby data will be
+%exported as Atom feeds from the source database(s), which are then
+%consumed by the integration module before being sent to the target
+%database for insertion.
+%
+%The first scenario will simulate the integration of product data from
+%multiple suppliers into a vendor's product information database. The
+%product information database is used to populate the vendor's online
+%product catalogue, which clients use to make decisions regarding goods
+%procurement. The Atom feeds in this scenario represent flows of product
+%data from the supplier to the vendor.
+%
+%The second scenario follows on from an earlier research project to
+%develop a kiosk system for the sale and distribution of music in digital
+%format. The database the kiosk(s) use will be populated with information
+%from vendors who have agreed to supply content (e.g., a record label's
+%collection of music files). What is needed is a mechanism to integrate
+%all the music data from each supplier into the music kiosk system's own
+%database. The Atom feeds in this scenario are used to maintain an up to
+%date database that has the location and description of each available
+%music track for sale in the system.
+%
+%The third scenario will simulate the implementation of a data
+%warehousing solution for a computer components distributor.
+%
+%Preliminary results from the case study evaluations are expected to be
+%available by June 2005. Our primary goal with the initial prototype is
+%to prove the feasibility of our approach. We will compare our proposed
+%architecture against existing data integration solutions by means of a
+%cost/benefit analysis. We may also investigate measuring various
+%software quality characteristics as defined by the ISO 9126 standard
+%\cite{ISO-2001-9126-1}.
 
 
 \section{Future Work}
@@ -472,7 +568,7 @@ of realistic case studies. We expect to have preliminary results from
 these evaluations by June 2005.
 
 
-\section{Acknowledgements}
+\section*{Acknowledgements}
 \label{sec-acknowledgements}
 
 The authors would like to thank Dr. Colin Aldridge and Dr. Stephen
