@@ -65,9 +65,10 @@ In this paper, we propose a lightweight architecture for propagating
 updates from one database to another using the Atom XML syndication
 format. This architecture could provide a cost-effective alternative
 technology for SME's to facilitate data integration rather than having
-to purchase expensive enterprise grade systems. We have implemented a
-basic proof of concept of this architecture, and are currently
-evaluating it using three case studies.
+to purchase expensive enterprise grade systems. It is flexible and can
+be easily extended to support additional functionality. We have
+implemented a basic proof of concept of this architecture, and are
+currently evaluating it using three case studies.
 
 We should clarify at this point that we are not proposing an
 architecture for processing data streams \cite{Babc-B-2002-Streams}.
@@ -511,19 +512,20 @@ run.
 \section{Future Work}
 \label{sec-future-work}
 
-As the initial prototype is intended as a basic proof of concept of our
+As the initial prototype is intended as a basic proof of concept of the
 proposed architecture, it has been kept as simple as possible in order
-to facilitate the implementation and evaluation. There are several
-obvious extensions to the basic prototype that will be investigated in
-later iterations of the architecture.
+to facilitate implementation and evaluation. There are several obvious
+extensions to the basic prototype that will be investigated in later
+iterations of the architecture.
 
 The initial prototype assumes that all data sources are largely
 homogeneous, that is, that they all share similar semantics and can
 therefore be relatively easily integrated. An obvious extension is to
-permit heterogeneous data sources that have differing semantics. Such an
-extension would require the addition of an ontology management module
-between the Atom feed processor and the integration module. This module
-will probably be based around the W3C's Web Ontology Language (OWL)
+permit heterogeneous data sources that have differing semantics. This
+would require the addition of export and mapping schemas, and a schema
+mapping layer to map incoming data from the source schema to the target
+schema, as shown in Figure~\ref{fig-extended}. These components could
+perhaps make use of the W3C's Web Ontology Language (OWL)
 \cite{McGu-DL-2004-OWL}.
 
 \begin{figure*}[htb]
@@ -532,40 +534,53 @@ will probably be based around the W3C's Web Ontology Language (OWL)
 		\centerline{\includegraphics[scale=0.9]{Architecture_extended}}%
 		\vskip 0.5cm%
 	}}
-	\caption{Overview of the extended architecture}
+	\caption{Possible extensions to the architecture}
 	\label{fig-extended}
 \end{figure*}
 
-The initial prototype also assumes only a single ``author'' per Atom feed,
-that is, there is only a single database underlying each feed (as
-implied by Figure 1). We can envisage a situation where what appears to
-be a single data source is actually a view layered on top of a
-collection of underlying databases (e.g., a supplier might draw data for
-their Atom feed from multiple databases within their organization). It
-would therefore be useful to investigate the possibility of multiple
-``authors'' per Atom feed. This could imply an additional layer of data
-integration within the data source itself.
+The prototype also assumes only a single ``author'' per Atom feed, that
+is, there is only a single database underlying each feed (as implied by
+Figure~\ref{fig-basic}). It is quite feasible to have a single data
+source that is actually a view layered on top of a collection of
+underlying databases, as illustrated at top left in
+Figure~\ref{fig-extended} (e.g., a supplier might draw data for their
+Atom feed from multiple databases within their organization). It would
+therefore be useful to investigate the possibility of multiple
+``authors'' per Atom feed.
 
-The data flows shown in Figure 1 imply that the proposed architecture is
-one-way only (i.e., from the data sources to the target database), but
-this may not be true in general. It would therefore be interesting to
-investigate extending the architecture to allow for the possibility of
-two-way data transfers, i.e., allowing data to flow from the target back
-to the sources.
+The prototype currently only supports the PostgreSQL and MySQL database
+management systems. While there has been some simple generalisation to
+enable the system to work with with both products, an obvious extension
+is to further generalise the data source interface to support multiple
+relational and non-relational data sources and targets. This is
+illustrated by the ``adaptor'' components in Figure~\ref{fig-extended}.
+
+Another possible extension could be to generalise the ``transport
+layer'' of the architecture. The architecture is currently based on Atom
+feeds over HTTP, but could conceivably be generalised to support
+different transport formats and protocols, such as Jabber, email, and so
+on.
+
+The data flows shown in Figures~\ref{fig-basic} and~\ref{fig-extended}
+imply that the proposed architecture is one-way only (i.e., from the
+data sources to the target database), but this may not be true in
+general. It would therefore be interesting to investigate extending the
+architecture to allow for the possibility of two-way data transfers,
+i.e., allowing data to flow from the target back to the sources.
 
 
 \section{Conclusion}
 \label{sec-conclusion}
 
-In this paper, we discussed a lightweight data integration architecture
-based on the Atom XML syndication format. Cost is a major factor in the
-slow adoption of data integration technologies by small to medium
-enterprises, so the proposed architecture could provide a cost-effective
-alternative for implementing data integration infrastructures in small
-business environments. We are currently developing a basic
-proof-of-concept prototype system that will be evaluated using a series
-of realistic case studies. We expect to have preliminary results from
-these evaluations by June 2005.
+In this paper, we discussed a lightweight update propagation
+architecture based on the Atom XML syndication format. Cost is a major
+factor in the slow adoption of data integration technologies by small to
+medium enterprises, so the proposed architecture could provide a
+cost-effective alternative for implementing data integration
+infrastructures in small business environments. We have developed a
+basic proof-of-concept prototype system that will be evaluated using a
+series of realistic case studies. We expect to have preliminary results
+from these evaluations by June 2005.
 
 
 \section*{Acknowledgements}
