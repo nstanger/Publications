@@ -346,7 +346,7 @@ This identified need provides the motivation for our proposed
 architecture, which we will discuss in the next section.
 
 
-\section{Proposed Architecture and Research Goals}
+\section{Proposed Architecture, Implementation and Methodology}
 \label{sec-architecture}
 
 To facilitate the adoption of data integration in SME's, we propose a
@@ -379,19 +379,19 @@ Within the push method, the consumption of feed information is governed
 predominantly by changes in state of the source data, i.e., when the feed
 generator detects a change in state of the source data (for example when
 a record is updated) the feed is regenerated and the consumer module
-called to apply the new information to the target schema. The majority
-of this activity takes place at or near the source data location,
+called immediately to apply the new information to the target schema. 
+The majority of this activity takes place at or near the source data location,
 however in practice the location of each component is not too critical as
 they are web-based.
 
-The pull method differs from the previously described approach on two
+The pull method however differs from the push approach on two
 key points. First, the feed consumer modules operate independently of,
 and are therefore not directly influenced by, the feed generator
 component and second, the flow of feed information to the target schema
 is governed by the consumer module itself, i.e., the consumer module
 will regularly check or ``poll'' the Atom feed to see if it has changed
 or not since the last time (this is done by simply checking the Atom
-feed <modified/> content). Hence rather than forcing or pushing feed
+feeds <modified/> content). Hence rather than forcing or pushing feed
 data, it is instead pulled down to the target.
 
 A further improvement to this design has been proposed, whereby the
@@ -405,25 +405,25 @@ feed generation approach used in the current prototype implementation.
 In order to evaluate the prototype, we have implemented two different
 simulated scenarios derived from actual use case of previous projects.
 Both case studies follow a similar structure whereby data will be
-exported as Atom feeds from the source database(s), which are then feed
-into the consumer module before being sent to the target.
+exported as Atom feeds from the source database(s), which are then read 
+by the consumer module before being sent to the target.
 
 The first scenario simulates the integration of movie timetable data
 from multiple cinema databases into a vendors' movie timetable database.
 This database is used to populate an e-catalogue allowing users to query
 times and locations for movies currently screening at cinemas
 contributing data to the system. The Atom feeds in this scenario
-represent flows of data from the supplier (the cinemas) to the vendor
-(the e-catalogue provider).
+represent flows of data from the supplier (the participating cinemas) to 
+the vendor (the e-catalogue provider).
 
-The second scenario follows on from an earlier research project to
-develop a kiosk-based system for the sale and distribution of music in
-digital format, e.g., MP3.
+The second scenario follows on from an earlier research project undertaken
+at Otago University to develop a kiosk-based system for the sale and 
+distribution of music in digital format, e.g., MP3.
 
 The database a kiosk uses is populated with information from vendors who
 have agreed to supply content, i.e., music files. In this case, the
 prototype acts as a mechanism to propagate data and changes to existing
-data from in the suppliers' data sources to the music kiosk system's own
+data in the suppliers' data sources to the music kiosk system's own
 database---the target. The Atom feeds in this instance are used to
 maintain an up to date database that has the location and description of
 each available music track for sale in the system.
@@ -431,29 +431,43 @@ each available music track for sale in the system.
 Both case studies had a varying level of complexity in terms of design
 and implementation demands, which allowed us to pursue a staged
 development of the core components by starting with the less complicated
-of the case studies first and then building on what was learned and
-extending what we had created in order to complete the second
-implementation.
+of the case studies first, the movie e-catalogue, and then building on 
+what was learned and extending what we had created in order to complete 
+the music kiosk system implementation.
 
 Essential functionality testing on the movie e-catalogue system will be
-carried out, however, more intensive testing is being focussed on the
-second case study because it not only contains all the same features as
-found in the first but also reflects more aspects of functionality that
-would be found in many other real world projects, with its added feature
-to update existing records held within the target schema. In addition,
-the volume of data involved was much greater than that in the movie
-e-catalogue system which meant that the music kiosk system provided an
-excellent opportunity to test an Atom based system under a variety of
+carried out, however, more intensive testing is being focused on the 
+music kiosk retail system because it not only contains all the same 
+features as found in the first but also reflects more aspects of 
+functionality that would be found in many other real world projects, with
+its added feature to update existing records held within the target schema.
+In addition, the volume of data involved was much greater than that in the
+movie e-catalogue system which meant that the music kiosk system provided
+an excellent opportunity to test an Atom based system under a variety of 
 loading conditions.
 
-Preliminary load testing to date has yielded data for the push method
-prototype pertaining to the time taken to propagate a set of records
-that ranged in size between 5600 to over 80,000 rows. The size of the
-Atom feed and SQL generated that is sent to the target schema.
+The testing environment currently consists of five Apple PowerMac G5
+computers with dual 1.8 GHz CPU's and 1 GB of RAM. The computers are 
+connected via a full duplex gigabit eithernet network using a Dell PowerConnect
+2624 series switch. Software required for the system consists of a Web server,
+PHP, database server and a Web browser, for which we have used Apache 1.3.33, 
+PHP 5.0, MySQL4.? and Firefox 1.0.6 respectively. Four of the Apple computers 
+are used as data sources with each having a source schema installed while the 
+fifth computer is used to house the target schema. 
 
-Four test runs were made per result set, with another data source being
-added (with the same number of records again) at the start of the next
-run.
+A set of sample data was generated that ranged in equivalent size of 5600 to
+22400 rows. For each set of sample data, four ``runs'' are made with each run having
+an additional data source added i.e. the first test run has one data source, the
+second has two and so on. This approach allows us to view not only how the 
+system performs when dealing with increasingly larger amounts of data but also
+with varying numbers of ``physical'' data sources.
+
+Preliminary load testing to date has yielded data for the push method
+prototype pertaining to the time taken to propagate a set of records.
+The size of sample data used in testing ranged between 5600 to over 
+80,000 rows. In addition, the size of the generated Atom feed and the 
+SQL generated for the target schema was also recorded.
+
 
 %We are currently implementing a basic proof of concept of this
 %architecture, and will evaluate its cost-effectiveness and performance
