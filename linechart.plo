@@ -1,0 +1,82 @@
+// use ploticus -eps -o run_times.eps barchart.plo
+
+#proc settings
+	units: cm
+#endproc
+
+#proc getdata
+	delim: comma
+	fieldnameheader: yes
+	data:
+		num_sources, time_5605, time_11210, time_16815, time_22420
+		1,74.45393801,164.238584,268.4231119,395.5453539
+		2,127.8150412,279.1868954,539.7388149,781.8267632
+		3,149.4828416,406.9234075,841.0447567,1396.823214
+		4,188.2833264,634.3747808,1340.074612,2424.239076
+
+#proc areadef
+	#if @field1 = "combo_mouse_move"
+		title: Combo box
+	#else
+		title: Check box
+	#endif
+	titledetails: size=10 style=B align=C
+	areaname: standard
+	yrange: 0 2500
+	xrange: 0.5 4.5
+//	autowidth: 0.33
+//	autoheight: 0.66
+
+#proc yaxis:
+	stubs: inc
+	stubformat: %2.1f
+	stubdetails: size=10
+	label: Time (s)
+	labeldetails: style=B size=10 adjust=-0.1,0
+	grid: color=gray(0.7)
+
+#proc xaxis:
+	stubs: datafields=num_sources
+	stubdetails: size=10
+	label: Number of data sources
+	labeldetails: style=B size=10 adjust=0,-0.1
+	//adjust=-0.1,0
+
+#proc lineplot
+	xfield: num_sources
+	yfield: time_5605
+	linedetails: color=black
+	pointsymbol: shape=diamond linecolor=black fillcolor=black
+	legendlabel: @label1
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: num_sources
+	yfield: time_11210
+	linedetails: color=gray(0.25)
+	pointsymbol: shape=square linecolor=gray(0.25) fillcolor=gray(0.25)
+	legendlabel: @label2
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: num_sources
+	yfield: time_16815
+	linedetails: color=gray(0.25)
+	pointsymbol: shape=square linecolor=gray(0.25) fillcolor=gray(0.25)
+	legendlabel: @label2
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: num_sources
+	yfield: time_22420
+	linedetails: color=gray(0.25)
+	pointsymbol: shape=square linecolor=gray(0.25) fillcolor=gray(0.25)
+	legendlabel: @label2
+	legendsampletype: line+symbol
+
+//#proc legend
+//	format: multiline
+//	location: max-1.2 max-0.3
+//	textdetails: size=10
+//	seglen: 0.25
+//	reverseorder: yes

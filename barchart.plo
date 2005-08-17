@@ -1,0 +1,59 @@
+// use ploticus -eps -o output_sizes.eps barchart.plo
+
+#proc settings
+	units: cm
+#endproc
+
+#proc getdata
+	delim: comma
+	fieldnameheader: yes
+	data:
+		data_set,feed_size,sql_size
+		5605,0.778901,1.2223949
+		11210,1.560481,2.4712457
+		16815,2.353235,3.7134646
+		22420,3.146175,4.9882384
+
+#proc areadef
+	areaname: slide
+	autowidth: 0.9
+	yrange: 0 5
+	xrange: 0.25 4.75
+
+#proc yaxis:
+	stubs: inc
+//	stubformat: @ystubfmt
+	stubdetails: size=10
+	label: Output size (megabytes)
+	labeldetails: style=B size=10 adjust=-0.1,0
+	grid: color=gray(0.7)
+
+#proc xaxis:
+	stubs: datafields=data_set
+	stubdetails: style=B size=10
+	label: Data set size (records)
+	tics: none
+
+#proc bars
+	lenfield: feed_size
+	color: gray(0.3)
+	showvalues: yes
+	labeldetails: size=8 adjust=-0.15,0.1
+	cluster: 1 / 2
+	barwidth: 0.5
+	legendlabel: Atom
+
+#proc bars
+	lenfield: sql_size
+	color: white
+	showvalues: yes
+	labeldetails: size=8 adjust=0.15,0.1
+	cluster: 2 / 2
+	barwidth: 0.5
+	legendlabel: SQL
+
+#proc legend
+	format: multiline
+	location: min+1 max-0.9
+	textdetails: size=9
+	outlinecolors: yes
