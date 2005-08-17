@@ -1,10 +1,14 @@
 \documentclass{CRPITStyle}
 
+
 \usepackage{harvard}
 \usepackage{graphicx}
+\usepackage{verbatim}
+
 
 \pagestyle{empty}
 \thispagestyle{empty}
+
 
 \title{Lightweight Update Propagation using Atom}
 \author{David W.\ Williamson \and Nigel J.\ Stanger}
@@ -61,42 +65,39 @@ cost of implementing an enterprise-scale data integration solution can
 often be prohibitive
 \cite{Beck-R-2002-Bled,Guo-J-2003-DocEng,Somm-RA-2002-SIGMOD}.
 
-In this paper, we propose a lightweight architecture for propagating
-updates from one database to another using the Atom XML syndication
-format. This architecture could provide a cost-effective alternative
-technology for SME's to facilitate data integration rather than having
-to purchase expensive enterprise grade systems. It is flexible and can
-be easily extended to support additional functionality. We have
-implemented a basic proof of concept of this architecture, and are
-currently evaluating it using three case studies.
+In this paper, we propose a lightweight approach for propagating updates
+from one database to another using the Atom XML syndication format. This
+approach could provide a cost-effective alternative technology for SME's
+to facilitate data integration rather than having to purchase expensive
+enterprise grade systems. The underlying architecture is very flexible
+and can be easily extended to support additional functionality.
 
-We should clarify at this point that we are not proposing an
-architecture for processing data streams \cite{Babc-B-2002-Streams}.
-Such architectures deal with processing continuous streams of real-time
-data, whereas our architecture provides a lightweight means to propagate
-discrete sets of ``conventional'' update operations from one database to
-another.
+We should clarify at this point that we are not proposing an approach
+for processing data streams \cite{Babc-B-2002-Streams}. Such approaches
+deal with processing continuous streams of real-time data, whereas our
+approach provides a lightweight means to propagate discrete sets of
+``conventional'' update operations from one database to another.
 
-The body of this paper comprises four main sections. In
+The remainder of this paper comprises four main sections. In
 Section~\ref{sec-background} we provide some general background
 information regarding data integration and the Atom syndication format.
 In Section~\ref{sec-motivation} we discuss the motivation behind our
-proposed architecture. We then discuss the proposed architecture and the
-goals of our research in Section~\ref{sec-architecture}, and present
-some possible directions for future work in
-Section~\ref{sec-future-work}. The paper concludes in
-Section~\ref{sec-conclusion}.
+approach. We outline the architecture underlying our approach and
+discuss the implementation and testing of a proof of concept prototype
+in Section~\ref{sec-architecture}. Possible directions for future work
+are presented in Section~\ref{sec-future-work}, and the paper concludes
+in Section~\ref{sec-conclusion}.
 
 
 \section{Background}
 \label{sec-background}
 
 In this section, we briefly discuss the concepts and technologies that
-underlie our proposed architecture. In
-Section~\ref{sec-data-integration} we provide a brief overview of data
-integration, especially in the context of SME's attempting to implement
-a data integration solution. This is followed by a brief discussion of
-the development of Atom and related technologies such as RSS and RDF.
+underlie our approach. In Section~\ref{sec-data-integration} we provide
+a brief overview of data integration, especially in the context of SME's
+attempting to implement a data integration solution. This is followed by
+a brief discussion of the development of Atom and related technologies
+such as RSS and RDF.
 
 
 \subsection{Data Integration}
@@ -104,20 +105,21 @@ the development of Atom and related technologies such as RSS and RDF.
 
 Data integration is a term used to describe the combining of data
 residing in different sources to provide the user with a unified view of
-data \cite{Bati-C-1986,Yu-C-2004-SIGMOD}. This activity is becoming
-increasingly important to modern business operation as more and more
-organizations rely upon applications that support staff in undertaking
-informed decision making \cite{Calv-D-1998-CoopIS,Yu-C-2004-SIGMOD}.
+those data \cite{Bati-C-1986,Yu-C-2004-SIGMOD}. This activity is
+becoming increasingly important to modern business operations as more
+and more organisations rely upon applications that support staff in
+undertaking informed decision making
+\cite{Calv-D-1998-CoopIS,Yu-C-2004-SIGMOD}.
 
 Data integration is a domain that has been a topic of research for some
 time \cite{Beck-R-2002-Bled,Wied-G-1993-SIGMOD}; today this domain is of
-no less significance with many organizations requiring the aggregation
+no less significance with many organisations requiring the aggregation
 of data from multiple and often heterogeneous sources, for a wide
 variety of applications \cite{Haas-LM-1999-DEB}.
 \citeasnoun{Bati-C-1986} illustrated three common scenarios for
 integration environments:
 
-\begin{itemize}
+\begin{enumerate}
 
 	\item homogeneous, where all the sources of data share the same
 	schema;
@@ -129,29 +131,30 @@ integration environments:
 	\item federated, where integration is facilitated by the use of a
 	common export schema over all data sources.
 
-\end{itemize}
+\end{enumerate}
 
 A typical example of data integration from heterogeneous sources can be
 found in the arena of business-to-business (B2B) commerce, where, for
 example, a manufacturer may have to interact with multiple suppliers or
 temporary contractors, each of whom may use completely different data
 structures and data exchange formats \cite{Ston-M-2001-SIGMOD}. With the
-introduction of cheaper web based technology, many additional
-organizations have been able to undertake projects to facilitate data
-integration, but the costs associated with such technology can still be
-quite prohibitive to the many smaller companies and organizations that
-comprise the majority of most countries' economies.
+introduction of cheaper web based technology, many more organisations
+have been able to undertake projects to facilitate data integration, but
+the costs associated with such technology can still be quite prohibitive
+to the many smaller companies and organisations that comprise the
+majority of most countries' economies.
 
 Many initiatives have been put forward to try and alleviate this
 situation, one of the more recent being the OASIS Universal Business
 Language (UBL) standard \cite{Mead-B-2004-UBL}, which is a project to
-standardize common business documentation---invoices, purchase orders,
+standardise common business documentation---invoices, purchase orders,
 etc.---so that it is easier for companies to establish and maintain
 automated transactions with other parties. UBL has been designed to
-operate with ebXML.
+operate with another OASIS standard, ebXML \cite{Eise-B-2001-ebXML},
+which specifies a framework for facilitating e-business transactions.
 
 XML has been widely adopted as a standard platform for exchanging data
-between organizations, and many specialist standards---such as the
+between organisations, and many specialist standards---such as the
 aforementioned ebXML---have been developed to cater to the unique needs
 that certain business sectors present. In addition to XML-based language
 specifications, other standards such as EDIFACT and EXPRESS have been
@@ -196,21 +199,17 @@ project \cite{Koiv-MR-2001-W3C}. In the words of its creator, Tim
 Berners-Lee, its goal is to:
 
 \begin{quotation}
-	``\ldots{}develop enabling standards and technologies designed to help
-	machines understand more information on the Web so that they can
-	support richer discovery, data integration, navigation, and
+	``\ldots{}develop enabling standards and technologies designed to
+	help machines understand more information on the Web so that they
+	can support richer discovery, data integration, navigation, and
 	automation of tasks. With Semantic Web we not only receive more
 	exact results when searching for information, but also know when we
 	can integrate information from different sources, know what
 	information to compare, and can provide all kinds of automated
 	services in different domains from future home and digital libraries
-	to electronic business and health services.'' \cite{Koiv-MR-2001-W3C}
+	to electronic business and health services.''
+	\cite{Koiv-MR-2001-W3C}
 \end{quotation}
-
-In other words, the Semantic Web will provide a space where more
-intelligent searching and processing of information will be made
-possible by further extending the existing capabilities of the World
-Wide Web (WWW).
 
 RDF is a technology that is an integral part of the W3C Semantic Web
 initiative, as the following excerpt from the W3C Semantic Web activity
@@ -238,21 +237,23 @@ conform to the W3C's RDF specification. It is a format intended for
 metadata description and content syndication \cite{Mano-F-2004-RDF}.
 Originally developed by Netscape as a means to syndicate content from
 multiple sources onto one page \cite{Nott-M-2005-Atom}, RSS has been
-embraced by other individuals and organizations resulting in the
+embraced by other individuals and organisations resulting in the
 spawning of multiple versions.
 
 At its most simple, the information provided in an RSS document
 comprises the description of a ``channel'' (which could be on a specific
-topic such as current events, sport or the weather, etc.) consisting of
-URL linked items. Each item comprises a title, a link to the actual
-content and a brief description or abstract.
+topic such as current events, sport, weather, etc.) consisting of URL
+linked items. Each item comprises a title, a link to the actual content
+and a brief description or abstract. In essence, RSS provides a simple
+way to summarise changes to a web site in a form that is easy to access
+and process.
 
 Because of the proliferation of differing RSS standards and associated
 problems with compatibility, a group of service providers, vendors and
 developers have initiated the development of a separate syndication
-standard named Atom, which will, according to the Atom Publishing Format
-and Protocol (Atompub) Working Group, be heavily influenced by the
-lessons learned in the evolution of RSS.
+standard named Atom. According to the Atom Publishing Format and
+Protocol (Atompub) Working Group, the development of Atom is heavily
+influenced by the lessons learned in the evolution of RSS.
 
 
 \subsubsection{Atom}
@@ -263,34 +264,36 @@ designed to describe lists of related information
 \cite{Nott-M-2005-Atom}. These lists are known as ``feeds''. Feeds are
 made up of multiple items, known as ``entries''; each entry can have an
 extensible set of attached metadata \cite{Nott-M-2005-Atom}.
+Figure~\ref{fig-atom-example} shows an example of a simple, single-entry
+Atom feed document.
+
+
+\begin{figure}
+	\fbox{\parbox[b]{.99\linewidth}{%
+		\vskip 0.5cm%
+		\footnotesize%
+		\verbatiminput{feed.atom}%
+		\vskip 0.25cm%
+	}}
+	\caption{A simple, single-entry Atom feed document \protect\cite{Nott-M-2005-Atom}}
+	\label{fig-atom-example}
+\end{figure}
+
 
 Atom as a technology comprises four key related components: a conceptual
 model of a resource, a well defined syntax for this model, the actual
-atom feed format itself and the editing protocol. Both the feed format
+atom feed format itself and an editing protocol. Both the feed format
 and editing protocol also make use of the aforementioned syntax.
 
-In addition to these features, the Atompub Working Group have outlined
-several design objectives for the feed format and the editing protocol.
-The feed format must be able to represent the following: a resource that
-is a weblog entry or article, a feed or channel of entries, a complete
-archive of all entries within a feed, existing well formed XML
-content (especially XHTML), and additional information in a
-user-extensible manner.
-
-The editing protocol must support creating, deleting or editing feed
-entries, multiple authors for a single feed, user authentication, user
-management, and the ability to create, obtain and configure
-complementary material such as comments or templates.
-
-The latest specification of Atom, which at the time of writing is still
-in draft form, states that the main purpose that Atom is intended to
-address is ``\ldots{}the syndication of Web content such as Weblogs and
-news headlines to Web sites as well as directly to user agents''
+The latest specification of Atom (1.0), which at the time of writing is
+still in draft form, states that the main use case that Atom is intended
+to address is ``\ldots{}the syndication of Web content such as Weblogs
+and news headlines to Web sites as well as directly to user agents''
 \cite{Nott-M-2005-Atom}. The specification also suggests, however, that
 Atom should not be limited to just web based content syndication but in
 fact could be adapted for other uses or content types. The Atompub
-Working Group aim to submit the Atom feed format and editing protocol to
-the IETF for consideration as a proposed standard in early April 2005.
+Working Group have submitted the Atom feed format and editing protocol
+to the IETF for consideration as an Internet standard.
 
 
 \section{Motivation}
@@ -300,7 +303,7 @@ One of the example domains of data integration is that of Electronic
 Data Interchange (EDI), a concept used by companies to exchange
 information such as goods procurement documentation. EDI is not new
 \cite{Beck-R-2002-Bled,Medj-B-2003-VLDB}, and has been used for many
-years by various organizations to reduce costs by replacing more
+years by various organisations to reduce costs by replacing more
 traditional paper based systems. It is interesting to note, however,
 that in surveys regarding the extent of adoption of EDI, only a fraction
 of the companies that might be perceived as beneficiaries of such
@@ -323,41 +326,38 @@ maintain market position \cite{Beck-R-2002-Bled,vaHe-E-1999-EDI}.
 
 Attempts have been made to make EDI more cost effective by introducing
 EDI on a web-based platform \cite{Beck-R-2002-Bled}, and through the
-development of standards such as the recently sanctioned OASIS Universal
-Business Language (UBL) standard \cite{Mead-B-2004-UBL}. While UBL is
-new and has probably not had sufficient time to make a substantial
+development of standards such as UBL \cite{Mead-B-2004-UBL}. While UBL
+is new and has probably not had sufficient time to make a substantial
 impact, the fact remains that the underlying reason these types of
 technologies are still not attractive enough to SME's is cost
 \cite{Beck-R-2002-Bled,Guo-J-2003-DocEng,Somm-RA-2002-SIGMOD,vaHe-E-1999-EDI}.
 
-To summarize, data integration related technologies are often not
+To summarise, data integration related technologies are often not
 readily or willingly implemented by SME's because of the perceived high
 costs involved, and at best are implemented only if it is deemed vitally
-important to the continued survival of the organization in the
+important to the continued survival of the organisation in the
 marketplace.
 
 Such a situation leads us to the conclusion that there is a need for
-alternative data integration technologies that are cost effective,
+alternative, cost-effective technologies to facilitate data integration,
 enabling SME's to embrace the benefits of applications that use data
 integration technologies, such as data warehousing, EDI networks or
-e-catalogues.
-
-This identified need provides the motivation for our proposed
-architecture, which we will discuss in the next section.
+e-catalogues. This identified need provides the motivation for our
+approach, which we discuss in the next section.
 
 
-\section{Proposed Architecture, Implementation and Methodology}
+\section{Update Propagation using Atom}
 \label{sec-architecture}
 
 To facilitate the adoption of data integration in SME's, we propose a
-lightweight architecture for propagating database updates based on Atom,
+lightweight approach for propagating database updates based on Atom,
 as illustrated in Figure~\ref{fig-basic}. Atom was chosen as the
 underlying technology because of its XML heritage, and because the Atom
 community is trying to encourage different uses for the format beyond
 the traditional application of weblog syndication
 \cite{Nott-M-2005-Atom}. Although the standard has yet to be officially
 ratified, it already has a large user and development community.
-%%!! check ratification status
+
 
 \begin{figure*}[htb]
 	\fbox{\parbox[b]{.99\linewidth}{%
@@ -368,6 +368,7 @@ ratified, it already has a large user and development community.
 	\caption{Overview of the basic architecture}
 	\label{fig-basic}
 \end{figure*}
+
 
 The ``feed consumer'' modules shown in Figure~\ref{fig-basic} take as
 input Atom feeds from client sources, which simulate incoming data from
@@ -528,19 +529,21 @@ SQL generated for the target schema was also recorded.
 
 As the initial prototype is intended as a basic proof of concept of the
 proposed architecture, it has been kept as simple as possible in order
-to facilitate implementation and evaluation. There are several obvious
-extensions to the basic prototype that will be investigated in later
-iterations of the architecture.
+to facilitate implementation and testing. There are several obvious
+extensions to the basic architecture that will be investigated in later
+iterations.
 
 The initial prototype assumes that all data sources are largely
-homogeneous, that is, that they all share similar semantics and can
-therefore be relatively easily integrated. An obvious extension is to
-permit heterogeneous data sources that have differing semantics. This
-would require the addition of export and mapping schemas, and a schema
-mapping layer to map incoming data from the source schema to the target
-schema, as shown in Figure~\ref{fig-extended}. These components could
-perhaps make use of the W3C's Web Ontology Language (OWL)
-\cite{McGu-DL-2004-OWL}.
+homogeneous, that is, that they all share similar semantics and data
+from them can therefore be relatively easily integrated. An obvious
+extension is to permit heterogeneous data sources that have differing
+semantics. This would require the addition of export and mapping
+schemas, and a schema mapping layer to map incoming data from the source
+schema to the target schema, as shown in Figure~\ref{fig-extended}.
+These components could perhaps make use of the W3C's Web Ontology
+Language (OWL) \cite{McGu-DL-2004-OWL} to map between sources and
+targets with differing semantics.
+
 
 \begin{figure*}[htb]
 	\fbox{\parbox[b]{.99\linewidth}{%
@@ -552,28 +555,22 @@ perhaps make use of the W3C's Web Ontology Language (OWL)
 	\label{fig-extended}
 \end{figure*}
 
-The prototype also assumes only a single ``author'' per Atom feed, that
-is, there is only a single database underlying each feed (as implied by
-Figure~\ref{fig-basic}). It is quite feasible to have a single data
-source that is actually a view layered on top of a collection of
-underlying databases, as illustrated at top left in
+
+The prototype also assumes only a single data source underlying each
+Atom feed (as implied by Figure~\ref{fig-basic}). It is quite feasible
+to have a single feed that is effectively a view layered on top of a
+collection of underlying databases, as illustrated at top left in
 Figure~\ref{fig-extended} (e.g., a supplier might draw data for their
-Atom feed from multiple databases within their organization). It would
-therefore be useful to investigate the possibility of multiple
-``authors'' per Atom feed.
+Atom feed from multiple databases within their organisation). It would
+therefore be useful to investigate the possibility of multiple data
+sources per Atom feed.
 
 The prototype currently only supports the PostgreSQL and MySQL database
-management systems. While there has been some simple generalisation to
-enable the system to work with with both products, an obvious extension
-is to further generalise the data source interface to support multiple
-relational and non-relational data sources and targets. This is
+management systems. While some simple generalisation has been done to
+enable the prototype to work with with both products, an obvious
+extension is to further generalise the data source interface to support
+multiple relational and non-relational data sources and targets, as
 illustrated by the ``adaptor'' components in Figure~\ref{fig-extended}.
-
-Another possible extension could be to generalise the ``transport
-layer'' of the architecture. The architecture is currently based on Atom
-feeds over HTTP, but could conceivably be generalised to support
-different transport formats and protocols, such as Jabber, email, and so
-on.
 
 The data flows shown in Figures~\ref{fig-basic} and~\ref{fig-extended}
 imply that the proposed architecture is one-way only (i.e., from the
@@ -581,6 +578,14 @@ data sources to the target database), but this may not be true in
 general. It would therefore be interesting to investigate extending the
 architecture to allow for the possibility of two-way data transfers,
 i.e., allowing data to flow from the target back to the sources.
+
+Another extension could be to generalise the ``transport layer'' of the
+architecture. The architecture is currently based on Atom feeds over
+HTTP, but this may not be suitable for all applications. The
+architecture could be generalised to support different transport formats
+such as UBL or binary serialisations, and different transport protocols
+such as Jabber or email, thus producing a fully-pluggable and very
+flexible architecture that can be customised to suit any situation.
 
 
 \section{Conclusion}
@@ -592,9 +597,9 @@ factor in the slow adoption of data integration technologies by small to
 medium enterprises, so the proposed architecture could provide a
 cost-effective alternative for implementing data integration
 infrastructures in small business environments. We have developed a
-basic proof-of-concept prototype system that will be evaluated using a
-series of realistic case studies. We expect to have preliminary results
-from these evaluations by June 2005.
+basic proof-of-concept prototype system that is currently being
+evaluated using a series of realistic case studies. Early results show
+that\ldots
 
 
 \section*{Acknowledgements}
