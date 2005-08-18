@@ -1,4 +1,4 @@
-// use ploticus -eps -o output_sizes.eps barchart.plo
+// use ploticus -eps -tightcrop -o output_sizes.eps barchart.plo
 
 #proc settings
 	units: cm
@@ -18,42 +18,38 @@
 	areaname: slide
 	autowidth: 0.9
 	yrange: 0 5
-	xrange: 0.25 4.75
+	xrange: 0.5 4.5
 
 #proc yaxis:
 	stubs: inc
-//	stubformat: @ystubfmt
-	stubdetails: size=10
+	stubdetails: size=9
 	label: Output size (megabytes)
-	labeldetails: style=B size=10 adjust=-0.1,0
+	labeldetails: style=B size=10
 	grid: color=gray(0.7)
 
 #proc xaxis:
 	stubs: datafields=data_set
-	stubdetails: style=B size=10
-	label: Data set size (records)
+	stubdetails: size=9 adjust=0,0.2
+	label: Number of updates to source data set
+	labeldetails: style=B size=10 adjust=0,0.1
 	tics: none
 
 #proc bars
 	lenfield: feed_size
 	color: gray(0.3)
-	showvalues: yes
-	labeldetails: size=8 adjust=-0.15,0.1
 	cluster: 1 / 2
 	barwidth: 0.5
-	legendlabel: Atom
+	legendlabel: Atom feed
 
 #proc bars
 	lenfield: sql_size
 	color: white
-	showvalues: yes
-	labeldetails: size=8 adjust=0.15,0.1
 	cluster: 2 / 2
 	barwidth: 0.5
-	legendlabel: SQL
+	legendlabel: Corresponding SQL code
 
 #proc legend
 	format: multiline
-	location: min+1 max-0.9
+	location: min+1 max-0.15
 	textdetails: size=9
 	outlinecolors: yes
