@@ -30,7 +30,7 @@
 #proc xaxis:
 	stubs: datafields=data_set
 	stubdetails: size=9 adjust=0,0.2
-	label: Number of updates to source data set
+	label: Number of records in source data set
 	labeldetails: style=B size=10 adjust=0,0.1
 	tics: none
 
