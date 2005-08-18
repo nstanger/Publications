@@ -358,6 +358,16 @@ the traditional application of weblog syndication
 \cite{Nott-M-2005-Atom}. Although the standard has yet to be officially
 ratified, it already has a large user and development community.
 
+Figure~\ref{fig-basic} shows a basic archiecture for this approach. A
+feed generator queries its corresponding data source, and compares the
+results against a snapshot stored in a small staging database. If the
+latest query results differ from the snapshot, then updates have
+occurred in the data source, and a new version of the Atom feed is
+generated. The latest query results then become the new snapshot in the
+staging database. The Atom feed is read by a feed consumer, which
+reconstructs the database updates and passes them to the incoming update
+queue for loading into the target database.
+
 
 \begin{figure*}[htb]
 	\fbox{\parbox[b]{.99\linewidth}{%
@@ -370,74 +380,93 @@ ratified, it already has a large user and development community.
 \end{figure*}
 
 
-The ``feed consumer'' modules shown in Figure~\ref{fig-basic} take as
-input Atom feeds from client sources, which simulate incoming data from
-client or supplier data sets. Two different methods of implementation
-have been explored, categorised as ``push'' and ``pull''---the names
-referring to how the flow of feed data to the target schema is managed.
+In the typical use case of weblog syndication, Atom feeds are polled by
+clients at regular intervals, and the client determines whether the feed
+has changed by comparing the modification time of the feed against the
+time that the client last checked. This may not be an optimal approach
+for propagating database updates, however. If a client polls the feed
+less frequently than updates occur at the data source, there is a danger
+of updates being lost, as the corresponding entries in the feed may
+``scroll off the end''before the client has a chance to see them. A
+simple polling model is therefore inappropriate.
 
-Within the push method, the consumption of feed information is governed
-predominantly by changes in state of the source data, i.e., when the feed
-generator detects a change in state of the source data (for example when
-a record is updated) the feed is regenerated and the consumer module
-called immediately to apply the new information to the target schema. 
-The majority of this activity takes place at or near the source data location,
-however in practice the location of each component is not too critical as
-they are web-based.
+This issue is resolved in our approach by enabling direct communication
+between the feed generator and its corresponding feed consumer(s). This
+is indicated by the ``push'' and ``pull'' annotations in
+Figure~\ref{fig-basic}. In the ``push'' method, the consumption of feed
+information is driven primarily by changes in state of the source data.
+When the generator detects a change in state of the source data (for
+example when a record is updated), it regenerates the feed, then
+directly notifies its corresponding consumer, thus ``pushing'' the
+updates to the consumer.
 
-The pull method however differs from the push approach on two
-key points. First, the feed consumer modules operate independently of,
-and are therefore not directly influenced by, the feed generator
-component and second, the flow of feed information to the target schema
-is governed by the consumer module itself, i.e., the consumer module
-will regularly check or ``poll'' the Atom feed to see if it has changed
-or not since the last time (this is done by simply checking the Atom
-feeds <modified/> content). Hence rather than forcing or pushing feed
-data, it is instead pulled down to the target.
+The ``pull'' method is the converse of the push method, in that the flow
+of feed information to the target schema is governed by the consumer
+itself. Rather than polling a ``static'' feed file, the consumer
+requests its corresponding generator to dynamically generate a custom
+feed as required. In other words, the consumer ``pulls'' the updates
+from the generator. This approach may be more suited to a situation
+where there are multiple consumers associated with one generator (not
+shown in Figure~\ref{fig-basic}).
 
-A further improvement to this design has been proposed, whereby the
-consumer module polls the feed generator directly at which point if the
-feed generator has changed since last time it generated a feed and
-informs the consumer module of the feed's location. It is thought that
-this method would reduce the possibility of updates being lost and allow
-feeds to be dynamically created on demand rather than the static
-feed generation approach used in the current prototype implementation.
+Both methods have their place, and indeed could be combined, as shown on
+the right of Figure~\ref{fig-basic}. That is, a generator could generate
+a ``static'' feed at regular intervals and notify its consumers, while
+also responding to requests for custom dynamic feeds from its consumers.
 
-In order to evaluate the prototype, we have implemented two different
-simulated scenarios derived from actual use case of previous projects.
-Both case studies follow a similar structure whereby data will be
-exported as Atom feeds from the source database(s), which are then read 
-by the consumer module before being sent to the target.
+Figure~\ref{fig-basic} provides no indication as to where on the network
+these different components will execute. In practice the precise
+location of each component is not critical, as long as they are able to
+communicate with each other. Thus, for example, the generator and
+consumer could both reside on the source machine, or be split across the
+source and target machines, or indeed could reside anywhere on the
+network.
+
+
+\section{Prototype Implementation and Testing}
+\label{sec-prototype}
+
+We have implemented a basic proof of concept prototype in PHP 5, in
+order to explore implementation issues and to do some initial testing.
+The prototype currently supports only the push method and works with the
+MySQL and PostgreSQL database management systems (DBMS). PHP was chosen
+because of its excellent database support and because it enabled us to
+quickly create web-based modules that could call each other by means of
+HTTP redirects.
+
+In order to evaluate the prototype, we have implemented two simulated
+scenarios derived from actual use cases of previous projects. Both case
+studies follow a similar structure whereby data are exported as Atom
+feeds from the source database(s), which are then read by the consumer
+module before being sent to the target.
 
 The first scenario simulates the integration of movie timetable data
-from multiple cinema databases into a vendors' movie timetable database.
+from multiple cinema databases into a vendor's movie timetable database.
 This database is used to populate an e-catalogue allowing users to query
-times and locations for movies currently screening at cinemas
-contributing data to the system. The Atom feeds in this scenario
-represent flows of data from the supplier (the participating cinemas) to 
-the vendor (the e-catalogue provider).
+times and locations for movies currently screening at the cinemas who
+contribute data to the system. The Atom feeds in this scenario represent
+flows of data from the supplier (the participating cinemas) to the
+vendor (the e-catalogue provider).
 
-The second scenario follows on from an earlier research project undertaken
-at Otago University to develop a kiosk-based system for the sale and 
-distribution of music in digital format, e.g., MP3.
+The second scenario follows on from an earlier research project at the
+University of Otago to develop a kiosk-based system for the sale and
+distribution of digital music (e.g., MP3 files). The database in the
+kiosk is populated with information from the vendors who have agreed to
+supply content (i.e., music files). In this case, the prototype acts as
+a mechanism to propagate data and updates from the suppliers' data
+sources to the music kiosk system's database (the target). The Atom
+feeds in this instance are used to maintain an up to date database that
+has the location and description of each available music track for sale
+in the system.
 
-The database a kiosk uses is populated with information from vendors who
-have agreed to supply content, i.e., music files. In this case, the
-prototype acts as a mechanism to propagate data and changes to existing
-data in the suppliers' data sources to the music kiosk system's own
-database---the target. The Atom feeds in this instance are used to
-maintain an up to date database that has the location and description of
-each available music track for sale in the system.
-
-Both case studies had a varying level of complexity in terms of design
-and implementation demands, which allowed us to pursue a staged
-development of the core components by starting with the less complicated
-of the case studies first, the movie e-catalogue, and then building on 
-what was learned and extending what we had created in order to complete 
-the music kiosk system implementation.
+Both case studies vary in terms of complexity of design and
+implementation demands, enabling us to pursue a staged development of
+the core components. We started with the less complex movie e-catalogue
+case study, then built on what was learned and extended what we had
+created in order to complete the music kiosk system implementation.
 
 Essential functionality testing on the movie e-catalogue system will be
-carried out, however, more intensive testing is being focused on the 
+carried out, but more intensive testing is being focused on the 
 music kiosk retail system because it not only contains all the same 
 features as found in the first but also reflects more aspects of 
 functionality that would be found in many other real world projects, with
@@ -447,27 +476,80 @@ movie e-catalogue system which meant that the music kiosk system provided
 an excellent opportunity to test an Atom based system under a variety of 
 loading conditions.
 
-The testing environment currently consists of five Apple PowerMac G5
-computers with dual 1.8 GHz CPU's and 1 GB of RAM. The computers are 
-connected via a full duplex gigabit eithernet network using a Dell PowerConnect
-2624 series switch. Software required for the system consists of a Web server,
-PHP, database server and a Web browser, for which we have used Apache 1.3.33, 
-PHP 5.0, MySQL4.? and Firefox 1.0.6 respectively. Four of the Apple computers 
-are used as data sources with each having a source schema installed while the 
-fifth computer is used to house the target schema. 
+The testing environment currently consists of five Apple Power Macintosh
+G5 computers with dual 1.8\,GHz CPUs and 1\,GB of RAM each. The
+computers are connected via a full duplex gigabit eithernet network
+using a Dell PowerConnect 2624 series switch. Software required for the
+system consists of a web server (Apache 1.3), PHP 5, a database server
+(MySQL 4) and a Web browser (Firefox). Four of the computers are used as
+data sources with each having a source schema installed while the fifth
+computer is used to house the target schema.
 
-A set of sample data was generated that ranged in equivalent size of 5600 to
-22400 rows. For each set of sample data, four ``runs'' are made with each run having
-an additional data source added i.e. the first test run has one data source, the
-second has two and so on. This approach allows us to view not only how the 
-system performs when dealing with increasingly larger amounts of data but also
-with varying numbers of ``physical'' data sources.
+A set of sample data was generated that ranged in equivalent size of
+5600 to 22400 rows. For each set of sample data, four ``runs'' are made
+with each run having an additional data source added i.e. the first test
+run has one data source, the second has two and so on. This approach
+allows us to view not only how the system performs when dealing with
+increasingly larger amounts of data but also with varying numbers of
+``physical'' data sources.
 
 Preliminary load testing to date has yielded data for the push method
 prototype pertaining to the time taken to propagate a set of records.
 The size of sample data used in testing ranged between 5600 to over 
 80,000 rows. In addition, the size of the generated Atom feed and the 
 SQL generated for the target schema was also recorded.
+
+For the first set of test runs, each source schema was populated with a
+data set equivalent to 5605 records. Execution times ranged from 74.5
+seconds with one source, up to 192.1 seconds when four sources/datasets
+were processed. Execution time measure here is defined as the total
+elapsed time from when data is retrieved from the source, to the time
+the data is applied to the target schema.
+
+So in this instance we see that a four-fold increase in sample data size
+and data sources lead to an increase in execution time two and a half
+times greater than that of the first single source test run.
+
+At the other end of the spectrum, with a significantly larger sample
+data set used (22420 records) total elapsed execution time ranged from
+395.6 seconds for a single source up to 2424.2 seconds or approximately
+40 minutes. So in this instance with an increased sample size we
+observed that the time taken to execute four data source/data sets was
+more than six times greater than that of a single source.
+
+This may indicate that this current simplified implementation is not
+optimised for larger scale sets of data. However it should be noted that
+the system is designed predominately with update/state change
+propagation, not initial schema population. This finding has further
+highlighted the need to investigate the implementation of some kind of
+output queue staging area that would relieve the consumer module of the
+need to deal with managing the target schema update process.
+
+
+\section{Preliminary Results}
+\label{sec-results}
+
+
+\begin{figure}
+	\fbox{\parbox[b]{.99\linewidth}{%
+		\vskip 0.5cm%
+		\centerline{\includegraphics[width=\columnwidth,keepaspectratio]{run_times}}%
+		\vskip 0.5cm%
+	}}
+	\caption{Execution time by number and size of data sources (``push'' method)}
+	\label{fig-run-times}
+\end{figure}
+
+
+\begin{figure}
+	\fbox{\parbox[b]{.99\linewidth}{%
+		\vskip 0.5cm%
+		\centerline{\includegraphics[width=\columnwidth,keepaspectratio]{output_sizes}}%
+		\vskip 0.5cm%
+	}}
+	\caption{Comparison of data set size}
+	\label{fig-sizes}
+\end{figure}
 
 
 %We are currently implementing a basic proof of concept of this
@@ -581,7 +663,7 @@ i.e., allowing data to flow from the target back to the sources.
 
 Another extension could be to generalise the ``transport layer'' of the
 architecture. The architecture is currently based on Atom feeds over
-HTTP, but this may not be suitable for all applications. The
+HTTP connections, but this may not be suitable for all applications. The
 architecture could be generalised to support different transport formats
 such as UBL or binary serialisations, and different transport protocols
 such as Jabber or email, thus producing a fully-pluggable and very
@@ -591,15 +673,27 @@ flexible architecture that can be customised to suit any situation.
 \section{Conclusion}
 \label{sec-conclusion}
 
-In this paper, we discussed a lightweight update propagation
-architecture based on the Atom XML syndication format. Cost is a major
-factor in the slow adoption of data integration technologies by small to
-medium enterprises, so the proposed architecture could provide a
-cost-effective alternative for implementing data integration
-infrastructures in small business environments. We have developed a
-basic proof-of-concept prototype system that is currently being
-evaluated using a series of realistic case studies. Early results show
-that\ldots
+In this paper, we discussed a lightweight update propagation approach
+based on the Atom XML syndication format. Cost is a major factor in the
+slow adoption of data integration technologies by small to medium
+enterprises, so our approach could provide a cost-effective alternative
+for implementing data integration infrastructures in small business
+environments.
+
+We have developed a basic proof-of-concept prototype system that is
+being evaluated using a series of realistic case studies. Preliminary
+results suggest that our approach may not scale well with the number of
+data sources, but this is still under investigation. Somewhat
+unexpectedly, the preliminary results also suggest that Atom provides a
+more compact representation for propagating updates than sending SQL
+commands directly. This has obvious potential for low bandwidth
+environments.
+
+The approach is very flexible and there are many interesting directions
+in which it can be extended. We expect that by the time of the
+conference, we will have completed a more general implementation of the
+approach in Java, and have more comprehensive results to report on.
+
 
 
 \section*{Acknowledgements}
