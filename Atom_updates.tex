@@ -37,7 +37,7 @@ be expensive to implement, particularly for small to medium enterprises
 updates from one database to another using the Atom XML syndication
 format, thus providing a simpler, cost-effective technology for
 facilitating data integration. This approach enables a target database
-to regularly poll one or more source databases for updates, which are
+to regularly query one or more source databases for updates, which are
 then applied to the target database (alternatively, updates could be
 ``pushed'' to the target from the sources). This approach can be used in
 typical data integration scenarios where the data sources are updated at
@@ -57,12 +57,11 @@ Semantic Web, B2B
 \label{sec-intro}
 
 The ability to integrate data from multiple heterogeneous sources is
-becoming a key issue for modern businesses, and yet the number of
-businesses implementing data integration solutions is smaller than we
-might expect \cite{Beck-R-2002-Bled,vaHe-E-1999-EDI}. This is
-particularly true for small to medium enterprises (SME's), for whom the
-cost of implementing an enterprise-scale data integration solution can
-often be prohibitive
+becoming a key issue for modern businesses, yet the number of businesses
+implementing data integration solutions is smaller than we might expect
+\cite{Beck-R-2002-Bled,vaHe-E-1999-EDI}. This is particularly true for
+small to medium enterprises (SME's), for whom the cost of implementing
+an enterprise-scale data integration solution can often be prohibitive
 \cite{Beck-R-2002-Bled,Guo-J-2003-DocEng,Somm-RA-2002-SIGMOD}.
 
 In this paper, we propose a lightweight approach for propagating updates
@@ -140,7 +139,7 @@ found in the arena of business-to-business (B2B) commerce, where, for
 example, a manufacturer may have to interact with multiple suppliers or
 temporary contractors, each of whom may use completely different data
 structures and data exchange formats \cite{Ston-M-2001-SIGMOD}. With the
-introduction of cheaper web based technology, many more organisations
+introduction of cheaper web-based technology, many more organisations
 have been able to undertake projects to facilitate data integration, but
 the costs associated with such technology can still be quite prohibitive
 to the many smaller companies and organisations that comprise the
@@ -180,7 +179,7 @@ people rather than for data and information that can be processed
 automatically\ldots'' \cite{Bern-T-2001-SciAm}, which provides minimal
 opportunity for computers to perform additional interpretation or
 processing on them \cite{Bern-T-1999-WWW,Bern-T-2001-SciAm}. In essence,
-computers in use on the Web today are primarily concerned with the
+computers in use on the web today are primarily concerned with the
 parsing of elementary layout information, for example headers, graphics
 or text, and processing like user input forms
 \cite{Bern-T-1999-W3C,Bern-T-2001-SciAm}.
@@ -190,7 +189,7 @@ processing or manipulation on web resources
 \cite{Bern-T-2001-SciAm,Fens-D-2003}, most often because the additional
 semantics required do not exist or are not in a form that can be
 interpreted by computers \cite{Koiv-MR-2001-W3C}. The motivation for the
-adoption of semantics in Web documents can be made evident simply by
+adoption of semantics in web documents can be made evident simply by
 using a contemporary search engine to look for an ``address''. This
 search may well return a plethora of results ranging from street
 addresses and email addresses to public addresses made by important
@@ -233,14 +232,13 @@ data interchange, searching, cataloguing, navigation, classification and
 so on\ldots{}'' \cite{Powe-S-2003-RDF}.
 
 Since its inception in the late 1990's, the RDF specification has
-spawned several applications, RSS being but one example. RDF Site
-Summary (RSS) is an XML application, of which versions 0.9 and 1.0
-conform to the W3C's RDF specification. It is a format intended for
-metadata description and content syndication \cite{Mano-F-2004-RDF}.
-Originally developed by Netscape as a means to syndicate content from
-multiple sources onto one page \cite{Nott-M-2005-Atom}, RSS has been
-embraced by other individuals and organisations resulting in the
-spawning of multiple versions.
+spawned several applications, RDF Site Summary (RSS) being but one
+example. Versions 0.9 and 1.0 of RSS conform to the W3C's RDF
+specification. It is a format intended for metadata description and
+content syndication \cite{Mano-F-2004-RDF}. Originally developed by
+Netscape as a means to syndicate content from multiple sources onto one
+page \cite{Nott-M-2005-Atom}, RSS has been embraced by other individuals
+and organisations resulting in the spawning of multiple versions.
 
 At its most simple, the information provided in an RSS document
 comprises the description of a ``channel'' (which could be on a specific
@@ -287,7 +285,7 @@ model of a resource, a well defined syntax for this model, the actual
 atom feed format itself and an editing protocol. Both the feed format
 and editing protocol also make use of the aforementioned syntax.
 
-The latest specification of Atom (1.0), which at the time of writing is
+The latest Atom specification (1.1), which at the time of writing is
 still in draft form, states that the main use case that Atom is intended
 to address is ``\ldots{}the syndication of Web content such as Weblogs
 and news headlines to Web sites as well as directly to user agents''
@@ -307,7 +305,7 @@ information such as goods procurement documentation. EDI is not new
 \cite{Beck-R-2002-Bled,Medj-B-2003-VLDB}, and has been used for many
 years by various organisations to reduce costs by replacing more
 traditional paper based systems. It is interesting to note, however,
-that in surveys regarding the extent of adoption of EDI, only a fraction
+that in surveys regarding the extent of EDI adoption, only a fraction
 of the companies that might be perceived as beneficiaries of such
 technology have actually implemented or attempted to implement it
 \cite{Beck-R-2002-Bled,vaHe-E-1999-EDI}. This naturally raises the
@@ -320,11 +318,12 @@ Perhaps the most important reason is that of cost: to a small company
 the perceived benefits of introducing the technology may not be
 sufficient to justify the expense
 \cite{Beck-R-2002-Bled,Guo-J-2003-DocEng,Somm-RA-2002-SIGMOD}. When a
-decision has been made to implement new technology, it is often the case
-that the SME in question has been forced into an investment that is, to
-them, an expensive solution, perhaps due to demands imposed by larger
-clients and partners, or as a response to competitors in an attempt to
-maintain market position \cite{Beck-R-2002-Bled,vaHe-E-1999-EDI}.
+decision has been made to implement such technology, it is often the
+case that the SME in question has been forced into an investment that
+is, to them, an expensive solution, perhaps due to demands imposed by
+larger clients and partners, or as a response to competitors in an
+attempt to maintain market position
+\cite{Beck-R-2002-Bled,vaHe-E-1999-EDI}.
 
 Attempts have been made to make EDI more cost effective by introducing
 EDI on a web-based platform \cite{Beck-R-2002-Bled}, and through the
@@ -342,10 +341,10 @@ marketplace.
 
 Such a situation leads us to the conclusion that there is a need for
 alternative, cost-effective technologies to facilitate data integration,
-enabling SME's to embrace the benefits of applications that use data
-integration technologies, such as data warehousing, EDI networks or
-e-catalogues. This identified need provides the motivation for our
-approach, which we discuss in the next section.
+enabling SME's to embrace the benefits of applications that rely on data
+integration, such as data warehousing, EDI networks or e-catalogues.
+This identified need provides the motivation for our approach, which we
+will now discuss.
 
 
 \section{Update Propagation using Atom}
@@ -355,18 +354,18 @@ To facilitate the adoption of data integration in SME's, we propose a
 lightweight approach for propagating database updates based on Atom,
 as illustrated in Figure~\ref{fig-basic}. Atom was chosen as the
 underlying technology because of its XML heritage, and because the Atom
-community is trying to encourage different uses for the format beyond
+community is trying to encourage different uses beyond
 the traditional application of weblog syndication
 \cite{Nott-M-2005-Atom}. Although the standard has yet to be officially
 ratified, it already has a large user and development community.
 
 Figure~\ref{fig-basic} shows a basic architecture for our approach. A
-feed generator queries its corresponding data source, and compares the
+feed generator queries its corresponding data source and compares the
 results against a snapshot stored in a small staging database. If the
 latest query results differ from the snapshot, then updates have
 occurred in the data source, and a new version of the Atom feed is
-generated. The latest query results then become the new snapshot in the
-staging database. The Atom feed is then read by a feed consumer, which
+generated. The latest query results replace the snapshot in the staging
+database. The Atom feed is then read by a feed consumer, which
 reconstructs the database updates and applies them to the target
 database.
 
@@ -390,8 +389,10 @@ the time that the client last checked. This may not be an optimal
 approach for propagating database updates, however. If a client polls
 the feed less frequently than updates occur at the data source, there is
 a danger of updates being lost, as the corresponding entries in the feed
-may ``scroll off the end''before the client has a chance to see them. A
-simple polling model is therefore inappropriate.
+may ``scroll off the end''before the client has a chance to see them.
+This is particularly of our approach, where each new set of updates to a
+data source results in a completely new feed being generated. A simple
+polling model is therefore inappropriate.
 
 This issue is resolved in our approach by enabling direct communication
 between the feed generator and its corresponding feed consumer(s). There
@@ -400,9 +401,9 @@ are two methods of achieving this, as indicated by the ``push'' and
 the consumption of feed information is driven primarily by changes in
 the source data. When the generator detects such a change (for example,
 when a record is updated), it regenerates the feed, then directly
-notifies its corresponding consumer, thus ``pushing'' the updates to the
-consumer. (Alternatively, the consumer could be said to be listening for
-update events from the generator.)
+notifies its corresponding consumers, thus ``pushing'' the updates to
+the consumers. (Alternatively, the consumers could be said to be
+listening for update events from the generator.)
 
 The ``pull'' method is the converse of the push method, in that the flow
 of feed information to the target schema is governed by the consumer
@@ -411,12 +412,14 @@ requests its corresponding generator to dynamically generate a custom
 feed as required. In other words, the consumer ``pulls'' the updates
 from the generator. This method may be more suited to a situation where
 there are multiple consumers associated with one generator (this is not
-shown in Figure~\ref{fig-basic}).
+shown in Figure~\ref{fig-basic}). The generator may need to maintain
+separate snapshots for each of its consumers in such cases, as the
+consumers might have different request frequencies.
 
 Both methods have their place, and indeed could be combined, as shown on
 the right of Figure~\ref{fig-basic}. That is, a generator could generate
 a ``static'' feed at regular intervals and notify its consumers, while
-also responding to requests for custom dynamic feeds from its consumers.
+also responding to requests for dynamic feeds from its consumers.
 
 Figure~\ref{fig-basic} provides no indication as to where on the network
 these different components will execute. In practice the precise
@@ -432,10 +435,10 @@ and target.
 \label{sec-prototype}
 
 We have implemented a basic proof of concept prototype using PHP 5, in
-order to explore implementation issues and to do some initial testing of
-scalability. The prototype currently supports only the push method and
-works only with the MySQL and PostgreSQL database management systems
-(DBMS). PHP was chosen because of its excellent DBMS support and
+order to explore implementation issues and to do some initial
+scalability testing. The prototype currently supports only the push
+method and works only with the MySQL and PostgreSQL database management
+systems (DBMS). PHP was chosen because of its excellent DBMS support and
 because it enabled us to quickly create web-based modules that could
 easily call each other by means of HTTP redirects.
 
@@ -447,12 +450,13 @@ database(s), then read by a feed consumer before being sent to the
 target database.
 
 The first scenario simulates the integration of movie timetable data
-from multiple cinema databases into a vendor's movie timetable database.
-This database is used to populate an e-catalogue allowing users to query
-times and locations of movies currently screening at the cinemas who
-contribute data to the system. The Atom feeds in this scenario represent
-flows of data from the supplier (the participating cinemas) to the
-vendor (the e-catalogue provider).
+from multiple cinema databases (the sources) into a vendor's movie
+timetable database (the target). This database is used to populate an
+e-catalogue allowing users to query times and locations of movies
+currently screening at the cinemas who contribute data to the system.
+The Atom feeds in this scenario represent flows of data from the
+supplier (the participating cinemas) to the vendor (the e-catalogue
+provider).
 
 The second scenario follows on from an earlier research project at the
 University of Otago to develop a kiosk-based system for the sale and
@@ -467,8 +471,8 @@ the system.
 Both case studies vary in terms of complexity of design and
 implementation demands, enabling us to pursue a staged development of
 the core components. We first implemented the less complex movie
-e-catalogue case study, then used our experience to extend the prototype
-to support the music kiosk case study.
+e-catalogue case study, then used our experiences from this to extend
+the prototype to support the music kiosk case study.
 
 Testing of essential functionality has been carried out on the movie
 e-catalogue system, but the main focus for extensive testing has been on
@@ -484,7 +488,7 @@ test our approach under a variety of loading conditions.
 We have carried out some initial experiments with the prototype under a
 variety of loading conditions to gain some idea of how our approach
 might scale with respect to the number of data sources and the number of
-updates performed at the source. The results of these experiments will
+updates performed at each source. The results of these experiments will
 help us to further refine our approach and identify potential problem
 areas.
 
@@ -505,12 +509,13 @@ numbers of data sources.
 
 The same data set was loaded onto each of the source computers, and all
 the staging databases were emptied. A PHP script representing the feed
-generator was then run on each of the source computers by opening it in
-the web browser. This script queried the source database, found new
-records not in the staging database, and generated an appropriate Atom
-feed. The generator script then redirected (``pushed'') to a consumer
-script on the same machine, which read the feed, generated appropriate
-SQL, then connected to the target database and applied the updates.
+generator was then run in parallel on each of the source computers by
+opening it in the web browser. This script queried the source database,
+found new records not in the staging database, and generated an
+appropriate Atom feed. The generator script then redirected (``pushed'')
+to a consumer script on the same machine, which read the feed, generated
+appropriate SQL, then connected to the target database and applied the
+updates.
 
 The number of updates to be propagated ranged from 5,605 (smallest data
 set, one source) to 89,680 (largest data set, four sources). For each
@@ -518,19 +523,21 @@ data source, we recorded the elapsed time from when the generator
 queried the source database to when the consumer applied updates to the
 target. We also recorded the size in bytes of both the generated Atom
 feed and the SQL code generated by the consumer script, so that we could
-compare the bandwidth requirements of sending an Atom feed across the
-network versus sending the equivalent SQL commands.
+compare the potential bandwidth requirements of sending an Atom feed
+across the network versus sending the equivalent SQL commands.
 
 
 \section{Preliminary Results}
 \label{sec-results}
 
 For the first set of test runs, each source schema was populated with
-the 5,605 record data set. Execution times ranged from 74.5 seconds with
-one source up to 192.1 seconds with four sources, as shown in
+the 5,605 row data set. Average execution times ranged from 74.5 seconds
+with one source up to 192.1 seconds with four sources, as shown in
 Figure~\ref{fig-run-times}. In other words, a four-fold increase in the
 number of updates arriving at the target produced a two and a half times
-increase in the execution time.
+increase in the execution time. Execution times for individual source
+machines were reasonably consistent, varying by no more than 3.4\% from
+the average.
 
 
 \begin{figure}
@@ -539,32 +546,34 @@ increase in the execution time.
 		\centerline{\includegraphics[width=\columnwidth,keepaspectratio]{run_times}}%
 		\vskip 0.5cm%
 	}}
-	\caption{Execution time by number of updates and data sources (``push'' method)}
+	\caption{Execution time by data set and number of data sources (``push'' method)}
 	\label{fig-run-times}
 \end{figure}
 
 
-At the other end of the scale, execution times for the 22,420 record
-data set ranged from 395.6 seconds with one source up to 2,424.2 seconds
-(about 40 minutes) with four sources (see Figure~\ref{fig-run-times}).
-In this instance the execution time with four sources is over six times
-that with a single source, and appears to be growing exponentially.
+At the other end of the scale, average execution times for the 22,420
+row data set ranged from 395.6 seconds with one source up to 2,424.2
+seconds (about 40 minutes) with four sources (see
+Figure~\ref{fig-run-times}). In this instance the execution time with
+four sources is over six times that with a single source, and appears to
+be growing exponentially. Execution times for individual source machines
+were again consistent, varying by no more than 1\% from the average.
 
 These results were somewhat unexpected; while we had expected execution
-times to increase with the number of updates, we had not expected them
-to increase quite so dramatically. Further investigation revealed that
-some consumers progressed relatively normally, while others appeared to
-stop for long intervals. Since we were testing in an isolated network,
-the most likely culprit is that all four consumers were attempting to
-write to the target simultaneously, and were thus blocking each other.
-This problem could be solved by introducing an output queue staging area
-between the consumers and the target, which would relieve consumers of
-the need to deal with managing the target update process, and present
-the target with an orderly sequence of updates, rather than an
-overwhelming ``stampede''. It should be noted, however, that our
+times to increase with the number of source updates, we had not expected
+them to increase quite so dramatically. Further investigation revealed
+that some consumers progressed relatively normally, while others
+appeared to progress in bursts. Since we were testing on an isolated
+network, the most likely culprit is that multiple consumers were
+blocking each other while attempting to simultaneously write to the
+target. This problem could be solved by introducing an output queue
+staging area between the consumers and the target, which would relieve
+consumers of the need to deal with managing the target update process,
+and present the target with an orderly sequence of updates, rather than
+an overwhelming ``stampede''. It should be noted, however, that our
 approach is designed primarily for ongoing update propagation, not
-initial schema population. The volume of updates that occurred in our
-testing would seem unlikely in typical applications.
+initial schema population. The volume of updates used in our testing
+would seem unlikely for typical applications.
 
 The results of comparing the Atom feed size with the consumer-generated
 SQL code were also interesting. XML formats are generally very verbose,
@@ -581,16 +590,17 @@ transposed the results! This was not the case, however.
 		\centerline{\includegraphics[width=\columnwidth,keepaspectratio]{output_sizes}}%
 		\vskip 0.5cm%
 	}}
-	\caption{Comparison of data set size}
+	\caption{Comparison of Atom feed vs.\ SQL code size}
 	\label{fig-sizes}
 \end{figure}
 
 
 As can be seen in Figure~\ref{fig-sizes}, the size of the generated SQL
-code is generally about one and half times that of the Atom feed. This
-bodes well for environments where bandwidth may be limited. Compressing
-the feed would reduce the size further, something that is not as readily
-achievable when sending SQL commands directly via JDBC, for example.
+code is generally about one and half times that of the corresponding
+Atom feed. This bodes well for environments where bandwidth may be
+limited. Compressing the feed would reduce the size further, something
+that is not as readily achievable when sending SQL commands directly via
+JDBC, for example.
 
 
 \section{Future Work}
@@ -680,7 +690,7 @@ technologies by small to medium enterprises, so our approach could
 provide a cost-effective alternative for implementing data integration
 infrastructures in small business environments.
 
-We have developed a basic proof-of-concept prototype that is being
+We have developed a basic proof of concept prototype that is being
 evaluated using a series of realistic case studies. Preliminary results
 suggest that our approach may not scale well with the number of data
 source updates, but this may be due to congestion at the target and is
@@ -690,16 +700,16 @@ for propagating updates than sending SQL commands directly. This has
 obvious potential for low bandwidth environments.
 
 Our approach is very flexible and there are many interesting directions
-in which it can be extended. We expect that by the time of the
-conference, we will have completed a more general implementation of the
-approach in Java, and have more comprehensive results to report on.
+in which it can be extended. We expect by the time of the conference to
+have completed a more general implementation of the approach in Java,
+and have more comprehensive results to report on.
 
 
 
 \section*{Acknowledgements}
 \label{sec-acknowledgements}
 
-The authors would like to thank Dr. Colin Aldridge and Dr. Stephen
+The authors would like to thank Dr.\ Colin Aldridge and Dr.\ Stephen
 Cranefield for their helpful comments on an early draft of this paper.
 
 
