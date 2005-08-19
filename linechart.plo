@@ -39,7 +39,7 @@
 	yfield: time_5605
 	linedetails: color=black
 	pointsymbol: shape=diamond linecolor=black fillcolor=black
-	legendlabel: 5,605 records
+	legendlabel: 5,605 rows
 	legendsampletype: line+symbol
 
 #proc lineplot
@@ -47,7 +47,7 @@
 	yfield: time_11210
 	linedetails: color=black
 	pointsymbol: shape=square linecolor=black fillcolor=black
-	legendlabel: 11,210 records
+	legendlabel: 11,210 rows
 	legendsampletype: line+symbol
 
 #proc lineplot
@@ -55,7 +55,7 @@
 	yfield: time_16815
 	linedetails: color=black
 	pointsymbol: shape=circle linecolor=black fillcolor=black
-	legendlabel: 16,815 records
+	legendlabel: 16,815 rows
 	legendsampletype: line+symbol
 
 #proc lineplot
@@ -63,7 +63,7 @@
 	yfield: time_22420
 	linedetails: color=black
 	pointsymbol: shape=triangle linecolor=black fillcolor=black
-	legendlabel: 22,420 records
+	legendlabel: 22,420 rows
 	legendsampletype: line+symbol
 
 #proc legend
