@@ -1,7 +1,7 @@
 \documentclass{CRPITStyle}
 
 
-\usepackage{harvard}
+\usepackage[agsmcite]{harvard}
 \usepackage[hang]{subfigure}
 \usepackage{graphicx}
 
@@ -53,8 +53,8 @@ particular interest, as they embody the progression from higher to lower
 levels of abstraction \cite{Tsic-D-1978}. Conceptual models are
 typically highly abstract, using techniques such as entity-relationship
 modelling. Logical models represent the database structure in a form
-that is closer to the physical representation, yet still sufficiently
-abstract to isolate applications from the physical representation
+that is closer to the physical representation, yet still abstracted
+sufficiently to isolate applications from the physical representation
 \cite{Codd-EF-1970}, and are expressed using formalisms such as the
 relational model. A logical model for a database can be derived by
 transforming the corresponding conceptual model.
@@ -71,9 +71,9 @@ abstraction.
 Physical level modelling, however, is equally as important as, if not
 \emph{more} important than the higher levels, because it is the physical
 level that determines the performance of a database \cite{BeDa-P-2003}.
-It is therefore somewhat surprising that there have been relatively few
-attempts to devise a graphical physical modelling notation, because such
-a notation can provide several advantages
+It is somewhat surprising that there have been relatively few attempts
+to devise an abstract graphical notation for physical modelling, because
+such a notation can provide several advantages
 \cite{BeDa-P-1992-PDD,Conn-TM-2002,Tuft-ER-1997,Will-J-1992}:
 \begin{itemize}
 
@@ -94,17 +94,17 @@ a notation can provide several advantages
 
 \end{itemize}
 
-Many of these benefits are embodied in modern database performance
+Some of these benefits are embodied in modern database performance
 monitoring tools, which provide higher-level visualisations of a
 database's internals in order to easily identify and highlight
 performance problems. Such tools, however, are primarily
 \emph{monitoring} tools rather than \emph{design} tools. They may
 therefore unintentionally encourage database administrators (DBAs) into
-a \emph{reactive} mode of continually ``tweaking'' the database to
-resolve performance issues, rather than a \emph{proactive} mode of
-anticipating and designing for expected usage. It may also be difficult
-for a DBA using such tools to gain a clear and comprehensive overview of
-all the tuning techniques that are in use within a particular database
+a reactive mode of continually ``tweaking'' the database to resolve
+performance issues, rather than a proactive mode of anticipating and
+designing for expected usage. It may also be difficult for a DBA using
+such tools to gain a clear and comprehensive overview of all the tuning
+techniques that are in use within a particular database
 \cite{Core-MJ-1997-OracleDW}.
 
 It could be argued that physical level structures vary so much from one
@@ -112,13 +112,13 @@ DBMS to another that it is futile to even consider a generic physical
 modelling notation. However, examination of the major DBMS products in
 use today reveals that they share many of the same physical tuning
 techniques. The specific implementation of (for example) clustering may
-vary in detail from platform to platform, but the feature is in general
+vary in detail from platform to platform, but the feature is in concept
 largely similar across all implementations. We provide a brief overview
-of commonly used physical tuning techniques in
+of five such commonly used physical tuning techniques in
 Section~\ref{sec-techniques}.
 
-In this paper we propose a graphical notation for physical database
-modelling. In Section~\ref{sec-previous} we discuss two earlier
+In this paper we propose an abstract graphical notation for physical
+database modelling. In Section~\ref{sec-previous} we discuss two earlier
 approaches upon which our work is partially based.
 Section~\ref{sec-notation} introduces our notation, and
 Section~\ref{sec-future} discusses possible future work. The paper
@@ -129,10 +129,10 @@ concludes in Section~\ref{sec-conclusion}.
 \label{sec-techniques}
 
 Database management is generally an I/O bound task, so the main
-performance bottleneck in most databases will be the performance of
-tertiary storage devices such as disk drives. Retrieving data from a
-hard disk is theoretically about six orders of magnitude slower than
-retrieving data from RAM\footnote{On the order of milliseconds
+performance bottleneck in most database systems will be the performance
+of tertiary storage devices such as disk drives. Retrieving data from a
+hard disk is theoretically about five to six orders of magnitude slower
+than retrieving data from RAM\footnote{On the order of milliseconds
 (\(10^{-3}\)) for disk versus nanoseconds (\(10^{-9}\)) for RAM.}. The
 aim of any physical tuning strategy must therefore be to minimise the
 impact of slow tertiary storage, either by directly reducing the number
@@ -154,36 +154,38 @@ by most modern mainstream DBMS products:
 	sequential scan has average and worst case performance of \(K/2b\)
 	and \((K - 1)/b\) disk accesses required, respectively, where \(K\)
 	is the number of records and \(b\) is the number of records per
-	database block. By comparison, a B+-tree has a worst case
-	performance of \(\log_{n/2}(K)\) \cite{Silb-A-2002-4E}, where
-	\(n\) is the number of key values per index node.
+	database block. In contrast, a B+-tree has a worst case performance
+	of \(\log_{n/2}(K)\) \cite{Silb-A-2002-4E}, where \(n\) is the
+	number of key values per index node.
 
 	\item[Hashing] is a method of quickly locating specific records by
 	passing a key value to a \emph{hash function}. This function ideally
 	returns a unique physical location of a hash bucket containing the
-	requested physical record. Hashing schemes typically require only
-	one or two physical disk accesses to retrieve a specific record, and
-	perform best for exact key matches on very large tables. Hashing
-	generally performs poorly for queries that require the retrieval of
-	many records.
+	requested physical record \cite{Pete-W-1957-hash}. Hashing schemes
+	typically require only one or two physical disk accesses to retrieve
+	a specific record, and perform best for exact key matches on very
+	large tables. Hashing generally performs poorly for queries that
+	require the retrieval of many records.
 
 	\item[Clustering] minimises disk access by ensuring that related
 	records (such as an order header and its associated order lines) are
-	physically adjacent on disk. This usually means that related records
-	will be stored in the same database block, and can thus be retrieved
-	with a single disk access. Clustering can, however, be expensive to
-	maintain in a high update environment, because of the frequent
-	``reclustering'' required.
+	physically adjacent on disk \cite{Shas-DE-2003-tuning}. This usually
+	means that related records will be stored in the same database
+	block, and can thus be retrieved with a single disk access. The
+	relationship between records is determined by a \emph{cluster key}
+	comprising fields in common to both physical tables. Clustering can
+	be expensive to maintain in a high update environment, because of
+	the frequent ``reclustering'' required.
 
 	\item[Partitioning] provides parallel access paths to data by
 	physically splitting a table into disjoint parts (either vertically
 	by columns or horizontally by rows) and placing them on separate
-	disks. This is particularly advantageous when multiple users wish to
-	access different subsets of a set of records, because it provides a
-	separate physical access path to each of the partitions.
-	Partitioning can also reduce the number of disk accesses required,
-	because there are fewer records to scan in each partition than if
-	the table were not partitioned.
+	disks \cite{Ceri-S-1982-partition}. This is particularly
+	advantageous when multiple users wish to access different subsets of
+	a set of records, because it provides a separate physical access
+	path to each of the partitions. Partitioning can also reduce the
+	number of disk accesses required, because there are fewer records to
+	scan in each partition than if the table were not partitioned.
 
 	\item[Replication] provides parallel access paths to data by making
 	multiple copies of the same records and placing them on separate
@@ -218,13 +220,14 @@ section we briefly discuss two previous efforts at modelling such
 information in a graphical manner.
 
 
-\subsection{\emph{Agile Modeling} (Ambler)}
+\subsection{\emph{Agile Modeling}}
 
-Ambler proposed a physical modelling notation based on the Unified
-Modelling Language (UML), as part of a broader effort to produce a
-``traditional'' style data modelling profile for the UML
-\cite{Ambl-SW-2003-ADT,Ambl-SW-2004-ObjPrimer3}. Ambler and others have
-argued the need for such a profile for some time
+\citename{Ambl-SW-2003-ADT}
+\citeyear{Ambl-SW-2003-ADT,Ambl-SW-2004-ObjPrimer3} proposed a physical
+modelling notation based on the Unified Modelling Language (UML), as
+part of a broader effort to develop a ``traditional'' style data
+modelling profile for the UML. Ambler and others have argued the need
+for such a profile for some time
 \cite{Ambl-SW-1998-BOA,Naib-EJ-2001-UMLDD}.
 
 Ambler's notation focuses on the physical modelling of relational
@@ -232,7 +235,7 @@ databases. The notation uses class boxes without stereotypes to
 represent physical tables, while indexes are represented by class boxes
 with the stereotype \verb|<<index>>|, as shown in
 Figure~\ref{fig-Ambler}. There appear to be no stereotypes for other
-physical tuning techniques such as partitioning, although these could be
+physical tuning structures such as partitions, although these could be
 easily incorporated.
 
 \begin{figure*}[htb]
@@ -241,39 +244,38 @@ easily incorporated.
 		\centerline{\includegraphics[scale=0.9]{Ambler}}%
 		\vskip 0.5cm%
 	}}
-	\caption{Ambler's physical modelling notation (adapted from \protect\cite{Ambl-SW-2003-ADT})}
+	\caption{Ambler's physical modelling notation \protect\citeaffixed{Ambl-SW-2003-ADT}{adapted from}}
 	\label{fig-Ambler}
 \end{figure*}
 
 Ambler's approach suffers from two serious disadvantages. First, the
 notation is very limited in the types of symbol used. All physical level
-constructs are represented by identical class boxes, which in a complex
-diagram could make distinguishing them difficult. This limitation
-probably arises from the constraints on developing a new notation within
-the existing UML framework.
+constructs are represented by almost identical class boxes, which in a
+complex diagram could make distinguishing them difficult. This
+limitation probably arises from the constraints on developing a new
+notation within the existing UML framework.
 
-Second, his approach appears to consistently confuse the conceptual and
-physical levels of abstraction: the same notations are used to represent
-not only physical but also conceptual elements \cite{Ambl-SW-2003-ADT}.
-This confusion is illustrated by the inclusion of a view (a non-physical
-construct) in Figure~\ref{fig-Ambler}.
+Second, his approach appears to consistently confuse different levels of
+abstraction: the same notations are used to represent not only physical
+but also conceptual elements in the same diagram
+\cite{Ambl-SW-2003-ADT}. This confusion is illustrated by the inclusion
+of a view (a non-physical construct) in Figure~\ref{fig-Ambler}.
 
 In summary, while Ambler's notation graphically models the physical
 level of a database, the similarity of the graphical symbols and the
-evident confusion between the physical and logical levels diminish its
-usefulness.
+evident confusion between abstraction levels diminish its usefulness.
 
 
-\subsection{\emph{Physical Design Using an Entity Model} (Beynon-Davies)}
+\subsection{\emph{Physical Design Using an Entity Model}}
 
-Beynon-Davies proposed a method for analysing and modelling the physical
-usage patterns of a database \cite{BeDa-P-1992-PDD}. In his method,
-various aspects of the physical performance of a database are measured,
-such as the size and expected growth rates of tables (volume analysis),
-the volatility of tables, and the frequency of transactions (usage
-analysis). The data obtained from these analyses are then used to
-annotate a logical level entity-relationship diagram (ERD) of the
-database, producing what is known as a \emph{composite usage map} (see
+\citeasnoun{BeDa-P-1992-PDD} proposed a method for analysing and
+modelling the physical usage patterns of a database. In his method,
+various physical aspects of a database are measured, such as the size
+and expected growth rates of tables (volume analysis), the volatility of
+tables, and the frequency of transactions (usage analysis). The data
+obtained from these analyses are then used to annotate a logical level
+entity-relationship diagram (ERD) of the database, producing what is
+known as a \emph{composite usage map} (see
 Figure~\ref{fig-Beynon-Davies} for an example).
 
 Beynon-Davies' method provides a very good mechanism for representing
@@ -283,9 +285,9 @@ Our experience with teaching this method at undergraduate level shows
 that even with a relatively small database, the designer can quickly
 become overwhelmed by the sheer volume of usage data involved.
 
-In addition, Beynon-Davies' method does not produce any conclusions as
-to which physical tuning methods should be implemented---rather it
-summarises the information required to facilitate these decisions.
+Furthermore, Beynon-Davies' method does not provide any way to model
+specific tuning techniques---rather it summarises the information
+required in order to decide which techniques should be applied.
 Beynon-Davies' method is thus more a notation for summarising the
 physical usage patterns of a database, rather than a notation for
 physical modelling per se.
@@ -300,9 +302,13 @@ Ambler's notation lacks clarity and is thus potentially confusing, while
 Beynon-Davies' notation only summarises the physical usage patterns of a
 database rather than providing an actual physical level model. We have
 therefore adopted aspects from both approaches to devise a graphical
-notation that enables database designers to graphically model the common
-physical database tuning techniques discussed in
-Section~\ref{sec-techniques}.
+notation that enables database designers and administrators to
+graphically model the common physical database tuning techniques
+discussed in Section~\ref{sec-techniques}, thus gaining a clearer
+picture of the tuning techniques applied to a database. The notation can
+be used either to model the physical structures of an existing database
+in preparation for further adjustment, or to design the physical
+structures of a new database.
 
 The symbols that we have adopted for this notation are shown in
 Figure~\ref{fig-notation}. Some of these symbols are adapted from other
@@ -344,53 +350,53 @@ Beynon-Davies style analysis.
 A physical table is represented by a simple box, as shown in
 Figure~\ref{fig-notation-table}. This is similar to most
 entity-relationship modelling notations. The fields of the physical
-table may be included, with or without physical data types, as
+table may be included with or without physical data types, as
 appropriate. It could be argued that a different symbol should be used
 to avoid confusion between, for example, physical tables and conceptual
 entities. These constructs belong to different levels of abstraction,
 however, so they should not both appear on the same diagram.
 Consequently there is no real potential for confusion.
 
-B-tree indexes are indicated by the symbol ``\(\bigtriangleup\)''
-(representing a tree-like structure) within a table, as shown in
+B-tree indexes are represented by the symbol ``\(\bigtriangleup\)''
+(symbolising a tree structure) within a table, as shown in
 Figure~\ref{fig-notation-index}. The index key is listed next to this
 symbol. Composite keys are indicated by a grouping symbol, and a unique
 index is indicated by a subscript ``1'', that is,
-\(\bigtriangleup_{1}\). Bitmap indexes and hashing are represented in a
-similar way, using the symbols
+``\(\bigtriangleup_{1}\)''. Bitmap indexes \cite{Onei-PE-1987-bitmap}
+and hashing are represented in a similar way, using the symbols
 ``\(\smash{\vdots\vdots\vdots}\)''\rule{0pt}{1.02\baselineskip} and
 ``\#'', respectively (see Figure~\ref{fig-notation-index}
-and~\ref{fig-notation-hash}). These symbols could easily be extended to
-cater for other types of index, such as R-trees.
+and~\ref{fig-notation-hash}). Additional symbols could easily be defined
+to cater for other types of index, such as R-trees.
 
 Clustering is represented by nesting one table inside another, as shown
-in Figure~\ref{fig-notation-cluster} (adapted from
-\cite{BeDa-P-1992-PDD}). The cluster key is indicated by an asterisk (*)
-attached to the appropriate field(s). Tables may be nested to as many
-levels as required in order to represent more complex clustering
-schemes. This notation is intuitive, and clearly indicates the field(s)
-on which the records are clustered. (Note that the physical relationship
-connecting the clustered tables has been omitted in
-Figure~\ref{fig-notation-cluster}.)
+in Figure~\ref{fig-notation-cluster}
+\citeaffixed{BeDa-P-1992-PDD}{adapted from}. The cluster key is
+indicated by an asterisk (*) attached to the appropriate field(s).
+Tables may be nested to as many levels as required in order to represent
+more complex clustering schemes. This notation is intuitive, and clearly
+indicates the field(s) on which the records are clustered. (Note that
+the physical relationship connecting the clustered tables has been
+omitted in Figure~\ref{fig-notation-cluster}.)
 
 Partitioning is represented by splitting a table into either vertical or
 horizontal partitions according to the style of partitioning, as shown
 in Figure~\ref{fig-notation-partition-h} and
-\ref{fig-notation-partition-v} (adapted from \cite{Silb-A-2002-4E}).
-Once again, the notation is intuitive, and allows the partition
-definitions to be easily indicated.
+\ref{fig-notation-partition-v} \citeaffixed{Silb-A-2002-4E}{adapted
+from}. Once again, the notation is intuitive, and allows the partition
+names and definitions to be easily specified.
 
-Replication is indicated by placing a diagonal bar across the
-lower-right corner of the table to be replicated, along with the total
-number of replicas, as shown in Figure~\ref{fig-notation-replica}. This
-is adapted from a similar notation used in data flow diagrams
+Replication is indicated by placing a diagonal bar across the lower
+right corner of the table to be replicated, along with the total number
+of replicas, as shown in Figure~\ref{fig-notation-replica}. This is
+adapted from a similar notation used in data flow diagrams
 \cite{Gane-C-1979}. This notation could also be used to indicate
-replication of individual table partitions, for DBMSs that permit this
-combination. We considered an alternative symbol that looked like a
+replication of individual table partitions, for those DBMSs that permit
+this combination. We considered an alternative symbol that looked like a
 ``stack'' of tables, on the basis that it might be useful to
-differentiate between different replicas. All the replicas are
-identical, however, which diminishes the usefulness of such a symbol,
-and the symbol was also more complex to draw.
+differentiate between replicas. All the replicas are identical, however,
+which diminishes the usefulness of such a symbol, and the symbol was
+also more complex to draw.
 
 Consider the entity-relationship diagram shown in Figure~\ref{fig-ERD},
 which uses Martin notation \cite{Mart-J-1990-IE2} to depict a database
@@ -400,21 +406,21 @@ Beynon-Davies' composite usage map based on fourteen significant
 transactions \cite{Pill-A-2005-DP} is shown in
 Figure~\ref{fig-Beynon-Davies} (some details have been omitted for
 clarity). The arrows represent physical access paths, while the number
-attached to each access path indicates the number of disk accesses per
-hour along that path. The diagram clearly highlights some potential
-performance problem areas in the database, for example:
+attached to each access path indicates the estimated number of disk
+accesses per hour along that path. The diagram clearly highlights some
+potential performance problem areas in the database, for example:
 \begin{itemize}
 
 	\item There are many disk accesses per hour along the access paths
-	between the \textsf{Sale\_head}/\textsf{Sale\_line} and the
-	\textsf{Order\_head}/\textsf{Order\_line} tables. Since each pair of
-	tables will normally be accessed together, both pairs could perhaps
-	be candidates for clustering (depending on the mix of update versus
-	read operations).
+	between the \textsf{Sale\_head}/\textsf{Sale\_line} and (to a lesser
+	extent) the \textsf{Order\_head}/\textsf{Order\_line} tables. Since
+	records from each pair of tables will normally be accessed together,
+	both pairs could perhaps be candidates for clustering, depending on
+	the mix of update versus read operations.
 
 	\item There appear to be multiple transactions accessing the
 	\textsf{Staff} table along different access paths. This could imply
-	a need for partitioning.
+	a need for some form of partitioning.
 
 	\item There is an extremely high access rate on the
 	\textsf{Customer} table. Further investigation, however, reveals
@@ -451,10 +457,13 @@ performance problem areas in the database, for example:
 
 
 The suggestions above can be represented as a physical model using our
-modelling notation, as shown in Figure~\ref{fig-physical-model} (some
-details have been omitted to save space). Note that we have placed
-indexes on all primary keys as a matter of course, as almost all DBMS
-products do this automatically.
+modelling notation, as shown in Figure~\ref{fig-physical-model}. Note
+that we have placed unique B-tree indexes on all primary keys as a
+matter of course, as almost all DBMS products do this automatically, but
+we have not included any other indexes. (In a real system, we would
+often place indexes on commonly queried fields.) Looking at the diagram,
+we can get a clear and concise picture of the techniques that have been
+applied without being overwhelmed by irrelevant detail.
 
 
 \begin{figure*}[htb]
@@ -479,7 +488,7 @@ ways, for example:
 	\item The current notation only caters for B-tree indexes, bitmap
 	indexes and hashing. An obvious extension is to define symbols for
 	other types of index, such as R-trees. We also plan to investigate
-	symbols for index variations such as reverse-key and integrated
+	symbols for index variants such as reverse-key and integrated
 	indexes.
 	
 	\item Many DBMS products support partitioning of indexes in addition
@@ -487,16 +496,19 @@ ways, for example:
 	be modified so that indexes are modelled separately from their
 	associated physical tables (similar to Ambler's notation). We would
 	need to evaluate whether the benefits gained from such an extension
-	would outweigh the additional complexity introduced.
+	would outweigh the additional diagrammatic complexity that it would
+	introduce.
 	
 	\item There is currently no way to specify physical placement
-	information, for example, which devices different partitions should
-	be placed on.
+	information such as which devices different partitions should be
+	placed on.
 	
 	\item The clustering notation effectively assumes that there are at
 	least two tables being clustered, but most DBMS products support
 	single-table clusters, which in effect physically sort the contents
-	of the table on the value of the cluster key.
+	of the table on the value of the cluster key. One solution would be
+	to use a box symbol with a double border, that is,
+	\fbox{\fbox{\mbox{}}}.
 	
 \end{itemize}
 
@@ -504,23 +516,38 @@ We are currently evaluating the efficacy of the notation with
 undergraduate students in an advanced database course. We will then
 compare this with using Beynon-Davies' method alone.
 
+We also plan to develop tool support for our notation (currently the
+diagrams must be produced manually). Given the similarity between our
+notation and standard entity-relationship notations, it should not be
+difficult to extend existing modelling tools to support the new
+notation. It should also be possible to incorporate the notation into
+more traditional database monitoring tools, which would provide DBAs
+with a much clearer, in-context overview of the physical structure of
+the database. Database activity could even be dynamically overlaid in
+real-time on the physical model, thus revealing how effective different
+tuning techniques are. Alternatively, the physical model could be used
+with a simulation of projected database usage to determine how proposed
+tuning techniques might affect database performance.
+
+
 
 \section{Conclusion}
 \label{sec-conclusion}
 
 In this paper we have described a graphical notation for physical
-database modelling, which enables database administrators (DBAs) to
-model the physical structure of new and existing databases in a more
+database modelling, which enables database designers and administrators
+to model the physical structure of new and existing databases in a more
 abstract manner. This will enable them to make more proactive and
 informed tuning decisions, compared to existing database monitoring
-tools, which tend to encourage a more reactive approach to database
-tuning. The notation uses simple and intuitive symbols to represent
-major physical database structures, and can easily represent complex
-physical schemas.
+tools, which tend to encourage a more reactive and ad hoc approach to
+database tuning. The notation uses simple and intuitive symbols to
+represent common physical database structures and tuning techniques, and
+can easily represent complex physical schemas.
 
-The notation is to be evaluated with undergraduate students in an
-advanced database course; the results of this evaluation will be
-compared with other physical modelling methods.
+The notation is currently being evaluated with undergraduate students in
+an advanced database course; the results of this evaluation will be
+compared with other physical modelling methods. We also plan to develop
+tool support for the new notation.
 
 
 \section*{Acknowledgements}
