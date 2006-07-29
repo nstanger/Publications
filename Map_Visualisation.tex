@@ -19,14 +19,15 @@
 \author{NIGEL STANGER \\ University of Otago}
             
 \begin{abstract} 
-A common technique for visualising the geographical distribution of
-web site hits is to geolocate the IP addresses of hits and plot them on
-a world map. This is typically achieved by dynamic generation of images
-on the server. In this paper we compare this technique with two others:
-overlaying CSS-enabled HTML on an underlying image and using Google
-Maps. The results show that all three techniques are suitable for small
-data sets, but that the latter two techniques do not scale well to large
-data sets.
+A common technique for visualising the geographical distribution of web
+site hits is to geolocate the IP addresses of hits and plot them on a
+world map. This is commonly achieved by dynamic generation of images on
+the server. In this paper we compare the scalability of this technique
+with three others: overlaying transparent images on an underlying base
+map, overlaying CSS-enabled HTML on an underlying base map and
+generating a map using Google Maps. The results show that all four
+techniques are suitable for small data sets, but that the latter two
+techniques scale poorly to large data sets.
 \end{abstract}
             
 \category{C.4}{Performance of Systems}{Performance attributes}
@@ -79,8 +80,8 @@ coming from. The EPrints statistics software developed at the University
 of Tasmania \cite{Sale-A-2006-stats} proved very useful in this regard,
 providing us with detailed per-eprint and per-country download
 statistics; an example of the latter is shown in
-Figure~\ref{fig-tas-stats}. However, while this display provides a
-numerical ranking of the number of hits from each country, it does not
+Figure~\ref{fig-tas-stats}. However, while this display provides an
+ordered ranking of the number of hits from each country, it does not
 provide any visual clues as to the distribution of hit sources around
 the globe.
 
@@ -148,16 +149,16 @@ overlay containing the plotted points. The overlay is then combined with
 the base map at the client. We shall henceforth refer to this class of
 techniques as \emph{overlay} techniques.
 
-Both classes of techniques have been used in the previously mentioned
-systems, but the overlay technique appears to have been particularly
-popular. For example, Palantir used an overlay technique, where a Java
-applet running at the client overlaid graphic elements onto a base map
-image retrieved from the now-defunct Xerox online map server
+Both classes of techniques have been used in the aforementioned systems,
+but the overlay technique appears to have been particularly popular. For
+example, Palantir used an overlay technique, where a Java applet running
+at the client overlaid graphic elements onto a base map image retrieved
+from the now-defunct Xerox online map server
 \cite{Papa-N-1998-Palantir}. A more recent example is the Google Maps
 API \cite{Goog-M-2006-maps}, which enables web developers to easily
 embed dynamic, interactive maps within web pages. Google Maps is a
-dynamic overlay technique that has only recently become feasible with the
-advent of support for CSS positioning and Ajax technologies in most
+dynamic overlay technique that has only recently become feasible with
+the advent of support for CSS positioning and Ajax technologies in most
 browsers.
 
 Overlay techniques enjoy a particular advantage over image generation
@@ -178,30 +179,6 @@ distribution styles, and the overlays themselves might take the form of
 transparent images, absolutely positioned HTML elements, dynamically
 generated graphics, etc.
 
-% With regard to our own visualization needs, we could quickly eliminate
-% several methods from consideration because they did not meet our
-% requirement to avoid manual installation of additional client-side
-% software (see Section~\ref{sec-methods} for further discussion). For
-% example, we eliminated the Palantir approach of using a client-side Java
-% applet because we could not guarantee the existence of a Java virtual
-% machine in every browser. We ultimately settled on the following four
-% methods that appeared to meet our requirements:
-% \begin{itemize}
-% 
-% 	\item server-side image generation (discussed further in
-% 	Section~\ref{sec-image-gen});
-% 
-% 	\item overlay using transparent images (discussed further in
-% 	Section~\ref{sec-image-overlay});
-% 
-% 	\item overlay using absolutely positioned HTML elements (discussed
-% 	further in Section~\ref{sec-html-overlay}); and
-% 
-% 	\item overlay using the Google Maps API (discussed further in
-% 	Section~\ref{sec-google}).
-% 
-% \end{itemize}
-
 Given the many possible techniques that were available, the next question
 was which of these techniques would be most suitable for our purposes?
 Scalability is a key issue for web applications in general \cite[p.\
@@ -215,14 +192,14 @@ of hit (abstract view versus document download) increased that figure to
 nearly 13,000.
 
 We first narrowed down the range of techniques to just four (server-side
-image generation, image overlay, HTML overlay and Google Maps); the
-selection process and details of the techniques chosen are discussed in
-Section~\ref{sec-techniques}. We then set about testing the scalability
-of these four techniques, in order to determine how well each technique
-handled large numbers of points. A series of experiments was conducted
-using each technique with progressively larger data sets, and the
-elapsed time and memory usage were measured. The experimental design is
-discussed in Section~\ref{sec-experiment}.
+image generation, image overlay, server-side HTML overlay and Google
+Maps); the selection process and details of the techniques chosen are
+discussed in Section~\ref{sec-techniques}. We then set about testing the
+scalability of these four techniques, in order to determine how well
+each technique handled large numbers of points. A series of experiments
+was conducted using each technique with progressively larger data sets,
+and the elapsed time and memory usage were measured. The experimental
+design is discussed in Section~\ref{sec-experiment}.
 
 Our intuition was that server-side image generation and image overlay
 would prove the most scalable, and this was borne out by the results of
@@ -239,85 +216,122 @@ Section~\ref{sec-results}.
 
 In this section we discuss in more detail the four techniques that we
 chose for testing, and how we decided upon these particular techniques.
-First, we briefly discuss the impact of distribution style on the choice
-of technique. Then, for each of the four chosen techniques, we examine
-how the technique works in practice, its implementation requirements,
-its relative advantages and disadvantages, and any other issues peculiar
-to the technique.
+First, we discuss the impact of distribution style on the choice of
+technique. Then, for each of the four chosen techniques, we examine how
+the technique works in practice, its implementation requirements, its
+relative advantages and disadvantages, and any other issues peculiar to
+the technique.
 
 
 \subsection{Distribution style}
+\label{sec-distribution}
 
-\citeN{Wood-J-1996-vis} and \citeN{MacE-AM-1998-GIS} identify four
-distribution styles for web-based geographic visualization software:
-\begin{itemize}
+\citeN{Wood-J-1996-vis} and \citeN{MacE-AM-1998-GIS} identified four
+distribution styles for web-based geographic visualization software. The
+\emph{data server} style is where the server only supplies raw data, and
+all manipulation, display and analysis takes place at the client. In
+other words, this is primarily a client-side processing model, as
+illustrated in Figure~\ref{fig-data-server}. For example, Palantir
+implemented an overlay technique using this distribution style
+\cite{Papa-N-1998-Palantir}, where the source data were generated at the
+server and the map was generated, displayed and manipulated by a Java
+applet running at the client. The data server distribution style can
+provide a very dynamic and interactive environment to the end user, but
+clearly requires support for executing application code within the web
+browser, typically using something like JavaScript, Java applets or
+Flash. JavaScript is now tightly integrated into most browsers, but the
+same cannot be said for either Java or Flash. That is, we cannot
+necessarily guarantee the existence of a Java virtual machine or Flash
+plugin in every browser, which violates our requirement to avoid manual
+installation of additional cient-side software. We can therefore
+eliminate Java- or Flash-based data server techniques from
+consideration.
 
-	\item the \emph{data server} style where the server only supplies
-	raw data, and all manipulation, display and analysis takes place at
-	the client (i.e., primarily client-side);
-	
-	\item the \emph{image server} style where the display is created at
-	the server and is viewed at the client (i.e., primarily server-side);
-	
-	\item the \emph{3D model interaction environment} style where a 3D
-	model created at the server can be explored at the client; and
-	
-	\item the \emph{shared environment} style where data manipulation is
-	done at the server, but control of that manipulation, rendering and
-	display all occur at the client.
 
-\end{itemize}
+\begin{narrowfig}{2cm}
+	\caption{The data server distribution style
+	\protect\cite{Wood-J-1996-vis}. (F = filtering, M = mapping, R =
+	rendering.)}
+	\label{fig-data-server}
+\end{narrowfig}
 
-The data server distribution style can provide a very dynamic and
-interactive environment to the end user, but clearly requires support
-for executing application code within the web browser, typically using
-something like JavaScript, Java applets or Flash. JavaScript is now
-tightly integrated into most browsers, but the same cannot be said for
-either Java or Flash. That is, we cannot necessarily guarantee the
-existence of a Java virtual machine or Flash plugin in every browser,
-which violates our requirement to avoid manual installation of
-additional cient-side software. We can therefore immediately eliminate
-Java- or Flash-based data server techniques from consideration.
 
-In contrast, the image server distribution style is primarily server
-based, and thus require no additional client-side software. The downside
-is that the resultant visualization tends to be very static and
-non-interactive in nature.
+In contrast, the \emph{image server} style is where the display is
+created at entirely the server and is only viewed at the client. In
+other words, this is primarily a server-side processing model, as
+illustrated in Figure~\ref{fig-image-server}. Consequently, techniques
+that use this style require no additional client-side software, and thus
+meet our requirements. The downside is that the resultant visualization
+can tend to be very static and non-interactive in nature, as it is a
+simple bitmap image.
 
-%%!! HERE
-The term ``3D model interaction environment'' seems a little out of place
-in the current context. \citeN{Wood-J-1996-vis}
-originally intended this to apply to VRML models for GIS applications,
-but this distribution style could
-be equally applied to any situation where an interactive model is downloaded
 
-something like a Flash application, where a self-contained
+\begin{narrowfig}{2cm}
+	\caption{The image server distribution style
+	\protect\cite{Wood-J-1996-vis}.}
+	\label{fig-image-server}
+\end{narrowfig}
 
-seems more appropriate to
-GIS-style applications than to visualization of web hits. 
-, but the
-remaining three styles are all appropriate for this application area.
-For example, Palantir implemented an overlay technique using a data
-server distribution style \cite{Papa-N-1998-Palantir}, where the source
-data were generated at the server and the map was generated, displayed
-and manipulated by a Java applet at the client.
 
-In contrast, techniques that use the image server style are primarily
-server based, and thus require no additional client-side software.
-Techniques that use a shared environment style fall somewhere in the
-middle, as they may or may not require additional client-side software
-(such as an image generation library), depending on how they are
-implemented.
+The \emph{3D model interaction environment} style is where a model
+created at the server can be explored at the client, as illustrated in
+Figure~\ref{fig-model-interaction}. The phrase ``3D model interaction''
+seems slightly out of place in the current context.
+\citeN{Wood-J-1996-vis} originally intended this distribution style to
+apply to VRML models for GIS applications, but it could be equally
+applied to any situation where an interactive model is generated at the
+server, then downloaded to and manipulated at the client. This is very
+similar to what happens with many Flash-based applications, for example.
+A more general name for this style could therefore be \emph{model
+interaction environment}. The key distinguishing feature of this style
+is that there is no further interaction between the client and server
+after the model has been downloaded. This means that while the
+downloaded model can be very dynamic and interactive, changing the
+underlying data requires a new model to be generated and downloaded from
+the server. Similar restrictions apply to techniques using this style as
+with the data server style, so Java- and Flash-based model interaction
+environment techniques can be eliminated from consideration. For similar
+reasons, we can also eliminate solutions that require browser plugins
+such as VRML or SVG (although native support for the latter is beginning
+to appear in some browsers). It may be possible to implement this
+distribution style using only client-side JavaScript, but it is unclear
+as to how effective this might be.
+
+
+\begin{narrowfig}{2cm}
+	\caption{The model interaction environment distribution style
+	\protect\cite{Wood-J-1996-vis}.}
+	\label{fig-model-interaction}
+\end{narrowfig}
+
+
+Finally, the \emph{shared environment} style is where data manipulation
+is done at the server, but control of that manipulation, rendering, and
+display all occur at the client, as illustrated in
+Figure~\ref{fig-shared-environment}. This is similar to the model
+interaction environment style, but with the addition of a feedback loop
+from the client to the server, thus enabling a more flexible and dynamic
+interaction. This is essentially the distribution style provided by Ajax
+technologies [REF]. We can eliminate techniques based on the same criteria
+as applied to the other three styles.
+
+
+\begin{narrowfig}{2cm}
+	\caption{The shared environment distribution style
+	\protect\cite{Wood-J-1996-vis}.}
+	\label{fig-shared-environment}
+\end{narrowfig}
 
 
 \subsection{Image generation techniques}
 \label{sec-image-gen}
 
-As noted earlier, these techniques work by directly plotting geolocated IP
-addresses onto a base map image, then displaying the composite image at
-the client, as shown in Figure~\ref{fig-image}. Such techniques require two
-specific components: software to programmatically create and manipulate
-bitmap images (for example, the GD image
+As noted earlier, image generation techniques work by directly plotting
+geolocated IP addresses onto a base map image, then displaying the
+composite image at the client. A typical example of the kind of output
+that might be produced is shown in Figure~\ref{fig-image}. Such
+techniques require two specific components: software to programmatically
+create and manipulate bitmap images (for example, the GD image
 library\footnote{\url{http://www.boutell.com/gd/}}); and software to
 transform raw latitude/longitude coordinates into projected map
 coordinates on the base map (for example, the PROJ.4 cartographic
@@ -332,79 +346,56 @@ projections library\footnote{\url{http://www.remotesensing.org/proj/}}).
 	\label{fig-image}
 \end{figure}
 
-% There are several different architectures for implementing web-based
-% visualization software \cite{Wood-J-1996-vis,MacE-AM-1998-GIS}. One possibility is
-% to use a distributed architecture, where the source data are
-% generated at the server and the map is generated and manipulated by a
-% Java applet at the client; \citeN{MacE-AM-1998-GIS} refers to this as
-% the \emph{shared environment} architecture. Alternatively, the map image
-% can be generated entirely on the server, with the client responsible
-% only for display; \citeN{MacE-AM-1998-GIS} refers to this as the
-% \emph{image server} architecture, which is the standard form of
-% interaction for many web sites. Both architectures are illustrated in
-% Figure~\ref{fig-image-architecture}. We have adopted the latter
-% architecture (server-side image generation) in our experiments, as the
-% former would require installing additional client-side software for
-% generating images and performing cartographic projection operations.
 
-We could implement image generation techniques using either the data
-server, shared environment or image server distribution styles. However,
-the data server style would require the installation of additional
+Image generation techniques could use any of the distribution styles
+discussed in Section~\ref{sec-distribution}. However, all but the image
+server style would probably require the installation of additional
 client-side software for generating images and performing cartographic
-projection operations, so solutions based on this style can be eliminated
-from consideration. 
+projection operations, so we will only consider image generation using
+an image servr distribution style (or ``server-side image generation'')
+from this point on.
 
-There are several different architectures for implementing web-based
-visualization software \cite{Wood-J-1996-vis,MacE-AM-1998-GIS}. One possibility is
-to use a distributed architecture, where the source data are
-generated at the server and the map is generated and manipulated by a
-Java applet at the client; \citeN{MacE-AM-1998-GIS} refers to this as
-the \emph{shared environment} architecture. Alternatively, the map image
-can be generated entirely on the server, with the client responsible
-only for display; \citeN{MacE-AM-1998-GIS} refers to this as the
-\emph{image server} architecture, which is the standard form of
-interaction for many web sites. Both architectures are illustrated in
-Figure~\ref{fig-image-architecture}. We have adopted the latter
-architecture (server-side image generation) in our experiments, as the
-former would require installing additional client-side software for
-generating images and performing cartographic projection operations.
-
-
-% \begin{figure}
-% 	\caption{Shared environment vs.\ image server architectures for the
-% 	image generation technique.}
-% 	\label{fig-image-architecture}
-% \end{figure}
-
-
-This technique provides some distinct advantages. If an image server
-architecture is adopted, the technique is relatively simple to implement
-and is fast at producing the final image, mainly because it uses
-existing, well-established technologies. It is also bandwidth efficient:
-the size of the generated map image is determined by the total number of
-pixels and the compression technique used, rather than by the number of
-points plotted. The amount of data generated should therefore remain
-more or less constant, regardless of the number of points plotted.
+The server-side image generation technique provides some distinct
+advantages. It is relatively simple to implement and is fast at
+producing the final image, mainly because it uses existing,
+well-established technologies. It is also bandwidth efficient: the size
+of the generated map image is determined by the total number of pixels
+and the compression method used, rather than by the number of points to
+be plotted. The amount of data generated should therefore remain more or
+less constant, regardless of the number of points plotted.
 
 This technique also has some disadvantages, however. First, a suitable
 base map image must be acquired. This could be generated from a GIS, but
 if this is not an option an appropriate image must be obtained from a
 third party. Care must be taken in the latter case to avoid potential
-copyright issues. Second, the compression technique used for the map image
-can impact on the quality of the final result. For example, lossy
-compression techniques such as JPEG can make the points plotted on the map
-appear distinctly fuzzy (see Figure~\ref{fig-image-quality}). A
-lossless compression technique such as PNG will avoid this problem, but
-will produce larger image files. Finally, it is harder to provide
-interactive map manipulation features with this technique, as the output
-is a static image. Anything that changes the content of the map (such as
-panning or changing the visibility of points) will require the entire
-image to be regenerated. Zooming could be achieved with a very high
-resolution base map image, but the number of zoom levels may be
+copyright issues. Second, the compression method used to produce the
+final composite map image can have a significant impact on visual
+quality. For example, lossy compression techniques such as JPEG can make
+the points plotted on the map appear distinctly fuzzy, as shown in
+Figure~\ref{fig-image-quality}. A lossless compression technique such as
+PNG will avoid this problem, but will tend to produce larger image
+files. Finally, it is harder to provide interactive map manipulation
+features with this technique, as the output is a simple static image.
+Anything that changes the content of the map (such as panning or
+changing the visibility of points) will require the entire image to be
+regenerated. Zooming could be achieved if a very high resolution base
+map image was available, but the number of possible zoom levels might be
 restricted.
 
 
-\subsection{HTML overlay}
+\begin{figure}
+	\begin{center}
+		\includegraphics[scale=1.25]{jpeg_detail}\medskip
+		
+		\includegraphics[scale=1.25]{overlay_detail}
+	\end{center}
+	\caption{Image quality of JPEG image generation (top) vs.\ PNG image
+	overlay (bottom).}
+	\label{fig-image-quality}
+\end{figure}
+
+
+\subsection{Overlay techniques}
 \label{sec-html-overlay}
 
 % Look for publications regarding the DataCrossing Ajax client.
@@ -414,92 +405,49 @@ restricted.
 % appearance of markers. The amount of data generated will still be
 % proportional to the number of points (one <IMG> per point).
 
-This technique also involves plotting points onto a base map image, but
-it differs from the image generation technique in that the points are
+Overlay techniques also involve plotting points onto a base map image,
+but they differ from image generation techniques in that the points are
 not plotted directly onto the base map image. Rather, the points are
-plotted as an independent overlay on the base map image, using HTML
-\verb|<DIV>| elements that are absolutely positioned via CSS. This
-technique thus requires a web browser that supports the appropriate CSS
-positioning attributes, but such support is now standard in many
-browsers. (The output looks essentially identical to that produced by
-image generation, so we have not provided an example.)
+plotted as an independent overlay on the base map image. This provides a
+significant advantage over image generation techniques, as it enables
+the possibility of multiple independent overlays that can be
+individually shown or hidden. This is very similar to the multi-layer
+functionality provide by GIS, and is an effective way to provide
+interactive visualizations of geographic data
+\cite{Wood-J-1996-vis,MacE-AM-1998-GIS}. We still have the problem of
+finding a suitable base map image, however.
 
-As with image generation, we can adopt either a shared environment
-architecture, where source data are generated at the server and
-converted into an HTML overlay at the client, or an image server
-architecture, where the HTML overlay is generated at the server. (The
-base map image is static and thus requires no additional processing.)
-Both architectures are illustrated in
-Figure~\ref{fig-html-architectures}. Unlike image generation, however,
-HTML overlay can be implemented as a shared environment architecture
-without the need to install additional client-side software. JavaScript
-is now standard in most browsers, and this is sufficient to implement
-the necessary client-side behaviour. Both architectures thus meet our
-requirement for avoiding additional client-side software.
+Until relatively recently, implementing overlay techniques would likely
+have required additional software at the client, but most modern
+browsers now support absolute positioning of elements using CSS. This
+enables us to create a map overlay using nothing more than HTML, CSS and
+a few bitmap images. We have identified two main alternatives for
+producing such an overlay, which we have termed \emph{image overlay} and
+\emph{HTML overlay}.
 
+An image overlay comprises a transparent bitmap image into which the
+points are plotted, which is then overlaid on the base map image (the
+output looks essentially identical to that shown in
+Figure~\ref{fig-image}). This requires the overlay image to be in either
+PNG or GIF format, as JPEG does not support transparency. Fortunately
+the overlay image is likely to be quite small, so use of a lossless
+compression method should not be an issue. This also eliminates the
+``fuzziness'' issue noted earlier (see Figure~\ref{fig-image-quality}).
+As noted earlier, generating images at the client would require
+additional software to be installed, so we will only consider the data
+server distribution style for this technique. That is, both the base map
+image and the overlay(s) are generated at the server.
 
-\begin{figure}
-	\caption{Shared environment vs.\ image server architectures for the
-	HTML overlay technique.}
-	\label{fig-html-architectures}
-\end{figure}
-
-
-If an image server architecture is adopted, this technique is actually
-slightly easier to implement than image generation, because we do not
-need any code to generate or manipulate images. Implementing a shared
-environment architecture is more complex, but this has more to do with
-the nature of distributed applications than the technique itself. The
-technique does not suffer image generation's problem of fuzzy-looking
-points (see Figure~\ref{fig-image-quality}), because the points are not
-part of the map image and thus unaffected by compression artifacts.
-Finally, the most significant advantage of HTML overlay over image
-generation is that it enables the possibility of multiple independent
-overlays, that can be individually shown or hidden. This is very similar
-to the multi-layer functionality provide by GIS, and is an effective way
-to provide interactive visualizations of geographic data
-\cite{Wood-J-1996-vis,MacE-AM-1998-GIS}.
-
-As with image generation, however, we still have the problem of finding
-a suitable base map image. HTML overlay also relies on relatively recent
-technologies that have not yet been fully or consistently implemented by
-all browsers. The most significant disadvantage of the HTML overlay
-technique, however, is that the size of the HTML overlay will be
-directly proportional to the number of points to be plotted, as there
-will be one \verb|<DIV>| element per point. A very large number of
-points will almost certainly lead to excessive browser memory usage, so
-this technique is unlikely to scale well at the high end. However, it
-may still be useful for smaller data sets that require interactive
-manipulation.
-
-
-\begin{figure}
-	\begin{center}
-		\includegraphics[scale=1.25]{jpeg_detail}\medskip
-		
-		\includegraphics[scale=1.25]{overlay_detail}
-	\end{center}
-	\caption{Image quality of JPEG image generation (top) vs.\ HTML
-	overlay (bottom).}
-	\label{fig-image-quality}
-\end{figure}
-
-
-\subsection{Google Maps}
-\label{sec-google}
-
-This technique uses the client-side Google Maps API
-\cite{Goog-M-2006-maps} to both generate the base map and plot points on
-it; an example of the output is shown in Figure~\ref{fig-google}. The
-output and interaction is significantly different in nature and
-appearance from that provided by the other two techniques. Google Maps
-requires JavaScript support at the client and the Google Maps software
-must be installed on the client. However, since the latter happens
-automatically when the corresponding web page is loaded, this technique
-meets our requirements. Google Maps inherently uses a shared environment
-architecture, as shown in Figure~\ref{fig-google-architecture}. Data are
-generated at the server, while all map display and manipulation occurs
-at the client.
+An HTML overlay comprises a collection of HTML elements corresponding to
+the points to be plotted, which are positioned over the base map image
+using CSS absolute positioning. There is considerable flexibility as to
+which elements could be used to construct the overlay. One possibility
+is to use \verb|<IMG>| elements, which is the approach adopted by Google
+Maps (see Figure~\ref{fig-google}). Another possibility is to use
+appropriately sized and colored \verb|<DIV>| elements, which will then
+appear as colored points ``floating'' over the base map image (the
+output looks essentially identical to that shown in
+Figure~\ref{fig-image}).
 
 
 \begin{figure}
@@ -511,12 +459,32 @@ at the client.
 \end{figure}
 
 
-\begin{figure}
-	\caption{Shared environment architecture of the Google Maps
-	technique.}
-	\label{fig-google-architecture}
-\end{figure}
+HTML overlays may be generated at either the server or the client.
+Unlike the techniques discussed previously, however, HTML overlays can
+be generated at the client without the need for additional software,
+because only HTML (i.e., text) is being generated. This can be easily
+achieved using client-side JavaScript, so HTML overlays can use any of
+the distribution styles discussed in Section~\ref{sec-distribution}
+without violating our requirements. We have therefore adopted two
+representative overlay techniques for our experiments: server-side HTML
+overlays (using the image server distribution style) and Google Maps
+(using the shared environment distribution style). Since Google Maps
+uses embedded \verb|<IMG>| elements, we have used embedded \verb|<DIV>|
+elements for the our server-side HTML overlays.
 
+Server-side HTML overlays are actually slightly easier to implement than
+either server-side image generation or image overlays, because we do not
+need any code to generate or manipulate images (the base map image is
+static and thus requires no additional processing). All that is required
+is code to transform latitude/longitude coordinates into projected map
+coordinates and produce corresponding \verb|<DIV>| elements.
+
+Google Maps \cite{Goog-M-2006-maps} is a more complex proposition. This
+technique uses the shared environment distribution style, where
+JavaScript code running within the browser enables the client to control
+the display of the base map and any overlays. Data and map images are
+requested asynchronously from the server as required, using Ajax
+technologies.
 
 The primary advantage of Google Maps is the powerful functionality it
 provides for generating and interacting with the map. Users may pan the
@@ -526,24 +494,34 @@ information about each point plotted (such as the name of the city, for
 example) can be displayed in a callout next to the point, as shown in
 Figure~\ref{fig-google}.
 
-However, there are also some significant disadvantages compared to the
-previous two techniques. As a distributed application, it will be more
-complex to implement, test and debug. It also relies on an active
-Internet connection in order to run. The server must have a registered
-API key from Google, which is verified every time that a page attempts
-to use the API. Similarly, the client must connect to Google's servers
-in order to to download the API's JavaScript source. Finally, the Google
-Maps API does not currently provide any technique of toggling the
-visibility of markers on the map, so it is not possible to implement the
-``layers'' that are possible with HTML overlay (it is of course possible
-that Google will implement this feature in a later version of the API).
+However, there are also some significant disadvantages to the Google
+Maps technique\footnote{Interestingly, the Google Earth application
+addresses many of these issues, but since it is not a browser-based
+solution it falls outside the scope of this work. However, for
+interest's sake we will do an informal comparison in
+Section~\ref{sec-results} between Google Earth and the four techniques
+that we have tested.}. First, it is a distributed application, thus
+making it more complex to implement, test and debug [REF]. Second, the
+server must have a registered API key from Google, which is verified
+every time that a page attempts to use the API. Similarly, the client
+must connect to Google's servers in order to to download the API's
+JavaScript source. This means that the technique must have an active
+Internet connection in order to work. Finally, the Google Maps API does
+not currently provide any technique of toggling the visibility of
+markers on the map, so it is not possible to implement the interactive
+``layers'' that are possible with an HTML overlay. (It is possible, of
+course, that Google will implement this feature in a later version of
+the API.)
 
-Interestingly, the Google Earth application addresses several of these
-issues, but falls outside the scope of this work, as it requires the
-manual installation of extra software and runs outside the web browser
-entirely. (Just for fun, however, we will do an informal comparison in
-Section~\ref{sec-results} between Google Earth and the three techniques
-discussed here.)
+The most significant disadvantage of all HTML overlay techniques,
+however, is that the size of the HTML overlay is directly proportional
+to the number of points to be plotted. There will be one overlay element
+(\verb|<DIV>| or \verb|<IMG>|) per point, so a very large number of
+points will result in an even larger amount of HTML source being
+generated. We expect that this will lead to excessive browser memory
+usage, and consequently that these techniques will not scale well at the
+high end. However, they may still be useful for smaller data sets that
+require interactive manipulation.
 
 
 \section{Experimental design}
