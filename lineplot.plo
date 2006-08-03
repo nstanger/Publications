@@ -1,0 +1,95 @@
+#musthave infile
+#musthave title
+//#musthave field2
+//#musthave label1
+//#musthave label2
+
+#proc settings
+	units: cm
+#endproc
+
+#proc getdata
+	delim: comma
+	fieldnameheader: yes
+	file: @infile
+
+#proc areadef
+	title: @title
+	titledetails: size=10 style=B align=C
+	areaname: standard
+	xscaletype: log
+	yscaletype: log
+	xautorange: datafield=points
+	yautorange: datafield=image_gen,image_overlay,html_overlay,google_maps,google_earth
+//	yrange: 1 4.25
+//	xrange: 0.5 6.5
+//	autowidth: 0.33
+//	autoheight: 0.66
+
+#proc yaxis:
+	stubs: datafields=image_gen,image_overlay,html_overlay,google_maps,google_earth
+	stubformat: %2.1f
+	stubdetails: size=10
+	stubcull: yes
+	label: Time (s)
+	labeldetails: style=B size=10 adjust=-0.1,0
+	grid: color=gray(0.7)
+
+#proc xaxis:
+	stubs: datafields=points
+	stubdetails: size=10
+	stubcull: yes
+	label: Number of points
+	labeldetails: style=B size=10 adjust=0,-0.1
+	//adjust=-0.1,0
+
+#proc lineplot
+	xfield: points
+	yfield: image_gen
+	//linedetails: color=black
+	pointsymbol: shape=diamond linecolor=black fillcolor=black
+	legendlabel: Image generation
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: points
+	yfield: image_overlay
+	//linedetails: color=gray(0.25)
+	//pointsymbol: shape=square linecolor=gray(0.25) fillcolor=gray(0.25)
+	pointsymbol: shape=square linecolor=black fillcolor=black
+	legendlabel: Image overlay
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: points
+	yfield: html_overlay
+	//linedetails: color=gray(0.25)
+	//pointsymbol: shape=square linecolor=gray(0.25) fillcolor=gray(0.25)
+	pointsymbol: shape=square style=spokes linecolor=black
+	legendlabel: HTML overlay
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: points
+	yfield: google_maps
+	//linedetails: color=gray(0.25)
+	//pointsymbol: shape=square linecolor=gray(0.25) fillcolor=gray(0.25)
+	pointsymbol: shape=triangle linecolor=black fillcolor=black
+	legendlabel: Google Maps
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: points
+	yfield: google_earth
+	//linedetails: color=gray(0.25)
+	//pointsymbol: shape=square linecolor=gray(0.25) fillcolor=gray(0.25)
+	pointsymbol: shape=circle linecolor=black fillcolor=black
+	legendlabel: Google Earth
+	legendsampletype: line+symbol
+
+#proc legend
+	format: multiline
+	location: max-1.2 max-0.3
+	textdetails: size=10
+	seglen: 0.25
+	reverseorder: yes
