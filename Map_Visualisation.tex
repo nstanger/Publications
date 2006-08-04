@@ -1,6 +1,9 @@
 \documentclass[acmtocl,acmnow]{acmtrans2m}
 
+
 \usepackage{graphicx}
+% \usepackage{subfig}
+
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{conjecture}[theorem]{Conjecture}
@@ -192,23 +195,23 @@ of hit (abstract view versus document download) increased that figure to
 nearly 13,000.
 
 We first narrowed down the range of techniques to just four (server-side
-image generation, image overlay, server-side HTML overlay and Google
-Maps); the selection process and details of the techniques chosen are
-discussed in Section~\ref{sec-techniques}. We then set about testing the
-scalability of these four techniques, in order to determine how well
-each technique handled large numbers of points. A series of experiments
-was conducted using each technique with progressively larger data sets,
-and the elapsed time and memory usage were measured. The experimental
-design is discussed in Section~\ref{sec-experiment}.
+image generation, server-side image overlay, server-side HTML overlay
+and Google Maps); the selection process and details of the techniques
+chosen are discussed in Section~\ref{sec-techniques}. We then set about
+testing the scalability of these four techniques, in order to determine
+how well each technique handled large numbers of points. A series of
+experiments was conducted using each technique with progressively larger
+data sets, and the elapsed time and memory usage were measured. The
+experimental design is discussed in Section~\ref{sec-experiment}.
 
-Our intuition was that server-side image generation and image overlay
-would prove the most scalable, and this was borne out by the results of
-the experiments, which show that both techniques scale reasonably well
-to very large numbers of points. The other two techniques proved to be
-reasonable for relatively small numbers of points (generally less than
-about 500--1,000), but their performance deteriorated rapidly beyond
-this. The results are discussed in more detail in
-Section~\ref{sec-results}.
+Our intuition was that server-side image generation and server-side
+image overlay techniques would prove the most scalable, and this was
+borne out by the results of the experiments, which show that both
+techniques scale reasonably well to very large numbers of points. The
+other two techniques proved to be reasonable for relatively small
+numbers of points (generally less than about 500--1,000), but their
+performance deteriorated rapidly beyond this. The results are discussed
+in more detail in Section~\ref{sec-results}.
 
 
 \section{Technique selection}
@@ -231,7 +234,7 @@ distribution styles for web-based geographic visualization software. The
 \emph{data server} style is where the server only supplies raw data, and
 all manipulation, display and analysis takes place at the client. In
 other words, this is primarily a client-side processing model, as
-illustrated in Figure~\ref{fig-data-server}. For example, Palantir
+illustrated in Figure~\ref{fig-distribution-styles}(a). For example, Palantir
 implemented an overlay technique using this distribution style
 \cite{Papa-N-1998-Palantir}, where the source data were generated at the
 server and the map was generated, displayed and manipulated by a Java
@@ -248,35 +251,45 @@ eliminate Java- or Flash-based data server techniques from
 consideration.
 
 
-\begin{narrowfig}{2cm}
-	\caption{The data server distribution style
+\begin{figure}
+	\begin{center}
+		\begin{tabular}{ccc}
+			\includegraphics[scale=1]{data_server}	&
+			\qquad	&
+			\includegraphics[scale=1]{image_server}	\\
+			\footnotesize (a) Data server	&
+			\qquad	&
+			\footnotesize (b) Image server	\\
+			\\
+			\\
+			\includegraphics[scale=1]{model_interaction}	&
+			\qquad	&
+			\includegraphics[scale=1]{shared}	\\
+			\footnotesize (c) Model interaction environment	&
+			\qquad	&
+			\footnotesize (d) Shared environment	\\
+		\end{tabular}
+	\end{center}
+	\caption{Distribution styles for web-based geographic visualization
 	\protect\cite{Wood-J-1996-vis}. (F = filtering, M = mapping, R =
 	rendering.)}
-	\label{fig-data-server}
-\end{narrowfig}
+	\label{fig-distribution-styles}
+\end{figure}
 
 
 In contrast, the \emph{image server} style is where the display is
 created at entirely the server and is only viewed at the client. In
 other words, this is primarily a server-side processing model, as
-illustrated in Figure~\ref{fig-image-server}. Consequently, techniques
+illustrated in Figure~\ref{fig-distribution-styles}(b). Consequently, techniques
 that use this style require no additional client-side software, and thus
 meet our requirements. The downside is that the resultant visualization
 can tend to be very static and non-interactive in nature, as it is a
 simple bitmap image.
 
-
-\begin{narrowfig}{2cm}
-	\caption{The image server distribution style
-	\protect\cite{Wood-J-1996-vis}.}
-	\label{fig-image-server}
-\end{narrowfig}
-
-
 The \emph{3D model interaction environment} style is where a model
 created at the server can be explored at the client, as illustrated in
-Figure~\ref{fig-model-interaction}. The phrase ``3D model interaction''
-seems slightly out of place in the current context.
+Figure~\ref{fig-distribution-styles}(c). The phrase ``3D model
+interaction'' seems slightly out of place in the current context.
 \citeN{Wood-J-1996-vis} originally intended this distribution style to
 apply to VRML models for GIS applications, but it could be equally
 applied to any situation where an interactive model is generated at the
@@ -294,33 +307,20 @@ environment techniques can be eliminated from consideration. For similar
 reasons, we can also eliminate solutions that require browser plugins
 such as VRML or SVG (although native support for the latter is beginning
 to appear in some browsers). It may be possible to implement this
-distribution style using only client-side JavaScript, but it is unclear
-as to how effective this might be.
+distribution style using only client-side JavaScript, but it is presentl
+unclear as to how effective this might be.
 
-
-\begin{narrowfig}{2cm}
-	\caption{The model interaction environment distribution style
-	\protect\cite{Wood-J-1996-vis}.}
-	\label{fig-model-interaction}
-\end{narrowfig}
-
+% future work: implement model interaction using JavaScript?
 
 Finally, the \emph{shared environment} style is where data manipulation
 is done at the server, but control of that manipulation, rendering, and
 display all occur at the client, as illustrated in
-Figure~\ref{fig-shared-environment}. This is similar to the model
+Figure~\ref{fig-distribution-styles}(d). This is similar to the model
 interaction environment style, but with the addition of a feedback loop
 from the client to the server, thus enabling a more flexible and dynamic
 interaction. This is essentially the distribution style provided by Ajax
 technologies [REF]. We can eliminate techniques based on the same criteria
 as applied to the other three styles.
-
-
-\begin{narrowfig}{2cm}
-	\caption{The shared environment distribution style
-	\protect\cite{Wood-J-1996-vis}.}
-	\label{fig-shared-environment}
-\end{narrowfig}
 
 
 \subsection{Image generation techniques}
@@ -349,11 +349,11 @@ projections library\footnote{\url{http://www.remotesensing.org/proj/}}).
 
 Image generation techniques could use any of the distribution styles
 discussed in Section~\ref{sec-distribution}. However, all but the image
-server style would probably require the installation of additional
-client-side software for generating images and performing cartographic
-projection operations, so we will only consider image generation using
-an image servr distribution style (or ``server-side image generation'')
-from this point on.
+server style would require the installation of additional client-side
+software for generating images and performing cartographic projection
+operations, so we will only consider image generation using an image
+server distribution style (or ``server-side image generation'') from
+this point on.
 
 The server-side image generation technique provides some distinct
 advantages. It is relatively simple to implement and is fast at
@@ -396,7 +396,7 @@ restricted.
 
 
 \subsection{Overlay techniques}
-\label{sec-html-overlay}
+\label{sec-overlay}
 
 % Look for publications regarding the DataCrossing Ajax client.
 % See <http://datacrossing.crs4.it/en_Documentation_Overlay_Example.html>.
@@ -527,99 +527,181 @@ require interactive manipulation.
 \section{Experimental design}
 \label{sec-experiment}
 
-After some preliminary experimentation and testing with live data from
-the Otago School of Business repository, we proceeded with a more formal
-series of experiments to test the scalability of the three techniques.
-Each technique was tested using progressively larger synthetic data
-sets. The first data set comprised one point at the South Pole (latitude
-\(-90^{\circ}\), longitude \(-180^{\circ}\)). Each successive data set
-was twice the size of its predecessor, comprising a regular grid of
-latitude/longitude points at one degree intervals. A total of twenty-one
-data sets were created in this way, with the number of points ranging
-from one to 1,048,576 (\(=2^{20}\))\footnote{It should be noted that
-only 64,800 points are required to fill the entire grid, so the five
-largest data sets have many duplicate points.}.
+After some preliminary testing with live data from the Otago School of
+Business repository, we proceeded with a series of experiments to test
+the scalability of the four techniques. Each technique was tested using
+progressively larger synthetic data sets. The first data set comprised
+one point at the South Pole (latitude \(-90^{\circ}\), longitude
+\(-180^{\circ}\)). Each successive data set was twice the size of its
+predecessor, comprising a regular grid of latitude/longitude points at
+one degree intervals\footnote{It should be noted that only 64,800 points are
+required to fill the entire grid, so the five largest data sets have
+many duplicate points.}. A total of twenty-one data sets were created in
+this way, with the number of points ranging from one to 1,048,576
+(\(=2^{20}\)).
 
-Our focus on scalability meant that we were primarily interested in
+The focus on scalability meant that we were primarily interested in
 measuring page load times, memory usage, and the amount of data
-generated (which impacts on both storage and network bandwidth). The
-page load time can be further broken down into the time taken to
-generate the map data, the time taken to transfer the map data to the
-client across the network, and the time taken by the client to display
-the map.
+generated (which impacts on both storage and network bandwidth). Page
+load time can be further broken down into the time taken to generate the
+map data, the time taken to transfer the map data to the client across
+the network, and the time taken by the client to display the map.
 
 Unfortunately, the Google Maps technique requires an active Internet
 connection, so we were unable to run the experiments on an isolated
 network. This meant that traffic on the local network could be a
 confounding factor. We therefore decided to eliminate network
 performance from the equation by running both the server and the client
-on the same machine\footnote{A Power Macintosh G5 1.8\,MHz with 1\,GiB
+on the same machine\footnote{A Power Macintosh G5 1.8\,MHz with 1\,GB
 RAM, running Mac OS X 10.4.7, Apache 2.0.55, PHP 4.4 and Perl 5.8.6.}.
 This in turn enabled us to measure the time taken for data generation
 and page display independently of each other, thus simplifying the
 process of data collection and also ensuring that the client and server
-processes did not impede each other unduly.
+processes did not unduly interfere with each other, despite running on
+the same machine.
 
 It could be argued that network performance would still have a
 confounding effect on the Google Maps technique, but this would only be
-likely for the initial download of the API (comprising about 155\,KiB of
-JavaScript source), as the API will be locally cached thereafter. The
-API key verification occurs every time the map is loaded, but the amount
-of data involved is very small, so it is unlikely that this would be
-significantly affected by network performance. Any such effect would
-also be immediately obvious as it would simply block the server from
-proceeding.
+likely for the initial download of the API (comprising about 235\,kB of
+JavaScript source and images), as the API will be locally cached
+thereafter. The API key verification occurs every time the map is
+loaded, but the amount of data involved is very small, so it is unlikely
+that this would be significantly affected by network performance. Any
+such effect would also be immediately obvious as it would simply block
+the server from proceeding.
 
-For each data set, we recorded the size of the data set, the time taken
-to generate it, the time taken to display the resultant map in the
-browser, and the amount of memory used during the test by both the
-browser and the web server. The data set generation time and memory
-usage were measured using the \texttt{time} and \texttt{top} utilities
+For each data set generated, we recorded its size, the time taken to
+generate it, the time taken to display the resultant map in the browser,
+and the amount of memory used during the test by both the browser and
+the web server. The data set generation time and memory usage were
+measured using the \texttt{time} and \texttt{top} utilities
 respectively. The map display time was measured using the ``page load
 test'' debugging feature of Apple's Safari web browser, which can
 repetitively load a set of pages while recording various statistics, in
 particular the time taken to load the page. Tests were run up to twenty
-times each, where feasible, in order to reduce the impact of random
-variations.
+times each where feasible, in order to reduce the impact of random
+variations. Some tests were run fewer times because they took a very
+long time (several minutes for a single test run). We typically broke
+off further testing when a single test run took longer than about five
+minutes.
 
-%%!! confused!
+While it is really beyond the scope of this work, out of interest some
+informal tests were also undertaken using the Google Earth application.
+A Perl script was used to generate a collection of KML files
+corresponding to the data sets described above. Each data set was then
+loaded into Google Earth, and a stopwatch was used to measure how long
+it took to load the data set, defined as the period that the dialog box
+``Loading myplaces.kml, including enabled overlays'' was displayed on
+screen.
 
-The image generation technique was implemented as an image server
-architecture. A dispatcher page written in PHP called a Perl script,
-which generated a JPEG-compressed map image and returned this to the
-browser.
 
-The HTML overlay technique was implemented in two ways:
-\begin{itemize}
+\subsection{Technique implementation}
 
-	\item as an image server architecture that worked in much the same way
-	as the image generation technique, except that the Perl script
-	returned an HTML file containing the \verb|<DIV>| elements for the
-	overlay, and an \verb|<IMG>| element to load the base map image; and
-	
-	\item as a shared environment architecture, where client-side
-	JavaScript code made an asynchronous call to the server-side Perl
-	script, which returned
+As noted in Sections~\ref{sec-image-gen} and \ref{sec-overlay}, the
+server-side image generation, server-side image overlay and server-side
+HTML overlay techniques were all implemented using the image server
+distribution style. A separate dispatcher page was written in PHP for
+each technique, which enabled passing arguments---such as the number of
+points to be plotted---from the client to a corresponding Perl script
+for each technique. The final page was then constructed as follows:
+\begin{description}
 
-\end{itemize}
+	\item[server-side image generation] The Perl script generated a JPEG
+	composite map image that was displayed using a standard \verb|<IMG>|
+	element.
 
-and Google Maps techniques were implemented as an image server and a
-shared environment architecture respectively. The HTML overlay technique
-was implemented twice; once as an image server architecture and once as
-a shared environment architecture.
+	\item[server-side image overlay] The base map (a JPEG image) was
+	displayed using a CSS-positioned \verb|<IMG>| element. The Perl
+	script then generated a transparent PNG image, which was displayed
+	using an \verb|<IMG>| element with identical positioning attributes
+	to the base map.
+
+	\item[server-side HTML overlay] The base map (a JPEG image) was
+	displayed using a CSS-positioned \verb|<IMG>| element. The Perl
+	script then generated a collection of CSS-positioned \verb|<DIV>|
+	elements, which were included inline into the source of the
+	dispatcher page.
+
+\end{description}
+
+The Google Maps technique was implemented using the shared environment
+distribution style. Once again, a PHP dispatcher page was used. This
+time, however, the page included client-side JavaScript code to load and
+initialise the Google Maps API, create the base map, and build the map
+overlay. The first two steps were achieved using standard Google Maps
+API calls. For the last step, the client used an \texttt{XMLHttpRequest}
+object to call a server-side Perl script. This script generated and
+returned to the client an XML data set containing the points to be
+plotted. The client then looped through this data set and used Google
+Maps API calls to create a marker on the base map corresponding to each
+point.
 
 
 \section{Results}
 \label{sec-results}
 
+It is important to note that the intent of these experiments was not to
+do a full analysis and statistical comparison of the performance of the
+different techniques, but rather to identify broad trends. We have
+therefore not carried any statistical analysis of the data.
+
+
 
 \subsection{Data size}
 
+The size of the data generated for each technique is shown in
+Figure~\ref{fig-data-size}.
 
-\subsection{Display time}
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[scale=0.66]{data_size}
+	\end{center}
+	\caption{Comparison of generated data size for each technique.}
+	\label{fig-data-size}
+\end{figure}
+
+
+\subsection{Page load time}
+
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[scale=0.66]{data_generation_time}
+	\end{center}
+	\caption{Comparison of data generation time for each technique.}
+	\label{fig-data-generation-time}
+\end{figure}
+
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[scale=0.66]{page_load_time}
+	\end{center}
+	\caption{Comparison of map display time for each technique.}
+	\label{fig-page-load-time}
+\end{figure}
+
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[scale=0.66]{combined_time}
+	\end{center}
+	\caption{Comparison of combined page load time for each technique.}
+	\label{fig-combined-time}
+\end{figure}
 
 
 \subsection{Memory usage}
+
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[scale=0.66]{virtual_memory}
+	\end{center}
+	\caption{Comparison of virtual memory usage for each technique.}
+	\label{fig-virtual-memory}
+\end{figure}
 
 
 \section{Conclusion}
