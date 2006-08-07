@@ -405,8 +405,8 @@ restricted.
 		
 		\includegraphics[scale=1.25]{overlay_detail}
 	\end{center}
-	\caption{Image quality of JPEG image generation (top) vs.\ PNG image
-	overlay (bottom).}
+	\caption{Image quality of JPEG (Q=90) image generation (top) vs.\
+	PNG image overlay (bottom).}
 	\label{fig-image-quality}
 \end{figure}
 
@@ -646,23 +646,41 @@ script for each technique. The final page was then constructed as
 follows:
 \begin{description}
 
-	\item[server-side image generation] The Perl script generated a JPEG
-	composite map image that was displayed using a standard \verb|<IMG>|
-	element.
+	\item[server-side image generation] The dispatcher page included a
+	standard \verb|<IMG>| element that called the Perl script. This
+	script then loaded a base map PNG image, plotted points directly
+	onto it, and returned the
+	composite map to the client as a JPEG image (with the ``quality''
+	parameter set to 90).
 
-	\item[server-side image overlay] The base map (a JPEG image) was
-	displayed using a CSS-positioned \verb|<IMG>| element. The Perl
-	script then generated a transparent PNG image, which was displayed
-	using an \verb|<IMG>| element with identical positioning attributes
-	to the base map.
+	\item[server-side image overlay] The dispatcher page included two
+	\verb|<IMG>| elements, the first for the base map and the second for
+	the overlay, both with identical CSS positioning attributes. The
+	first \verb|<IMG>| simply loaded a static JPEG image representing
+	the base map. The second \verb|<IMG>| called the Perl script, which
+	generated and returned the overlay as a transparent PNG image.
 
-	\item[server-side HTML overlay] The base map (a JPEG image) was
-	displayed using a CSS-positioned \verb|<IMG>| element. The Perl
-	script then generated a collection of CSS-positioned \verb|<DIV>|
-	elements, which were included inline in the source of the dispatcher
-	page.
+	\item[server-side HTML overlay] The dispatcher page included a
+	\verb|<IMG>| element for the base map and a \verb|<DIV>| element for
+	the overlay, both with identical CSS positioning attributes. As with
+	the previous technique, the \verb|<IMG>| simply loaded a static JPEG
+	image representing the base map. The \verb|<DIV>| contained inline
+	PHP code that called the Perl script. This in turn generated and
+	returned the overlay as a collection of CSS-positioned \verb|<DIV>|
+	elements, nested within the top-level \verb|<DIV>| element.
 
 \end{description}
+
+For all three techniques, the base map image was 1,024 by 520 pixels. In
+PNG format it occupied approximately 1.2\,MB (but this version was never
+returned to the client), while in JPEG format (Q=90) it occupied
+approximately 180\,kB. The base map image was derived from an original
+3,599 by 1,826 pixel image, which was part of a collection of maps
+released into the public domain by the \citeN{CIA-WFB-2006}. All three
+techniques used the PROJ.4 cartographic projections library to convert
+latitude/longitude pairs into projected map coordinates, while the first
+two techniques also used the GD graphics library to programmatically
+generate and manipulate images.
 
 The Google Maps technique was implemented using the data server
 distribution style. Once again, a PHP dispatcher page was used. This
@@ -672,9 +690,9 @@ overlay. The first two steps were achieved using standard Google Maps
 API calls. For the last step, the client used an \texttt{XMLHttpRequest}
 object to call a server-side Perl script. This script generated and
 returned to the client an XML data set containing the points to be
-plotted. The client then looped through this data set and used Google
-Maps API calls to create a marker on the base map corresponding to each
-point.
+plotted. The client then looped through this data set and used the
+Google Maps API calls to create a marker on the base map corresponding
+to each point.
 
 
 \section{Results}
@@ -746,17 +764,30 @@ memory usage in each category. This told us the size of both the current
 ``working set'' and the total memory footprint of the browser process
 after it had completed a test run.
 
+% maybe put them in anyway??
+
 The real memory data proved somewhat unreliable, however. Real memory
-usage was generally consistent across several test runs, but frequently
-it would fluctuate upwards by a factor of nearly two for no readily
+usage was generally consistent across several test runs, but would also
+frequently fluctuate upwards by a factor of nearly two for no readily
 apparent reason. We can only assume that this was a result of other
 processes running on the test machine interacting with the browser
-process in unexpected ways. We therefore discarded the real memory data.
+process in unexpected ways. We therefore disregarded the real memory
+data. They did however, display similar trends to the virtual memory
+data.
 
 The virtual memory data proved more consistent, as the virtual memory
 footprint of a process is less likely to be impacted by other running
 processes. The amount of virtual memory used by the browser for each
 technique is shown in Figure~\ref{fig-virtual-memory}.
+
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[scale=0.66]{real_memory}
+	\end{center}
+	\caption{Comparison of real memory usage for each technique (log-log scale).}
+	\label{fig-virtual-memory}
+\end{figure}
 
 
 \begin{figure}
