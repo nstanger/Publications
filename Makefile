@@ -15,7 +15,8 @@ GRAPHICS:=ImageGeneration-full.png GoogleMap-full.png \
 	jpeg_detail.png overlay_detail.png \
 	tasmania_stats.pdf data_size.pdf data_generation_time.pdf \
 	page_load_time.pdf combined_time.pdf real_memory.pdf virtual_memory.pdf \
-	data_server.pdf image_server.pdf model_interaction.pdf shared.pdf
+	data_server.pdf image_server.pdf model_interaction.pdf shared.pdf \
+	16384_points.png
 
 
 Map_Visualisation.pdf: Map_Visualisation.tex Map_Visualisation.bib $(GRAPHICS)
@@ -44,10 +45,10 @@ combined_time.pdf: d_combined_time.txt lineplot.plo
 	$(call lineplot,$*,$<,'Combined Page Load Time','Average time to generate data and display map (s)',0.001,2000)
 
 real_memory.pdf: d_real_memory.txt lineplot.plo
-	$(call lineplot,$*,$<,'Real Memory Usage','Application real memory size (MB)',10,2000)
+	$(call lineplot,$*,$<,'Real Memory Usage','Application real memory size (MB)',1,1200)
 
 virtual_memory.pdf: d_virtual_memory.txt lineplot.plo
-	$(call lineplot,$*,$<,'Virtual Memory Usage','Application virtual memory size (MB)',50,1200)
+	$(call lineplot,$*,$<,'Virtual Memory Usage','Application virtual memory size (MB)',1,1200)
 
 %.pdf: %.svg
 	inkscape --file=$< --export-text-to-path --without-gui --export-eps=$*.eps
