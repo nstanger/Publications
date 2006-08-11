@@ -56,23 +56,9 @@
 
 #proc lineplot
 	xfield: points
-	yfield: google_earth
-	pointsymbol: shape=circle linecolor=black fillcolor=white
-	legendlabel: Google Earth
-	legendsampletype: line+symbol
-
-#proc lineplot
-	xfield: points
-	yfield: google_maps
-	pointsymbol: shape=triangle linecolor=black fillcolor=white
-	legendlabel: Google Maps
-	legendsampletype: line+symbol
-
-#proc lineplot
-	xfield: points
-	yfield: image_overlay
-	pointsymbol: shape=square style=spokes linecolor=black
-	legendlabel: Image overlay
+	yfield: image_gen
+	pointsymbol: shape=diamond linecolor=black fillcolor=white
+	legendlabel: Image generation
 	legendsampletype: line+symbol
 
 #proc lineplot
@@ -84,14 +70,22 @@
 
 #proc lineplot
 	xfield: points
-	yfield: image_gen
-	pointsymbol: shape=diamond linecolor=black fillcolor=white
-	legendlabel: Image generation
+	yfield: image_overlay
+	pointsymbol: shape=square style=spokes linecolor=black
+	legendlabel: Image overlay
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: points
+	yfield: google_maps
+	pointsymbol: shape=triangle linecolor=black fillcolor=white
+	legendlabel: Google Maps
 	legendsampletype: line+symbol
 
 #proc legend
 	format: multiline
-	location: max-3.5 min+3
+	location: min+2 max-1
 	textdetails: size=10
 	seglen: 0.25
-	reverseorder: yes
+	frame: yes
+	backcolor: white
