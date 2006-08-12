@@ -21,8 +21,6 @@
 	yscaletype: log
 	xrange: 1 2000000
 	yrange: @ymin @ymax
-//	autowidth: 0.33
-//	autoheight: 0.66
 
 #proc xaxis:
 	selflocatingstubs: text
@@ -63,16 +61,16 @@
 
 #proc lineplot
 	xfield: points
-	yfield: html_overlay
-	pointsymbol: shape=square linecolor=black fillcolor=white
-	legendlabel: HTML overlay
+	yfield: image_overlay
+	pointsymbol: shape=square style=spokes linecolor=black
+	legendlabel: Image overlay
 	legendsampletype: line+symbol
 
 #proc lineplot
 	xfield: points
-	yfield: image_overlay
-	pointsymbol: shape=square style=spokes linecolor=black
-	legendlabel: Image overlay
+	yfield: html_overlay
+	pointsymbol: shape=square linecolor=black fillcolor=white
+	legendlabel: HTML overlay
 	legendsampletype: line+symbol
 
 #proc lineplot
