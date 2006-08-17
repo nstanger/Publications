@@ -65,8 +65,8 @@ When administering a web site, it is quite reasonable to want
 information on the nature of traffic to the site. Information on the
 geographic sources of traffic can be particularly useful in the right
 context. For example, an e-commerce site might wish to determine the
-geographical distribution of visitors to its site, so that it can decide
-where best to target its marketing resources. One approach to doing so
+geographical distribution of visitors to the site, so as to decide
+where best to target marketing resources. One approach to doing so
 is to plot the geographical location of web site hits on a map.
 Geographical information systems (GIS) were already being used for these
 kinds of purposes prior to the advent of the World Wide Web
@@ -197,9 +197,11 @@ For example, at the time of writing the Otago EPrints repository had
 been accessed from over 10,000 distinct IP addresses, each potentially
 representing a distinct geographical location. Separating out the type
 of hit (abstract view versus document download) increased that figure to
-nearly 13,000. Early informal experiments with these data indicated that
-a single-layer composite map image would work quite well, whereas Google
-Maps would not.
+nearly 13,000. Early informal experiments with these data suggested that
+a single-layer composite map image would perform well with this volume
+of data, taking at most a few seconds to load and display a page.
+Conversely, it appeared that Google Maps would not perform well, taking
+on the order of minutes to load and display a page.
 
 We first narrowed down the range of techniques to just four (server-side
 image generation, server-side image overlay, server-side HTML overlay
@@ -361,7 +363,7 @@ library\footnote{\url{http://www.remotesensing.org/proj/}}).
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.9\textwidth,keepaspectratio]{ImageGeneration-full}
+	\includegraphics[width=\textwidth,keepaspectratio]{ImageGeneration-full}
 	\caption{Sample output from the (single-layer) server-side image
 		generation technique.}
 	\label{fig-image}
@@ -393,8 +395,9 @@ third party. Care must be taken in the latter case to avoid copyright
 issues. Second, the compression method used to produce the final
 composite map image can have a significant impact on visual quality. For
 example, lossy compression methods such as JPEG can make the points
-plotted on the map appear distinctly fuzzy or ``muddy'', as shown in
-Figure~\ref{fig-image-quality}. Lossless compression methods such as PNG
+plotted on the map appear distinctly fuzzy or ``muddy'',
+%as shown in Figure~\ref{fig-image-quality}
+even at high quality levels. Lossless compression methods such as PNG
 avoid this problem, but may produce larger files for the same image.
 Finally, it is harder to provide interactive map manipulation features
 with this technique, as the output is a simple static image. Anything
@@ -405,14 +408,14 @@ map image was available, but the number of possible zoom levels might be
 restricted.
 
 
-\begin{figure}
-	\centering
-	\includegraphics[scale=0.98]{jpeg_detail}
-	\includegraphics[scale=0.98]{overlay_detail}
-	\caption{Image quality of JPEG (Q=90) image generation (left) vs.\
-	PNG image overlay (right).}
-	\label{fig-image-quality}
-\end{figure}
+% \begin{figure}
+% 	\centering
+% 	\includegraphics[scale=0.98]{jpeg_detail}
+% 	\includegraphics[scale=0.98]{overlay_detail}
+% 	\caption{Image quality of JPEG (Q=90) image generation (left) vs.\
+% 	PNG image overlay (right).}
+% 	\label{fig-image-quality}
+% \end{figure}
 
 
 \subsection{Multi-layer techniques}
@@ -446,8 +449,9 @@ overlay image to be in either PNG or GIF format, as JPEG does not
 support transparency. The overlay image is likely to contain
 considerable ``white space'', which compresses very well, so use of a
 lossless compression method should not be an issue. This also eliminates
-the ``fuzziness'' issue noted earlier (see
-Figure~\ref{fig-image-quality}). The size of the image overlay will
+the ``fuzziness'' issue noted earlier.
+%(see Figure~\ref{fig-image-quality}).
+The size of the image overlay will
 generally be proportional to the number of points to be plotted, but the
 image compression should have a moderating effect on this.
 
@@ -472,7 +476,7 @@ Figure~\ref{fig-image} on page~\pageref{fig-image}).
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.9\textwidth,keepaspectratio]{GoogleMap-full.png}
+	\includegraphics[width=\textwidth,keepaspectratio]{GoogleMap-full.png}
 	\caption{Sample output from the Google Maps technique.}
 	\label{fig-google}
 \end{figure}
@@ -517,7 +521,11 @@ map in any direction and zoom to many different levels of detail. A
 satellite imagery view is also available. In addition, further
 information about each point plotted (such as the name of the city) can
 be displayed in a callout attached to the point, as shown in
-Figure~\ref{fig-google}.
+Figure~\ref{fig-google}. Google Maps also has a proven record for
+visualization of network resources. For example,
+\citeN{Gibb-H-2006-Gridscape} use Google Maps to visualize and manage
+worldwide computing grids.
+
 
 However, there are also some significant disadvantages to the Google
 Maps technique\footnote{Interestingly, the Google Earth application
@@ -554,19 +562,22 @@ After some preliminary testing with live data from the Otago School of
 Business repository, we proceeded with a series of experiments to test
 the scalability of the four techniques. Each technique was tested using
 progressively larger synthetic data sets. The first data set comprised
-one point at the South Pole (latitude \(-90^{\circ}\), longitude
-\(-180^{\circ}\)). Each successive data set was twice the size of its
-predecessor, building up a regular grid of latitude/longitude points at
-one degree intervals\footnote{The entire grid has 64,800 points, so the
-five largest data sets have many duplicate points.}. A total of
-twenty-one data sets were created in this way, with the number of points
-ranging from one to 1,048,576 (\(=2^{20}\)). The result of plotting the
-16,384-point data set is shown in Figure~\ref{fig-grid-points}.
+one point at the South Pole. A regular grid of points at one degree
+intervals was then constructed by progressively incrementing the
+latitude and longitude, with each data set being twice the size of its
+predecessor. A total of twenty-one data sets were created in this way,
+with the number of points ranging from one to 1,048,576 (\(=2^{20}\)).
+The result of plotting the 16,384-point data set is shown in
+Figure~\ref{fig-grid-points}. The grid spacing used meant that 64,800
+points were sufficient to fill the entire map, so the five largest data
+sets had many duplicate points. This does not affect the results of the
+experiments, however, as it is the total number of points that is
+significant, not their location.
 
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.9\textwidth,keepaspectratio]{16384_points}
+	\includegraphics[width=\textwidth,keepaspectratio]{16384_points}
 	\caption{The 16,384-point data set plotted on the base map.}
 	\label{fig-grid-points}
 \end{figure}
@@ -736,7 +747,7 @@ dispatcher page and the JavaScript source for the Google Maps API.
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.5]{data_size}
+	\includegraphics[scale=0.55]{data_size}
 	\caption{Comparison of generated data size for each technique (log-log scale).}
 	\label{fig-data-size}
 \end{figure}
@@ -796,7 +807,7 @@ generation + display time) is shown in Figure~\ref{fig-combined-time}.
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.5]{data_generation_time}
+	\includegraphics[scale=0.55]{data_generation_time}
 	\caption{Comparison of data generation time for each technique (log-log scale).}
 	\label{fig-data-generation-time}
 \end{figure}
@@ -846,7 +857,7 @@ vs.\ hundreds of kilobytes).
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.5]{page_load_time}
+	\includegraphics[scale=0.55]{page_load_time}
 	\caption{Comparison of map display time for each technique (log-log scale).}
 	\label{fig-page-load-time}
 \end{figure}
@@ -879,7 +890,7 @@ minutes.
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.5]{combined_time}
+	\includegraphics[scale=0.55]{combined_time}
 	\caption{Comparison of combined page load time for each technique (log-log scale).}
 	\label{fig-combined-time}
 \end{figure}
@@ -913,7 +924,7 @@ Figure~\ref{fig-virtual-memory}.
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.5]{real_memory}
+	\includegraphics[scale=0.55]{real_memory}
 	\caption{Comparison of real memory usage for each technique (log-log scale).}
 	\label{fig-real-memory}
 \end{figure}
@@ -921,7 +932,7 @@ Figure~\ref{fig-virtual-memory}.
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.5]{virtual_memory}
+	\includegraphics[scale=0.55]{virtual_memory}
 	\caption{Comparison of virtual memory usage for each technique (log-log scale).}
 	\label{fig-virtual-memory}
 \end{figure}
@@ -1007,7 +1018,8 @@ that requires no external network access. This would enable us to test
 on an isolated network with the client and server running on different
 machines. We could then include measurements of network transfer time,
 and eliminate any problems caused by running the client and server on
-the same machine.
+the same machine. This would require a distributed measurement
+infrastructure similar to that developed by \citeN{Barf-P-1999-webperf}.
 
 Our overall aim was to identify which was the best technique to use to
 plot downloads and abstract views from the Otago School of Business
