@@ -24,7 +24,7 @@
 A useful approach to visualising the geographical distribution of web
 site hits is to geolocate the IP addresses of hits and plot them on a
 world map. This can be achieved by dynamic generation and display of map
-images at the server and/or the client. In this paper we compare the
+images at the server and/or the client. This paper compares the
 scalability with respect to source data size of four techniques for
 dynamic map generation and display: generating a single composite map
 image, overlaying transparent images on an underlying base map,
@@ -73,19 +73,19 @@ kinds of purposes prior to the advent of the World Wide Web
 \cite{Beau-JR-1991-GIS}, and it is a natural extension to apply these
 ideas to online visualization of web site hits.
 
-Our interest in this area derives from implementing a pilot digital
-institutional repository at the University of
-Otago\footnote{\url{http://eprints.otago.ac.nz/}} in November 2005
+The author's interest in this area derives from implementing a pilot
+digital institutional repository for the University of Otago School of
+Business\footnote{\url{http://eprints.otago.ac.nz/}} in November 2005
 \cite{Stan-N-2006-running}, using the GNU
 EPrints\footnote{\url{http://www.eprints.org/}} repository management
 software. This repository quickly attracted interest from around the
 world and the number of abstract views and document downloads began to
-steadily increase. We were very interested in tracking this increase,
+steadily increase. There was great interest in tracking this increase,
 particularly with respect to where in the world the hits were coming
 from. The EPrints statistics management software developed at the
 University of Tasmania \cite{Sale-A-2006-stats} proved very useful in
-this regard, providing us with detailed per-eprint and per-country
-download statistics; an example of the latter is shown in
+this regard, providing detailed per-eprint and per-country download
+statistics; an example of the latter is shown in
 Figure~\ref{fig-tas-stats}. However, while this display provides an
 ordered ranking of the number of hits from each country, it does not
 provide any greater detail than to the country level, nor does it
@@ -102,10 +102,10 @@ the globe.
 \end{figure}
 
 
-We therefore began to explore possible techniques for plotting our
+The author therefore began to explore possible techniques for plotting
 repository hit data onto a world map, with the aim of adding this
-capability to the Tasmania statistics package. Our preference was for a
-technique that could be used within a modern web browser without the
+capability to the Tasmania statistics package. Preference was given to
+techniques that could be used within a modern web browser without the
 need to manually install additional client software, so as to make the
 new feature available to the widest possible audience and reduce the
 impact of wide variation in client hardware and software environments
@@ -147,12 +147,12 @@ The techniques used by these prior systems can generally be divided into
 two classes. The first class of techniques generate a single bitmap
 image that contains both the map and the graphics representing web hits.
 This can be achieved by programmatically plotting points onto a base map
-image; the composite image is then displayed at the client. We shall
-henceforth refer to this class of techniques as \emph{single-layer}
+image; the composite image is then displayed at the client. This class
+of techniques shall henceforth be referred to as \emph{single-layer}
 techniques. The second class of techniques separately return both a base
 map image and some kind of overlay containing the plotted points. The
 overlay and the base map are then displayed as separate items at the
-client. We shall henceforth refer to this class of techniques as
+client. This class of techniques shall henceforth be referred to as
 \emph{multi-layer} techniques.
 
 Both classes of techniques have been used in the aforementioned systems,
@@ -188,32 +188,34 @@ themselves might take the form of transparent images, absolutely
 positioned HTML elements, dynamically generated graphics, etc.
 
 Given the wide variety of possible techniques that were available, the
-next question was which techniques would be most suitable for our
-purposes? Scalability is a key issue for web applications in general
+next question was which techniques would be most suitable? Ideally, a
+technique should not only efficiently fulfil the task of plotting
+repository hits on a map, but also provide tangible benefits to
+end-users. Scalability is a key issue for web applications in general
 \cite[p.\ 28]{Offu-J-2002-quality}, and online activity visualization in
-particular \cite[p.\ 50]{Eick-SG-2001-sitevis}, so we were particularly
-interested in techniques that could scale to a large number of points.
-For example, at the time of writing the Otago EPrints repository had
-been accessed from over 10,000 distinct IP addresses, each potentially
+particular \cite[p.\ 50]{Eick-SG-2001-sitevis}, so techniques that could
+scale to a large number of points were of particular interest. For
+example, at the time of writing the Otago EPrints repository had been
+accessed from over 10,000 distinct IP addresses, each potentially
 representing a distinct geographical location. Separating out the type
 of hit (abstract view versus document download) increased that figure to
-nearly 13,000. Early informal experiments with these data suggested that
-a single-layer composite map image would perform well with this volume
-of data, taking at most a few seconds to load and display a page.
+nearly 13,000. Informal testing with these data suggested that a
+single-layer composite map image would perform well with this volume of
+data, taking at most a few seconds to load and display a page.
 Conversely, it appeared that Google Maps would not perform well, taking
-on the order of minutes to load and display a page.
+on the order of minutes to load and display a large number of points.
 
-We first narrowed down the range of techniques to just four (server-side
-image generation, server-side image overlay, server-side HTML overlay
-and Google Maps); the selection process and details of the techniques
-chosen are discussed in Section~\ref{sec-techniques}. We then set about
-testing the scalability of these four techniques, in order to determine
-how well each technique handled large numbers of points. A series of
+The range of techniques was first narrowed down to just four
+(server-side image generation, server-side image overlay, server-side
+HTML overlay and Google Maps); the selection process and details of the
+techniques chosen are discussed in Section~\ref{sec-techniques}. The
+scalability of these four techniques was then tested to determine how
+well each technique handled large numbers of points. A series of
 experiments was conducted on each technique with progressively larger
 data sets, and the elapsed time and memory usage were measured. The
 experimental design is discussed in Section~\ref{sec-experiment}.
 
-Our initial intuition was that the server-side image generation and
+Informal tests suggested that the server-side image generation and the
 server-side image overlay techniques would scale best, and this was
 borne out by the results of the experiments, which show that both
 techniques scale reasonably well to very large numbers of points. The
@@ -236,13 +238,13 @@ Section~\ref{sec-conclusion}.
 \section{Technique selection}
 \label{sec-techniques}
 
-In this section we discuss in more detail the four techniques that we
-chose for testing, and how we decided upon these particular techniques.
-First, we discuss the impact of distribution style on the choice of
-technique. Then, for each of the four chosen techniques, we examine how
-the technique works in practice, its implementation requirements, its
-relative advantages and disadvantages, and any other issues peculiar to
-the technique.
+In this section the four techniques that were chosen for testing are
+discussed in more detail, along with the reasons for choosing these
+particular techniques. First, the impact of distribution style on the
+choice of technique is discussed. This is followed by an examination of
+how each technique works in practice, its implementation requirements,
+its relative advantages and disadvantages, and any other issues peculiar
+to the technique.
 
 
 \subsection{Distribution style}
@@ -262,14 +264,13 @@ can provide a very dynamic and interactive environment to the end user,
 but clearly requires support for executing application code within the
 web browser, typically using something like JavaScript, Java applets or
 Flash. JavaScript is now tightly integrated into most browsers, but the
-same cannot be said for either Java or Flash. That is, we cannot
-necessarily guarantee the existence of a Java virtual machine or Flash
-plugin in every browser, which violates our requirement to avoid manual
-installation of additional client-side software. We can therefore
-eliminate Java- or Flash-based data server techniques from
-consideration, but JavaScript-based data server techniques are feasible.
-Indeed, as we will see in Section~\ref{sec-overlay}, Google Maps is an
-example of such a technique.
+same cannot be said for either Java or Flash. That is, the existence of
+a Java virtual machine or Flash plugin cannot necessarily be guaranteed
+in every browser, which violates the requirement to avoid manual
+installation of additional client-side software. Java- or Flash-based
+data server techniques can therefore be eliminated from consideration,
+but JavaScript-based data server techniques are feasible. Indeed, Google
+Maps is an example of such a technique (see Section~\ref{sec-overlay}).
 
 
 \begin{figure}
@@ -302,9 +303,9 @@ created entirely at the server and is only viewed at the client. In
 other words, this is primarily a server-side processing model, as
 illustrated in Figure~\ref{fig-distribution-styles}(b). Consequently,
 techniques that use this style require no additional client-side
-software, and thus meet our requirements. The downside is that the
-resultant visualization can tend to be very static and non-interactive
-in nature, as it is typically just a simple bitmap image.
+software. The downside is that the resultant visualization can tend to
+be very static and non-interactive in nature, as it is typically just a
+simple bitmap image.
 
 The \emph{model interaction environment} style is where a model created
 at the server can be explored at the client, as illustrated in
