@@ -171,7 +171,7 @@ Multi-layer techniques enjoy a particular advantage over single-layer
 techniques, in that they provide the potential for a more flexible
 GIS-like interaction with the map, with multiple layers that can be
 activated and deactivated as desired. This flexibility could explain why
-such techniques appear more prevalent in the literature. As we shall see
+such techniques appear more prevalent in the literature. As will be seen
 shortly, however, web-based multi-layer techniques tend to rely on more
 recent web technologies such as CSS and Ajax, whereas single-layer
 techniques generally do not. Single-layer techniques should therefore be
@@ -325,12 +325,12 @@ dynamic and interactive, changing the underlying data requires a new
 model to be generated at the server and downloaded to the client.
 Similar restrictions apply to techniques using this style as to the data
 server style, so Java- and Flash-based model interaction environment
-techniques can be eliminated from consideration. For similar reasons, we
-can also eliminate solutions such as VRML or SVG that require external
-browser plugins (although native support for SVG is beginning to appear
-in some browsers). It may be possible to implement this distribution
-style using only client-side JavaScript, but it is presently unclear as
-to how effective this might be.
+techniques can be eliminated from consideration. For similar reasons,
+solutions such as VRML or SVG that require external browser plugins can
+also be eliminated (although native support for SVG is beginning to
+appear in some browsers). It may be possible to implement this
+distribution style using only client-side JavaScript, but it is
+presently unclear as to how effective this might be.
 
 Finally, the \emph{shared environment} style is where data manipulation
 is done at the server, but control of that manipulation, rendering, and
@@ -341,8 +341,8 @@ from the client to the server, thus enabling a more flexible and dynamic
 interaction. Ajax technologies \cite{Garr-JJ-2005-Ajax} can easily
 support this kind of distribution style. For example,
 \citeN{Saya-A-2006-GISWS} use Ajax to integrate Google Maps with
-existing GIS visualization web services. We can eliminate specific
-shared environment techniques from consideration based on the same
+existing GIS visualization web services. Specific shared environment
+techniques can be eliminated from consideration based on the same
 criteria as were applied to the other three styles (e.g., no Java- or
 Flash-based techniques).
 
@@ -375,9 +375,9 @@ Single-layer techniques could use any of the distribution styles
 discussed in Section~\ref{sec-distribution}. However, all but the image
 server style would require the installation of additional client-side
 software for generating images and performing cartographic projection
-operations, so we will only consider single-layer techniques that use
-the image server distribution style (or \textbf{server-side image
-generation}).
+operations, so only single-layer techniques that use the image server
+distribution style (or \textbf{server-side image generation}) are
+considered here.
 
 The server-side image generation technique provides some distinct
 advantages. It is relatively simple to implement and is fast at
@@ -431,36 +431,34 @@ enables the possibility of multiple independent layers that can be
 individually shown or hidden. This is very similar to the multi-layer
 functionality provided by GIS, and is an effective way to provide
 interactive visualizations of geographic data
-\cite{Wood-J-1996-vis,MacE-AM-1998-GIS}. We still have the problem of
+\cite{Wood-J-1996-vis,MacE-AM-1998-GIS}. There is still the problem of
 finding a suitable base map image, however.
 
-Until relatively recently, implementing multi-layer techniques would likely
-have required additional software at the client, but most modern
+Until relatively recently, implementing multi-layer techniques would
+likely have required additional software at the client, but most modern
 browsers now support absolute positioning of elements using CSS. This
-enables us to create a map overlay using nothing more than HTML, CSS and
-a few bitmap images. We have identified two main alternatives for
-producing such an overlay, which we have termed \emph{image overlay} and
-\emph{HTML overlay}.
+enables the creation of a map overlay using nothing more than HTML, CSS
+and a few bitmap images. The author has identified two main alternatives
+for producing such an overlay, which can be termed \emph{image overlay}
+and \emph{HTML overlay}.
 
 An image overlay comprises a transparent bitmap image into which the
-points are plotted, which is then overlaid on the base map image (in our
-implementation, the output looks essentially identical to that shown in
-Figure~\ref{fig-image} on page~\pageref{fig-image}). This requires the
-overlay image to be in either PNG or GIF format, as JPEG does not
-support transparency. The overlay image is likely to contain
+points are plotted, which is then overlaid on the base map image (in the
+author's implementation, the output looks essentially identical to that
+shown in Figure~\ref{fig-image} on page~\pageref{fig-image}). This
+requires the overlay image to be in either PNG or GIF format, as JPEG
+does not support transparency. The overlay image is likely to contain
 considerable ``white space'', which compresses very well, so use of a
 lossless compression method should not be an issue. This also eliminates
-the ``fuzziness'' issue noted earlier.
-%(see Figure~\ref{fig-image-quality}).
-The size of the image overlay will
-generally be proportional to the number of points to be plotted, but the
-image compression should have a moderating effect on this.
+the image quality issue noted earlier. The size of the image overlay
+will generally be proportional to the number of points to be plotted,
+but the image compression should have a moderating effect on this.
 
 As noted in Section~\ref{sec-image-gen}, generating images at the client
-would require additional software to be installed, so we will only
-consider the data server distribution style for image overlays (or
-\textbf{server-side image overlay}). That is, both the base map image
-and the overlay(s) are generated at the server.
+would require additional software to be installed, so only the data
+server distribution style will be considered here for image overlays
+(i.e., \textbf{server-side image overlay}). That is, both the base map
+image and the overlay(s) are generated at the server.
 
 An HTML overlay comprises a collection of HTML elements corresponding to
 the points to be plotted, which are positioned over the base map image
@@ -470,8 +468,8 @@ possibility is to use \verb|<IMG>| elements to place icons on the base
 map, which appears to be the approach adopted by Google Maps (see
 Figure~\ref{fig-google}). Another possibility is to use appropriately
 sized and colored \verb|<DIV>| elements, which then appear as colored
-blocks ``floating'' over the base map image (in our implementation, the
-output looks essentially identical to that shown in
+blocks ``floating'' over the base map image (in the author's
+implementation, the output looks essentially identical to that shown in
 Figure~\ref{fig-image} on page~\pageref{fig-image}).
 
 
@@ -489,19 +487,19 @@ be generated at the client without the need for additional software,
 because only HTML (i.e., text) is being generated, not images. This can
 be easily achieved using client-side JavaScript, so HTML overlays can
 use any of the distribution styles discussed in
-Section~\ref{sec-distribution} without violating our requirements. We
-have therefore adopted two representative HTML overlay techniques for
-our experiments: \textbf{server-side HTML overlays} (using the image
-server distribution style) and \textbf{Google Maps} (using the data
-server distribution style). Since Google Maps uses \verb|<IMG>|
-elements, we have used \verb|<DIV>| elements for the server-side HTML
-overlay.
+Section~\ref{sec-distribution} without violating the requirement to
+avoid additional client-side software. Two representative HTML overlay
+techniques have thus been adopted for the experiments:
+\textbf{server-side HTML overlays} (using the image server distribution
+style) and \textbf{Google Maps} (using the data server distribution
+style). Since Google Maps uses \verb|<IMG>| elements, \verb|<DIV>|
+elements have been used for the server-side HTML overlay.
 
 Server-side HTML overlays are actually slightly simpler to implement
-than either server-side image generation or image overlays, because we
-do not need to write any code to generate or manipulate images (the base
-map image is static and thus requires no additional processing). All
-that is required is code to transform latitude/longitude coordinates
+than either server-side image generation or image overlays, because it
+is not necessary to write any code to generate or manipulate images (the
+base map image is static and thus requires no additional processing).
+All that is required is code to transform latitude/longitude coordinates
 into projected map coordinates and generate corresponding \verb|<DIV>|
 elements.
 
@@ -531,7 +529,7 @@ worldwide computing grids.
 However, there are also some significant disadvantages to the Google
 Maps technique\footnote{Interestingly, the Google Earth application
 addresses many of these issues, but since it is not a browser-based
-solution it falls outside the scope of our consideration.}. First, it is
+solution it falls outside the scope of consideration.}. First, it is
 a distributed application, thus making it more complex to implement,
 test and debug \cite{Bates-PC-1995-distdebug,Ensl-PH-1978-distributed}.
 Second, the server must have a registered API key from Google, which is
@@ -550,18 +548,18 @@ however, is that the size of the HTML overlay is directly proportional
 to the number of points to be plotted. There will be one overlay element
 (\verb|<DIV>| or \verb|<IMG>|) per point, so a very large number of
 points will result in an even larger amount of HTML source being
-generated. We expect that this will lead to excessive browser memory
-usage, and consequently that these techniques will not scale well at the
-high end. However, they may still be appropriate for smaller data sets
-that require interactive manipulation.
+generated. It is expected that this will lead to excessive browser
+memory usage, and consequently that these techniques will not scale well
+at the high end. However, they may still be appropriate for smaller data
+sets that require interactive manipulation.
 
 
 \section{Experimental design}
 \label{sec-experiment}
 
 After some preliminary testing with live data from the Otago School of
-Business repository, we proceeded with a series of experiments to test
-the scalability of the four techniques. Each technique was tested using
+Business repository, a series of experiments was undertaken to test the
+scalability of the four techniques. Each technique was tested using
 progressively larger synthetic data sets. The first data set comprised
 one point at the South Pole. A regular grid of points at one degree
 intervals was then constructed by progressively incrementing the
@@ -584,25 +582,25 @@ significant, not their location.
 \end{figure}
 
 
-The focus on scalability meant that we were primarily interested in
-measuring page load times, memory usage and the amount of data
-generated (which impacts on both storage and network bandwidth). Page
-load time can be further broken down into the time taken to generate the
-map data, the time taken to transfer the map data to the client across
-the network, and the time taken by the client to display the map.
+The focus on scalability meant that the primary measure of interest were
+page load time, memory usage and the amount of data generated (which
+impacts on both storage and network bandwidth). Page load time can be
+further broken down into the time taken to generate the map data, the
+time taken to transfer the map data to the client across the network,
+and the time taken by the client to display the map.
 
 Unfortunately, the Google Maps technique requires an active Internet
-connection (as noted in Section~\ref{sec-overlay}), so we were unable to
-run the experiments on an isolated network. This meant that traffic on
-the local network was a potential confounding factor. We therefore
+connection (as noted in Section~\ref{sec-overlay}), so the experiments
+could not be run on an isolated network. This meant that traffic on the
+local network was a potential confounding factor. It was therefore
 decided to eliminate network performance from the equation by running
 both the server and the client on the same machine\footnote{A Power
 Macintosh G5 1.8\,GHz with 1\,GB RAM, running Mac OS X 10.4.7, Apache
-2.0.55, PHP 4.4 and Perl 5.8.6.}. This in turn enabled us to
-independently measure the time taken for data generation and page
-display, thus simplifying the process of data collection and also
-ensuring that the client and server processes did not unduly interfere
-with each other, despite running on the same machine.
+2.0.55, PHP 4.4 and Perl 5.8.6.}. This in turn enabled independent
+measurement of the times for data generation and page display, thus
+simplifying the process of data collection and also ensuring that the
+client and server processes did not unduly interfere with each other,
+despite running on the same machine.
 
 It could be argued that network performance would still have a
 confounding effect on the Google Maps technique, but this would only be
@@ -614,24 +612,24 @@ this would be significantly affected by network performance. Any such
 effect would also be immediately obvious as it would simply block the
 server from proceeding.
 
-For each data set generated, we recorded its size, the time taken to
-generate it, the time taken to display the resultant map in the browser,
-and the amount of real and virtual memory used by the browser during the
-test. We also intended to measure the memory usage of the server, but
-this proved more difficult to isolate than expected, and was thus
-dropped from the experiments. The data set generation time and browser
-memory usage were measured using the \texttt{time} and \texttt{top}
-utilities respectively (the latter was run after each test run to avoid
-interference). The map display time was measured using the ``page load
-test'' debugging feature of Apple's Safari web browser, which can
-repetitively load a set of pages while recording various statistics, in
-particular the time taken to load the page. Tests were run up to twenty
-times each where feasible, in order to reduce the impact of random
-variations. Some tests were run fewer times because they took an
-excessive amount of time to complete (i.e., several minutes for a single
-test run). We typically broke off further testing when a single test run
-took longer than about five minutes, as by this stage performance had
-already deteriorated well beyond usable levels.
+For each data set generated, its size, the time taken to generate it,
+the time taken to display the resultant map in the browser, and the
+amount of real and virtual memory used by the browser during the test
+were recorded. It was also intended to measure the memory usage of the
+server, but this proved more difficult to isolate than expected, and was
+thus dropped from the experiments. The data set generation time and
+browser memory usage were measured using the \texttt{time} and
+\texttt{top} utilities respectively (the latter was run after each test
+run to avoid interference). The map display time was measured using the
+``page load test'' debugging feature of Apple's Safari web browser,
+which can repetitively load a set of pages while recording various
+statistics, in particular the time taken to load the page. Tests were
+run up to twenty times each where feasible, in order to reduce the
+impact of random variations. Some tests were run fewer times because
+they took an excessive amount of time to complete (i.e., several minutes
+for a single test run). Further testing was generally halted when a
+single test run took longer than about five minutes, as by this stage
+performance had already deteriorated well beyond usable levels.
 
 
 \subsection{Technique implementation}
@@ -699,11 +697,12 @@ to each point.
 
 As noted in the introduction, the intent of these experiments was not to
 do a full analysis and statistical comparison of the performance of the
-different techniques, but rather to identify broad trends. We have not,
-therefore, carried out any statistical analysis on the results. We will
-now discuss the results for data size, page load time and memory usage.
-Because the number of points in each data set increases in powers of
-two, we have used log-log scales for all plots.
+different techniques, but rather to identify broad trends. There has
+not, therefore, been any statistical analysis carried out on the
+results. The remainder of this section will discuss the results for data
+size, page load time and memory usage. Because the number of points in
+each data set increases in powers of two, log-log scales have been used
+for all plots.
 
 
 \subsection{Data size}
@@ -796,10 +795,10 @@ coordinates.
 
 \subsection{Page load time}
 
-For each test run, we recorded the length of time taken to generate the
-data at the server and to display the page in the client browser. The
-former is illustrated in Figure~\ref{fig-data-generation-time} and the
-latter in Figure~\ref{fig-page-load-time}. The combined time (data
+For each test run, both the length of time taken to generate the data at
+the server and to display the page in the client browser were recorded.
+The former is illustrated in Figure~\ref{fig-data-generation-time} and
+the latter in Figure~\ref{fig-page-load-time}. The combined time (data
 generation + display time) is shown in Figure~\ref{fig-combined-time}.
 
 
@@ -914,13 +913,13 @@ significant difference.
 
 \subsection{Memory usage}
 
-We measured both the real and virtual memory usage of the browser by
+Both the real and virtual memory usage of the browser were measured by
 running the \texttt{top} utility after each test run and observing the
-memory usage in each category. This told us the size of both the current
-``working set'' and the total memory footprint of the browser process
-after it had completed a test run. The real memory results are shown in
-Figure~\ref{fig-real-memory} and the virtual memory results are shown in 
-Figure~\ref{fig-virtual-memory}.
+memory usage in each category. This provided the size of both the
+current ``working set'' and the total memory footprint of the browser
+process after it had completed a test run. The real memory results are
+shown in Figure~\ref{fig-real-memory} and the virtual memory results are
+shown in Figure~\ref{fig-virtual-memory}.
 
 
 \begin{figure}
@@ -944,13 +943,13 @@ proved somewhat problematic. Real memory usage was generally consistent
 across test runs, but would also frequently fluctuate upwards by a
 factor of nearly two for no readily apparent reason. This is
 particularly apparent with the HTML overlay technique beyond 1,024
-points. We can only assume that this was a result of other processes on
-the test machine interacting with the browser process in unexpected
-ways. We are therefore somewhat wary of the real memory data, but they
-are at least broadly consistent with the virtual memory data. The
-virtual memory data proved more consistent overall, as the virtual
-memory footprint of a process is less likely to be impacted by other
-running processes.
+points. It seems likely that this was a result of other processes on the
+test machine interacting with the browser process in unexpected ways.
+There is some doubt therefore as to the validity of the real memory
+data, but they are at least broadly consistent with the virtual memory
+data. The virtual memory data proved more consistent overall, as the
+virtual memory footprint of a process is less likely to be impacted by
+other running processes.
 
 The results show that the two image-based techniques have essentially
 constant memory usage regardless of the number of points plotted. This
@@ -959,12 +958,13 @@ essentially constant. The text-based techniques, however, clearly begin
 to diverge as the number of points increases. The HTML overlay technique
 starts to visibly diverge somewhere between 2,048 and 4,096 points,
 while Google Maps starts to visibly diverge 64 and 128 points. This is
-in line with our expectation for these techniques that memory usage
-would increase in proportion to the number of points. It is intriguing
-to note that for both techniques, there appears little consistency as to
-where the performance of each measure begins to diverge, as shown in
-Table~\ref{tab-divergence} (although Google Maps appears to exhibit
-greater consistency than HTML overlay in this regard).
+in line with the initial expectation for these techniques, that is, that
+memory usage would increase in proportion to the number of points. It is
+intriguing to note that for both techniques, there appears little
+consistency as to where the performance of each measure begins to
+diverge, as shown in Table~\ref{tab-divergence} (although Google Maps
+appears to exhibit greater consistency than HTML overlay in this
+regard).
 
 
 \begin{acmtable}{11cm}
@@ -984,8 +984,8 @@ greater consistency than HTML overlay in this regard).
 \section{Conclusion and future work}
 \label{sec-conclusion}
 
-In this research, we tested the scalability of four techniques for
-online geovisualization of web site hits, with respect to the number of
+In this research, the scalability of four techniques for
+online geovisualization of web site hits was tested, with respect to the number of
 points to be plotted on the map. The four techniques tested were
 server-side image generation, server-side image overlay, server-side
 HTML overlay and Google Maps. The results clearly show that the
@@ -995,15 +995,15 @@ Google Maps techniques work well for small data sets, but their
 performance rapidly deteriorates as the size of the data set increases,
 to the point where they become unusable.
 
-Despite this clear difference in scalability, we are still left with
-some interesting questions. We did not investigate the model interaction
-environment distribution style in this research, as it was unclear
-whether this could be achieved using only client-side JavaScript. This
-is clearly an avenue for further investigation. In addition, the
-appearance of native SVG support in some browsers means that this may
-also become a viable option in future.
+Despite this clear difference in scalability, there are still some
+interesting questions remaining. The model interaction environment
+distribution style was not investigated in this research, as it was
+unclear whether this could be achieved using only client-side
+JavaScript. This is clearly an avenue for further investigation. In
+addition, the appearance of native SVG support in some browsers means
+that this may also become a viable option in future.
 
-We were somewhat surprised that the server-side HTML overlay and Google
+It was somewhat surprising that the server-side HTML overlay and Google
 Maps techniques exhibited no obvious consistency in where the different
 measures (data size, map display time and virtual memory usage)
 diverged. It seems logical that some form of correlation might exist, so
@@ -1011,26 +1011,29 @@ further research will be required to investigate this. One possibility
 might be to implement an instrumented web browser and server in order to
 gather more precise data.
 
-Shortly after completing our experiments, we discovered \emph{msCross
-Webgis}\footnote{\url{http://datacrossing.crs4.it/en_Documentation_mscross.html}},
+Shortly after completing the experiments, the author discovered
+\emph{msCross Webgis}\footnote{\url{http://datacrossing.crs4.it/en_Documentation_mscross.html}},
 which is an open source Google Maps clone. Its documentation implies
 that it may be possible to build a fully self-contained implementation
-that requires no external network access. This would enable us to test
-on an isolated network with the client and server running on different
-machines. We could then include measurements of network transfer time,
-and eliminate any problems caused by running the client and server on
-the same machine. This would require a distributed measurement
-infrastructure similar to that developed by \citeN{Barf-P-1999-webperf}.
+that requires no external network access. This would enable testing on
+an isolated network with the client and server running on different
+machines. Measurements of network transfer time could then be included,
+and any problems caused by running the client and server on the same
+machine would be eliminated. This would require a distributed
+measurement infrastructure similar to that developed by
+\citeN{Barf-P-1999-webperf}.
 
-Our overall aim was to identify which was the best technique to use to
-plot downloads and abstract views from the Otago School of Business
-digital repository. Based on our results, both the server-side HTML
+The overall aim of this work was to identify the best technique for
+plotting downloads and abstract views from the Otago School of Business
+digital repository. Based on the results, both the server-side HTML
 overlay and Google Maps techniques are clearly inappropriate for this
-task. This leaves us with a choice between two very similarly-performing
+task. This leaves a choice between two very similarly-performing
 techniques: server-side image generation and server-side image overlay.
-However, the practical advantages of multi-layer techniques over
+However, multi-layer techniques display many practical advantages over
 single-layer techniques, such as the ability to dynamically show and
-hide multiple overlays, mean that server-side image overlay is the clear
+hide multiple overlays. These advantages provide greater flexibility and
+a more dynamic experience for end-users. Taking these end-user benefits
+into consideration, the server-side image overlay technique is the clear
 winner in this case.
 
 
