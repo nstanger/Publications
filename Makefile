@@ -45,10 +45,10 @@ combined_time.pdf: d_combined_time.txt lineplot.plo
 	$(call lineplot,$*,$<,'Combined Page Load Time','Average time to generate data and display map (s)',0.001,2000)
 
 real_memory.pdf: d_real_memory.txt lineplot.plo
-	$(call lineplot,$*,$<,'Real Memory Usage','Application real memory size (MB)',10,1200)
+	$(call lineplot,$*,$<,'Real Memory Usage','Browser real memory size (MB)',10,1200)
 
 virtual_memory.pdf: d_virtual_memory.txt lineplot.plo
-	$(call lineplot,$*,$<,'Virtual Memory Usage','Application virtual memory size (MB)',10,1200)
+	$(call lineplot,$*,$<,'Virtual Memory Usage','Browser virtual memory size (MB)',10,1200)
 
 %.pdf: %.svg
 	inkscape --file=$< --export-text-to-path --without-gui --export-eps=$*.eps
