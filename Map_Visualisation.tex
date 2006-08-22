@@ -166,7 +166,7 @@ API \cite{Goog-M-2006-maps}, which enables web developers to easily
 embed interactive maps within web pages. Google Maps is a dynamic
 multi-layer technique that has only become feasible relatively recently
 with the advent of widespread support for CSS positioning and Ajax
-technologies in many browsers.
+technologies \cite{Garr-JJ-2005-Ajax} in many browsers.
 
 Multi-layer techniques enjoy a particular advantage over single-layer
 techniques, in that they provide the potential for a more flexible
@@ -199,14 +199,14 @@ end-users. Scalability is a key issue for web applications in general
 visualization in particular \cite[p.\ 50]{Eick-SG-2001-sitevis}, so
 techniques that could scale to a large number of points were of
 particular interest. For example, at the time of writing the Otago
-EPrints repository had been accessed from over 10,000 distinct IP
-addresses, each potentially representing a distinct geographical
-location. Separating out the type of hit (abstract view versus document
-download) increased that figure to nearly 13,000. Informal testing with
-these data suggested that a single-layer composite map image would
-perform well with this volume of data, taking at most a few seconds to
-load and display. Conversely, it appeared that Google Maps would not
-perform well, taking on the order of minutes to load and display a map
+EPrints repository had been accessed from 13,000 distinct IP addresses,
+each potentially representing a distinct geographical location.
+Separating out the type of hit (abstract view versus document download)
+increased that figure to nearly 16,000. Informal testing with these data
+suggested that a single-layer composite map image would perform well
+with this volume of data, taking at most a few seconds to load and
+display. Conversely, it appeared that Google Maps would not perform
+well, taking on the order of minutes to load and display a map
 containing a few thousand points.
 
 The range of techniques was first narrowed down to just four
@@ -315,9 +315,9 @@ image.
 
 The \emph{model interaction environment} style is where a model created
 at the server can be explored at the client, as illustrated in
-Figure~\ref{fig-distribution-styles}(c). \citeN{Wood-J-1996-vis}
-originally referred to this as the ``3D model interaction'' style, but
-this seems slightly out of place in the current context. They originally
+Figure~\ref{fig-distribution-styles}(c). \citeN{MacE-AM-1998-GIS} calls
+this the ``3D model interaction'' style, but this seems slightly out of
+place in the current context. \citeN{Wood-J-1996-vis} originally
 intended this distribution style to apply to VRML models for GIS
 applications, but it could be equally applied to any situation where an
 interactive model is generated at the server, then downloaded to and
@@ -344,13 +344,12 @@ and display all occur at the client, as illustrated in
 Figure~\ref{fig-distribution-styles}(d). This is similar to the model
 interaction environment style, but with the addition of a feedback loop
 from the client to the server, thus enabling a more flexible and dynamic
-interaction. Ajax technologies \cite{Garr-JJ-2005-Ajax} can easily
-support this kind of distribution style. For example,
-\citeN{Saya-A-2006-GISWS} use Ajax to integrate Google Maps with
-existing GIS visualization web services. Specific shared environment
-techniques can be eliminated from consideration based on the same
-criteria as were applied to the other three styles (e.g., no Java- or
-Flash-based techniques).
+interaction. Ajax technologies can easily support this kind of
+distribution style. For example, \citeN{Saya-A-2006-GISWS} use Ajax to
+integrate Google Maps with existing GIS visualization web services.
+Specific shared environment techniques can be eliminated from
+consideration based on the same criteria as were applied to the other
+three styles (e.g., no Java- or Flash-based techniques).
 
 
 \subsection{Single-layer techniques}
@@ -473,7 +472,7 @@ Figure~\ref{fig-image} on page~\pageref{fig-image}).
 \begin{figure}
 	\centering
 	\includegraphics[width=\textwidth,keepaspectratio]{GoogleMap-full.png}
-	\caption{Sample output from the Google Maps technique.}
+	\caption{Sample output from the (multi-layer) Google Maps technique.}
 	\label{fig-google}
 \end{figure}
 
@@ -511,17 +510,16 @@ the client. In the shared environment distribution style, the server is
 directly involved in manipulating the map, under the control of the
 client. This is clearly not the case with Google Maps.
 
-The primary advantage of Google Maps is the powerful functionality it
-provides for generating and interacting with the map. Users may pan the
-map in any direction and zoom to many different levels of detail. A
-satellite imagery view is also available. In addition, further
-information about each point plotted (such as the name of the city) can
-be displayed in a callout attached to the point, as shown in
+The primary advantage of Google Maps is the powerful and compelling
+functionality it provides for generating and interacting with the map.
+Users may pan the map in any direction and zoom to many different levels
+of detail. A satellite imagery view is also available. In addition,
+further information about each point plotted (such as the name of the
+city) can be displayed in a callout attached to the point, as shown in
 Figure~\ref{fig-google}. Google Maps also has a proven record for
 visualization of network resources. For example,
 \citeN{Gibb-H-2006-Gridscape} use Google Maps to visualize and manage
-worldwide computing grids.
-
+world-wide computing grids.
 
 However, there are also some significant disadvantages to the Google
 Maps technique\footnote{Interestingly, the Google Earth application
@@ -557,18 +555,18 @@ appropriate for smaller data sets that require interactive manipulation.
 After some preliminary testing with live data from the Otago School of
 Business repository, a series of experiments was undertaken to test the
 scalability of the four chosen techniques. Each technique was tested
-using the same progressively larger synthetic data sets. The first data
-set comprised one point at the South Pole. A regular grid of points at
-one degree intervals was then constructed by progressively incrementing
-the latitude and longitude, with each data set being twice the size of
-its predecessor. A total of twenty-one data sets were created in this
-way, with the number of points ranging from one to 1,048,576
-(\(=2^{20}\)). The result of plotting the 16,384-point data set is shown
-in Figure~\ref{fig-grid-points}. The grid spacing used meant that 64,800
-points were sufficient to fill the entire map, so the five largest data
-sets had many duplicate points. This does not affect the results of the
-experiments, however, as it is the total number of points that is
-significant, not their location.
+using the same collection of progressively larger synthetic data sets.
+The first data set comprised one point at the South Pole. A regular grid
+of points at one degree intervals was then constructed by progressively
+incrementing the latitude and longitude, with each data set being twice
+the size of its predecessor. A total of twenty-one data sets were
+created in this way, with the number of points ranging from one to
+1,048,576 (\(=2^{20}\)). The result of plotting the 16,384-point data
+set is shown in Figure~\ref{fig-grid-points}. The grid spacing used
+meant that 64,800 points were sufficient to fill the entire map, so the
+five largest data sets had many duplicate points. This does not affect
+the results of the experiments, however, as it is the total number of
+points that is significant, not their location.
 
 
 \begin{figure}
@@ -583,8 +581,9 @@ The focus on scalability meant that the primary measures of interest
 were page load time, memory usage and the volume of data generated
 (which impacts on both storage and network bandwidth). Page load time
 can be further broken down into the time taken to generate the map data,
-the time taken to transfer the map data to the client across the
-network, and the time taken by the client to display the map.
+the time taken to transfer the map data and other ancillary material to
+the client across the network, and the time taken by the client to
+display the map.
 
 Unfortunately, as noted in Section~\ref{sec-overlay}, the Google Maps
 technique requires an active Internet connection, so the experiments
@@ -592,12 +591,12 @@ could not be run on an isolated network. This meant that traffic on the
 local network was a potential confounding factor. It was therefore
 decided to eliminate network performance from the equation by running
 both the server and the client on the same machine\footnote{A Power
-Macintosh G5 1.8\,GHz with 1\,GB RAM, running Mac OS X 10.4.7, Apache
-2.0.55, PHP 4.4 and Perl 5.8.6.}. This in turn enabled independent
-measurement of the times for data generation and page display, thus
-simplifying the process of data collection and also ensuring that the
-client and server processes did not unduly interfere with each other,
-despite running on the same machine.
+Macintosh G5 1.8\,GHz (single processor) with 1\,GB RAM, running Mac OS
+X 10.4.7, Apache 2.0.55, PHP 4.4 and Perl 5.8.6.}. This in turn enabled
+independent measurement of the times for data generation and page
+display, thus simplifying the process of data collection and also
+ensuring that the client and server processes did not unduly interfere
+with each other, despite running on the same machine.
 
 It could be argued that network performance would still have a
 confounding effect on the Google Maps technique, but this would only be
@@ -626,7 +625,8 @@ impact of random variations. Some tests were run fewer times because
 they took an excessive amount of time to complete. Further testing for a
 particular technique was generally halted when a single test run took
 longer than about five minutes, as by this stage performance had already
-deteriorated well beyond usable levels.
+deteriorated well beyond usable levels. The web browser was quit and
+reloaded afresh before each group of tests.
 
 
 \subsection{Technique implementation}
@@ -665,16 +665,16 @@ follows:
 
 \end{description}
 
-For all of these techniques, the base map image was 1,024 by 520 pixels.
-In PNG format it occupied approximately 1.2\,MB (but this version was
-never returned to the client), while in JPEG format (Q=90) it occupied
-approximately 180\,kB. The base map image was derived from an original
-3,599 by 1,826 pixel image, which was part of a collection of maps
-released into the public domain by the \citeN{CIA-WFB-2006}. All three
-techniques used the PROJ.4 cartographic projections library to convert
-latitude/longitude pairs into projected map coordinates, while the first
-two techniques also used the GD graphics library to programmatically
-generate and manipulate images.
+For all of these techniques, the base map image was 1,024 \(\times\) 520
+pixels. In PNG format it occupied approximately 1.2\,MB (but this
+version was never returned to the client), while in JPEG format (Q=90)
+it occupied approximately 180\,kB. The base map image was derived from
+an original 3,599 \(\times\) 1,826 pixel image, which was part of a
+collection of maps released into the public domain by the
+\citeN{CIA-WFB-2006}. All three techniques used the PROJ.4 cartographic
+projections library to convert latitude/longitude pairs into projected
+map coordinates, while the first two techniques also used the GD
+graphics library to programmatically generate and manipulate images.
 
 The Google Maps technique was implemented using the data server
 distribution style. As with the other three techniques, a PHP dispatcher
@@ -682,11 +682,11 @@ page was used. This time, however, the page included client-side
 JavaScript code to load and initialize the Google Maps API, create the
 base map, and build the map overlay. The first two steps were achieved
 using standard Google Maps API calls. For the last step, the client used
-an \texttt{XMLHttpRequest} object to call a server-side Perl script,
-which generated and returned to the client an XML data set containing
-the points to be plotted. The client then looped through this data set
-and used Google Maps API calls to create a marker on the base map
-corresponding to each point.
+an \texttt{XMLHttpRequest} object to asynchronously call a server-side
+Perl script, which generated and returned to the client an XML data set
+containing the points to be plotted. The client then looped through this
+data set and used Google Maps API calls to create a marker on the base
+map corresponding to each point.
 
 
 \section{Results}
@@ -704,12 +704,11 @@ for all plots.
 
 \subsection{Data size}
 
-During each test run, the data generated by the server was saved to a
-file and its size in bytes recorded. In the case of the server-side
-image generation and server-side image overlay techniques, the file
-comprised a bitmap image; whereas for the server-side HTML overlay and
-Google Maps techniques, the file comprised HTML or XML text,
-respectively.
+For each data set, the data generated by the server was saved to a file
+and its size in bytes recorded. In the case of the server-side image
+generation and server-side image overlay techniques, the file comprised
+a bitmap image; whereas for the server-side HTML overlay and Google Maps
+techniques, the file comprised HTML or XML text, respectively.
 
 In addition to the generated data, there was a certain amount of fixed
 overhead associated with each technique tested, as summarized in
@@ -771,24 +770,24 @@ Figure~\ref{fig-grid-points} on page~\pageref{fig-grid-points} for an
 example), which compresses more efficiently.
 
 The amount of data generated by the image overlay technique appears
-constant, but actually increases by about 2\,kB across the entire range
-of tests. This has important implications for the ability of this
-technique to handle multiple layers. Because the overlay images are
-quite small (less than 2\,kB for up to one million points), it should be
-feasible to pre-load several overlay images into a client-side array and
-switch them on and off as desired.
+constant, but actually increases by about 2\,kB across the range. This
+has important implications for the ability of this technique to handle
+multiple layers. Because the overlay images are quite small (less than
+2\,kB for up to one million points), it should be feasible to pre-load
+several overlay images into a client-side array and switch them on and
+off as desired.
 
 The server-side HTML overlay and Google Maps techniques clearly do not
-scale well, and begin to visibly diverge from the other two techniques
-once the amount of data generated exceeds about 5\% of the fixed
-overhead. For the HTML overlay technique this occurs somewhere between
-64 and 128 points, whereas for Google Maps it occurs somewhere between
-256 and 512 points. The divergence increases rapidly for both techniques
-beyond these points, with the HTML overlay technique suffering the most.
-The latter occurs because the HTML overlay technique needs to generate
-additional CSS attributes (i.e., more text) in order to correctly
-position the \verb|<DIV>| elements, whereas the Google Maps technique
-needs only to return a more compact list of latitude/longitude
+scale well with respect to data size, and begin to visibly diverge from
+the other two techniques once the amount of data generated exceeds about
+5\% of the fixed overhead. For the HTML overlay technique this occurs
+somewhere between 64 and 128 points, whereas for Google Maps it occurs
+somewhere between 256 and 512 points. The divergence increases rapidly
+for both techniques beyond these points, with the HTML overlay technique
+suffering the most. The latter occurs because the HTML overlay technique
+needs to generate additional CSS attributes (i.e., more text) in order
+to correctly position the \verb|<DIV>| elements, whereas the Google Maps
+technique needs only to return a more compact list of latitude/longitude
 coordinates.
 
 
@@ -817,7 +816,7 @@ length of time taken to generate the source data increases in proportion
 to the number of points to be plotted, as expected. It is interesting to
 note the differences in data generation time for each technique,
 however. Data generation for both of the ``text-based'' techniques (HTML
-overlay and Google Maps) is consistently faster than for the
+overlay and Google Maps) is generally faster than for the
 ``image-based'' techniques (image generation and image overlay).
 
 The results show that server-side image generation generally takes the
@@ -953,8 +952,8 @@ virtual memory footprint of a process is less likely to be impacted by
 other running processes.
 
 The results show that the two image-based techniques have essentially
-constant memory usage of about 170\,MB regardless of the number of
-points plotted. This is to be expected, given that the size of the
+constant virtual memory usage of about 170\,MB regardless of the number
+of points plotted. This is to be expected, given that the size of the
 generated data is also essentially constant. The text-based techniques,
 however, clearly begin to diverge as the number of points increases. The
 HTML overlay technique starts to visibly diverge somewhere between 2,048
@@ -963,25 +962,7 @@ testing was terminated. Google Maps starts to visibly diverge between 64
 and 128 points, reaching a maximum of about 264\,MB at the point that
 testing was terminated. This is in line with the initial expectation for
 these techniques, that is, that memory usage would increase in
-proportion to the number of points to be plotted. It is intriguing to
-note that for both techniques, there appears little consistency as to
-where the performance of each measure begins to diverge, as shown in
-Table~\ref{tab-divergence} (although Google Maps appears to exhibit
-greater consistency than HTML overlay in this respect).
-
-
-\begin{acmtable}{11cm}
-	\centering
-	\begin{tabular}{lccc}
-		Technique						&	Data size	&	Map display time	&	Virtual memory	\\
-		\hline
-		Server-side HTML overlay		&	64--128		&	128--256			&	2,048--4,096 \\
-		Google Maps						&	256--512	&	64--128				&	64--128	\\
-	\end{tabular}
-	\caption{Approximate number of points at which each measure begins to diverge,
-		for the HTML overlay and Google Maps techniques.}
-	\label{tab-divergence}
-\end{acmtable}
+proportion to the number of points to be plotted.
 
 
 \section{Conclusion and future work}
@@ -1003,16 +984,34 @@ interesting questions remaining. The model interaction environment
 distribution style was not investigated in this research, as it was
 unclear whether this could be achieved using only client-side
 JavaScript. This is clearly an avenue for further investigation. In
-addition, the appearance of native SVG support in some browsers means
-that this may also become a viable option in future.
+addition, the appearance of native SVG support in browsers means that
+this may become a viable option for implementing this distribution style
+in future.
 
 It was somewhat surprising that the server-side HTML overlay and Google
 Maps techniques exhibited no obvious consistency in where the different
 measures (data size, map display time and virtual memory usage)
-diverged. It seems logical that some form of correlation might exist, so
-further research will be required to investigate this. One possibility
-might be to implement an instrumented web browser and server in order to
-gather more precise data.
+diverged, as shown in Table~\ref{tab-divergence}. Google Maps appears to
+exhibit greater consistency than HTML overlay in this respect, but it
+seems logical to expect some form of correlation, so further research
+will be required to investigate this. One possibility might be to
+implement an instrumented web browser and server in order to gather more
+precise data.
+
+
+\begin{acmtable}{11cm}
+	\centering
+	\begin{tabular}{lccc}
+		Technique						&	Data size	&	Map display time	&	Virtual memory	\\
+		\hline
+		Server-side HTML overlay		&	64--128		&	128--256			&	2,048--4,096 \\
+		Google Maps						&	256--512	&	64--128				&	64--128	\\
+	\end{tabular}
+	\caption{Approximate number of points at which each measure begins to
+		visibly diverge, for the HTML overlay and Google Maps techniques.}
+	\label{tab-divergence}
+\end{acmtable}
+
 
 Shortly after completing the experiments, the author discovered
 \emph{msCross Web\-gis}\footnote{\url{http://datacrossing.crs4.it/en_Documentation_mscross.html}},
@@ -1026,17 +1025,17 @@ would be eliminated. This would require a distributed measurement
 infrastructure similar to that developed by \citeN{Barf-P-1999-webperf}.
 
 The overall aim of this work was to identify the best technique for
-plotting downloads and abstract views from the Otago School of Business
-digital repository. Based on the results, both the server-side HTML
-overlay and Google Maps techniques are clearly inappropriate for this
-task. This leaves a choice between two very similarly-performing
-techniques: server-side image generation and server-side image overlay.
-However, multi-layer techniques display many practical advantages over
-single-layer techniques, such as the ability to dynamically show and
-hide multiple overlays. These advantages provide greater flexibility and
-a more dynamic experience for end-users. Taking these end-user benefits
-into consideration, the server-side image overlay technique is the clear
-winner in this case.
+plotting the large number of downloads and abstract views from the Otago
+School of Business digital repository. Based on the results, both the
+server-side HTML overlay and Google Maps techniques are clearly
+inappropriate for this task. This leaves a choice between two very
+similarly-performing techniques: server-side image generation and
+server-side image overlay. However, multi-layer techniques display many
+practical advantages over single-layer techniques, such as the ability
+to dynamically show and hide multiple overlays. These advantages provide
+greater flexibility and a more dynamic experience for end-users. Taking
+these end-user benefits into consideration, the server-side image
+overlay technique is the clear winner in this case.
 
 
 \begin{acks}
