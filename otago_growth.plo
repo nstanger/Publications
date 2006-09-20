@@ -1,0 +1,91 @@
+//#musthave infile
+//#musthave title
+//#musthave ytitle
+//#musthave ymin
+//#musthave ymax
+
+#proc settings
+	units: cm
+#endproc
+
+#proc getdata
+	delim: comma
+	fieldnameheader: yes
+	data:
+		month,num_items,num_abstracts,num_downloads
+		11/2005,43,402,233
+		12/2005,134,2218,712
+		01/2006,141,1973,958
+		02/2006,214,3246,1556
+		03/2006,233,9862,3701
+		04/2006,244,7975,4050
+		05/2006,253,6071,3438
+		06/2006,262,13006,3639
+		07/2006,268,12210,2791
+		08/2006,313,10083,3888
+
+#proc areadef
+//	title: "Monthly traffic"
+//	titledetails: size=10 style=B align=C
+	areaname: standard
+	xscaletype: date
+	yscaletype: linear
+	xautorange: datafield=month
+	yautorange: datafield=num_abstracts
+
+#proc xaxis:
+	stubs: inc 1 month
+	stubdetails: size=10
+	label: Number of points
+	labeldetails: style=B size=10 adjust=0,-0.1
+	ticlen: 0.25
+
+#proc yaxis:
+	stubs: inc 2000
+	stubdetails: size=10
+	label: Number of accesses
+	labeldetails: style=B size=10 adjust=-0.3,0
+	grid: color=gray(0.7)
+	ticlen: 0.25
+
+#proc yaxis:
+	axisline: none
+	selflocatingstubs: text
+		#include chunk_logtics
+	ticlen: 0.1
+
+#proc lineplot
+	xfield: points
+	yfield: image_gen
+	pointsymbol: shape=diamond linecolor=black fillcolor=white
+	legendlabel: Image generation
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: points
+	yfield: image_overlay
+	pointsymbol: shape=square style=spokes linecolor=black
+	legendlabel: Image overlay
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: points
+	yfield: html_overlay
+	pointsymbol: shape=square linecolor=black fillcolor=white
+	legendlabel: HTML overlay
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: points
+	yfield: google_maps
+	pointsymbol: shape=triangle linecolor=black fillcolor=white
+	legendlabel: Google Maps
+	legendsampletype: line+symbol
+
+#proc legend
+	format: multiline
+	location: min+2 max-1
+	textdetails: size=10
+	seglen: 0.25
+	frame: yes
+	backcolor: white
