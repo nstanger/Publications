@@ -19,10 +19,10 @@
 	radius: 2.5
 	labelmode: line+label
 	labelfarout: 1.1
-	textdetails: size=10
+	textdetails: size=12
 	labels:
 		Journal\n(@@PCT%)
 		Conference\n(@@PCT%)
 		Thesis\n(@@PCT%)
-		Tech. report\n(@@PCT%)
+		Monograph\n(@@PCT%)
 		Other\n(@@PCT%)

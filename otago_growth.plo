@@ -6,7 +6,7 @@
 	delim: comma
 	fieldnameheader: yes
 	data:
-		month,num_items,num_abstracts,num_downloads
+		the_month,num_items,num_abstracts,num_downloads
 		15/11/2005,43,402,233
 		15/12/2005,134,2218,712
 		15/01/2006,141,1973,958
@@ -22,28 +22,28 @@
 	areaname: standard
 	xscaletype: date dd/mm/yyyy
 	yscaletype: linear
-	xautorange: datafield=month
+	xautorange: datafield=the_month
 	yautorange: datafield=num_abstracts
 
 #proc xaxis
 	stubs: datematic
 	stubslide: 15(s)
 	autoyears: yyyy
-	stubdetails: size=10
+	stubdetails: size=12
 	label: Month
-	labeldetails: style=B size=10 adjust=0,-0.3
+	labeldetails: style=B size=12 adjust=0,-0.5
 	ticlen: 0.25
 
 #proc yaxis
 	stubs: inc 2000
-	stubdetails: size=10
-	label: Number of accesses
-	labeldetails: style=B size=10 adjust=-0.5,0
+	stubdetails: size=12
+	label: Number of hits
+	labeldetails: style=B size=12 adjust=-0.7,0
 	grid: color=gray(0.7)
 	ticlen: 0.25
 
 #proc bars
-	locfield: month
+	locfield: the_month
 	lenfield: num_abstracts
 	barwidth: 0.5
 	cluster: 1 / 2
@@ -51,7 +51,7 @@
 	legendlabel: Abstracts
 
 #proc bars
-	locfield: month
+	locfield: the_month
 	lenfield: num_downloads
 	barwidth: 0.5
 	cluster: 2 / 2
@@ -61,27 +61,27 @@
 	areaname: standard
 	xscaletype: date dd/mm/yyyy
 	yscaletype: linear
-	xautorange: datafield=month
+	xautorange: datafield=the_month
 	yautorange: datafield=num_items
 
 #proc yaxis:
 	stubs: inc 50
-	stubdetails: size=10 adjust=0.8,0 align=left
+	stubdetails: size=12 adjust=0.8,0 align=left
 	label: Number of items
-	labeldetails: style=B size=10 adjust=2.5,0
+	labeldetails: style=B size=12 adjust=2.7,0
 	ticlen: -0.25
 	location: max
 
 #proc lineplot
-	xfield: month
+	xfield: the_month
 	yfield: num_items
-	legendlabel: Archive size
+	legendlabel: Repository size
 	linedetails: width=2
 
 #proc legend
 	format: singleline
 	location: min+1 max-0.6
-	textdetails: size=10
+	textdetails: size=12
 	seglen: 0.25
 	swatchsize: 0.25
 	outlinecolors: yes

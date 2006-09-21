@@ -39,12 +39,9 @@
 
 \section{Introduction}
 
-Digital institutional repositories have become a hot topic over the last few years, and many institutions around the world are now considering or actively working towards implementing them. In this article we discuss how low cost yet fully functional digital institutional repositories (IRs) can be set up in a very short time frame. We reflect on the lessons learned while implementing three different repositories at the University of Otago and suggest some best practices for implementing an IR. We also discuss the issues that must be considered when moving from a small-scale pilot implementation to a full roll-out.
+Digital institutional repositories have become a hot topic over the last few years, and many institutions around the world are now actively working towards implementing them. In this article we discuss how low cost yet fully functional digital institutional repositories (IRs) can be set up in a very short time frame. We reflect on the lessons learned while implementing three different repositories at the University of Otago and suggest some best practices for implementing an IR. We also discuss the issues that must be considered when moving from a small-scale pilot implementation to a full roll-out.
 
-
-% \section{Background}
-
-Interest in institutional repositories at the University of Otago was sparked by the release of the New Zealand Digital Strategy by the New Zealand government in May 2005. The strategy has the stated goal of ``ensuring New Zealand is a world leader in using information and technology to realise our economic, environmental, social and cultural goals'' \cite{NZG-2005-digital_strategy}. In parallel with this, the National Library of New Zealand set up an expert working party with representatives from across the research sector to investigate the feasibility of establishing a national institutional repository for New Zealand's research outputs \cite{Rank-J-2005-feasibility}. The National Library is fostering the creation and launch of a work programme to improve access to New Zealand's research outputs, by collaborating with institutions to stimulate the set-up of research repositories.
+Interest in institutional repositories at the University of Otago was sparked by the release of the New Zealand Digital Strategy by the New Zealand government in May 2005. The strategy aims to ensure that ``New Zealand is a world leader in using information and technology to realise our economic, environmental, social and cultural goals'' \cite{NZG-2005-digital_strategy}. In parallel with this, the National Library of New Zealand set up an expert working party with representatives from across the research sector to investigate the feasibility of establishing a national institutional repository for New Zealand's research outputs \cite{Rank-J-2005-feasibility}. The National Library is fostering the creation and launch of a work programme to improve access to New Zealand's research outputs, by collaborating with institutions to stimulate the set-up of research repositories.
 
 In May 2005, two senior University of Otago staff undertook a study tour of Digital Challenges facing universities in the United States. Their report provided the immediate impetus for the first IR pilot in Otago's School of Business. Project work began on 7 November 2005, with the following goals:
  
@@ -61,31 +58,62 @@ In May 2005, two senior University of Otago staff undertook a study tour of Digi
 
 \section{Implementation of the first pilot}
 
-The GNU EPrints repository management software was chosen because it was widely used, well-supported, inexpensive and would not lock us into specific technologies or vendors \cite{Sale-A-2005-NZIRW}. The development team also had prior experience with the software. A rapid prototyping methodology was adopted, emphasising quick releases of visible results with multiple iterations, in order to create interest in the project at an early stage, and enable a positive feedback cycle. A sandbox was used to test entries and entry formats before the material went live.
+The GNU EPrints repository management software was chosen for the pilot repository because it was widely used, well-supported, inexpensive and would not lock the School into specific technologies or vendors \cite{Sale-A-2005-NZIRW}. The development team also had prior experience with the software. A rapid prototyping methodology was adopted, emphasising quick releases of visible results with multiple iterations, in order to create interest in the project at an early stage, and enable a positive feedback cycle. A sandbox was used to test entries and entry formats before the material went live.
 
-The pilot IR was fully implemented within ten days of assembling the project team. This outcome was possible because of the establishment of a very clear brief to ``prove the concept'', rather than taking on a large scale project that would involve many different disciplines, researchers and research outputs from the outset. Early decisions were made to restrict the content and content domain used for the pilot, in order to speed the collection process and minimise the possibility of requirement ``creep''. Meetings were kept to a minimum and policy and procedural issues that required institutional decisions were noted as work progressed, rather than tackled head on. The project was widely publicised within the School and Heads of Departments were consulted to ensure top-level buy-in. This approach produced immediate results and the repository was quickly populated with a range of working/discussion papers, conference items, journal articles and theses.
+The pilot IR was fully implemented within ten days of assembling the project team, with most of this time spent tweaking the look and feel of the web site and collecting content. This outcome was possible because of the establishment of a very clear brief to ``prove the concept'', rather than taking on a large scale project that would involve many different disciplines, researchers and research outputs from the outset. Early decisions were made to restrict the content and content domain used for the pilot, in order to speed the collection process and minimise the possibility of requirement ``creep''. Meetings were kept to a minimum and policy and procedural issues that required institutional decisions were noted as work progressed, rather than tackled head on. The project was widely publicised within the School and Heads of Departments were consulted to ensure top-level buy-in. This approach produced immediate results and the repository was quickly populated with a range of working/discussion papers, conference items, journal articles and theses.
 
 There was no cost associated with the open access software community associated with GNU EPrints, and from a technical point of view the project was wonderfully straightforward. The School of Business IR\footnote{\url{http://eprints.otago.ac.nz/}} was deployed on a spare mid-range server running FreeBSD, which meant that hardware and software costs were essentially nil. In other words, if you happen to have some spare hardware lying around, you can set up an initial repository very cheaply, and then expand it later.
 
 A minimalist approach was taken with regard to gathering potential content; partly because of the prototypical nature of the project, and partly because material in the hand is worth more than a million promises of what authors suggest they ``can'' provide if given sufficient time. New publications are always being created, and content acquisition is a moving target that has to be effectively managed. Once some basic content acquisition and data entry protocols were put in place, an incremental methodology was adopted. Content was strictly limited to voluntary contributions in PDF format from colleagues in the School of Business, but with no constraint on the type of output. As of mid-September 2006, the IR contains 327 documents covering a wide range of topics and document types, and these are added to as new content is acquired. A more systematic approach to content collection is currently being considered.
 
-It is remarkable what can be achieved by a small, dedicated, knowledgeable and enthusiastic implementation team. As with any project, the right mix of technical and project management skills is crucial in making things happen. The project team comprised the School's Research Development Coordinator (project management and evangelism), an Information Science lecturer (software implementation), the School's IT manager (hardware and deployment) and two senior students (research, content acquisition and data entry). Oversight was provided by a standing committee comprising representatives from the Information Technology Services Division, the University Library and the School of Business.
+It is remarkable what can be achieved by a small, dedicated, knowledgeable and enthusiastic implementation team. As with any project, the right mix of technical and project management skills is crucial in making things happen. The project team comprised the School's Research Development Coordinator (project management and evangelism), an Information Science lecturer (software implementation), the School's IT manager (hardware and deployment) and two senior students (research, content acquisition and data entry). Oversight was provided by a standing committee comprising representatives from Information Technology Services, the University Library and the School of Business.
 
 
 \section{Impact of the pilot}
 
-The initial response to the pilot repository seemed spectacular, with over 18,000 downloads recorded within the first three months. This was considerably more than similar IRs elsewhere in the world and excited considerable interest from both inside and outside the University. It was therefore somewhat disheartening to discover in April 2006 that the download counts were in fact over-inflated by a factor of about five. This was due to an undocumented assumption in the Tasmania statistics generating software \cite{Sale-A-2006-stats} that resulted in downloads being counted more than once if the statistics were calculated more often than once per day. (The lesson here is to always be wary of computers bearing good news!)
+The initial response to the pilot repository seemed spectacular, with over 18,000 downloads recorded within the first three months, from a very wide range of different countries. This was considerably more than several similar repositories elsewhere in the world and excited considerable interest from both inside and outside the University. It was therefore somewhat disheartening to discover in April 2006 that the hit rates were in fact over-inflated by a factor of about five. This was due to an undocumented assumption in the Tasmania statistics generating software \cite{Sale-A-2006-stats} that resulted in hits being counted more than once if the statistics were gathered more often than once per day. (The lesson here is to always be wary of computers bearing wonderful news!)
 
-Despite this setback, the download rates for the IR are still comparatively higher than several other similar repositories, especially when time since launch is taken into account. As of mid-September 2006 [more detail to come as I have yet to collate some of the data] Clearly this is a very interesting development, and a research project is currently underway to investigate the possible reasons behind this.
+Despite this, hit rates for the Otago IR are still healthy, as shown in Figure~\ref{fig-otago-growth}. Interestingly, the repository attracts many more abstract views than downloads. An informal analysis of hit rates for five other repositories around the world shows that the same is true for some of them, while for others the opposite occurs (many more downloads than abstract views). Further investigation is needed to determine why this variation occurs.
 
-One exciting outcome of the IR deployment has been the ability to make publicly available material that might otherwise be inaccessible. For example, over two thirds of the items in the repository are
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.79]{otago_growth}
+	\caption{Total monthly hit rates (bar chart, left axis) and number of items (line chart, right axis) for the Otago repository.}
+	\label{fig-otago-growth}
+\end{figure}
+
+
+Of particular interest is that hit rates on the Otago IR have grown at a much more rapid rate than the other repositories were examined, especially when time since launch is taken into account. As can be seen in Figure~\ref{fig-growth-comparison}, total traffic to the Otago IR has grown much more rapidly during its early months than any of the other repositories, including some that have existed for much longer. Clearly this is a very interesting development, and a research project is currently underway to investigate the possible reasons for this.
+
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.8]{growth_comparison}
+	\caption{Comparison of traffic growth across eight EPrints repositories.}
+	\label{fig-growth-comparison}
+\end{figure}
+
+
+One exciting outcome of the IR deployment has been the ability to make publicly available material that might otherwise be inaccessible. For example, Figure~\ref{fig-item-types} shows that about two thirds of the items in the Otago IR are items that might not otherwise be readily accessible, such as theses, dissertations, and various working and discussion papers. Indeed, the top ten downloaded items as of mid-September comprise five departmental working papers, two conference papers, one journal paper, one thesis and one research report, in essentially that order.
+
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.8]{otago_items}
+	\caption{Distribution of item types in the Otago repository.}
+	\label{fig-item-types}
+\end{figure}
+
+
+The pilot implementation was clearly a success. Indeed, it was so successful that the ``pilot'' status was dropped in mid-May, and it is now the official IR for Otago's School of Business. The lessons learned from this experience have since been applied to two other IRs at Otago, with potentially more to come.
 
 
 \section{The second IR: EPrints Te Tumu}
 
-The success of the first pilot produced considerable interest throughout the University community. We were approached in early 2006 by Te Tumu, the University's School of Maori, Pacific \& Indigenous Studies, to set up an IR for their specific needs. They were particularly interested in the use of an IR as a means of disseminating research and other work, as there are relatively fewer ``official'' outlets for such work in their discipline.
+The success of the pilot resulted in considerable interest throughout the University community. In early 2006, Te Tumu, the University's School of Maori, Pacific \& Indigenous Studies, expressed an interest in implementing an IR for their specific needs. They were particularly interested in the use of an IR as a means of disseminating research and other work, as there are relatively few ``official'' outlets for their discipline.
 
-Drawing on our experiences with the first pilot, the Te Tumu repository\footnote{\url{http://eprintstetumu.otago.ac.nz/}} was implemented by a single person in about a month, and was officially launched on May 3 2006, making it the first IR for indigenous studies in New Zealand [possibly the world]. Response to the repository has been positive, with nearly 400 downloads in the first month (the repository currently contains about 20 items).
+Drawing on experiences from the pilot, the Te Tumu IR\footnote{\url{http://eprintstetumu.otago.ac.nz/}} was implemented by a single person in about a month, and was officially launched on May 3 2006, making it the first IR for indigenous studies in New Zealand (and possibly the world). Response to the repository has been positive, with over 2,500 downloads from 46 different countries during its first four and half months (the repository currently contains about 30 items).
 
 
 \section{Issues that arose}
