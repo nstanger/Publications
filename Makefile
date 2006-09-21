@@ -11,7 +11,7 @@ lineplot = ploticus -eps -tightcrop -o $(1).eps lineplot.plo infile=$(2) \
 
 
 
-GRAPHICS:=otago_growth.pdf
+GRAPHICS:=otago_growth.pdf otago_items.pdf growth_comparison.pdf
 
 
 OCLC.pdf: OCLC.tex OCLC.bib $(GRAPHICS)
@@ -28,7 +28,14 @@ OCLC.pdf: OCLC.tex OCLC.bib $(GRAPHICS)
 # 	convert -crop 180x95+150+95 $< $@
 
 otago_growth.pdf: otago_growth.plo
-	$(call lineplot,$*,$<,'Size of Generated Data','Data size (kB)',1,200000)
+	ploticus -eps -croprel 0,0.1,0.6,0 -o $*.eps $<
+	epstopdf $*.eps
+	rm -f $*.eps
+
+%.pdf: %.plo
+	ploticus -eps -tightcrop -o $*.eps $<
+	epstopdf $*.eps
+	rm -f $*.eps
 
 # data_generation_time.pdf: d_data_generation_time.txt lineplot.plo
 # 	$(call lineplot,$*,$<,'Data Generation Time','Average time to generate data at server (s)',0.001,2000)

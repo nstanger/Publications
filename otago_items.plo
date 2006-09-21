@@ -1,0 +1,28 @@
+#proc settings
+	units: cm
+#endproc
+
+#proc getdata
+	delim: comma
+	fieldnameheader: yes
+	data:
+		type,num_items
+		article,23
+		conference,80
+		thesis,55
+		techreport,165
+		other,4
+
+#proc pie
+	datafield: num_items
+	center: 2.5 2.5
+	radius: 2.5
+	labelmode: line+label
+	labelfarout: 1.1
+	textdetails: size=10
+	labels:
+		Journal\n(@@PCT%)
+		Conference\n(@@PCT%)
+		Thesis\n(@@PCT%)
+		Tech. report\n(@@PCT%)
+		Other\n(@@PCT%)
