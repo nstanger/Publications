@@ -11,13 +11,13 @@
 		2,,,3565,2447,128,470,56,
 		3,,,6496,3943,318,650,154,
 		4,,,11298,5281,441,1377,416,
-		5,,,24861,6406,492,2291,2028,648
+		5,,,24861,6875,537,2291,2028,648
 		6,,,36886,,,3947,4206,1370
 		7,,,46395,,,6457,7362,2034
 		8,,,63040,,,9783,10110,3015
 		9,,,78041,,,13319,13154,3947
 		10,,,92012,,,17186,17585,5093
-		11,,,99957,,,21912,21989,6262
+		11,,,106865,,,21912,21989,6262
 		12,,,,,,28170,26105,7427
 		13,,,,,,37128,30811,8632
 		14,,,,,,47318,34461,10147
@@ -107,54 +107,54 @@
 	xfield: month_num
 	yfield: dlist
 	linedetails: style=0
-	label: DLIST
-	labeldetails: size=10 adjust=0,-0.1
+	label: dLIST (U. Arizona)
+	labeldetails: size=10 adjust=-0.1,-0.1
 
 #proc lineplot
 	xfield: month_num
 	yfield: nott
 	linedetails: style=0
-	label: Nottingham
+	label: U. Nottingham
 	labeldetails: size=10 adjust=-1.5,0.25
 
 #proc lineplot
 	xfield: month_num
 	yfield: otago
 	linedetails: width=2 style=0
-	label: Otago SoB
+	label: U. Otago/SoB
 	labeldetails: size=10 style=B adjust=-1.5,0.3
 
 #proc lineplot
 	xfield: month_num
 	yfield: tetumu
 	linedetails: style=3
-	label: Te Tumu
+	label: U. Otago/Te Tumu
 	labeldetails: size=10
 
 #proc lineplot
 	xfield: month_num
 	yfield: cardrona
 	linedetails: style=3
-	label: Cardrona
+	label: U. Otago/Cardrona
 	labeldetails: size=10
 
 #proc lineplot
 	xfield: month_num
 	yfield: rhodes
 	linedetails: style=3
-	label: Rhodes
+	label: Rhodes U.
 	labeldetails: size=10 adjust=-0.6,0.25
 
 #proc lineplot
 	xfield: month_num
 	yfield: unimelb
 	linedetails: style=0
-	label: Melbourne
+	label: U. Melbourne
 	labeldetails: size=10 adjust=0,0.1
 
 #proc lineplot
 	xfield: month_num
 	yfield: utas
 	linedetails: style=0
-	label: Tasmania
+	label: U. Tasmania
 	labeldetails: size=10
