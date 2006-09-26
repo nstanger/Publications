@@ -12,8 +12,11 @@
 
 
 \title{Building institutional repositories on a shoestring}
-\author{Nigel Stanger \and Graham McGregor}
-\date{University of Otago, Dunedin, New Zealand}
+\author{Nigel Stanger\thanks{\protect\url{nstanger@infoscience.otago.ac.nz}} \and Graham McGregor\thanks{\protect\url{gmcgregor@infoscience.otago.ac.nz}}}
+\date{University of Otago, PO Box 56, Dunedin 9054, New Zealand}
+
+
+\renewcommand{\thetable}{\Roman{table}}
 
 
 \begin{document}
@@ -25,15 +28,18 @@
 \bibliographystyle{dcu}
 
 \begin{abstract}
-\textbf{Purpose} --- To share the authors' experiences in implementing three different digital repositories, and to demonstrate the relative ease with which a digital institutional repository can be implemented.
+
+\noindent Case study \\
+
+\noindent\textbf{Purpose} --- To share the authors' experiences in implementing three different digital repositories, and to demonstrate the relative ease with which a digital institutional repository can be implemented.
 
 \noindent\textbf{Design/methodology/approach} --- Three separate repositories were implemented at the University of Otago over a six month period, each with a different focus and different needs. The first repository was implemented as a pilot, and is now a fully-functional system. The other two repositories were implemented from the ground up as fully-functional systems.
 
-\noindent\textbf{Findings} --- Implementing an effective digital repository requires suprisingly few resources. The first Otago repository was implemented by a team of four people in only ten days, running on cheap commodity hardware and free open source software.
+\noindent\textbf{Findings} --- Implementing an effective digital repository requires surprisingly few resources. The first Otago repository was implemented by a team of five people in only ten days, running on cheap commodity hardware and free open source software.
 
 \noindent\textbf{Practical implications} --- The repositories described in this paper were implemented extremely quickly and were very successful. This implies that digital repository software tools have matured to a sufficient state that almost anyone can quickly and easily implement a full-featured repository.
 
-\noindent\textbf{Originality/value} --- The three repositories discussed in this paper provide excellent exemplars in three quite different contexts: a ``traditional'' academia, indigenous studies and community history.
+\noindent\textbf{Originality/value} --- The three repositories discussed in this paper provide excellent exemplars in three quite different contexts: ``traditional'' academia, indigenous studies and community history.
 \end{abstract}
 
 
@@ -41,10 +47,9 @@
 
 Digital institutional repositories have become a hot topic over the last few years, and many institutions around the world are now actively working towards implementing them. In this article we discuss how low cost yet fully functional digital institutional repositories (IRs) can be set up in a very short time frame. We reflect on the lessons learned while implementing three different repositories at the University of Otago, and discuss some new and exciting applications of digital repositories arising from these. We also suggest some best practices for implementing an IR and discuss issues that must be considered when moving from a small-scale pilot implementation to a full roll-out.
 
-Interest in institutional repositories at the University of Otago was sparked by the release of the New Zealand Digital Strategy by the New Zealand government in May 2005. The strategy aims to ensure that ``New Zealand is a world leader in using information and technology to realise our economic, environmental, social and cultural goals'' \cite{NZG-2005-digital_strategy}. In parallel with this, the National Library of New Zealand set up an expert working party with representatives from across the research sector to investigate the feasibility of establishing a national institutional repository for New Zealand's research outputs \cite{Rank-J-2005-feasibility}. The National Library is fostering a work programme to improve access to New Zealand's research outputs, by collaborating with institutions to stimulate the set-up of research repositories.
+Interest in institutional repositories at the University of Otago was sparked by the release of the New Zealand Digital Strategy by the New Zealand government in May 2005. The strategy aims to ensure that ``New Zealand is a world leader in using information and technology to realize our economic, environmental, social and cultural goals'' \cite{NZG-2005-digital_strategy}. In parallel with this, the National Library of New Zealand set up an expert working party with representatives from across the research sector to investigate the feasibility of establishing a national institutional repository for New Zealand's research outputs \cite{Rank-J-2005-feasibility}. The National Library is fostering a work program to improve access to New Zealand's research outputs, by collaborating with institutions to stimulate the set-up of research repositories.
 
 In May 2005, two senior University of Otago staff undertook a study tour of Digital Challenges facing universities in the United States. Their report provided the impetus for the first IR pilot in Otago's School of Business. Project work began on 7 November 2005, with the following goals \cite{Stan-N-2006-running}:
- 
 \begin{itemize}
 
 	\item To establish a proof of concept demonstrator for storing and providing open access to digital research publications in the School of Business.
@@ -55,12 +60,14 @@ In May 2005, two senior University of Otago staff undertook a study tour of Digi
 
 \end{itemize}
 
+The remainder of the paper discusses how three different repositories were rapidly implemented at the University of Otago, and the subsequent impact of these repositories. Issues that arose during implementation and possible solutions are discussed, then the process of rolling out to the wider instutition is examined. The paper concludes with a look ahead to future developments arising from the Otago repository project.
+
 
 \section{The pilot repository}
 
-The GNU EPrints repository management software was chosen for the pilot repository because it was widely used, well-supported, inexpensive and would not lock the School into specific technologies or vendors \cite{Sale-A-2005-NZIRW}. The development team also had prior experience with the software. A rapid prototyping methodology was adopted, emphasising quick releases of visible results with multiple iterations, in order to create interest in the project at an early stage, and enable a positive feedback cycle. A sandbox was used to test entries and entry formats before the material went live.
+The GNU EPrints repository management software was chosen for the pilot repository because it was widely used, well-supported, inexpensive and would not lock the School into specific technologies or vendors \cite{Sale-A-2005-NZIRW}. The development team also had prior experience with the software. A rapid prototyping methodology was adopted, emphasizing quick releases of visible results with multiple iterations, in order to create interest in the project at an early stage, and enable a positive feedback cycle. A sandbox was used to test entries and entry formats before the material went live.
 
-The pilot repository was fully implemented within ten days of assembling the project team, with most of this time spent tweaking the look and feel of the web site and collecting content \cite{Stan-N-2006-running}. This outcome was possible because of the establishment of a very clear brief to ``prove the concept'', rather than taking on a large scale project that would involve many different disciplines, researchers and research outputs from the outset. Early decisions were made to restrict the content and content domain used for the pilot, in order to speed the collection process and minimise requirements ``creep''. Meetings were kept to a minimum and policy and procedural issues that required institutional decisions were noted as work progressed, rather than tackled head on. The project was widely publicised within the School and Heads of Departments were consulted to ensure top-level buy-in. This approach produced immediate results and the repository was quickly populated with a range of working/discussion papers, conference items, journal articles and theses.
+The pilot repository was fully implemented within ten days of assembling the project team, with most of this time spent tweaking the look and feel of the web site and collecting content \cite{Stan-N-2006-running}. This outcome was possible because of the establishment of a very clear brief to ``prove the concept'', rather than taking on a large scale project that would involve many different disciplines, researchers and research outputs from the outset. Early decisions were made to restrict the content and content domain used for the pilot, in order to speed the collection process and minimize requirements ``creep''. Meetings were kept to a minimum and policy and procedural issues that required institutional decisions were noted as work progressed, rather than tackled head on. The project was widely publicized within the School and Heads of Departments were consulted to ensure top-level buy-in. This approach produced immediate results and the repository was quickly populated with a range of working/discussion papers, conference items, journal articles and theses.
 
 There was no cost associated with the GNU EPrints software community, and from a technical point of view the project was wonderfully straightforward. The School of Business repository\footnote{\url{http://eprints.otago.ac.nz/}} was deployed on a spare mid-range server running FreeBSD, which meant that hardware and software costs were essentially nil. In other words, if you happen to have some spare hardware lying around, you can set up an initial repository very cheaply, and expand it later.
 
@@ -137,66 +144,51 @@ The success of the pilot excited considerable interest throughout the University
 Drawing on experience from the pilot, the Te Tumu repository\footnote{\url{http://eprintstetumu.otago.ac.nz/}} was implemented by a single person in about a month, and was officially launched on May 3 2006, making it the first repository for indigenous studies in New Zealand (and possibly the world). Response to the repository has been very positive, with over 2,600 downloads from 49 different countries during its first five months. The repository currently contains 30 items, including articles, theses, images and video clips.
 
 
-\section{Issues that arose}
-
-Many issues were encountered during the implementation of both the pilot and Te Tumu repositories. The following is a summary of the key issues that had to be dealt with:
+\section{Issues to consider}
 
 
-\begin{description}
+\subsection{Copyright}
 
-	\item[Copyright:] This is a potentially thorny issue for any IR, although many of the concerns raised often turn out to be perceived rather than actual problems (EPrints, 2005). Much of the material loaded into the Otago repositories comprised departmental working or discussion papers, for which permission to publish online had already been granted. Items with uncertain copyright status had full text access restricted until their status was confirmed. The SHERPA website\footnote{\url{http://www.sherpa.ac.uk/}} was a valuable resource for ascertaining journal copyright agreements.
-
-	\item[Data standards:] New Zealand's Digital Strategy proposes the long term goal of linking all New Zealand repositories to share information and avoid isolated ``silos of knowledge'', where each institution has little idea of what is happening elsewhere \cite{NZG-2005-digital_strategy}. It is therefore imperative that open standards such as the Dublin Core Metadata Initiative (2006) be applied for both data and metadata. Dublin Core is natively supported by EPrints, and also by many library cataloguing systems.
-
-	\item[Data entry:] Data entry may often be carried out by people who are not specifically trained for the task (for example, document authors), so it is essential to have well-defined and widely publicised processes and standards for data entry. EPrints allows the data entry process to be heavily customised to the needs of an individual repository. In addition, a final editorial verification is essential to check the quality of the data entered and to ensure that the item is suitable for inclusion in the repository.
-
-	\item[Content acquisition:] The key issue regarding acquisition of material is whether self-archiving should be compulsory (top-down) or voluntary (bottom-up). Sale (2005b) argues that a compulsory policy is much more effective at increasing the size of a repository, as illustrated by the growth rates of repositories at the Queensland University of Technology (compulsory, high growth) and the University of Queensland (voluntary, low growth). Compulsory archiving policies are often driven by the need to capture information for research evaluation and funding purposes, but run the risk that authors may react negatively to such a requirement. \citeasnoun{Swan-A-2004-OA} surveyed 157 authors who did not self-archive and found that 69\% of them would willingly deposit their articles in an open repository if required to do so.
-
-	\item[Types of content:] Decisions about the types of material that should be archived (e.g. working papers, theses, lecture material, sound and picture files) are also key, as is the question of what historical material to include? There is a cost associated with scanning or converting non-digitised work into digital format. The value of the repository depends on the number of authors contributing \cite{Rank-J-2005-feasibility}. Ready targets for inclusion are outputs that would otherwise have only limited availability, such as departmental working and discussion papers, and theses and dissertations. The latter in particular are often very difficult to obtain from outside the institution that published them, yet paradoxically, they are often the easiest to obtain for the purposes of populating an IR, because there is a lower likelihood of copyright issues, and departments often have copies of the documents in question.
-
-\end{description}
+Copyright is a potentially thorny issue for any IR, although many of the concerns raised often turn out to be perceived rather than actual problems \cite{EPri-O-2005-SelfFAQ}. Much of the material loaded into the Otago repositories comprised departmental working or discussion papers, for which permission to publish online had already been granted. Items with uncertain copyright status had full text access restricted until their status was confirmed. The SHERPA website\footnote{\url{http://www.sherpa.ac.uk/}} was a valuable resource for ascertaining journal copyright agreements.
 
 
-%[all of these to be expanded]
-%
-%\begin{itemize}
-%
-%	\item Copyright: who owns it, perception vs.\ reality.
-%
-%	\item Data standards: metadata, interoperability with Library systems, etc.
-%
-%	\item Data entry: trained vs.\ non-trained users, editorial control.
-%
-%	\item Content acquisition: voluntary vs.\ mandatory.
-%
-%	\item Types of content: quality vs.\ quantity, currency vs.\ archival, media types, non-digital material, etc.
-%
-%\end{itemize}
+\subsection{Data standards}
+
+New Zealand's Digital Strategy proposes the long term goal of linking all New Zealand repositories to share information and avoid isolated ``silos of knowledge'', where each institution has little idea of what is happening elsewhere \cite{NZG-2005-digital_strategy}. It is therefore imperative that open standards such as the Dublin Core Metadata Initiative\footnote{\url{http://www.dublincore.org/}} be applied for both data and metadata. Dublin Core is natively supported by EPrints, and also by many library cataloging systems.
 
 
-\section{Rollout to the wider Institution}
+\subsection{Data entry}
 
-The University of Otago is currently considering whether to proceed with a full implementation of an IR for the University as a whole. If such a rollout occurs, the repository will be the responsibility of the University Library, which is a logical place for such a resource to be managed. The Library has expressed strong support for going ahead with a wider rollout. Regardless of whether this occurs, the School of Business has committed to continuing with its existing IR.
-
-Further issues that need to be considered in this context:
+Data entry may often be carried out by people who are not specifically trained for the task (for example, document authors), so it is essential to have well-defined and widely publicized processes and standards for data entry. EPrints allows the data entry process to be heavily customized to the needs of an individual repository. In addition, a final editorial verification is essential to check the quality of the data entered and to ensure that the item is suitable for inclusion in the repository.
 
 
-\begin{itemize}
+\subsection{Content acquisition}
+\label{sec-content}
 
-	\item Management: library vs.\ IT, oversight, position within the University.
+The key issue regarding acquisition of material is whether self-archiving should be compulsory (top-down) or voluntary (bottom-up). \citeasnoun{Sale-A-2005-NZIRW} argues that a compulsory policy is much more effective at increasing the size of a repository, as illustrated by the growth rates of repositories at the Queensland University of Technology (compulsory, high growth) and the University of Queensland (voluntary, low growth). Compulsory archiving policies are often driven by the need to capture information for research evaluation and funding purposes, but run the risk that authors may react negatively to such a requirement. \citeasnoun{Swan-A-2004-OA} surveyed 157 authors who did not self-archive and found that 69\% of them would willingly deposit their articles in an open repository if required to do so.
 
-	\item Integration: single monolithic repository vs.\ many small distributed repositories (we are already heading in the direction of the second model); integration with existing information systems.
-
-	\item Data entry: authors (self-archiving) vs.\ library staff.
-
-	\item others...
-
-\end{itemize}
+Another issue is when authors should submit new content to a repository. In particular, should pre-prints of submitted papers be immediately placed in the repository, or should the authors wait until the paper has been accepted for publication? There are valid arguments for both positions, but in the case of popular repositories, waiting for acceptance may be a ``safer'' option. In March 2006, the authors of the current paper submitted an article to a journal, and also placed a pre-print of the paper into the pilot repository. The pre-print rapidly became the most popular download from the repository, with 625 downloads in only three weeks. The journal subsequently rejected the article on the basis that the material had already been widely disseminated and was therefore no longer topical.
 
 
-\section{Looking ahead: Community repositories}
+\subsection{Types of content}
 
-An exciting consequence of our work on the School of Business repository has been an approach from various communities throughout New Zealand to help set up repositories of historical material relating to their community. The first of these was Cardrona\footnote{\url{http://cardrona.eprints.otago.ac.nz/}}, a small Central Otago community with a long and varied history. The Cardrona Community Repository was launched on May 17 2006, and is the first community repository in New Zealand (possibly the world). Digital repositories offer communities a wonderful opportunity to preserve their historical and cultural information, and to disseminate it to a much wider audience than would normally be possible. It also provides a sense of focus for the community, epecially in cases like Cardrona, where the community is quite small and somwhat geographically dispersed.
+Decisions about the types of material that should be archived (e.g., working papers, theses, lecture material, multimedia files) are also key, as is the question of what historical material to include? There is a cost associated with scanning or converting non-digitized work into digital format. The value of the repository depends on the number of authors contributing \cite{Rank-J-2005-feasibility}. Ready targets for inclusion are outputs that would otherwise have only limited availability, such as departmental working and discussion papers, and theses and dissertations. The latter in particular are often very difficult to obtain from outside the institution that published them, yet paradoxically, they are often the easiest to obtain for the purposes of populating an IR, because there is a lower likelihood of copyright issues, and departments often have copies of the documents in question.
+
+
+\subsection{Rollout to the wider Institution}
+
+There are several additional factors to consider when rolling a pilot repository implementation out to the wider institution, as is currently being considered at the University of Otago. First, who manages it? In the case of Otago, the obvious candidates are Information Technology Services and the University Library. The Library seems the most natural candidate, however, as an IR is really more about knowledge management than technology, plus the Library already has the skills for acquiring and managing content.
+
+Second, should the wider IR be implemented as a single monolitic entity for the entire institution, or as a federated collection of smaller repositories within institutional sub-units? Otago is currently heading in the latter direction. The two approaches are not mutually exclusive, however, as a centralized IR can easily harvest metadata from any smaller IRs in the institution, and thus provide a central entry point to all research in the institution. Another question is how to integrate IR(s) into existing information systems, in particular those used to track research outputs.
+
+Finally, who should enter new content into the repository? Some institutions allow authors to self-archive their own work, while others centralize the process. The former approach is more flexible, but can suffer from problems with consistency and quality of metadata. In contrast, centralization is easier to manage, but may lead to a feeling of ``lack of control'' on the part of authors. This could perhaps be mitigated by introducing a compulsory deposit policy, as discussed in Section~\ref{sec-content}.
+
+
+\section{Looking ahead}
+
+An exciting consequence of the School of Business repository has been an approach from various communities throughout New Zealand to help set up repositories of historical material relating to their community. The first of these was Cardrona\footnote{\url{http://cardrona.eprints.otago.ac.nz/}}, a small Central Otago community with a long and varied history. The Cardrona Community Repository was launched on May 17 2006, and is the first community repository in New Zealand (and possibly the world). Digital repositories offer communities a wonderful opportunity to preserve their historical and cultural information, and to disseminate it to a much wider audience than would normally be possible. It also provides a sense of focus for the community, especially in cases like Cardrona, where the community is quite small and somewhat geographically dispersed.
+
+The Otago team is also playing a major role in the Open Access Repositories in New Zealand (OARiNZ) project\footnote{\url{http://www.oarinz.ac.nz/}}. This is a new government-funded project to develop a national infrastructure that will connect all of New Zealand's digital research repositories. Work is currently underway at Otago on an easy-to-use installer and configurator for setting up EPrints repositories, in order to encourage wider adoption of these technologies.
 
 
 
