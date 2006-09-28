@@ -93,7 +93,7 @@
 		#include chunk_logstubs
 	stubdetails: size=12
 	label: Cumulative number of hits (log scale)
-	labeldetails: style=B size=12 adjust=-1.0,-1.0
+	labeldetails: style=B size=12 adjust=-0.9,-1.3
 	grid: color=gray(0.7)
 	ticlen: 0.25
 
@@ -107,14 +107,14 @@
 	xfield: month_num
 	yfield: dlist
 	linedetails: style=0
-	label: dLIST (U. Arizona)
+	label: dLIST
 	labeldetails: size=10 adjust=-0.1,-0.1
 
 #proc lineplot
 	xfield: month_num
 	yfield: elis
 	linedetails: style=0
-	label: E-LIS (Italy)
+	label: E-LIS
 	labeldetails: size=10 adjust=0,0
 
 #proc lineplot

@@ -56,7 +56,7 @@
 	lenfield: num_downloads
 	barwidth: 0.5
 	cluster: 2 / 2
-	legendlabel: Downloads
+	legendlabel: Full text downloads
 
 #proc areadef
 	areaname: standard

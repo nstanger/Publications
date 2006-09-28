@@ -82,16 +82,16 @@ The pilot implementation was completed within ten days of assembling the project
 
 There was no cost associated with the GNU EPrints software or its associated online community, and from a technical point of view the project was wonderfully straightforward. The School of Business repository\footnote{\url{http://eprints.otago.ac.nz/}} was deployed on a spare mid-range server running FreeBSD, which meant that hardware and software costs were essentially nil. In other words, if you happen to have some spare hardware lying around, you can set up an initial repository very cheaply, and expand it later.
 
-A minimalist approach was taken with regard to gathering content; partly because of the prototypical nature of the project, and partly because material in the hand is worth more than promises by authors to supply content at some indeterminate future date. New publications are always being created, and content acquisition is a moving target that has to be effectively managed. Once basic content acquisition and data entry protocols were put in place, an incremental methodology was adopted. Content was limited to voluntary contributions in PDF format from colleagues in the School of Business, but with no constraint on the type of output. At the end of September 2006, the repository contains 327 documents covering a wide range of topics and document types, with new content being continually acquired.
+A minimalist approach was taken with regard to gathering content; partly because of the prototypical nature of the project, and partly because material in the hand is worth more than promises by authors to supply content at some indeterminate future date. New publications are always being created, and content acquisition is a moving target that has to be effectively managed. Once basic content acquisition and data entry protocols were put in place, an incremental methodology was adopted. Content was limited to voluntary contributions in PDF format from colleagues in the School of Business, but with no constraint on the type of output. As of the end of September 2006, the repository contains 327 documents covering a wide range of topics and document types, with new content being continually acquired.
 
 It is remarkable what can be achieved by a small, dedicated, knowledgeable and enthusiastic implementation team. As with any project, the right mix of technical and project management skills is crucial in making things happen. The project team comprised the School's Research Development Coordinator (project management and evangelism), an Information Science lecturer (software implementation), the School's IT manager (hardware and deployment) and two senior students (research, content acquisition and data entry). Oversight was provided by a standing committee comprising representatives from Information Technology Services, the University Library and the School of Business.
 
 
 \section{Impact of the pilot}
 
-Traffic and downloads were generated from the moment the system went live, and the statistics package that sits alongside the repository became an object of fascination in its own right. The initial response to the pilot repository seemed spectacular, with nearly 19,000 downloads recorded within the first three months from eighty different countries. This level of traffic excited considerable interest from both inside and outside the University. However, while the repository had indeed been accessed from eighty countries, it was salutary to discover that the download rates were in fact over-inflated by a factor of about five. This was due to an undocumented assumption in the Tasmania statistics software \cite{Sale-A-2006-stats} that resulted in hits being counted more than once if statistics were gathered more often than once per day. The lesson here is to always be wary of computers bearing wonderful news!
+Traffic and downloads were generated from the moment the system went live, and the statistics package that sits alongside the repository became an object of fascination in its own right. The initial response to the pilot repository seemed spectacular, with nearly 19,000 downloads recorded within the first three months from eighty different countries. This level of traffic excited considerable interest from both inside and outside the University. However, while the repository had indeed been accessed from eighty countries, it was salutary to discover that the download rates were in fact over-inflated by a factor of about five. This was due to an undocumented assumption in the Tasmania statistics software \cite{Sale-A-2006-stats} that resulted in hits being counted multiple times if statistics were gathered more often than once per day. The lesson here is to always be wary of computers bearing wonderful news!
 
-Despite the downward adjustment to overall download rates, there is still ongoing healthy interest in the repository, as shown in Figure~\ref{fig-otago-growth}. Interestingly, the repository experiences many more abstract views than downloads. An informal analysis of hit rates across eight other repositories that generate similar statistics, shows that some experience the same pattern as Otago, while others experience more downloads than abstract views. Further investigation is needed to determine why this variation occurs.
+Despite the downward adjustment to overall download rates, there is still ongoing healthy interest in the repository, as shown in Figure~\ref{fig-otago-growth}. Interestingly, the repository experiences many more abstract views than full text downloads. An informal analysis of hit rates across eight other repositories that generate similar statistics, shows that some experience the same pattern as Otago, while others experience more downloads than abstract views. Further investigation is needed to determine why this variation occurs.
 
 
 \begin{figure}
@@ -114,28 +114,28 @@ Otago's rate of traffic growth has also been compared with the repositories ment
 
 
 \begin{table}
-	\caption{Details of repositories compared in Figure~\ref{fig-growth-comparison}.}
+	\caption{Details of repositories compared in Figure~\ref{fig-growth-comparison}, as of September 2006.}
 	\label{tab-repositories}
 	\begin{center}
 		\begin{tabular}{lrrl}
-													&	\textbf{Age in}	&	\textbf{Num.}	\\
-			\textbf{Repository}						&	\textbf{months}	&	\textbf{items}	\\
+															&	\textbf{Age in}	&	\textbf{Num.}	\\
+			\textbf{Repository}								&	\textbf{months}	&	\textbf{items}	\\
 			\hline
-			dLIST (U.\ Arizona)						&	17				&	735	\\
-			E-LIS (CILEA, Italy)					&	45.5			&	4275	\\
-			U.\ Melbourne							&	50.5			&	1279	\\
-			U.\ Nottingham							&	38.5			&	235	\\
-			U.\ Otago/Cardrona						&	4.5				&	13	\\
-			\textbf{U.\ Otago/School of Business}	&	\textbf{10.5}	&	\textbf{327}	\\
-			U.\ Otago/Te Tumu						&	5				&	30	\\
-			Rhodes U. (S.\ Africa)					&	18.5			&	248	\\
-			U.\ Tasmania							&	24				&	301	\\
+			dLIST (University of Arizona, U.S.A.)			&	17				&	735	\\
+			E-LIS (CILEA, Italy)							&	45.5			&	4275	\\
+			University of Melbourne (Australia)				&	50.5			&	1279	\\
+			University of Nottingham (U.K.)					&	38.5			&	235	\\
+			University of Otago/Cardrona					&	4.5				&	13	\\
+			\textbf{University of Otago/School of Business}	&	\textbf{10.5}	&	\textbf{327}	\\
+			University of Otago/Te Tumu						&	5				&	30	\\
+			Rhodes University (South Africa)				&	18.5			&	248	\\
+			University of Tasmania (Australia)				&	24				&	301	\\
 		\end{tabular}
 	\end{center}
 \end{table}
 
 
-An exciting outcome of the pilot has been the ability to make  available material that might otherwise be difficult or impossible to access, and thus increase the likelihood of it being cited \cite{Harn-S-2005-research,Hajj-C-2005-citation}. For example, Figure~\ref{fig-item-types} shows that about two thirds of the items in the Otago repository are items that might not otherwise be readily accessible, such as theses, dissertations, and departmental working and discussion papers. Indeed, the top ten downloaded items as of September 2006 comprise five departmental working papers, two conference papers, one journal paper, one thesis and one research report. The full text of these items is also readily searchable by major Internet search engines such as Google \cite{Sale-A-2006-OAchapter}.
+An exciting outcome of the pilot has been the ability to make available material that might otherwise be difficult or impossible to access, and thus increase the likelihood of it being cited \cite{Harn-S-2005-research,Hajj-C-2005-citation}. For example, Figure~\ref{fig-item-types} shows that about two thirds of the items in the Otago repository are items that might not otherwise be readily accessible, such as theses, dissertations, and departmental working/discussion papers. Indeed, the top ten downloaded items as of September 2006 comprise five departmental working papers, two conference papers, one journal paper, one thesis and one research report. The full text of these items is also readily searchable by major Internet search engines such as Google \cite{Sale-A-2006-OAchapter}, often within a only few days of being deposited.
 
 
 \begin{figure}
@@ -146,14 +146,14 @@ An exciting outcome of the pilot has been the ability to make  available materia
 \end{figure}
 
 
-The pilot was not only technologically successful, but also generated much local and national interest. Consequently, after a mere six months, the pilot became the official repository for Otago's School of Business. It has also been adopted as a model with potential for roll-out across the entire University. As there are four Divisions at Otago (of which the School of Business is one), a federated model of repositories is envisaged that would be centrally linked and managed by the University Library.
+The pilot was not only technologically successful, but also generated much local and national interest. Consequently, after a mere six months, the pilot became the official repository for Otago's School of Business. It has also been adopted as a model with potential for roll-out across the entire University. As there are four academic Divisions at Otago (of which the School of Business is one), a federated model of repositories is envisaged that would be centrally linked and managed by the University Library.
 
 Having proved the concept, it has been (and is) relatively simple to develop other repositories with similar speed. The key is having an experienced team and a highly focused project management plan. 
 
 
 \section{EPrints Te Tumu}
 
-The success of the pilot excited considerable interest throughout the University community. In early 2006, Te Tumu, Otago's School of M\={a}ori, Pacific and Indigenous Studies, expressed an interest in implementing a repository for their specific needs. They were particularly interested in the use of a digital repository as a means of disseminating their research and other work, as there are relatively few ``official'' outlets for their discipline. In addition to the usual items found in most typical IRs, Te Tumu wished to store multimedia items such as images of traditional crafts and artwork, and video clips of various performances. This was simply a matter of adding appropriate item types to the EPrints metadata configuration and creating corresponding templates.
+The success of the pilot excited considerable interest throughout the University community. In early 2006, Te Tumu, Otago's School of M\={a}ori, Pacific and Indigenous Studies, expressed an interest in implementing a repository for their specific needs. They were particularly interested in the use of a digital repository as a means of disseminating their research and other work, as there are relatively few ``official'' outlets for their discipline. In addition to the usual items found in most typical IRs, Te Tumu wished to store multimedia items such as images of traditional crafts and artwork, and video clips of performances. This was simply a matter of adding appropriate item types to the EPrints metadata configuration and creating corresponding templates.
 
 Drawing on experience from the pilot, the Te Tumu repository\footnote{\url{http://eprintstetumu.otago.ac.nz/}} was implemented in less than a month, and was officially launched on May 3 2006, making it the first repository for indigenous studies in New Zealand. Interest in the repository is evident  with over 2,700 downloads from 53 different countries during its first five months. The repository currently contains 30 items, including articles, theses, images and video clips.
 
@@ -163,7 +163,7 @@ Drawing on experience from the pilot, the Te Tumu repository\footnote{\url{http:
 
 \subsection{Copyright}
 
-Copyright is an issue that needs to be faced, although concerns that are voiced tend to be perceived rather than actual problems \cite{EPri-O-2005-SelfFAQ,Sale-A-2006-OAchapter}. A substantial fraction of the material loaded into the Otago repositories comprised departmental working or discussion papers, for which permission to publish online had already been granted. Items with uncertain copyright status had full text access restricted until their status was confirmed. The SHERPA website\footnote{\url{http://www.sherpa.ac.uk/}} was a valuable resource for ascertaining journal copyright agreements.
+Copyright is an issue that needs to be faced, although concerns that are voiced tend to be perceived rather than actual problems \cite{EPri-O-2005-SelfFAQ,Sale-A-2006-OAchapter}. A substantial fraction of the material loaded into the Otago repositories comprised departmental working or discussion papers, for which permission to publish online had already been granted. Items with uncertain copyright status had full text access restricted until their status was confirmed. The SHERPA web site\footnote{\url{http://www.sherpa.ac.uk/}} was a valuable resource for ascertaining journal copyright agreements.
 
 
 \subsection{Data standards}
@@ -179,18 +179,18 @@ Data entry may often be carried out by people who are not specifically trained f
 \subsection{Content acquisition}
 \label{sec-content}
 
-The key issue regarding acquisition of material is whether self-archiving should be compulsory (top-down) or voluntary (bottom-up). \citename{Sale-A-2005-NZIRW} \citeyear{Sale-A-2005-NZIRW,Sale-A-2006-OAchapter} argues that a compulsory policy is much more effective for growing a repository, as illustrated by the growth rates of repositories at the Queensland University of Technology (compulsory, high growth) and the University of Queensland (voluntary, low growth). Compulsory archiving policies are often driven by the need to capture information for research evaluation and funding purposes, but run the risk that authors may react negatively to such a requirement. \citeasnoun{Swan-A-2004-OA} surveyed 157 authors who did not self-archive and found that 69\% of them would willingly deposit their articles in an open repository if required to do so. A more recent study increased this figure to 81\% \cite{Swan-A-2006-OAchapter}.
+The key issue regarding acquisition of material is whether self-archiving should be compulsory (top-down) or voluntary (bottom-up). \citename{Sale-A-2005-NZIRW} \citeyear{Sale-A-2005-NZIRW,Sale-A-2006-OAchapter} argues that a compulsory policy is much more effective for growing a repository, as illustrated by the growth rates of repositories at the Queensland University of Technology (compulsory, high growth) and the University of Queensland (voluntary, low growth). Compulsory archiving policies are often driven by the need to capture information for research evaluation and funding purposes, but run the risk that authors may react negatively to such a requirement. \citeasnoun{Swan-A-2004-OA} surveyed 157 authors who did not self-archive and found that 69\% of them would willingly deposit their articles in an open access repository if required to do so. A more recent study increased this figure to 81\% \cite{Swan-A-2006-OAchapter}.
 
-Another issue is when authors should deposit new content into a repository. In particular, should pre-prints of submitted papers be immediately deposited, or should the authors wait until the paper has been accepted for publication? There are valid arguments for both positions, but in the case of popular repositories, waiting for acceptance may be a ``safer'' option. In March 2006, the authors submitted an article to a journal, and simultaneously deposited a pre-print \cite{Stan-N-2006-running} into the pilot repository. The pre-print quickly became the most popular download from the repository, with 625 downloads in only three weeks. The journal subsequently rejected the article on the basis that the material had already been widely disseminated and was therefore no longer topical.
+Another issue is when authors should deposit new content into a repository. In particular, should pre-prints of submitted papers be immediately deposited, or should authors wait until the paper has been accepted for publication? There are valid arguments for both positions, but in the case of highly popular repositories, waiting for acceptance may prove to be a ``safer'' option. In March 2006, the authors submitted an article to a journal, and concurrently deposited a pre-print \cite{Stan-N-2006-running} into the pilot repository. The pre-print quickly became the most popular download from the repository, with 625 downloads in only three weeks. The journal subsequently rejected the article on the basis that the material had already been widely disseminated and was therefore no longer topical.
 
 
 \subsection{Types of content}
 
 Decisions about the types of material that should be archived (e.g., working papers, theses, lecture material, multimedia files) are also key, as is the question of what historical material to include. Indeed, this has proved to be one of the most challenging issues faced at Otago, since there can be considerable cost associated with scanning to convert non-digitized work into digital format. There are also associated practical and logistical issues.
 
-The value of a repository depends on the number of authors contributing \cite{Rank-J-2005-feasibility}. Ready targets for inclusion are outputs that would otherwise have only limited availability, such as departmental working and discussion papers, and theses and dissertations. The latter in particular are often very difficult to obtain from outside the institution that published them, yet paradoxically, they are often the easiest to obtain for the purposes of populating an IR, because there is a lower likelihood of copyright issues, and departments often have copies of the documents.
+The value of a repository depends on the number of authors contributing \cite{Rank-J-2005-feasibility}. Ready targets for inclusion are outputs that would otherwise have only limited availability, such as departmental working and discussion papers, and theses and dissertations. The latter in particular are often very difficult to obtain from outside the institution that published them, yet paradoxically, they are often the easiest to obtain for the purposes of populating an IR, because there is a lower likelihood of copyright issues, and departments often have copies of the documents to hand.
 
-Extant and already bound material requires page-by-page scanning, which can be a long and arduous process. While a number of robotic scanners are in use, these are likely to be out of the financial reach of most institutions.  The content focus at Otago has thus moved towards the development of a mandatory policy that requires all student theses and dissertations to be submitted in both hard and electronic copy.
+Extant and already bound material requires page-by-page scanning, which can be a long and arduous process. While a number of robotic scanners are available, these are likely to be out of the financial reach of most institutions.  The content focus at Otago has thus moved towards the development of a mandatory policy that requires all student theses and dissertations to be submitted in both hard and electronic copy.
 
 
 \section{Looking ahead}
@@ -202,11 +202,11 @@ The Otago team is also playing a significant role in the Open Access Repositorie
 
 \section{Conclusion}
 
-Experience at Otago demonstrates that in an increasingly digital world, digital repositories are a necessary and welcome means of archiving and making accessible electronic content of all kinds. Global connectedness between scholars and communities at the touch of a keyboard is not a clich\'{e}d dream, but a reality. The  technology has matured to the point where a basic repository can be set up with a very moderate level of technical expertise. Even setting up a heavily customized repository can be achieved in a matter of days rather than weeks, if a dedicated and knowledgeable team is created and given focused, achievable and bounded goals. Software costs are essentially nil, hardware costs are minimal and there is a hugely supportive and generous community of scholars who are willing to share their technical knowledge and expertise at no cost.
+Experience at Otago demonstrates that in an increasingly digital world, digital repositories are a necessary and welcome means of archiving and making accessible electronic content of all kinds. Global connectedness between scholars and communities at the touch of a keyboard is not a clich\'{e}d dream, but a reality. The  technology has matured to the point where a basic repository can be set up with a very moderate level of technical expertise. Even setting up a heavily customized repository can be achieved in a matter of days rather than weeks, if a dedicated and knowledgeable team is created and given focused, achievable and bounded goals. Software costs are essentially nil, hardware costs are minimal, and there is a hugely supportive and generous worldwide community of scholars who are willing to share their technical knowledge and expertise at no cost.
 
 On the non-technical side, there are now sufficient repository implementations around the world that IR's are becoming less of a novelty and more an integral tool for researchers, librarians and archivists alike. While Otago is yet to adopt an institution-wide repository, there is little doubt that the progress made to date with its three different thrusts has generated widespread interest locally, nationally and globally. In a purely academic context, the tension between traditional (journal based) scholarship and publishing, and digital (repository based) scholarship and publishing has yet to play itself out.
 
-Our experience with community preservation and heritage type groups, on the other hand, suggests that given appropriate access to the technology, the content flood gates will truly open. The imprint of EPrints at Otago has not only made its mark, it has stimulated a renaissance-like enthusiasm for making available knowledge and ideas and history and scholarship that might be hidden or remain otherwise inaccessible. The added value is that the required institutional or community investment, both time and money, in developing a digital repository seems rather trivial.  We suggest you ``hit the ground running'' and if you need help, do contact us!
+Our experience with community preservation and heritage type groups, on the other hand, suggests that given appropriate access to the technology, the content flood gates will truly open. The imprint of EPrints at Otago has not only made its mark, it has stimulated a renaissance-like enthusiasm for making available knowledge and ideas and history and scholarship that might otherwise remain hidden or inaccessible. The added value is that the required institutional or community investment, both time and money, in developing a digital repository seems rather trivial.  We suggest you ``hit the ground running'' and if you need help, do contact us!
 
 
 \section*{Acknowledgments}
