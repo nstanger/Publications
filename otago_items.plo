@@ -23,6 +23,6 @@
 	labels:
 		Journal\n(@@PCT%)
 		Conference\n(@@PCT%)
-		Thesis\n(@@PCT%)
-		Monograph\n(@@PCT%)
+		Thesis/dissertation\n(@@PCT%)
+		Working/discussion\n(@@PCT%)
 		Other\n(@@PCT%)
