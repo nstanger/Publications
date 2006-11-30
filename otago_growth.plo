@@ -17,7 +17,9 @@
 		15/06/2006,262,13006,3639
 		15/07/2006,268,12210,2791
 		15/08/2006,313,10083,3888
-		15/09/2006,327,12929,4429
+		15/09/2006,329,12929,4429
+		15/10/2006,401,11839,5217
+		15/11/2006,409,6088,3975
 
 #proc areadef
 	areaname: standard
@@ -40,7 +42,7 @@
 	stubdetails: size=12
 	label: Number of hits
 	labeldetails: style=B size=12 adjust=-0.7,0
-	grid: color=gray(0.7)
+//	grid: color=gray(0.7)
 	ticlen: 0.25
 
 #proc bars
