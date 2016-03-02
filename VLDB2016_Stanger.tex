@@ -1,0 +1,1164 @@
+%%
+%% MAX 12 PAGES (all material)
+%%
+
+\documentclass{vldb}
+
+\usepackage{balance}
+\usepackage{relalg}
+\usepackage{txfonts}
+\usepackage{bm}
+\usepackage{subfigure}
+\usepackage{booktabs}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{graphs}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows}
+
+% "empty" arrow tip
+\pgfarrowsdeclare{:}{:}{}{}
+% custom bar arrow tip, offset from end of line (use "empty" tip at line ends if no >)
+\tikzset{crossbar/.tip={|[scale width=1.75,sep=0.25em]}}
+% various edge styles for TikZ
+\tikzset{
+    function/.style={arrows={->}},
+    injection/.style={arrows={<-}},
+    total/.style={arrows={:{crossbar}-}},
+    surjection/.style={arrows={-{crossbar}:}},
+    bijection/.style={arrows={<{crossbar}-{crossbar}>}},
+    projection/.style={arrows={:{crossbar}-{crossbar}>}},
+    projection left/.style={arrows={:{crossbar}-{crossbar}>},edge label={\scriptsize\(\RelProject\)}},
+    projection right/.style={arrows={:{crossbar}-{crossbar}>},edge label'={\scriptsize\(\RelProject\)}},
+    selection left/.style={arrows={<-{crossbar}>},edge label={\scriptsize\(\RelRestrict\)}},
+    selection right/.style={arrows={<-{crossbar}>},edge label'={\scriptsize\(\RelRestrict\)}},
+    funcdep left/.style={arrows={->},edge node={node[sloped,midway,above] {\scriptsize\emph{key}}}},
+    funcdep right/.style={arrows={->},edge node={node[sloped,midway,below] {\scriptsize\emph{key}}}},
+    surtotal/.style={arrows={:{crossbar}-{crossbar}:}},
+    input keep/.style={blue,thick},
+    input delete/.style={blue!40,thick,dashed},
+    output/.style={red,thick},
+    output temp/.style={red,thick,dashed},
+    path 1/.style={green!60!black,thick},
+    path 2/.style={orange,thick}
+}
+        
+% projection and selection edge annotations for TikZ
+\makeatletter
+\newcommand{\ProjectionAnnotation}[3][]{%
+    \path (#2) to node[above,#1] {\scriptsize\(\RelProject\)} (#3);%
+}
+\newcommand{\SelectionAnnotation}[3][]{%
+    \path (#2) to node[above,#1] {\scriptsize\(\RelRestrict\)} (#3);%
+}
+\makeatother
+
+
+\newcounter{constraint}
+
+% misc
+\newcommand{\todo}[1]{\textbf{!!TODO!!} {[#1]}}
+
+% commonly used elements
+\newcommand{\LS}{\ensuremath{\mathit{LS}}}
+\newcommand{\NLS}{\ensuremath{\mathit{NLS}}}
+\newcommand{\LSsub}{\ensuremath{\mathit{LS}_{\mathit{sub}}}}
+\newcommand{\NLSsub}{\ensuremath{\mathit{NLS}_{\mathit{sub}}}}
+\newcommand{\Sno}{\ensuremath{\mathit{Sno}}}
+\newcommand{\Sname}{\ensuremath{\mathit{Sname}}}
+\newcommand{\Status}{\ensuremath{\mathit{Status}}}
+\newcommand{\City}{\ensuremath{\mathit{City}}}
+
+\newcommand{\T}[1]{\ensuremath{T_{#1}}}
+\newcommand{\TT}[1]{\ensuremath{T_{\{#1\}}}}
+
+\newcommand{\CityLondon}{\ensuremath{\{\City\colon\mathit{'London'}\}}}
+\newcommand{\TCityMinusLondon}{\ensuremath{\T{\City} - \CityLondon}}
+\newcommand{\TSSC}{\ensuremath{\T{\Sname} \times \T{\Status} \times \T{\City}}}
+\newcommand{\TSSL}{\ensuremath{\T{\Sname} \times \T{\Status} \times \CityLondon}}
+\newcommand{\TSSNL}{\ensuremath{\T{\Sname} \times \T{\Status} \times (\TCityMinusLondon)}}
+
+\newcommand{\TLSPlusNLS}{\ensuremath{\T{\LS} + \T{\NLS}}}
+\newcommand{\TTLSPlusNLS}{\ensuremath{\TT{\LS} + \TT{\NLS}}}
+\newcommand{\TLSPlusNLSsub}{\ensuremath{\T{\LSsub} + \T{\NLSsub}}}
+\newcommand{\TTLSPlusNLSsub}{\ensuremath{\TT{\LSsub} + \TT{\NLSsub}}}
+
+\newcommand{\StackTLSPlusNLS}{\ensuremath{\begin{array}{c}\T{\LS}\,+ \\ \T{\NLS}\end{array}}}
+\newcommand{\StackTTLSPlusNLS}{\ensuremath{\begin{array}{c}\TT{\LS}\,+ \\ \TT{\NLS}\end{array}}}
+\newcommand{\StackTLSPlusNLSsub}{\ensuremath{\begin{array}{c}\T{\LSsub}\,+ \\ \T{\NLSsub}\end{array}}}
+\newcommand{\StackTTLSPlusNLSsub}{\ensuremath{\begin{array}{c}\TT{\LSsub}\,+ \\ \TT{\NLSsub}\end{array}}}
+\newcommand{\StackTSSC}{\ensuremath{\begin{array}{c}\T{\Sname}\,\times \\ \T{\Status} \times \T{\City}\end{array}}}
+\newcommand{\StackTSSL}{\ensuremath{\begin{array}{c}\T{\Sname} \times \T{\Status}\,\times \\ \CityLondon\end{array}}}
+\newcommand{\StackTSSNL}{\ensuremath{\begin{array}{c}\T{\Sname} \times \T{\Status}\,\times \\ (\TCityMinusLondon)\end{array}}}
+\newcommand{\StackTCityMinusLondon}{\ensuremath{\begin{array}{c}\T{\City}\,- \\ \CityLondon\end{array}}}
+
+\newcommand{\SC}[1]{\ensuremath{\mathcal{S}_{#1}}}
+
+% dominates
+\newcommand{\Dominates}[2]{\ensuremath{#2 \preceq #1}}
+\newcommand{\Equivalent}[2]{\ensuremath{#1 \equiv #2}}
+
+% SIG notation (in text)
+\newcommand{\Sedge}[1]{\ensuremath{\sigma_{\textrm{#1}}}}
+\newcommand{\SedgeP}[1]{\ensuremath{\sigma_{\textrm{#1}}^{'}}}
+
+\newcommand{\medmid}{\raise.125ex\hbox{\scalebox{1}[0.75]{$\mid$}}}
+
+% General SIG edges for use in formulas.
+% Adapted from: http://tex.stackexchange.com/questions/96330/adding-symbols-at-the-ends-of-a-horizontal-line
+\makeatletter
+\newlength{\@annotskipleft}
+\newlength{\@annotskipright}
+% #1 = left edge component
+% #2 = right edge component
+% #3 = left bar annotation
+% #4 = right bar annotation
+\newcommand\@sig@edge[4]{%
+    \let\@middle\joinrel%
+    \ifx#1\relbar%
+        \@annotskipleft=.3em%
+        % scrunch up the bare line so it's similar length to \long...arrow
+        \ifx#2\relbar\def\@middle{\joinrel\joinrel\relbar\joinrel\joinrel}\fi%
+    \else% 
+        % arrows need a little more clearance
+        \@annotskipleft=.4em%
+    \fi%
+    \ifx#2\relbar\@annotskipright=.3em\else\@annotskipright=.4em\fi%
+    \mathrel{\ooalign{$#1\@middle#2$\cr\hskip\@annotskipleft$#3$\hfil$#4$\hskip\@annotskipright\cr}}%
+}
+
+% 0 = nothing
+% 1 = bar
+% 2 = arrowhead
+% 3 = both
+\def\@sigedge#1#2{%
+    \ifcase\numexpr#1*4+#2\relax%
+        \@sig@edge{\relbar}{\relbar}{}{}\or                     % 00 = -----
+        \@sig@edge{\relbar}{\relbar}{}{\medmid}\or              % 01 = ---+-
+        \@sig@edge{\relbar}{\rightarrow}{}{}\or                 % 02 = ---->
+        \@sig@edge{\relbar}{\rightarrow}{}{\medmid}\or          % 03 = ---+>
+        \@sig@edge{\relbar}{\relbar}{\medmid}{}\or              % 10 = -+---
+        \@sig@edge{\relbar}{\relbar}{\medmid}{\medmid}\or       % 11 = -+-+-
+        \@sig@edge{\relbar}{\rightarrow}{\medmid}{}\or          % 12 = -+-->
+        \@sig@edge{\relbar}{\rightarrow}{\medmid}{\medmid}\or   % 13 = -+-+>
+        \@sig@edge{\leftarrow}{\relbar}{}{}\or                  % 20 = <----
+        \@sig@edge{\leftarrow}{\relbar}{}{\medmid}\or           % 21 = <--+-
+        \@sig@edge{\leftarrow}{\rightarrow}{}{}\or              % 22 = <--->
+        \@sig@edge{\leftarrow}{\rightarrow}{}{\medmid}\or       % 23 = <--+>
+        \@sig@edge{\leftarrow}{\relbar}{\medmid}{}\or           % 30 = <+---
+        \@sig@edge{\leftarrow}{\relbar}{\medmid}{\medmid}\or    % 31 = <+-+-
+        \@sig@edge{\leftarrow}{\rightarrow}{\medmid}{}\or       % 32 = <+-->
+        \@sig@edge{\leftarrow}{\rightarrow}{\medmid}{\medmid}   % 33 = <+-+>
+    \fi%
+}
+
+\newcommand{\sigedge}[1]{\ensuremath{\@sigedge#1}}
+\makeatother
+
+\newcommand{\Edge}{\sigedge{00}}
+\newcommand{\Total}{\sigedge{10}}
+\newcommand{\Surjective}{\sigedge{01}}
+\newcommand{\SurTotal}{\sigedge{11}}
+\newcommand{\Functional}{\sigedge{02}}
+\newcommand{\Injective}{\sigedge{20}}
+\newcommand{\Bijective}{\sigedge{33}}
+
+% Hack to get the overset symbols to appear at the right height.
+% \smash removes the spacing around the operator, hence \mathop.
+\newcommand{\LabelledEdge}[2]{\mathop{\overset{\raisebox{0.3em}{\scriptsize\ensuremath{#2}}}{\smash[t]{#1}}}}
+\newcommand{\ProjectionEdge}{\LabelledEdge{\sigedge{13}}{\RelProject}}
+\newcommand{\SelectionEdge}{\LabelledEdge{\sigedge{23}}{\RelRestrict}}
+\newcommand{\TrivialProjection}{\ensuremath{\LabelledEdge{\Bijective}{\RelProject}}}
+\newcommand{\TrivialSelection}{\ensuremath{\LabelledEdge{\Bijective}{\RelRestrict}}}
+\newcommand{\KeyEdge}{\ensuremath{\LabelledEdge{\Functional}{\mathit{key}}}}
+
+
+\hyphenation{co-pied sche-ma}
+
+\pagestyle{empty}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+\title{Characterising relational view updates using relative information capacity}
+
+\numberofauthors{1}
+\author{
+\alignauthor Nigel Stanger \\
+    \affaddr{Department of Information Science}\\
+    \affaddr{University of Otago}\\
+    \affaddr{Dunedin, New Zealand}\\
+    \email{nigel.stanger@otago.ac.nz}
+}
+
+\maketitle
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{abstract}
+In 2012, Chris Date published a book about the view update problem in the context of the Relational Model. He presented several detailed examples of different varieties of view updates and characterised their behaviour, in the process deriving a set of principles for updating views based around the notion of \emph{information equivalence} of view schemas. In this paper we examine how this notion can be more formally characterised using Hull's concept of \emph{relative information capacity}. Specifically, we use Miller's \emph{schema intension graph} formalism to characterise the information equivalence of Date's restriction view example, and show that this supports his operational definition of information equivalence.
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Introduction}
+
+\noindent The view update problem is a well known and long standing problem of great practical significance in the database field. Indeed, Date \cite{Date.C-2013a-View} likens it to significant unsolved problems in other fields such as the Riemann Hypothesis in mathematics or ``\(P = \mathit{NP}\)?'' in computational complexity theory. In his 2012 book \cite{Date.C-2013a-View} Date developed a comprehensive set of principles for updating relational views, based on the notion of \emph{information equivalence}. However, that notion was defined more operationally than by a formal theoretical definition.
+
+View updating can be considered a special case of schema translation: we effectively have one schema comprising a set of views and another schema comprising a set of base relations, and need to translate updates from one schema to the other.\footnote{These schemas may be actually separate, or more likely may be sub-schemas of a larger database schema, with effective separation achieved via the access privilege mechanism.} It therefore makes sense that formalisms developed to assist with characterising sche\-ma translations would also be applicable to view updates. To that end, we propose to use Hull's notion of \emph{relative information capacity} \cite{Hull.R-1986a-Relative} as a means to characterise the equivalence of the schemas involved in a given view configuration.
+
+In particular, we will use Miller's \emph{schema intension graph} (SIG) formalism, which facilitates the comparison of relative information capacity across schemas. In this paper, we show how SIGs can be used to characterise the equivalence of schemas within a view configuration. To facilitate this, we extend the SIG formalism with additional concepts, including relation and tuple types, key constraints and functional dependencies. We also show how the formalism can be practically used to characterise the information equivalence of a view configuration, by applying it to Date's example of disjoint restriction views \cite{Date.C-2013a-View}. The results our formal analysis are shown to be consistent with Date's operational analysis of information equivalence in this example.
+
+In Section~\ref{sec-view-update-problem}, we briefly review the view update problem and relevant research, and in Section~\ref{sec-relations-types} we introduce some core concepts that are used throughout the remainder of the paper. In Section~\ref{sec-info-capacity} we provide a detailed explanation of relative information capacity and the SIG formalism, then explain in Section~\ref{sec-relational-sigs} how to construct a SIG that represents a relational schema. In Section~\ref{sec-characterising} we analyse Date's restriction view example \cite{Date.C-2013a-View} in detail, and characterise the information capacity of the various sub-schemas involved. We discuss conclusions and future work in Section~\ref{sec-conclusion}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{The view update problem}
+\label{sec-view-update-problem}
+
+\noindent The view update problem was first discussed by Codd in 1974 \cite{Codd.E-1974a-Recent}. When an update operation is applied to a view, that update needs to be translated into corresponding updates on the base relations from which the view is derived \cite{Keller.A-1985a-Algorithms}. Sometimes this translation is clear, but sometimes there are multiple such translations that all produce the desired view update, but produce different---possibly incompatible---changes in the base relations. Worse, there may be translations that have side effects (e.g., for some views based on joins), which produce a different result in the view than what we would expect if we could apply the update to the view directly \cite{Keller.A-1985a-Algorithms}. The problem then is how to choose the most appropriate translation. As yet there has been no solution that completely and automatically resolves this ambiguity.
+
+There has been considerable research into this problem over the last four decades, and numerous different approaches have been suggested. We shall now briefly review some key developments in the relational context.
+
+% Paolini?
+
+Banchilhon and Spyratos proposed the concept of \emph{constant complement} \cite{Bancilhon.F-1981a-Update} as a way to resolve view update issues. The \emph{complement} of a view describes all the information from the original database that is not in the view, so composing a view with its complement provides enough information to reconstruct the original database. Keeping the complement invariant under view update facilitates translation construction. This is a useful approach that has been developed further by other authors \cite{Hegner.S-2004a-Order-based,Lechtenborger.J-2003a-Impact}, but it has been shown that reasonable translations exist that cannot be carried out under constant complement \cite{Keller.A-1987a-Comment}. Computing the complement of a given view is also difficult, and several authors have worked on computing complements more efficiently \cite{Cosmadakis.S-1984a-Updates,Laurent.D-2001a-Monotonic,Lechtenborger.J-2003a-Computation}. Finally, this approach is purely structural in nature and does not consider the semantics of the schema, which is necessary to properly resolve translation ambiguity \cite{Keller.A-1986a-Role}.
+
+Gottlob et al.\ generalised the idea of constant complement into the class of \emph{consistent views} \cite{Gottlob.G-1988a-Properties}. They define consistent views as having the property that ``if the effect of a view update on a view state is determined, then the effect of the corresponding database update is unambiguously determined'' \cite{Gottlob.G-1988a-Properties}. However, there are still reasonable views that are not consistent under this definition, and this approach again does not consider schema semantics.
+
+% not sure this is really needed?
+%Keller nicely illustrated the view update problem in terms of mappings between database states \cite{Keller.A-1985a-Algorithms}, as shown in Figure~\ref{fig-equivalence}. A view \(V(\mathit{DB})\) is derived via a view mapping \(V\) from the original database \(\mathit{DB}\). When an update \(U\) is applied to \(V(\mathit{DB})\), a view translator \(T\) translates it into an update \(T(U)\) on \(\mathit{DB}\), resulting in a new database state \(\mathit{DB}'\). The new view state \(V(\mathit{DB}')\) is then derived. Problems arise if \(V(\mathit{DB}')\) does not match what we would expect if \(U\) were applied directly to \(V(\mathit{DB})\), because of side effects introduced by \(T\). Ideally, we would be able to find a side effect free translator \(T\) for any given view, but there are some views that cannot be translated without side effects (e.g. certain joins) \cite{Keller.A-1985a-Algorithms}.
+
+% Date \cite{Date.C-2013a-View} notes that this arises from a lack of \emph{information equivalence} between \(\mathit{DB}\) and \(V(\mathit{DB})\).
+
+%%%%%%%%%%%%%%%%%%%%
+
+%\newcommand{\qeq}{\ensuremath{\mathop{\smash[t]{\overset{?}{=}}}}}
+%
+%\begin{figure}
+%    \centering
+%    \begin{tikzpicture}[every edge/.style={draw,semithick}]
+%        \node (vdb)                         {\(V(\mathit{DB})\)};
+%        \node (db)   [below=11mm of vdb]     {\(\mathit{DB}\vphantom{(')}\)};
+%    
+%        \node (vdbp) [right=3cm of vdb]     {\(V(\mathit{DB}')\)};
+%        \node (uvdb) [left=-1mm of vdbp]    {\(U(V(\mathit{DB})) \qeq\)};
+%    
+%        \node (dbp)  at (db -| vdbp)        {\(\mathit{DB}\smash[t]{'}\vphantom{()}\)};
+%        \node (tudb) [left=-1mm of dbp]     {\(T(U)(\mathit{DB}) =\)};
+%        
+%        \graph{
+%            { (db), (dbp) } -> [edge label={\(V\)},swap] { (vdb), (vdbp) };
+%            
+%            (vdb) -> [edge node={node (u)  [above=-0.6mm] {\(U\)}}]    (uvdb);
+%            (db)  -> [edge node={node (tu) [above=-0.6mm] {\(T(U)\)}}] (tudb);
+%            
+%            (u) -> [double equal sign distance=2pt,-implies] (tu);
+%        };
+%    \end{tikzpicture}
+%    \caption{Equivalence of view updates \protect\cite{Keller.A-1985a-Algorithms}.}
+%    \label{fig-equivalence}
+%\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%
+
+Keller noted that semantic information is essential in order to choose an appropriate translation \cite{Keller.A-1986a-Role}, and suggested this could be collected at view definition time from the database administrator (DBA)  \cite{Keller.A-1985a-Algorithms}. Masunaga argued, however, that this would be insufficient to completely resolve ambiguity, and suggested collecting further semantic information from end users at update time \cite{Masunaga.Y-1984a-Relational}. Shu \cite{Shu.H-2000a-Using} discussed an interesting approach to this kind of information gathering, by treating the problem of generating suitable view translations as a constraint satisfaction problem. This enables constraints to be added incrementally at view update time. However, while collecting such information from the DBA seems reasonable, collecting it from the end user at update time could be seen as too burdensome, and could impact the usability of query interfaces. It is also unclear which information needs to be captured, and how best to capture it.
+
+Kotidis et al.\ \cite{Kotidis.Y-2006a-Updates} discussed a different approach to avoiding side effects in view translations. They proposed creating a materialised copy of the view that could be updated directly, rather than mapping updates from the (virtual) view to the base tables. Clearly this approach enables the view to updated without translation side effects, but does imply that the physical manifestation of the view may no longer match the original view query (i.e., its extension may not match its intension).
+
+Finally, Date has published several books on the theoretical underpinnings of the Relational Model over the last decade, including one specifically targeting the view update problem \cite{Date.C-2013a-View} (indeed, the book is subtitled ``Solving the View Update Problem''). He developed a comprehensive set of rules for updating views in a relational context, supported by a wide array of worked examples. Date advocated explicitly stating all relevant constraints at view creation time, which is similar to the information gathering approaches discussed above \cite{Keller.A-1985a-Algorithms,Masunaga.Y-1984a-Relational,Shu.H-2000a-Using}. He argued that if a complete set of constraints was available, then ambiguity would be diminished or eliminated, and it would be possible to automatically generate a set of appropriate \emph{compensatory rules} to automatically manage the view update process. Compensatory rules are similar in principle to database triggers, except that they are intended to be declarative so that their definitions can made explicitly visible to end users.
+
+Date's work is interesting and compelling, and raises several questions worthy of further investigation. However, there are still some situations where the correct view translation may be ambiguous, e.g., views based on certain types of join, as previously noted by Keller \cite{Keller.A-1985a-Algorithms}. Somewhat disappointingly, Date took a pragmatic approach in these cases, effectively saying ``this feels like the correct solution''. His justification was well argued and logical, but it still falls somewhat short of the ideal of a fully automated solution.
+
+As noted previously, Date characterises the ability to define an appropriate and effective view translation using the notion of \emph{information equivalence}. Two schemas \(\SC{1}\) and \(\SC{2}\) are said to be information equivalent ``if and only if the constraints that apply to [\(\SC{1}\)] and [\(\SC{2}\)] are such that every proposition that can be represented by [\(\SC{1}\)] can be represented by [\(\SC{2}\)] and vice versa'' \cite{Date.C-2013a-View}. While information equivalence is clearly a formal concept, the definition and characterisation in \cite{Date.C-2013a-View} are more operational and pragmatic in nature. This is what we explore further in this paper.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Relations and types}
+\label{sec-relations-types}
+
+\noindent We generally follow Date's \cite{Date.C-2012a-SQL-and-Relational} notation and terminology regarding the Relational Model. The main exception is that we do not use Tutorial D notation Date uses in his examples, preferring instead a more classical algebraic style notation.
+
+In this paper, \(A\) represents an attribute (comprising a name:type pair), \(R\) represents a relation variable (\emph{relvar}), and \(v\) represents a value (of an attribute, tuple, relation, etc.). In the following discussion it will generally be clear which attribute a value is associated with, but where necessary, the value will be prefixed with the attribute name, i.e., \(\mathit{name}\colon\mathit{value}\).
+
+Date defines a \emph{type} \(\T{i}\) as ``essentially a \emph{named, finite set of values}'' \cite{Date.C-2012a-SQL-and-Relational}, representing every possible value of some specific kind, e.g., every possible ASCII character string of length 5, every possible city name, every possible relation value with a particular heading, etc. That is:
+\begin{equation}\label{eqn-type}
+    \T{i} = \{v_{1}, v_{2}, \dotsc, v_{m}\}, 0 < m < k
+\end{equation}
+where \(k\) is some finite upper bound. Thus, the type of an attribute \(A_{i}\) (denoted \(\T{A_{i}}\)) is by definition the set of all possible values of \(A_{i}\).
+
+Consider a relvar \(R\) with heading \(\{A_{1}, A_{2}, \dotsc, A_{n}\}\). Following from equation~\ref{eqn-type}, the (relation) type of \(R\), denoted here as \(\T{R}\), is the set of all possible relation values with \(R\)'s heading. Similarly, the (tuple) type of \(R\)'s tuples, denoted here as \TT{R}, is the set of all possible tuple values with \(R\)'s heading, which equates to the cartesian product of \(R\)'s attribute types, i.e.:
+\begin{equation}\label{eqn-tuple-type}
+\TT{R} = \T{A_{1}} \times \T{A_{2}} \times\dotsb\times \T{A_{n}}\text{.}
+\end{equation}
+By definition any given value of \(R\) must comprise a subset (possibly empty) of tuples \(\{t_{1}, t_{2}, \dotsc, t_{m}\} \subseteq \TT{R}\). \(\T{R}\) therefore represents every possible \(k\)-combination of the elements of \TT{R}, for \(0 \le k \le \left|\TT{R}\right|\).
+
+For example, Date's usual suppliers-and-parts schema \cite{Date.C-2013a-View} includes a relvar \(S\!\) with heading \(\{\Sno, \Sname, \Status, \City\}\), which contains details of suppliers. As per equation~\ref{eqn-tuple-type}, the tuples of \(S\!\) have type \(\TT{S} = \T{\Sno} \times \TSSC\).
+
+This notion of type as a set of possible values is synonymous with Codd's original definition of domains in the Relational Model \cite{Codd.E-1970a-Relational,Date.C-2012a-SQL-and-Relational}, and in particular with the notion of domains as ``sets of values'' in schema intension graphs \cite{Miller.R-1994a-Schema,Miller.R-1994a-SIG}. The implications of the latter point will be explored further in Section~\ref{sec-relational-sigs}, after we have discussed the concepts of relative information capacity and schema intension graphs in Section~\ref{sec-info-capacity}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsection{Nulls}
+
+\noindent We also follow Date in assuming that nulls are not permitted in relation values. Philosophical objections aside, however, this makes little practical difference to the approach discussed in this paper, as we are dealing exclusively with types rather than attributes. That is, an attribute can be null, but it makes little sense to say that a \emph{type} can be ``null''. It could be claimed that a type ``includes'' nulls, but it is unclear what this would even mean in practice, and runs the risk of treating nulls like ``normal'' values rather than the special markers that they actually are. In any case, this would effectively be no different from the situation without nulls, so we omit further consideration of nulls in the interest of clarity.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\newpage
+
+\section{Relative information capacity}
+\label{sec-info-capacity}
+
+\noindent A schema conveys information about the phenomenon that it models. Hull \cite{Hull.R-1986a-Relative} defined the concept of \emph{relative information capacity} to describe the information content of different schemas. The relative information capacity of a schema determines the set of all valid instances of that schema \cite{Hull.R-1986a-Relative,Miller.R-1994a-PhD,Miller.R-1993a-Information}. Relative information capacity, as its name implies, is not a quantitative measure; rather it is an indicator of the relative information content of different schemas.
+
+Relative information capacity can be used as a basis for identifying the differences between schema instances, and can therefore be used as an aid to schema integration and translation \cite{Miller.R-1994a-PhD}. As noted earlier, view updating is a special case of this, so it follows that information capacity can also be used to characterise view updates, or more precisely, to characterise the information content of views compared to the base relvar(s) from which they are derived.
+
+Miller et al.\ \cite{Miller.R-1993a-Information} defined relative information capacity in terms of two types of mapping. An \emph{information (capacity) preserving mapping} from schema \(\SC{1}\) to schema \(\SC{2}\) maps every element of \(\SC{1}\) to an element of \(\SC{2}\), but only some elements of \(\SC{2}\) to elements of \(\SC{1}\). \(\SC{2}\) has an information capacity greater than \(\SC{1}\), and is said to \emph{dominate} \(\SC{1}\), denoted \Dominates{\SC{2}}{\SC{1}}. Compare this to an \emph{equivalence preserving mapping} from \(\SC{1}\) to \(\SC{3}\), which maps every element of \(\SC{1}\) to an element \(\SC{3}\) and vice versa (i.e., both the mapping and its inverse are information preserving). The information capacities of \(\SC{1}\) and \(\SC{3}\) are identical, and the schemas are said to be \emph{equivalent}, denoted \Equivalent{\SC{1}}{\SC{3}}.
+
+(Note that Miller et al.\ \cite{Miller.R-1994a-Schema} use stricter definitions of equivalence and dominance than those used here; strictly speaking, the discussion of equivalence and dominance in this section should properly refer to \emph{absolute} dominance and equivalence, whereas the following discussion on SIG transformations should properly refer to \emph{internal} dominance and equivalence \cite{Miller.R-1994a-Schema}. The distinction, however, is not crucial to the discussion in this paper.)
+
+Since relative information capacity is a relative measure, it can only be effectively used in a comparative manner. To this end, Miller et al.\ \cite{Miller.R-1994a-SIG} defined the \emph{schema intension graph} formalism to provide a tool for comparing the information capacity of schemas. A schema intension graph (SIG) describes the associations between domains in a schema, and provides a way to ``reason about constraints on \emph{collections of entities} in an instance of the entity set, rather than about the internal structure of a single entity'' \cite{Miller.R-1994a-SIG}. In particular, SIGs provide a useful abstract formalism within which to perform schema transformations, as transforming the SIG for a schema is effectively the same as transforming the schema itself.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsection{Constructing SIGs}
+\label{sec-sig-build}
+
+\noindent A SIG is a graph \(G = (N, E)\) \cite{Miller.R-1994a-Schema}. The nodes \(n_{i} \in N\) represent typed domains (i.e., sets of values). Nodes may be \emph{simple} (atomic) or \emph{constructed} (composite). Simple nodes are denoted by the name of the domain that they represent. Constructed nodes represent a collection of domains and are built using the \(\times\) (cartesian product) and \(+\) (union) operators.
+
+The edges \(e_{i} \in E\) represent binary relations (in the mathematical sense) between domains. Edges are denoted by plain lines with an optional label, and may be composed to form a \emph{path} between two nodes (the notation \(e_{2} \circ e_{1}\) means ``edge \(e_{1}\) followed by edge \(e_{2}\)''). Some edges may be designated as \emph{selection} edges, labelled \(\RelRestrict\), or \emph{projection} edges, labelled \(\RelProject\). These correspond to the relational algebra operators of the same name \cite{Codd.E-1972a-Completeness}.
+
+Edges may also be annotated with up to four properties denoting simple constraints on the binary relation represented by the edge: totality, surjectivity, functionality and injectivity. These properties are defined as follows \cite{Miller.R-1994a-Schema}:
+\begin{quotation}
+    \noindent Let \(A\) and \(B\) be two sets. A binary relation \(r : A - B\) is \emph{total} (denoted \(e : A \Total B\)) if it is defined for all elements of \(A\); \emph{surjective} (\(e : A \Surjective B\)) if it is defined for all elements of \(B\); \emph{functional} (\(e : A \Functional B\)) if an element of \(A\) determines at most one element of \(B\); and \emph{injective} (\(e : A \Injective B\)) if an element of \(B\) determines at most one element of \(A\).
+\end{quotation}
+Note that the correct usage of these properties is determined by the direction in which the binary relation is read. That is, the binary relation \(A \Functional B\) is functional if read from left to right, but injective if read from right to left. A \emph{bijection} is a binary relation that has all four properties \cite{Miller.R-1994a-SIG}.
+
+Essentially, \(A \Total B\)) means that every element of \(A\) (conversely, \(B\) for \(A \Surjective B\)) must participate in the binary relation, while \(A \Functional B\) means that a given element of \(A\) (conversely, \(B\) for \(A \Injective B\)) may appear in at most one instance of the binary relation.
+
+Note that use of the term ``relation'' here, while mathematically correct, clearly has potential to cause confusion in any discussion that also involves the Relational Model. From now on, we shall therefore refer to the binary relations represented by SIG edges as ``associations''.
+
+A selection edge \(e : A \LabelledEdge{\sigedge{00}}{\RelRestrict} B\) indicates that the elements of \(B\) comprise a subset (or specialisation) of the elements of \(A\). If \(B = A\), which we term a \emph{trivial} selection, every element of B must appear in A and vice versa. Similarly, every element of \(A\) can be associated with at most one element of \(B\), and vice versa. Trivial selection edges are therefore bijective, i.e., \(A \LabelledEdge{\Bijective}{\RelRestrict} B\). If \(B \subset A\), which we term a \emph{non-trivial} selection, every element of \(B\) must appear in \(A\), but the converse no longer holds. The mapping remains one-to-one, as before. Non-trivial selection edges are therefore surjective (from the perspective of the supertype), functional, and injective, i.e., \(A \SelectionEdge B\).
+
+A projection edge \(e : A \LabelledEdge{\sigedge{00}}{\RelProject} B\), indicates that the elements of \(B\) are a projection of \(A\). This implies that \(A\) is a constructed node of the form \(B \times C \times \dotsb\). Trivial projection edges (\(B = A\)) are bijective, i.e., \(A \LabelledEdge{\Bijective}{\RelProject} B\), for the same reasons as trivial selection edges. For non-trivial projections (i.e., \(B \ne A\)), every element of \(A\) must have a corresponding element in \(B\), and vice versa. Similarly, every element of \(A\) can be associated with at most one element of \(B\), but \emph{not} vice versa. Thus, non-trivial projection edges are total, surjective, and functional, i.e., \(A \ProjectionEdge B\).\footnote{Allowing nulls could potentially alter which of these properties apply, but all non-trivial projection edges would still share the same properties regardless.}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsection{Comparing SIGs}
+\label{sec-sig-compare}
+
+\noindent It is possible to determine the relationship between the relative information capacities of two schemas by comparing SIGs for the two schemas. Consider two schemas \(\SC{1}\) and \(\SC{2}\), with corresponding SIGs \(G_{\SC{1}}\) and \(G_{\SC{2}}\). Intuitively, if \(G_{\SC{1}}\) and \(G_{\SC{2}}\) are isomorphic, then \(\SC{1}\) and \(\SC{2}\) are equivalent \cite{Miller.R-1994a-SIG}. An isomorphism occurs between two SIGs when the graphs match both structurally and semantically. That is, \(G_{\SC{1}}\) and \(G_{\SC{2}}\) must be more than just structurally identical---the semantics of the SIG nodes and edges must also be compatible.
+
+Miller et al.\ \cite{Miller.R-1994a-SIG} identify three possible results from comparing two SIGs \(G_{\SC{1}}\) and \(G_{\SC{2}}\):
+\begin{enumerate}
+    
+    \item \(G_{\SC{1}}\) and \(G_{\SC{2}}\) are either immediately isomorphic, or one can be manipulated by a series of equivalence preserving transformations (described below) until it is isomorphic to the other. The two schemas are equivalent (i.e., \(\SC{1} \equiv \SC{2}\)).
+    
+    \item \(G_{\SC{1}}\) and \(G_{\SC{2}}\) are not immediately isomorphic, but one can be manipulated by a series of information capacity augmenting transformations (described below) until it is isomorphic to the other. The transformed schema is dominated by the other (i.e., either \(\Dominates{\SC{2}}{\SC{1}}\) or \(\Dominates{\SC{1}}{\SC{2}}\)).
+    
+    \item \(G_{\SC{1}}\) and \(G_{\SC{2}}\) are not immediately isomorphic and cannot be transformed to be isomorphic. The information capacities of \(\SC{1}\) and \(\SC{2}\) cannot be compared.
+    
+\end{enumerate}
+Batini et al.\ \cite{Batini.C-1992b-Conceptual} follow a similar classification scheme with respect to schema transformations: they refer to the first as \emph{information-preserving} transformations, the second as \emph{augmenting} transformations and the third as \emph{noncomparable} transformations.
+
+Miller et al.\ \cite{Miller.R-1994a-Schema} describe the following equivalence preserving and information capacity augmenting transformations on SIGs, which are summarised in Table~\ref{Tab.Viewpoints.SIGTransformations}:
+\begin{description}
+    
+    \item[Annotation transformations] allow the removal of annotations, or projection and selection constraints from edges (e.g., \(n_{1} \sigedge{23} n_{2} \Rightarrow n_{1} \sigedge{02} n_{2}\)). If we can transform \(\SC{1}\) into \(\SC{2}\) by such a transformation, then the information capacity of \(\SC{2}\) dominates that of \(\SC{1}\) (i.e., \Dominates{\SC{2}}{\SC{1}}).
+    
+    \item[Composition transformations] allow edges to be moved and copied around the graph. Consider an edge \(e\) between nodes \(n_{1}\) and \(n_{2}\), as shown in Figure~\ref{fig-sig-composition-original}. If there is a path \(P = e_{m} \circ \dotsb \circ e_{k}\) of functional edges from some other node \(n_{k}\) to \(n_{2}\) (i.e., \(n_{k} \Functional \dotsb \Functional n_{2}\)), \(e\) may be copied to a new edge \(e'\) between nodes \(n_{1}\) and \(n_{k}\) as shown in Figure~\ref{fig-sig-composition-copy}. The original \(e\) can then be deleted if desired, effectively moving \(e\) to \(e'\) as shown in Figure~\ref{fig-sig-composition-move}.
+    
+    The annotation of \(e'\) is determined by the composition of the edges of \(P\!\). If an edge with a particular annotation (such as surjectivity) is composed with an edge without that annotation, the resulting edge does not have the annotation. For example, the composition of the edges \(\Functional\) and \(\Surjective\) would be an edge with no annotations (\(\Edge\)), whereas the composition of \(\Functional\) and \(\sigedge{03}\) would be \(\Functional\). If we can transform \(\SC{1}\) into \(\SC{2}\) by such a transformation, then \Dominates{\SC{2}}{\SC{1}}.
+
+%%%%%%%%%%%%%%%%%%%%
+
+\begin{table}[tb]
+    \centering
+    \small
+    \begin{tabular}{lcc}
+        \toprule
+                                                        &                   &   \textbf{Effect on infor-}   \\
+        \textbf{Transformation}                         &   \textbf{Type}   &   \textbf{mation capacity}    \\
+        \midrule
+        Delete annotation or \(\RelProject\)/\(\RelRestrict\) constraint    &   annotation      &   augmented   \\
+        Move/copy edge                                  &   composition     &   augmented   \\
+        Create/delete duplicate node                    &   selection       &   no change   \\
+        Create trivial selection edge                   &   selection       &   no change   \\
+        Delete trivial selection edge                   &   selection       &   augmented   \\
+        \bottomrule
+    \end{tabular}
+    \caption{Summary of SIG transformations.}
+    \label{Tab.Viewpoints.SIGTransformations}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[htb]
+    \centering
+    \subfigure[Original state\label{fig-sig-composition-original}]{
+        \begin{tikzpicture}
+            \node (n1)                      {\(n_{1}\)};
+            \node (n2) [below=1cm of n1]    {\(n_{2}\)};
+            \node (n3) [right=1cm of n2]    {\(n_{3}\)};
+            \node (ee) [right=0.75cm of n3] {\ldots};
+            \node (nk) [right=0.75cm of ee] {\(n_{k}\)};
+        
+            \graph{
+                (n1) -- [edge label={\(e\)},swap] (n2);
+                (nk) -> [edge label={\(e_{k}\)}] (ee) -> [edge label={\(e_{m+1}\)}] (n3) -> [edge label={\(e_{m}\)}] (n2);
+            };
+            
+            \node (Pleft) [above=2mm of n2.north east] {};
+            \node (Pright) [above=2mm of nk.north west] {};
+            \node (P) at ($(Pleft)!0.5!(Pright)$) {\(P\)};
+            \draw[decorate,decoration=brace] (n2.north east) -- (nk.north west);
+        \end{tikzpicture}
+    }
+    
+    \subfigure[Copy edge \(e\) to \(e'\)\label{fig-sig-composition-copy}]{
+        \begin{tikzpicture}
+            \node (n1)                      {\(n_{1}\)};
+            \node (n2) [below=1cm of n1]    {\(n_{2}\)};
+            \node (n3) [right=1cm of n2]    {\(n_{3}\)};
+            \node (ee) [right=0.75cm of n3] {\ldots};
+            \node (nk) [right=0.75cm of ee] {\(n_{k}\)};
+        
+            \graph{
+                (n1) -- [edge label={\(e\)},swap] (n2);
+                (n1) -- [edge label={\(e'\)}]     (nk);
+                (nk) -> [edge label={\(e_{k}\)}] (ee) -> [edge label={\(e_{m+1}\)}] (n3) -> [edge label={\(e_{m}\)}] (n2);
+            };
+        \end{tikzpicture}
+    }
+    
+    \subfigure[Move edge \(e\) to \(e'\)\label{fig-sig-composition-move}]{
+        \begin{tikzpicture}
+            \node (n1)                      {\(n_{1}\)};
+            \node (n2) [below=1cm of n1]    {\(n_{2}\)};
+            \node (n3) [right=1cm of n2]    {\(n_{3}\)};
+            \node (ee) [right=0.75cm of n3] {\ldots};
+            \node (nk) [right=0.75cm of ee] {\(n_{k}\)};
+        
+            \graph{
+                (n1) -- [edge label={\(e'\)}] (nk);
+                (nk) -> [edge label={\(e_{k}\)}] (ee) -> [edge label={\(e_{m+1}\)}] (n3) -> [edge label={\(e_{m}\)}] (n2);
+            };
+        \end{tikzpicture}
+    }
+    \caption{Composition transformations.}
+    \label{fig-sig-composition}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%
+
+    \item[Selection transformations] allow the creation and deletion of new nodes and edges as follows:
+    \begin{enumerate}
+        
+        \item An existing node \(n\) may be duplicated to create a new node \(n'\!\). A trivial selection edge \(e:n \LabelledEdge{\Bijective}{\RelRestrict} n'\) is added to enforce the restriction that \(n'\) is a duplicate of \(n\).
+        
+        \item A node \(n_{1}\) may be deleted if it is attached to exactly one other node \(n_{2}\) by a single trivial selection edge \(e:n_{1} \LabelledEdge{\Bijective}{\RelRestrict} n_{2}\) (implying \(n_{1}\) is a duplicate of \(n_{2}\)). This also implies deleting the attached trivial selection edge.
+        
+        \item A trivial selection edge \(e:n \LabelledEdge{\Bijective}{\RelRestrict} n\) may be created that connects a node \(n\) to itself.
+        
+        \item A trivial selection edge \(e:n_{1} \LabelledEdge{\Bijective}{\RelRestrict} n_{2}\) may be deleted, removing the association between \(n_{1}\) and \(n_{2}\).
+        
+    \end{enumerate}
+    
+    If we can transform \(\SC{1}\) into \(\SC{2}\) using any of the first three selection transformations, then \Equivalent{\SC{2}}{\SC{1}}. If we can transform \(\SC{1}\) into \(\SC{2}\) using the fourth selection transformation, then \Dominates{\SC{2}}{\SC{1}}. The latter seems somewhat counter-intuitive \cite{Qian.X-1995a-Correct}, but is nonetheless correct \cite{Miller.R-1994a-Schema}. This is because a trivial selection edge \(e:n_{1} \LabelledEdge{\Bijective}{\RelRestrict} n_{2}\) denotes that \(n_{1}\) and \(n_{2}\) correspond to the same domain, so removing the edge also removes this constraint.
+    
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Relational schemas as SIGs}
+\label{sec-relational-sigs}
+
+\noindent The direct correspondence between relational types and SIG domains (as noted in Section~\ref{sec-relations-types}) enables us to use SIGs to represent the structure and constraints of relational schemas. Equating tuple types to the cartesian product of their attributes (equation \ref{eqn-tuple-type}) means that these can also be mapped directly to a constructed SIG node.
+
+Let us again consider the relvar \(S\{\Sno, \Sname, \Status, \City\}\) from Date's suppliers-and-parts schema. In addition to type constraints on the attributes, tuples, and the relvar as a whole, \(S\!\) is subject to a (primary) key constraint on \Sno. Taken together with the collection of types \(\T{\Sno}\), \(\T{\Sname}\), \(\T{\Status}\), \(\T{\City}\), \(\TT{S}\), and \(\T{S}\), we can construct the corresponding SIG shown in Figure~\ref{fig-sig-s-alone} as explained below (assuming that \(S\!\) is the only relvar in the schema).
+
+As noted in Section~\ref{sec-relations-types}, any given value of \(S\!\) must comprise a subset of \(\TT{S}\), so the association between \(\T{S}\) and \(\TT{S}\) is total. Similarly, every tuple in \(\TT{S}\) must appear in at least one value of \(S\!\), so the association is also surjective. The association is neither functional nor injective, however, as a value of \(S\!\) in general may contain multiple tuples, and each tuple in \(\TT{S}\) appears in multiple values of \(S\!\). This gives us \(\T{S}\SurTotal\TT{S}\).
+    
+The key constraint on \Sno\ implies that the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) holds in \(S\!\). From equation \ref{eqn-tuple-type}, we can infer the type of \(\{\Sname, \Status, \City\}\) as \(\TSSC\). The association is functional and not injective by definition. As not every supplier number may appear in any given value of \(S\!\), there may be elements of \(\T{\Sno}\) that are not associated with an element of \(\TSSC\), and vice versa. This implies that the association is neither total nor surjective. This gives us \(\T{\Sno} \KeyEdge \TSSC\) (we introduce the label \(\mathit{key}\) to indicate that this edge represents a key constraint).
+    
+Both \(\T{\Sno}\) and \(\TSSC\) are projections of \(\TT{S}\), so we can add (non-trivial) projection edges \(\TT{S} \ProjectionEdge \T{\Sname} \times \T{\Status} \times T_{\City}\) and \(\TT{S} \ProjectionEdge \T{\Sno}\). Similarly, \(\T{\Sname}\), \(\T{\Status}\), and \(\T{\City}\) are each projections of \(\TSSC\), so we can add further projection edges to these nodes, as shown in Figure~\ref{fig-sig-s-alone}.
+
+%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[htb]
+    \centering
+    \begin{tikzpicture}[level distance=12mm]
+        \node (TS) {\(\T{S}\)};
+        \node (TTS) [right=1cm of TS] {\(\TT{S}\)}
+            [sibling distance=3cm]
+            child[arrows={:{crossbar}-{crossbar}>}] {node (TSno) {\(\T{\Sno}\)}}
+            child[arrows={:{crossbar}-{crossbar}>}] {node (TSSC) {\(\TSSC\)}
+                [sibling distance=15mm]
+                child[arrows={:{crossbar}-{crossbar}>}] {node (TSname) {\(\T{\Sname}\)}}
+                child[arrows={:{crossbar}-{crossbar}>}] {node (TStatus) {\(\T{\Status}\)}}
+                child[arrows={:{crossbar}-{crossbar}>}] {node (TCity) {\(\T{\City}\)}}};
+        
+        % TS to T{S}
+        \draw[arrows={:{crossbar}-{crossbar}:}] (TS) to (TTS);
+        
+        % FD
+        \draw[arrows={->}] (TSno) to node[below=-2pt] {\scriptsize\emph{key}} (TSSC);
+        
+        % projection edges
+        \ProjectionAnnotation[above left=-2pt and -4pt]{TTS}{TSno}
+        \ProjectionAnnotation[above right=-2pt and -4pt]{TTS}{TSSC}
+
+        \ProjectionAnnotation[above left=-2pt and -4pt]{TSSC}{TSname}
+        \ProjectionAnnotation[right=-2pt]{TSSC}{TStatus}
+        \ProjectionAnnotation[above right=-2pt and -4pt]{TSSC}{TCity}
+    \end{tikzpicture}
+    \caption{SIG for relvar \(\bm{S\{\Sno, \Sname, \Status, \City\}}\).}
+    \label{fig-sig-s-alone}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%
+
+Looking at Figure~\ref{fig-sig-s-alone}, it could be argued that the \(T_{\dots}\) type notation is redundant and unnecessarily complicates the diagram. Why not just use, e.g., \(S\!\) instead of \(\T{S}\), \(\Sno\) instead of \(\T{\Sno}\), and \(\Sno \times \Sname \times \Status \times \City\) instead of \(\TT{S}\)? It is important to remember, however, that SIGs like that shown in Figure~\ref{fig-sig-s-alone} include multiple elements of quite different kinds, including relations, tuples, and various combinations of attributes. Discarding the type notation might be reasonable in informal situations, but could lead to confusion between the different kinds of elements represented. The explicit type notation protects the semantics of the various elements of the schema and makes it clear what is being considered.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Characterising view updates}
+\label{sec-characterising}
+
+\noindent In this section we show how SIGs can be used to characterise the information equivalence of view updates, using Date's motivating example of restriction views \cite{Date.C-2013a-View}.
+
+Views and the base relvars they are derived from normally exist within the same ``base'' database schema (although this is not strictly required), which we shall refer to as \(\SC{0}\). However, an end user may be granted access only to the views, and thus not be aware of the existence of the base relvar(s), or vice versa. This effectively partitions the schema into sub-schemas \(\SC{1}, \SC{2}, \dotsc, \SC{n}\).
+
+There are explicit and implicit constraints in \(\SC{0}\) that should also apply to the sub-schemas. Ignoring these constraints in a sub-schema \(\SC{k}\) will affect its information capacity, and could negatively impact the information equivalence of view updates involving \(\SC{k}\). In the next section we will show how such constraints can be propagated into sub-schemas by rewriting them in terms of the sub-schema alone, which enables us to explicitly incorporate into the sub-schema the type information implicit in \(\SC{0}\) that would otherwise be omitted. We will then discuss the construction of SIGs for Date's restriction view example (Section~\ref{sec-date-sigs}), and show how to transform and compare these (Section~\ref{sec-transforming}).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsection{Constraint derivation and propagation}
+\label{sec-constraints}
+
+\noindent Date's motivating example in Chapter 4 of \cite{Date.C-2013a-View} explores what is arguably the simplest case of view updating: disjoint restriction views. The example includes a base relvar \(S\!\) and two views \(\LS\) and \(\NLS\) derived\footnote{Although as Date notes \cite{Date.C-2013a-View}, we could just as easily define \(\LS\) and \(\NLS\) as base relvars and then derive \(S = \LS \RelUnion \NLS\), or even define all three as base relvars. The constraints will remain the same regardless.} from \(S\!\):
+\begin{eqnarray}
+    \LS  & = & \RelRestrict_{\City = \mathit{'London'}}S \label{eqn-ls}   \\
+    \NLS & = & \RelRestrict_{\City \ne \mathit{'London'}}S \label{eqn-nls}
+\end{eqnarray}
+
+Informally, \LS\ contains details of London suppliers, while \NLS\ contains details of non-London suppliers. \(\LS\) and  \(\NLS\) represent disjoint restrictions of \(S\!\) with the same heading. They have the following tuple types:
+\begin{eqnarray}
+    \TT{\LS}  & = & \T{\Sno} \times \T{\Sname} \times \T{\LS} \times \CityLondon \nonumber    \\
+    \TT{\NLS} & = & \T{\Sno} \times \T{\Sname} \times \T{\Status} \times (\TCityMinusLondon) \nonumber
+\end{eqnarray}
+
+The base schema for this example is \(\SC{0} = \{S, \LS, \NLS\}\). This is subject to type constraints as specified by the various types noted previously, and the following additional constraints:
+\begin{list}{\textbf{C\(\bm{_{\arabic{constraint}}}\):}}{\usecounter{constraint}}
+
+    \item\label{constraint-key} \Sno\ is a key for each of \(S\!\), \LS, and \NLS, therefore the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) also holds in each of (a) \(S\!\), (b) \(\LS\), and (c) \(\NLS\).
+    
+    % not sure how relevant the FK constraints are?
+    % how to represent? FK is a subset of the original key, so selection edge between S.Sno and each of LS.Sno and NLS.Sno
+    % or perhaps a selection edge from Sno to itself? (labelled FK)
+    % Notation: \T{\Sno}, \T{\LS.\Sno}, \T{\NLS.\Sno}?
+    \item\label{constraint-lsfk} \(\RelProject_{\{\Sno\}}\LS \subseteq \RelProject_{\{\Sno\}}S\) [foreign key from \(\LS\) to \(S\!\)]
+    
+    \item\label{constraint-nlsfk} \(\RelProject_{\{\Sno\}}\NLS \subseteq \RelProject_{\{\Sno\}}S\) [foreign key from \(\NLS\) to \(S\!\)]
+    
+    \item\label{constraint-union} \(S = \LS \RelUnion \NLS\) [from (\ref{eqn-ls}) and (\ref{eqn-nls}) above]
+    
+    \item\label{constraint-disjoint} \(\LS \RelIntersect \NLS = \emptyset\) [\LS\ and \NLS\ are disjoint]
+    
+    \item\label{constraint-notlondon} \(\RelRestrict_{\City \ne \mathit{'London'}}\LS = \emptyset\) [from (\ref{eqn-ls}) above]
+    
+    \item\label{constraint-london} \(\RelRestrict_{\City = \mathit{'London'}}\NLS = \emptyset\) [from (\ref{eqn-nls}) above]
+    
+    \item\label{constraint-relation-type-union} (a) \(\T{S} = \T{\LS} \RelUnion \T{\NLS}\); (b) \(\TT{S} = \TT{\LS} \RelUnion \TT{\NLS}\) [from C\(_{\ref{constraint-union}}\)]
+    
+    \item\label{constraint-relation-types} (a) \(\T{\LS} \subset \T{S}\); (b) \(\TT{\LS} \subset \TT{S}\) [from (\ref{eqn-ls}) above]
+    
+    \item\label{constraint-tuple-types} (a) \(\T{\NLS} \subset \T{S}\); (b) \(\TT{\NLS} \subset \TT{S}\) [from (\ref{eqn-nls}) above]
+    
+    \item\label{constraint-implied-types-london} \(\CityLondon \subset \T{\City}\)
+    
+    \item\label{constraint-implied-types-nonlondon} \((\TCityMinusLondon) \subset \T{\City}\)
+    
+    \item\label{constraint-implied-types-TSSL} \(\TSSL \subset \TSSC\)
+    
+    \item\label{constraint-implied-types-TSSNL} \(\TSSNL \subset \TSSC\)
+    
+\end{list}
+
+Constraints C\(_{\ref{constraint-union}}\)--C\(_{\ref{constraint-london}}\) enforce that \(\LS\) and \(\NLS\) are disjoint restrictions of \(S\!\), while C\(_{\ref{constraint-relation-type-union}}\)--C\(_{\ref{constraint-implied-types-TSSNL}}\) are additional type constraints that specify specialisation associations implied by the subtypes and supertypes occurring in \(\SC{0}\).
+
+In most typical database schemas, only constraints C\(_{\ref{constraint-key}}\), C\(_{\ref{constraint-lsfk}}\), and C\(_{\ref{constraint-nlsfk}}\) will be explicitly specified. Some database schemas may also explicitly specify constraints C\(_{\ref{constraint-union}}\) and C\(_{\ref{constraint-disjoint}}\), but it is more likely that these and all the remaining constraints will be implicit in the definition of \(\SC{0}\). It is important for the purposes of this analysis to clearly identify all such implicit constraints, so that nothing is missed when constructing corresponding SIGs.
+
+Let us partition \(\SC{0}\) into three sub-schemas: \(\SC{1} = \{S\}\), \(\SC{2} = \{\LS, \NLS\}\), and \(\SC{3} = \{LS\}\). We wish to compare the relative information capacities of the schema pairs \((\SC{1}, \SC{2})\) and \((\SC{1}, \SC{3})\), in order to determine whether the schemas in each pair are information equivalent. This will in turn characterise the view update compatibility of the two schemas.
+
+Note that in the following analysis, we omit the foreign key constraints C\(_{\ref{constraint-lsfk}}\) and C\(_{\ref{constraint-nlsfk}}\), as we have yet to determine the best way to represent inclusion dependencies of this nature in a SIG, or indeed whether such dependencies are significant.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsubsection{Schema \(\SC{1}\)}
+\label{sec-constraints-s-i}
+
+\noindent A user granted access only to \(\SC{1}\) sees only relvar \(S\!\). Constraint C\(_{\ref{constraint-key}}\)(a) can be propagated directly into \(\SC{1}\) because it is expressed only in terms of \(S\!\). Constraints C\(_{\ref{constraint-implied-types-london}}\)--C\(_{\ref{constraint-implied-types-TSSNL}}\) do not mention any relvars and can thus also be directly propagated into \(\SC{1}\). Constraints C\(_{\ref{constraint-union}}\)--C\(_{\ref{constraint-tuple-types}}\) can be propagated to \(\SC{1}\) by rewriting them only in terms of \(S\!\). We can do this by substituting the definitions of \(\LS\) (equation~\ref{eqn-ls}) and \(\NLS\) (equation~\ref{eqn-nls}) into the constraints. For brevity, we shall denote these substitutions as \(\LSsub\) and \(\NLSsub\), so as to distinguish them from the actual \(\LS\) and \(\NLS\) relvars in \(\SC{0}\), \(\SC{2}\), and \(\SC{3}\). The superscript ``1'' in the following denotes that these constraints have been rewritten in \(\SC{1}\):
+\begin{list}{\textbf{C\(\bm{_{\arabic{constraint}}^{1}}\):}}{\usecounter{constraint}\setcounter{constraint}{3}}
+
+    \item \(S = \LSsub \RelUnion \NLSsub\) (or even just \(S = S\))
+    
+    \item \(\LSsub \RelIntersect \NLSsub = \emptyset\)
+
+    \item \(\RelRestrict_{\City \ne \mathit{'London'}}\LSsub = \emptyset\)
+    
+    \item \(\RelRestrict_{\City = \mathit{'London'}}\NLSsub = \emptyset\)
+    
+    \item (a) \(\T{S} = \T{\LSsub} \RelUnion \T{\NLSsub}\); (b) \(\TT{S} = \TT{\LSsub} \RelUnion \TT{\NLSsub}\) (or even just \(\T{S} = \T{S}\) and \(\TT{S} = \TT{S}\))
+    
+    \item (a) \(\T{\LSsub} \subset \T{S}\); (b) \(\TT{\LSsub} \subset \TT{S}\) [from (\ref{eqn-ls}) above]
+    
+    \item (a) \(\T{\NLSsub} \subset \T{S}\); (b) \(\TT{\NLSsub} \subset \TT{S}\) [from (\ref{eqn-nls}) above]
+    
+\end{list}
+We can also rewrite C\(_{\ref{constraint-key}}\)(b) and C\(_{\ref{constraint-key}}\)(c) to C\(_{\ref{constraint-key}}^{1}\)(b) and C\(_{\ref{constraint-key}}^{1}\)(c), so that the functional dependency applies to \(\LSsub\) and \(\NLSsub\) instead of \(\LS\) and \(\NLS\).
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsubsection{Schema \(\SC{2}\)}
+\label{sec-constraints-s-ii}
+
+\noindent A user granted access only to \(\SC{2}\) sees only relvars \(\LS\) and \(\NLS\). Constraints C\(_{\ref{constraint-key}}\)(b),  C\(_{\ref{constraint-key}}\)(c), and C\(_{\ref{constraint-disjoint}}\)--C\(_{\ref{constraint-london}}\) can be directly propagated into \(\SC{2}\) as they are defined only in terms of \(\LS\) and \(\NLS\). C\(_{\ref{constraint-implied-types-london}}\)--C\(_{\ref{constraint-implied-types-TSSNL}}\) can be directly propagated into \(\SC{2}\) as they do not mention any relvars. C\(_{\ref{constraint-union}}\), C\(_{\ref{constraint-relation-type-union}}\), C\(_{\ref{constraint-relation-types}}\), and C\(_{\ref{constraint-tuple-types}}\) can be rewritten only in terms of \(\LS\) and \(\NLS\):
+\begin{list}{\textbf{C\(\bm{_{\arabic{constraint}}^{2}}\):}}{\usecounter{constraint}\setcounter{constraint}{3}}
+
+    \item \(\LS \RelUnion \NLS = \LS \RelUnion \NLS\)\setcounter{constraint}{7}
+    
+    \item (a) \(\T{\LS} \RelUnion \T{\NLS} = \T{\LS} \RelUnion \T{\NLS}\); (b) \(\TT{\LS} \RelUnion \TT{\NLS} = \TT{\LS} \RelUnion \TT{\NLS}\)
+    
+    \item (a) \(\T{\LS} \subset (\T{\LS} \RelUnion \T{\NLS})\); (b) \(\TT{\LS} \subset (\TT{\LS} \RelUnion \TT{\NLS})\)
+    
+    \item (a) \(\T{\NLS} \subset \T{S}\); (b) \(\TT{\NLS} \subset \TT{S}\)
+    
+\end{list}
+We can also rewrite C\(_{\ref{constraint-key}}\)(a) to C\(_{\ref{constraint-key}}^{2}\)(a), so that the functional dependency applies to \(\LS \RelUnion \NLS\) instead of \(S\!\).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsubsection{Schema \(\SC{3}\)}
+\label{sec-constraints-s-iii}
+
+\noindent A user granted access only to \(\SC{3}\) sees only relvar \(\LS\). Constraints C\(_{\ref{constraint-key}}\)(b) and C\(_{\ref{constraint-notlondon}}\) can be directly propagated into \(\SC{3}\) as they are defined only  in terms of \(\LS\). C\(_{\ref{constraint-implied-types-london}}\)--C\(_{\ref{constraint-implied-types-TSSNL}}\) can also be directly propagated as previously discussed. The remaining constraints cannot be rewritten only in terms of \(\LS\), and therefore cannot be propagated to \(\SC{3}\).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\newpage
+
+\subsection{Constructing the SIGs}
+\label{sec-date-sigs}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsubsection{Schema \(\SC{1}\)}
+\label{sec-sigs-s-i}
+
+\noindent The SIG for \(\SC{1}\) will not just be that for relvar \(S\!\) (see Figure~\ref{fig-sig-s-alone}), as that schema did not incorporate the constraints implicit in \(\SC{0}\). The process for constructing the SIG will be similar to that for the earlier example, however. The constraints appearing in \(\SC{1}\) are C\(_{\ref{constraint-key}}^{1}\), C\(_{\ref{constraint-union}}^{1}\)--C\(_{\ref{constraint-tuple-types}}^{1}\), and C\(_{\ref{constraint-implied-types-london}}\)--C\(_{\ref{constraint-implied-types-TSSNL}}\).
+
+The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone}. \(\T{S} \SurTotal \TT{S}\) implies \(\T{\LSsub} \SurTotal \TT{\LSsub}\) and \(\T{\NLSsub} \SurTotal \TT{\NLSsub}\). Constraints C\(_{\ref{constraint-implied-types-london}}\)--C\(_{\ref{constraint-implied-types-TSSNL}}\) imply the existence of several subtype nodes, plus corresponding selection and projection edges:
+\begin{itemize}
+   
+    \item \(\TT{\LSsub} \ProjectionEdge \T{\Sno}\) and \(\TT{\NLSsub} \ProjectionEdge \T{\Sno}\)
+
+    \item \(\TT{\LSsub} \ProjectionEdge \TSSL\)
+
+    \item \(\TT{\NLSsub} \ProjectionEdge \TSSNL\)
+
+    \item \(\TSSL \ProjectionEdge \T{\Sname}\)
+
+    \item \(\TSSL \ProjectionEdge \T{\Status}\)
+
+    \item \(\TSSL \ProjectionEdge\,\CityLondon\)
+
+    \item \(\TSSNL \ProjectionEdge \T{\Sname}\)
+
+    \item \(\TSSNL \ProjectionEdge \T{\Status}\)
+
+    \item \(\TSSNL \ProjectionEdge \T{\City} -\) \newline \(\CityLondon\)
+
+\end{itemize}
+C\(_{\ref{constraint-key}}^{1}\)(b) and C\(_{\ref{constraint-key}}^{1}\)(c) imply two additional key edges:
+\begin{itemize}
+   
+    \item \(\T{\Sno} \KeyEdge \TSSL\)
+
+    \item \(\T{\Sno} \KeyEdge \TSSNL\)
+   
+\end{itemize}
+
+C\(_{\ref{constraint-relation-type-union}}^{1}\)(a) implies node \(\TLSPlusNLSsub\) to represent \(\T{\LSsub} \RelUnion \T{\NLSsub}\). However, this node would be effectively identical to \(\T{S}\!\), so we can ignore C\(_{\ref{constraint-relation-type-union}}^{1}\)(a) and just continue to use \(\T{S}\!\). A similar argument applies for C\(_{\ref{constraint-relation-type-union}}^{1}\)(b) and \(\TT{S}\).
+
+C\(_{\ref{constraint-relation-types}}^{1}\)--C\(_{\ref{constraint-implied-types-TSSNL}}^{1}\) imply the following selection edges:
+\begin{itemize}
+
+    \item \(\T{S} \SelectionEdge \T{\LSsub}\) and \(\TT{S} \SelectionEdge \TT{\LSsub}\)
+    
+    \item \(\T{S} \SelectionEdge \T{\NLSsub}\) and \(\TT{S} \SelectionEdge \TT{\NLSsub}\)
+    
+    \item \(\T{\City} \SelectionEdge\,\CityLondon\)
+    
+    \item \(\T{\City} \SelectionEdge\,(\TCityMinusLondon)\)
+    
+    \item \(\TSSC \SelectionEdge\) \(\TSSL\)
+    
+    \item \(\TSSC \SelectionEdge \T{\Sname} \times \T{\Status} \times \T{\City} -\) \newline \(\CityLondon\)
+
+\end{itemize}
+The complete SIG for \(\SC{1}\) is shown in Figure~\ref{fig-sig-s}.
+
+%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure*}
+    \centering
+    \begin{tikzpicture}
+        \matrix[row sep=0.5cm]
+        { 
+            \node (TLS) {\(\T{\LSsub}\)};   &[7mm]  \node (TTLS) {\(\TT{\LSsub}\)};     &[7mm]                              &[4mm]                                  &[-4mm] \node (TSSL) {\(\StackTSSL\)};      &                                       &   \node (LSCity) {\(\CityLondon\)};   \\
+                                            &                                           &                                   &   \node (TSname) {\(\T{\Sname}\)};    \\
+            \node (TLSPlusNLS) {\(\T{S}\)}; &       \node (TTLSPlusNLS) {\(\TT{S}\)};   &   \node (TSno) {\(\T{\Sno}\)};    &                                       &       \node (TSSC) {\(\StackTSSC\)};      &                                       &   \node (TCity) {\(\T{City}\)};   \\
+                                            &                                           &                                   &                                       &                                           &   \node (TStatus) {\(\T{\Status}\)};  \\
+            \node (TNLS) {\(\T{\NLSsub}\)}; &       \node (TTNLS) {\(\TT{\NLSsub}\)};   &                                   &                                       &       \node (TSSNL) {\(\StackTSSNL\)};    &                                       &   \node (NLSCity) {\(\StackTCityMinusLondon\)}; \\
+        };
+        
+        \graph{
+            % relation types to tuple types
+            { [edges=surtotal]
+                { (TLS), (TNLS), (TLSPlusNLS) } -- { (TTLS), (TTNLS), (TTLSPlusNLS) },
+            };
+            
+            % FDs
+            (TSno) -- [funcdep left,bend left] (TSSL);
+            (TSno) -- [funcdep right] (TSSNL);
+            
+            % projection edges
+            { [edges=projection left]
+                (TTLSPlusNLS) -- (TSno),
+                (TTLS)  -- { (TSno), (TSSL) },
+                (TSSL)  -- { (TStatus), (LSCity) },
+            };
+            
+            { [edges=projection right]
+                (TTNLS) -- { (TSno), (TSSNL) },
+                (TSSC)  -- { (TSname),  (TStatus) },
+                (TSSL)  -- (TSname),
+                (TSSNL) -- { (TStatus), (NLSCity), (TSname) },
+            };
+            
+            % selection edges
+            { [edges=selection left]
+                { (TLSPlusNLS), (TTLSPlusNLS) } -- { (TLS), (TTLS) },
+                (TSSC)  -- { (TSSL), (TSSNL) },
+                (TCity) -- (NLSCity),
+            };
+            { [edges=selection right]
+                { (TLSPlusNLS), (TTLSPlusNLS) } -- { (TNLS), (TTNLS) },
+                (TCity) -- (LSCity),
+            };
+            
+            % insert "gaps" into crossed edges
+            { [edges={white,line width=1.5mm}]
+                (TSno) -- (TSSC),
+                (TSSC) -- (TCity),
+                (TTLSPlusNLS) -- [bend right] (TSSC),
+            };
+            (TSno) -- [funcdep right] (TSSC);
+            (TSSC) -- [projection left] (TCity);
+            (TTLSPlusNLS) -- [projection right,bend right] (TSSC),
+        };
+    \end{tikzpicture}
+    \caption{SIG for schema \(\bm{\SC{1} = \{S\}}\).}
+    \label{fig-sig-s}
+\end{figure*}
+
+%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsubsection{Schema \(\SC{2}\)}
+\label{sec-sigs-s-ii}
+
+\noindent The constraints appearing in \(\SC{2}\) are C\(_{\ref{constraint-key}}^{2}\), C\(_{\ref{constraint-union}}^{2}\), C\(_{\ref{constraint-disjoint}}\)--C\(_{\ref{constraint-london}}\), C\(_{\ref{constraint-relation-type-union}}^{2}\)--C\(_{\ref{constraint-tuple-types}}^{2}\), and C\(_{\ref{constraint-implied-types-london}}\)--C\(_{\ref{constraint-implied-types-TSSNL}}\). This is the same set of constraints, albeit with different rewritings, as \(\SC{1}\). This means that the SIG for \(\SC{2}\) can be built in essentially the same manner as for \(\SC{1}\), with some nodes differently named. In particular, C\(_{\ref{constraint-relation-type-union}}\) implies that there will be nodes \(\TLSPlusNLS\) and \(\TTLSPlusNLS\) instead of \(\T{S}\) and \(\TT{S}\). There will also be \(\T{\LS}\) instead of \(\T{\LSsub}\), etc. The complete SIG for \(\SC{2}\) is shown in Figure~\ref{fig-sig-ls-nls}.
+
+%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure*}
+    \centering
+    \begin{tikzpicture}
+        \matrix[row sep=0.5cm]
+        { 
+            \node (TLS) {\(\T{\LS}\)};                  &[7mm]  \node (TTLS) {\(\TT{\LS}\)};                    &[7mm]                              &[4mm]                                  &[-4mm] \node (TSSL) {\(\StackTSSL\)};      &                                       &   \node (LSCity) {\(\CityLondon\)};   \\
+                                                        &                                                       &                                   &   \node (TSname) {\(\T{\Sname}\)};    \\
+            \node (TLSPlusNLS) {\(\StackTLSPlusNLS\)};  &       \node (TTLSPlusNLS) {\(\StackTTLSPlusNLS\)};    &   \node (TSno) {\(\T{\Sno}\)};    &                                       &       \node (TSSC) {\(\StackTSSC\)};      &                                       &   \node (TCity) {\(\T{City}\)};   \\
+                                                        &                                                       &                                   &                                       &                                           &   \node (TStatus) {\(\T{\Status}\)};  \\
+            \node (TNLS) {\(\T{\NLS}\)};                &       \node (TTNLS) {\(\TT{\NLS}\)};                  &                                   &                                       &       \node (TSSNL) {\(\StackTSSNL\)};    &                                       &   \node (NLSCity) {\(\StackTCityMinusLondon\)}; \\
+        };
+        
+        \graph{
+            % relation types to tuple types
+            { [edges=surtotal]
+                { (TLS), (TNLS), (TLSPlusNLS) } -- { (TTLS), (TTNLS), (TTLSPlusNLS) },
+            };
+            
+            % FDs
+            (TSno) -- [funcdep left,bend left] (TSSL);
+            (TSno) -- [funcdep right] (TSSNL);
+            
+            % projection edges
+            { [edges=projection left]
+                (TTLSPlusNLS) -- (TSno),
+                (TTLS)  -- { (TSno), (TSSL) },
+                (TSSL)  -- { (TStatus), (LSCity) },
+            };
+            
+            { [edges=projection right]
+                (TTNLS) -- { (TSno), (TSSNL) },
+                (TSSC)  -- { (TSname),  (TStatus) },
+                (TSSL)  -- (TSname),
+                (TSSNL) -- { (TStatus), (NLSCity), (TSname) },
+            };
+            
+            % selection edges
+            { [edges=selection left]
+                { (TLSPlusNLS), (TTLSPlusNLS) } -- { (TLS), (TTLS) },
+                (TSSC)  -- { (TSSL), (TSSNL) },
+                (TCity) -- (NLSCity),
+            };
+            { [edges=selection right]
+                { (TLSPlusNLS), (TTLSPlusNLS) } -- { (TNLS), (TTNLS) },
+                (TCity) -- (LSCity),
+            };
+            
+            % insert "gaps" into crossed edges
+            { [edges={white,line width=1.5mm}]
+                (TSno) -- (TSSC),
+                (TSSC) -- (TCity),
+                (TTLSPlusNLS) -- [bend right] (TSSC),
+            };
+            (TSno) -- [funcdep right] (TSSC);
+            (TSSC) -- [projection left] (TCity);
+            (TTLSPlusNLS) -- [projection right,bend right] (TSSC),
+        };
+    \end{tikzpicture}
+    \caption{SIG for schema \(\bm{\SC{2} = \{\LS, \NLS\}}\).}
+    \label{fig-sig-ls-nls}
+\end{figure*}
+
+%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsubsection{Schema \(\SC{3}\)}
+\label{sec-sigs-s-iii}
+
+\noindent The constraints appearing in \(\SC{3}\) are C\(_{\ref{constraint-key}}\)(b), C\(_{\ref{constraint-notlondon}}\), and C\(_{\ref{constraint-implied-types-london}}\)--C\(_{\ref{constraint-implied-types-TSSNL}}\). The SIG will only include edges and nodes that relate either directly to \(\LS\) or are independent of any relvar, such as the subtype node \(\TSSNL\). The complete SIG for \(\SC{3}\) is shown in Figure~\ref{fig-sig-ls}.
+
+%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure*}
+    \centering
+    \begin{tikzpicture}
+        \matrix[row sep=0.5cm]
+        { 
+            \node (TLS) {\(\T{\LS}\)};  &[7.5mm]  \node (TTLS) {\(\TT{\LS}\)};  &[7mm]                              &[4mm]                                  &[-4mm] \node (TSSL) {\(\StackTSSL\)};      &                                       &   \node (LSCity) {\(\CityLondon\)};   \\
+                                        &                                       &                                   &   \node (TSname) {\(\T{\Sname}\)};    \\
+                                        &                                       &   \node (TSno) {\(\T{\Sno}\)};    &                                       &       \node (TSSC) {\(\StackTSSC\)};      &                                       &   \node (TCity) {\(\T{City}\)};   \\
+                                        &                                       &                                   &                                       &                                           &   \node (TStatus) {\(\T{\Status}\)};  \\
+                                        &                                       &                                   &                                       &       \node (TSSNL) {\(\StackTSSNL\)};    &                                       &   \node (NLSCity) {\(\StackTCityMinusLondon\)}; \\
+        };
+        
+        \graph{
+            % relation types to tuple types
+            { [edges=surtotal]
+                (TLS) -- (TTLS),
+            };
+            
+            % projection edges
+            { [edges=projection left]
+                (TTLS)  -- { (TSno), (TSSL) },
+                (TSSL)  -- { (TStatus), (LSCity) },
+            };
+            
+            { [edges=projection right]
+                (TSSC)  -- { (TSname),  (TStatus) },
+                (TSSL)  -- (TSname),
+                (TSSNL) -- { (TStatus), (NLSCity), (TSname) },
+            };
+            
+            % selection edges
+            { [edges=selection left]
+                (TSSC)  -- { (TSSL), (TSSNL) },
+                (TCity) -- (NLSCity),
+            };
+            { [edges=selection right]
+                (TCity) -- (LSCity),
+            };
+            
+            % insert "gaps" into crossed edges
+            { [edges={white,line width=1.5mm}]
+                (TSno) -- (TSSC),
+                (TSSC) -- (TCity),
+            };
+            (TSno) -- [funcdep right] (TSSC);
+            (TSSC) -- [projection left] (TCity);
+        };
+    \end{tikzpicture}
+    \caption{SIG for schema \(\bm{\SC{3} = \{\LS\}}\).}
+    \label{fig-sig-ls}
+\end{figure*}
+
+%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsection{Transforming the SIGs}
+\label{sec-transforming}
+
+\noindent Now that we have constructed SIGs for all three schemas, we can compare the relative information capacities of the schema pairs \((\SC{1}, \SC{2})\) and \((\SC{1}, \SC{3})\). We do this by attempting to transform the SIG for one of the schemas until it is isomorphic with the other.
+
+Looking at the SIGs for \(\SC{1}\) and \(\SC{2}\), we can see immediately that both SIGs have the same node and edge structure; indeed the only difference is in the names of some of the nodes. However, we already know from the discussion in Sections~\ref{sec-constraints-s-i} and~\ref{sec-constraints-s-ii} that these differently-named nodes represent the same domains. We therefore have an immediate isomorphism between the two SIGs and can conclude that the information capacities of \(\SC{1}\) and \(\SC{2}\) are identical, i.e., \(\Equivalent{\SC{1}}{\SC{2}}\).
+
+The comparison between \(\SC{1}\) and \(\SC{3}\) is more interesting. There are some shared structures, but the two SIGs are clearly different. Since the SIG transformations discussed in Section~\ref{sec-sig-compare} only ever preserve or enhance information capacity, intuitively we should attempt to transform the ``smaller'' SIG for \(\SC{3}\) into the ``larger'' SIG for \(\SC{1}\). SIG transformations can generally be carried out in two broad phases (using the current transformation as an example):
+\begin{description}
+
+    \item[Duplicate nodes] in \(\SC{3}\) (producing \(\SC{3}'\)) that correspond to supertypes in \(\SC{1}\), to produce nodes corresponding to the extra nodes that \(\SC{1}\) has over \(\SC{3}\). The goal is to produce a node structure similar to that of \(\SC{1}\). The duplicated nodes will be connected to their original nodes by trivial selection edges. These transformations (if applicable) will not alter the information capacity of \(\SC{3}'\) (i.e., \(\equiv\)).
+    
+    \item[Copy and move edges] across the bijective paths connecting the new duplicated nodes in \(\SC{3}'\). The goal is to produce an edge structure similar to that of \(\SC{1}\). The paths that the edges are copied or moved across are bijective, so the annotations of the affected edges will remain unchanged. These transformations (if applicable) will \emph{increase} the information capacity of \(\SC{3}'\) (i.e., \(\preceq\)).
+    
+\end{description}
+
+These two phases generally occur in order, but may be interspersed throughout with the following:
+\begin{description}
+
+    \item[Delete duplicate nodes] in \(\SC{3}'\) that are no longer needed, especially those that do not exist in \(\SC{1}\). These transformations (if applicable) will not alter the information capacity of \(\SC{3}'\) (\(\equiv\)).
+    
+    \item[Remove totality annotations] from trivial selection edges in \(\SC{3}'\) to change them into non-trivial selection edges. This decouples subtypes and supertypes to ensure that they represent different domains. These transformations (if applicable) will \emph{increase} the information capacity of \(\SC{3}'\) (\(\preceq\)).
+    
+\end{description}
+For example, we might duplicate some nodes, remove some totality annotations, move or copy some edges, delete some no longer needed nodes, move or copy some more edges, then remove some more totality annotations.
+
+Following this process, we first duplicate node \(\T{\LS}\) to \(\T{S}\) and node \(\TT{\LS}\) to \(\TT{S}\). To obtain a node structure similar to that of \(\SC{1}\), we also need to further duplicate \(\T{S}\) to \(\T{\NLS}\) and \(\TT{S}\) to \(\TT{\NLS}\). The result of these duplications is shown in Figure~\ref{fig-transform-all-duplicates}. The transformed SIG now has essentially the same node structure as that for \(\SC{1}\), albeit with different node semantics.
+
+%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure*}
+    \centering
+    \begin{tikzpicture}
+        \matrix[row sep=0.5cm]
+        { 
+            \node [input keep] (TLS) {\(\T{\LS}\)};     &[7mm]  \node [input keep] (TTLS) {\(\TT{\LS}\)};   &[7mm]                              &[4mm]                                  &[-4mm] \node (TSSL) {\(\StackTSSL\)};      &                                       &   \node (LSCity) {\(\CityLondon\)};   \\
+                                                        &                                                   &                                   &   \node (TSname) {\(\T{\Sname}\)};    \\
+            \node [output] (TLSPlusNLS) {\(\T{S}\)};    &       \node [output] (TTLSPlusNLS) {\(\TT{S}\)};  &   \node (TSno) {\(\T{\Sno}\)};    &                                       &       \node (TSSC) {\(\StackTSSC\)};      &                                       &   \node (TCity) {\(\T{City}\)};   \\
+                                                        &                                                   &                                   &                                       &                                           &   \node (TStatus) {\(\T{\Status}\)};  \\
+            \node [output] (TNLS) {\(\T{\NLS}\)};       &       \node [output] (TTNLS) {\(\TT{\NLS}\)};     &                                   &                                       &       \node (TSSNL) {\(\StackTSSNL\)};    &                                       &   \node (NLSCity) {\(\StackTCityMinusLondon\)}; \\
+        };
+        
+        \graph{
+            % relation types to tuple types
+            { [edges=surtotal]
+                (TLS) -- (TTLS),
+            };
+            
+            % projection edges
+            { [edges=projection left]
+                (TTLS)  -- { (TSno), (TSSL) },
+                (TSSL)  -- { (TStatus), (LSCity) },
+            };
+            
+            { [edges=projection right]
+                (TSSC)  -- { (TSname),  (TStatus) },
+                (TSSL)  -- (TSname),
+                (TSSNL) -- { (TStatus), (NLSCity), (TSname) },
+            };
+            
+            % selection edges
+            { [edges=selection left]
+                (TSSC)  -- { (TSSL), (TSSNL) },
+                (TCity) -- (NLSCity),
+            };
+            { [edges=selection right]
+                (TCity) -- (LSCity),
+            };
+            
+            { [edges={bijection,output},edge label={\scriptsize\(\RelRestrict\)}]
+                { (TLS), (TTLS) } -- { (TLSPlusNLS), (TTLSPlusNLS) },
+                { (TLSPlusNLS), (TTLSPlusNLS) } -- { (TNLS), (TTNLS) },
+            };
+            
+            % insert "gaps" into crossed edges
+            { [edges={white,line width=1.5mm}]
+                (TSno) -- (TSSC),
+                (TSSC) -- (TCity),
+            };
+            (TSno) -- [funcdep right] (TSSC);
+            (TSSC) -- [projection left] (TCity);
+        };
+    \end{tikzpicture}
+    \caption{SIG for modified schema \(\bm{S_{3}'}\) after duplicating various nodes to produce analogues of the additional nodes in \(\bm{S_{1}}\). Inputs to the transformation are coloured \textcolor{blue}{blue}, outputs are coloured \textcolor{red}{red}. [\(\equiv\)]}
+    \label{fig-transform-all-duplicates}
+\end{figure*}
+
+%%%%%%%%%%%%%%%%%%%%
+
+The next phase is to copy and move edges. To produce the edge \(\T{S} \SurTotal \TT{S}\), we first \emph{copy} \(\T{\LS} \SurTotal \TT{\LS}\) across the path \(\TT{S} \TrivialSelection \TT{\LS}\) (giving \(\T{\LS} \SurTotal \TT{S}\)), then \emph{move} it across \(\T{S} \TrivialSelection \T{\LS}\). We can carry out a similar series of transformations to copy and move \(\T{S} \SurTotal \TT{S}\) to \(\T{\NLS} \SurTotal \TT{\NLS}\).
+
+Next, we copy and move the projection edge \(\TT{\LS} \ProjectionEdge \T{\Sno}\) to produce the edges \(\TT{S} \ProjectionEdge \T{\Sno}\) and \(\TT{\NLS} \ProjectionEdge \T{\Sno}\). Similarly, we copy and move \(\TT{\LS} \ProjectionEdge \TSSL\) to produce \(\TT{S} \LabelledEdge{\sigedge{03}}{\RelProject} \TSSC\) and \(\TT{\NLS} \LabelledEdge{\sigedge{02}}{\RelProject} \TSSNL\). Note that the first edge in the latter pair of transformations loses the totality annotation, and the second edge the surjectivity annotation, as a result of composition with the pre-existing non-bijective selection edges in the middle of the SIG.
+
+Finally, we carry out similar copy and move transformations to copy the key edge \(\T{\Sno} \KeyEdge \TSSC\) to \(\T{\Sno} \KeyEdge \TSSL\) and \(\T{\Sno} \KeyEdge \TSSNL\). The annotations for these edges are unaffected. The result of all these edge transformations is shown in Figure~\ref{fig-transform-edge-moves}.
+
+%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure*}
+    \centering
+    \begin{tikzpicture}
+        \matrix[row sep=0.5cm]
+        { 
+            \node (TLS) {\(\T{\LS}\)};      &[7mm]  \node (TTLS) {\(\TT{\LS}\)};        &[7mm]                              &[4mm]                                  &[-4mm] \node (TSSL) {\(\StackTSSL\)};      &                                       &   \node (LSCity) {\(\CityLondon\)};   \\
+                                            &                                           &                                   &   \node (TSname) {\(\T{\Sname}\)};    \\
+            \node (TLSPlusNLS) {\(\T{S}\)}; &       \node (TTLSPlusNLS) {\(\TT{S}\)};   &   \node (TSno) {\(\T{\Sno}\)};    &                                       &       \node (TSSC) {\(\StackTSSC\)};      &                                       &   \node (TCity) {\(\T{City}\)};   \\
+                                            &                                           &                                   &                                       &                                           &   \node (TStatus) {\(\T{\Status}\)};  \\
+            \node (TNLS) {\(\T{\NLS}\)};    &       \node (TTNLS) {\(\TT{\NLS}\)};      &                                   &                                       &       \node (TSSNL) {\(\StackTSSNL\)};    &                                       &   \node (NLSCity) {\(\StackTCityMinusLondon\)}; \\
+        };
+        
+        \graph{
+            % relation types to tuple types
+            { [edges=surtotal]
+                (TLS)        -- [input keep] (TTLS),
+                (TLSPlusNLS) -- [output] (TTLSPlusNLS),
+                (TNLS)       -- [output] (TTNLS),
+            };
+            
+            % FDs
+            (TSno) -- [funcdep left,bend left,output] (TSSL);
+            (TSno) -- [funcdep right,output] (TSSNL);
+            
+            % projection edges
+            { [edges=projection left]
+                (TTLS)  -- [input keep] { (TSno), (TSSL) },
+                (TSSL)  -- { (TStatus), (LSCity) },
+                (TTLSPlusNLS) -- [output] (TSno),
+            };
+            
+            { [edges=projection right]
+                (TSSC)  -- { (TSname),  (TStatus) },
+                (TSSL)  -- (TSname),
+                (TSSNL) -- { (TStatus), (NLSCity), (TSname) },
+                (TTNLS)  -- [output] (TSno),
+                (TTNLS)  -- [arrows={:->},output] (TSSNL),
+            };
+            
+            % selection edges
+            { [edges=selection left]
+                (TSSC)  -- { (TSSL), (TSSNL) },
+                (TCity) -- (NLSCity),
+            };
+            { [edges=selection right]
+                (TCity) -- (LSCity),
+            };
+            
+            { [edges=bijection,edge label={\scriptsize\(\RelRestrict\)}]
+                { (TLS), (TTLS) } -- { (TLSPlusNLS), (TTLSPlusNLS) },
+                { (TLSPlusNLS), (TTLSPlusNLS) } -- { (TNLS), (TTNLS) },
+            };
+            
+            % insert "gaps" into crossed edges
+            { [edges={white,line width=1.5mm}]
+                (TSno) -- (TSSC),
+                (TSSC) -- (TCity),
+                (TTLSPlusNLS) -- [bend right] (TSSC),
+            };
+            (TSno) -- [funcdep right,input keep] (TSSC);
+            (TSSC) -- [projection left] (TCity);
+            (TTLSPlusNLS) -- [projection right,arrows={:-{crossbar}>},bend right,output] (TSSC),
+        };
+    \end{tikzpicture}
+    \caption{SIG for modified schema \(\bm{S_{3}'}\) after copying and moving edges. [\(\preceq\)]}
+    \label{fig-transform-edge-moves}
+\end{figure*}
+
+%%%%%%%%%%%%%%%%%%%%
+
+If we compare Figure~\ref{fig-sig-s} with Figure~\ref{fig-transform-edge-moves}, we can see that the transformed SIG for \(\SC{3}'\) now has the same node and edge structure as the SIG for \(\SC{1}\). We still need to remove the totality annotations from the four remaining trivial selection edges, but even when this is done, we do not achieve the desired isomorphism, as the projection edges \(\TT{S} \LabelledEdge{\sigedge{03}}{\RelProject} \TSSC\) and \(\TT{\NLS} \LabelledEdge{\sigedge{02}}{\RelProject} \TSSNL\) have different annotations from the corresponding edges in the SIG for \(\SC{1}\). Technically this means that the information capacities of \(\SC{1}\) and \(\SC{3}\) are incomparable, but the structural differences are so small that it is probably safe to say that the information capacity of \(\SC{3}\) is less than that of \(\SC{1}\) (i.e., \Dominates{\SC{1}}{\SC{3}}). Either way, it is clear that view updates based on this pair of schemas will be problematic.
+
+Incidentally, if we created a fourth sub-schema \(\SC{4} = \{\NLS\}\) and compared this with \(\SC{1}\), the result would be similar to \(\SC{3}\).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Conclusion \& future work}
+\label{sec-conclusion}
+
+\noindent In this paper we have shown how to use the concept of relative information capacity and the schema intension graph (SIG) formalism to characterise information equivalence with respect to view updating. The results of our analysis of Date's restriction view example \cite{Date.C-2013a-View} are consistent with his findings. The information capacities of \(\SC{1} = \{S\}\) and \(\SC{2} = \{\LS,\NLS\}\) are equivalent, so it should be possible to effectively propagate view updates between \(\SC{1}\) and \(\SC{2}\), regardless of the configuration of views and base relvars. Conversely, the information capacity of \(\SC{3} = \{\LS\}\) is at best less than that of \(\SC{1}\), implying that there are updates that cannot be propagated between \(\SC{1}\) and \(\SC{3}\).
+
+Our analysis shows the importance of clearly identifying all explicit and implicit constraints that can be propagated from the base schema \(\SC{0}\) to its sub-schemas. Omission of constraints could lead to a different SIG structure that might not be comparable, or might lead to an erroneous conclusion about a schema's information capacity relative to another.
+
+There are several avenues for future work. While the discussion in this paper focused on the relational context, relative information capacity and the SIG formalism are data model agnostic, and thus should be applicable in non-relational view contexts (e.g., XML).
+
+It is unclear at present whether the omission of inclusion dependencies such as foreign keys is significant. If such dependencies are significant, the question then is how best to represent them in the SIG formalism. It is also unclear at present whether copying or moving an edge across a bijective path should necessarily increase information capacity, as no annotations are lost in such a transformation. It may be that the structural change to the SIG implies an increase in information capacity regardless. Further investigation is required.
+
+Finally, we have only examined disjoint restriction views in this paper, which are arguably the simplest case of view updating. Further work needs to be done to characterise other types of view configuration, such as projection views, join views, and union views. This will enable us to further refine the application of SIGs in this context.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\balance
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\bibliographystyle{abbrv}
+\bibliography{VLDB2016_Stanger}
+
+\end{document}
