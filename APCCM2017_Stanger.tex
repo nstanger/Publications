@@ -75,7 +75,7 @@
 \newcommand{\TT}[1]{\ensuremath{T_{\{#1\}}}}
 
 \newcommand{\CityLondon}{\ensuremath{\{\City\colon\mathit{'London'}\}}}
-\newcommand{\TCityMinusLondon}{\ensuremath{\T{\City} - \CityLondon}}
+\newcommand{\TCityMinusLondon}{\ensuremath{\T{\City} \setminus \CityLondon}}
 \newcommand{\TSSC}{\ensuremath{\T{\Sname} \times \T{\Status} \times \T{\City}}}
 \newcommand{\TSSL}{\ensuremath{\T{\Sname} \times \T{\Status} \times \CityLondon}}
 \newcommand{\TSSNL}{\ensuremath{\T{\Sname} \times \T{\Status} \times (\TCityMinusLondon)}}
@@ -92,7 +92,7 @@
 \newcommand{\StackTSSC}{\ensuremath{\begin{array}{c}\T{\Sname}\,\times \\ \T{\Status} \times \T{\City}\end{array}}}
 \newcommand{\StackTSSL}{\ensuremath{\begin{array}{c}\T{\Sname} \times \T{\Status}\,\times \\ \CityLondon\end{array}}}
 \newcommand{\StackTSSNL}{\ensuremath{\begin{array}{c}\T{\Sname} \times \T{\Status}\,\times \\ (\TCityMinusLondon)\end{array}}}
-\newcommand{\StackTCityMinusLondon}{\ensuremath{\begin{array}{c}\T{\City}\,- \\ \CityLondon\end{array}}}
+\newcommand{\StackTCityMinusLondon}{\ensuremath{\begin{array}{c}\T{\City}\,\setminus \\ \CityLondon\end{array}}}
 
 \newcommand{\SC}[1]{\ensuremath{\mathcal{S}_{#1}}}
 
@@ -355,13 +355,13 @@ Edges may also be annotated with up to four properties denoting simple constrain
 \begin{quotation}
     \noindent Let \(A\) and \(B\) be two sets. A binary relation \(r : A \sigedge{00} B\) is \emph{total} (denoted \(e : A \Total B\)) if it is defined for all elements of \(A\); \emph{surjective} (\(e : A \Surjective B\)) if it is defined for all elements of \(B\); \emph{functional} (\(e : A \Functional B\)) if an element of \(A\) determines at most one element of \(B\); and \emph{injective} (\(e : A \Injective B\)) if an element of \(B\) determines at most one element of \(A\).
 \end{quotation}
-Note that the correct usage of these properties is sensitive to the direction in which the binary relation is read. That is, \(A \Functional B\) is functional, whereas \(B \Injective A\) is injective. A \emph{bijection} is a binary relation that has all four properties \cite{Miller.R-1994a-SIG}.
+A \emph{bijection} is a binary relation that has all four properties \cite{Miller.R-1994a-SIG}.
 
 The use of the term ``relation'' here, while mathematically correct, is potentially confusing in any discussion that also involves the Relational Model. From now on, we shall therefore refer to the binary relations represented by SIG edges as ``associations''.
 
-A selection edge \(e : A \LabelledEdge{\sigedge{00}}{\RelRestrict} B\) indicates that the elements of \(B\) comprise a subset (or specialisation) of the elements of \(A\). If \(B = A\), we have what we term a \emph{trivial} selection. Every element of B must appear in A, and vice versa, and every element of \(A\) is associated with exactly one element of \(B\), and vice versa. Trivial selection edges are therefore bijective, i.e., \(A \LabelledEdge{\Bijective}{\RelRestrict} B\). If \(B \subset A\), we have what we term a \emph{non-trivial} selection. Every element of \(B\) must appear in \(A\), but not vice versa. The mapping remains one-to-one, as before. From the perspective of the supertype (\(A\) in this example), non-trivial selection edges are therefore surjective, functional, and injective, i.e., \(A \SelectionEdge B\).
+A selection edge \(e : A \LabelledEdge{\sigedge{00}}{\RelRestrict} B\) indicates that the elements of \(B\) comprise a subset (or specialisation) of the elements of \(A\). If \(B = A\), we have what we term a \emph{trivial} selection. Every element of B must appear in A, and vice versa, and every element of \(A\) is associated with exactly one element of \(B\), and vice versa. Trivial selection edges are therefore bijective, i.e., \(A \TrivialSelection B\). If \(B \subset A\), we have what we term a \emph{non-trivial} selection. Every element of \(B\) must appear in \(A\), but not vice versa. The mapping remains one-to-one, as before. From the perspective of the supertype (\(A\) in this example), non-trivial selection edges are therefore surjective, functional, and injective, i.e., \(A \SelectionEdge B\).
 
-A projection edge \(e : A \LabelledEdge{\sigedge{00}}{\RelProject} B\), indicates that the elements of \(B\) are a projection of \(A\), where \(A\) is a constructed node of the form \(C \times D \times \dotsb\). Trivial projection edges (\(B = A\)) are bijective, i.e., \(A \LabelledEdge{\Bijective}{\RelProject} B\), for the same reasons as trivial selection edges. For non-trivial projections (i.e., \(B \ne A\)), every element of \(A\) must have a corresponding element in \(B\), and vice versa. Similarly, every element of \(A\) can be associated with at most one element of \(B\), but not vice versa. Thus, non-trivial projection edges are total, surjective, and functional, i.e., \(A \ProjectionEdge B\).
+A projection edge \(e : A \LabelledEdge{\sigedge{00}}{\RelProject} B\), indicates that the elements of \(B\) are a projection of \(A\), where \(A\) is a constructed node of the form \(C \times D \times \dotsb\). Trivial projection edges (\(B = A\)) are bijective, i.e., \(A \TrivialProjection B\), for the same reasons as trivial selection edges. For non-trivial projections (i.e., \(B \ne A\)), every element of \(A\) must have a corresponding element in \(B\), and vice versa. Similarly, every element of \(A\) can be associated with at most one element of \(B\), but not vice versa. Thus, non-trivial projection edges are total, surjective, and functional, i.e., \(A \ProjectionEdge B\).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -370,28 +370,27 @@ A projection edge \(e : A \LabelledEdge{\sigedge{00}}{\RelProject} B\), indicate
 \subsection{Comparing SIGs}
 \label{sec-sig-compare}
 
-\noindent It is possible to determine the relationship between the relative information capacities of two schemas by comparing SIGs for the two schemas. Consider two schemas \(\SC{1}\) and \(\SC{2}\), with corresponding SIGs \(G_{\SC{1}}\) and \(G_{\SC{2}}\). Intuitively, if \(G_{\SC{1}}\) and \(G_{\SC{2}}\) are isomorphic, then \(\SC{1}\) and \(\SC{2}\) are equivalent \cite{Miller.R-1994a-SIG}. \(G_{\SC{1}}\) and \(G_{\SC{2}}\) are considered isomorphic if they have identical structures and the corresponding nodes and edges in both SIGs have compatible semantics.
+\noindent It is possible to determine the relationship between the relative information capacities of two schemas by comparing SIGs for the two schemas. Consider two schemas \(\SC{1}\) and \(\SC{2}\), with corresponding SIGs \(G_{\SC{1}}\) and \(G_{\SC{2}}\). Intuitively, if \(G_{\SC{1}}\) and \(G_{\SC{2}}\) are isomorphic, then \(\SC{1}\) and \(\SC{2}\) are equivalent \cite{Miller.R-1994a-SIG}. \(G_{\SC{1}}\) and \(G_{\SC{2}}\) are considered isomorphic if they have identical structure and semantics, i.e., the same nodes, edges, node types, and annotations.
 
 Miller et al.\ \cite{Miller.R-1994a-SIG} identify three possible results from comparing two SIGs \(G_{\SC{1}}\) and \(G_{\SC{2}}\):
 \begin{enumerate}
     
-    \item \(G_{\SC{1}}\) and \(G_{\SC{2}}\) are either immediately isomorphic, or one can be manipulated by a series of equivalence preserving transformations (described below) until it is isomorphic to the other. The two schemas are equivalent (i.e., \(\SC{1} \equiv \SC{2}\)).
+    \item \(G_{\SC{1}}\) and \(G_{\SC{2}}\) are either immediately isomorphic, or one can be manipulated by a series of equivalence preserving transformations (described below) until it is isomorphic to the other. The two schemas are equivalent, i.e., \(\SC{1} \equiv \SC{2}\).
     
-    \item \(G_{\SC{1}}\) and \(G_{\SC{2}}\) are not immediately isomorphic, but one can be manipulated by a series of information capacity augmenting transformations (described below) until it is isomorphic to the other. The transformed schema is dominated by the other (i.e., either \(\Dominates{\SC{2}}{\SC{1}}\) or \(\Dominates{\SC{1}}{\SC{2}}\)).
+    \item \(G_{\SC{1}}\) and \(G_{\SC{2}}\) are not immediately isomorphic, but one can be manipulated by a series of information capacity augmenting transformations (described below) until it is isomorphic to the other. The transformed schema is dominated by the other, e.g., if we transform \(G_{\SC{1}}\), then \(\Dominates{\SC{2}}{\SC{1}}\).
     
     \item \(G_{\SC{1}}\) and \(G_{\SC{2}}\) are not immediately isomorphic and cannot be transformed to be isomorphic. The information capacities of \(\SC{1}\) and \(\SC{2}\) cannot be compared.
     
 \end{enumerate}
-Batini et al.\ \cite{Batini.C-1992b-Conceptual} follow a similar classification scheme with respect to schema transformations: they refer to the first as \emph{information-preserving} transformations, the second as \emph{augmenting} transformations and the third as \emph{noncomparable} transformations.
 
 Miller et al.\ \cite{Miller.R-1994a-Schema} describe the following equivalence preserving and information capacity augmenting transformations on SIGs, which are summarised in Table~\ref{Tab.Viewpoints.SIGTransformations}:
 \begin{description}
     
-    \item[Annotation transformations] allow the removal of annotations or projection and selection constraints from edges (e.g., \(n_{1} \sigedge{23} n_{2} \Rightarrow n_{1} \sigedge{03} n_{2}\)). If we can transform \(\SC{1}\) into \(\SC{2}\) by such a transformation, then the information capacity of \(\SC{2}\) dominates that of \(\SC{1}\) (i.e., \Dominates{\SC{2}}{\SC{1}}).
+    \item[Annotation transformations] allow the removal of annotations or projection and selection constraints from edges (e.g., \(n_{1} \sigedge{23} n_{2} \Rightarrow n_{1} \sigedge{03} n_{2}\), or \(n_{3} \TrivialSelection n_{4} \Rightarrow n_{3} \Bijective n_{4}\)). If an annotation transformation on \(G_{\SC{1}}\) makes it isomorphic to \(G_{\SC{2}}\), then the information capacity of \(\SC{2}\) dominates that of \(\SC{1}\) (i.e., \Dominates{\SC{2}}{\SC{1}}).
     
-    \item[Composition transformations] allow edges to be moved and copied around the graph. Consider an edge \(e : n_{1} \sigedge{00} n_{2}\), as shown in Figure~\ref{fig-sig-composition-original}. If there is a path \(P = e_{m} \circ \dotsb \circ e_{k}\) of functional edges from some other node \(n_{k}\) to \(n_{2}\) (i.e., \(n_{k} \Functional \dotsb \Functional n_{2}\)), \(e\) may be copied to a new edge \(e' : n_{1} \sigedge{00} n_{k}\), as shown in Figure~\ref{fig-sig-composition-copy}. The original \(e\) can then be deleted if desired, effectively moving \(e\) to \(e'\) as shown in Figure~\ref{fig-sig-composition-move}.
+    \item[Composition transformations] allow edges to be moved and copied around the graph. Consider an edge \(e : n_{1} \sigedge{00} n_{2}\), as shown in Figure~\ref{fig-sig-composition-original}. If there is a path \(P = e_{m} \circ \dotsb \circ e_{k}\) of functional edges from some other node \(n_{k}\) to \(n_{2}\), \(e\) may be copied to a new edge \(e' : n_{1} \sigedge{00} n_{k}\), as shown in Figure~\ref{fig-sig-composition-copy}. The original \(e\) can then be deleted if desired, effectively moving \(e\) to \(e'\) as shown in Figure~\ref{fig-sig-composition-move}.
     
-    The annotation of \(e'\) is determined by the composition of the edges of \(P\!\). If an edge with a particular annotation (such as surjectivity) is composed with an edge without that annotation, the resulting edge also does not have the annotation. For example, the composition of the edges \(\Functional\) and \(\Surjective\) would be an edge with no annotations (\(\Edge\)), whereas the composition of \(\Functional\) and \(\sigedge{03}\) would be \(\Functional\). If we can transform \(\SC{1}\) into \(\SC{2}\) by such a transformation, then \Dominates{\SC{2}}{\SC{1}}.
+    The annotation of \(e'\) is determined by composing \(P\) with \(e\), i.e., \(e \circ P\). If an edge with a particular annotation (such as surjectivity) is composed with an edge without that annotation, the resulting edge also does not have the annotation. For example, the composition of the edges \(\Functional\) and \(\Surjective\) would be an edge with no annotations (\(\Edge\)), whereas the composition of \(\Functional\) and \(\sigedge{03}\) would be \(\Functional\). If a composition transformation on \(G_{\SC{1}}\) makes it isomorphic to \(G_{\SC{2}}\), then \Dominates{\SC{2}}{\SC{1}}.
 
 %%%%%%%%%%%%%%%%%%%%
 
@@ -479,17 +478,17 @@ Miller et al.\ \cite{Miller.R-1994a-Schema} describe the following equivalence p
     \item[Selection transformations] allow the creation and deletion of new nodes and edges as follows:
     \begin{enumerate}
         
-        \item An existing node \(n\) may be duplicated to create a new node \(n'\!\). A trivial selection edge \(e:n \LabelledEdge{\Bijective}{\RelRestrict} n'\) is added to enforce the restriction that \(n'\) is a duplicate of \(n\).
+        \item An existing node \(n\) may be duplicated to create a new node \(n'\!\). A trivial selection edge \(e:n \TrivialSelection n'\) is added to enforce the constraint that \(n'\) is a duplicate of \(n\).
         
-        \item A node \(n_{1}\) may be deleted if it is associated with exactly one other node \(n_{2}\) by a single trivial selection edge \(e:n_{1} \LabelledEdge{\Bijective}{\RelRestrict} n_{2}\) (implying \(n_{1}\) is a duplicate of \(n_{2}\)). This also implies deleting the trivial selection edge.
+        \item A node \(n_{1}\) may be deleted if it is associated with exactly one other node \(n_{2}\) by a single trivial selection edge \(e:n_{1} \TrivialSelection n_{2}\) (implying \(n_{1}\) is a duplicate of \(n_{2}\)). This also implies deleting the trivial selection edge.
         
-        \item A trivial selection edge \(e:n \LabelledEdge{\Bijective}{\RelRestrict} n\) may be created that connects a node \(n\) to itself.
+        \item A trivial selection edge \(e:n \TrivialSelection n\) may be created that connects a node \(n\) to itself.
         
-        \item A trivial selection edge \(e:n_{1} \LabelledEdge{\Bijective}{\RelRestrict} n_{2}\) may be deleted, removing the association between \(n_{1}\) and \(n_{2}\).
+        \item A trivial selection edge \(e:n_{1} \TrivialSelection n_{2}\) may be deleted, removing the association between \(n_{1}\) and \(n_{2}\).
         
     \end{enumerate}
     
-    If we can transform \(\SC{1}\) into \(\SC{2}\) using any of the first three selection transformations, then \Equivalent{\SC{2}}{\SC{1}}. If we can transform \(\SC{1}\) into \(\SC{2}\) using the fourth selection transformation, then \Dominates{\SC{2}}{\SC{1}}. The latter seems somewhat counter-intuitive \cite{Qian.X-1995a-Correct}, but is nonetheless correct \cite{Miller.R-1994a-Schema}. This is because a trivial selection edge \(e:n_{1} \LabelledEdge{\Bijective}{\RelRestrict} n_{2}\) denotes that \(n_{1}\) and \(n_{2}\) correspond to the same domain, so removing the edge also removes this constraint. The information capacity of \(\SC{2}\) must therefore be greater than \(\SC{1}\).
+    If we can make \(G_{\SC{1}}\) isomorphic to \(G_{\SC{2}}\) using any of the first three selection transformations, then \Equivalent{\SC{1}}{\SC{2}}. If we can make \(G_{\SC{1}}\) isomorphic to \(G_{\SC{2}}\) using the fourth selection transformation, then \Dominates{\SC{2}}{\SC{1}}. The latter may seem somewhat counter-intuitive \cite{Qian.X-1995a-Correct}, but is nonetheless correct \cite{Miller.R-1994a-Schema}. This is because a trivial selection edge \(e:n_{1} \TrivialSelection n_{2}\) denotes that \(n_{1}\) and \(n_{2}\) correspond to the same domain, so removing the edge also removes this constraint. The information capacity of \(\SC{2}\) must therefore be greater than \(\SC{1}\).
     
 \end{description}
 
