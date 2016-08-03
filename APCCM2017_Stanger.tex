@@ -74,7 +74,7 @@
 \newcommand{\T}[1]{\ensuremath{T_{#1}}}
 \newcommand{\TT}[1]{\ensuremath{T_{\{#1\}}}}
 
-\newcommand{\CityLondon}{\ensuremath{\{\City\colon\mathit{'London'}\}}}
+\newcommand{\CityLondon}{\ensuremath{\{\City\colon\allowbreak\mathit{'London'}\}}}
 \newcommand{\TCityMinusLondon}{\ensuremath{\T{\City} \setminus \CityLondon}}
 \newcommand{\TSSC}{\ensuremath{\T{\Sname} \times \T{\Status} \times \T{\City}}}
 \newcommand{\TSSL}{\ensuremath{\T{\Sname} \times \T{\Status} \times \CityLondon}}
@@ -324,8 +324,6 @@ This notion of type as a set of possible values is synonymous with Codd's origin
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-% \newpage
 
 \section{Relative information capacity}
 \label{sec-info-capacity}
@@ -684,8 +682,6 @@ We can also rewrite C\(_{\ref{constraint-key}}\)(a) to C\(_{\ref{constraint-key}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-\newpage
 
 \subsection{Constructing the SIGs}
 \label{sec-date-sigs}
@@ -1051,9 +1047,10 @@ Following this process, we first duplicate node \(\T{\LS}\) to \(\T{S}\) and nod
 
 The next phase is to copy and move edges. To produce the edge \(\T{S} \SurTotal \TT{S}\), we first \emph{copy} \(\T{\LS} \SurTotal \TT{\LS}\) across the path \(\TT{S} \TrivialSelection \TT{\LS}\) (giving \(\T{\LS} \SurTotal \TT{S}\)), then \emph{move} it across \(\T{S} \TrivialSelection \T{\LS}\). We can carry out a similar series of transformations to copy and move \(\T{S} \SurTotal \TT{S}\) to \(\T{\NLS} \SurTotal \TT{\NLS}\).
 
-Next, we copy and move the projection edge \(\TT{\LS} \ProjectionEdge \T{\Sno}\) to produce the edges \(\TT{S} \ProjectionEdge \T{\Sno}\) and \(\TT{\NLS} \ProjectionEdge \T{\Sno}\). Similarly, we copy and move \(\TT{\LS} \ProjectionEdge \TSSL\) to produce \(\TT{S} \LabelledEdge{\sigedge{03}}{\RelProject} \TSSC\) and \(\TT{\NLS} \LabelledEdge{\sigedge{02}}{\RelProject} \TSSNL\). Note that the first edge in the latter pair of transformations loses the totality annotation, and the second edge the surjectivity annotation, as a result of composition with the pre-existing non-bijective selection edges in the middle of the SIG.
+Next, we copy and move the projection edge \(\TT{\LS} \ProjectionEdge \T{\Sno}\) to produce the edges \(\TT{S} \ProjectionEdge \T{\Sno}\) and \(\TT{\NLS} \ProjectionEdge \T{\Sno}\). Similarly, we copy and move \(\TT{\LS} \ProjectionEdge \TSSL\) to produce \(\TT{S} \LabelledEdge{\sigedge{12}}{\RelProject} \TSSC\) and \(\TT{\NLS} \LabelledEdge{\sigedge{02}}{\RelProject} \TSSNL\). Note that the first edge in the latter pair of transformations loses the totality annotation, and the second edge the surjectivity annotation, as a result of composition with the pre-existing non-bijective selection edges in the middle of the SIG.
 
 Finally, we carry out similar copy and move transformations to copy the key edge \(\T{\Sno} \KeyEdge \TSSC\) to \(\T{\Sno} \KeyEdge \TSSL\) and \(\T{\Sno} \KeyEdge \TSSNL\). The annotations for these edges are unaffected. The result of all these edge transformations is shown in Figure~\ref{fig-transform-edge-moves}.
+
 
 %%%%%%%%%%%%%%%%%%%%
 
@@ -1118,7 +1115,7 @@ Finally, we carry out similar copy and move transformations to copy the key edge
             };
             (TSno) -- [funcdep right,input keep] (TSSC);
             (TSSC) -- [projection left] (TCity);
-            (TTLSPlusNLS) -- [projection right,arrows={:-{crossbar}>},bend right,output] (TSSC),
+            (TTLSPlusNLS) -- [projection right,arrows={:{crossbar}->},bend right,output] (TSSC),
         };
     \end{tikzpicture}
     \caption{SIG for modified schema \(\bm{S_{3}'}\) after copying and moving edges. [\(\preceq\)]}
@@ -1127,7 +1124,7 @@ Finally, we carry out similar copy and move transformations to copy the key edge
 
 %%%%%%%%%%%%%%%%%%%%
 
-If we compare Figure~\ref{fig-sig-s} with Figure~\ref{fig-transform-edge-moves}, we can see that the transformed SIG for \(\SC{3}'\) now has the same node and edge structure as the SIG for \(\SC{1}\). We still need to remove the totality annotations from the four remaining trivial selection edges, but even when this is done, we do not achieve the desired isomorphism, as the projection edges \(\TT{S} \LabelledEdge{\sigedge{03}}{\RelProject} \TSSC\) and \(\TT{\NLS} \LabelledEdge{\sigedge{02}}{\RelProject} \TSSNL\) have different annotations from the corresponding edges in the SIG for \(\SC{1}\). Strictly speaking this means that the information capacities of \(\SC{1}\) and \(\SC{3}\) are incomparable, but the structural differences are small enough that it is probably reasonable to infer that the information capacity of \(\SC{3}\) is less than that of \(\SC{1}\) (i.e., \Dominates{\SC{1}}{\SC{3}}). Regardless, it is clear that view updates based on this pair of schemas will be problematic.
+If we compare Figure~\ref{fig-sig-s} with Figure~\ref{fig-transform-edge-moves}, we can see that the transformed SIG for \(\SC{3}'\) now has the same node and edge structure as the SIG for \(\SC{1}\). We still need to remove the totality annotations from the four remaining trivial selection edges, but even when this is done, we do not achieve the desired isomorphism, as the projection edges \(\TT{S} \LabelledEdge{\sigedge{12}}{\RelProject} \TSSC\) and \(\TT{\NLS} \LabelledEdge{\sigedge{02}}{\RelProject} \TSSNL\) have different annotations from the corresponding edges in the SIG for \(\SC{1}\). (Indeed, it is debatable as to whether these two edges can even still be considered projection edges, as they no longer match the definition in Section~\ref{sec-sig-build}). This clearly shows that the information capacities of \(\SC{1}\) and \(\SC{3}\) are incomparable, and that view updates based on this pair of schemas will be problematic.
 
 Incidentally, if we created a fourth sub-schema \(\SC{4} = \{\NLS\}\) and compared this with \(\SC{1}\), the result would be similar to \(\SC{3}\).
 
