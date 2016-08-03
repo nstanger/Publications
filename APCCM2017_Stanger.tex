@@ -381,7 +381,7 @@ Miller et al.\ \cite{Miller.R-1994a-SIG} identify three possible results from co
     
 \end{enumerate}
 
-Miller et al.\ \cite{Miller.R-1994a-Schema} describe the following equivalence preserving and information capacity augmenting transformations on SIGs, which are summarised in Table~\ref{Tab.Viewpoints.SIGTransformations}:
+Miller et al.\ \cite{Miller.R-1994a-Schema} describe the following equivalence preserving and information capacity augmenting transformations on SIGs:
 \begin{description}
     
     \item[Annotation transformations] allow the removal of annotations or projection and selection constraints from edges (e.g., \(n_{1} \sigedge{23} n_{2} \Rightarrow n_{1} \sigedge{03} n_{2}\), or \(n_{3} \TrivialSelection n_{4} \Rightarrow n_{3} \Bijective n_{4}\)). If an annotation transformation on \(G_{\SC{1}}\) makes it isomorphic to \(G_{\SC{2}}\), then the information capacity of \(\SC{2}\) dominates that of \(\SC{1}\) (i.e., \Dominates{\SC{2}}{\SC{1}}).
@@ -389,29 +389,6 @@ Miller et al.\ \cite{Miller.R-1994a-Schema} describe the following equivalence p
     \item[Composition transformations] allow edges to be moved and copied around the graph. Consider an edge \(e : n_{1} \sigedge{00} n_{2}\), as shown in Figure~\ref{fig-sig-composition-original}. If there is a path \(P = e_{m} \circ \dotsb \circ e_{k}\) of functional edges from some other node \(n_{k}\) to \(n_{2}\), \(e\) may be copied to a new edge \(e' : n_{1} \sigedge{00} n_{k}\), as shown in Figure~\ref{fig-sig-composition-copy}. The original \(e\) can then be deleted if desired, effectively moving \(e\) to \(e'\) as shown in Figure~\ref{fig-sig-composition-move}.
     
     The annotation of \(e'\) is determined by composing \(P\) with \(e\), i.e., \(e \circ P\). If an edge with a particular annotation (such as surjectivity) is composed with an edge without that annotation, the resulting edge also does not have the annotation. For example, the composition of the edges \(\Functional\) and \(\Surjective\) would be an edge with no annotations (\(\Edge\)), whereas the composition of \(\Functional\) and \(\sigedge{03}\) would be \(\Functional\). If a composition transformation on \(G_{\SC{1}}\) makes it isomorphic to \(G_{\SC{2}}\), then \Dominates{\SC{2}}{\SC{1}}.
-
-%%%%%%%%%%%%%%%%%%%%
-
-\begin{table}[tb]
-    \centering
-    \small
-    \begin{tabular}{lcc}
-        \toprule
-                                                        &                   &   \textbf{Effect on infor-}   \\
-        \textbf{Transformation}                         &   \textbf{Type}   &   \textbf{mation capacity}    \\
-        \midrule
-        Delete annotation or \(\RelProject\)/\(\RelRestrict\) constraint    &   annotation      &   augmented   \\
-        Move/copy edge                                  &   composition     &   augmented   \\
-        Create/delete duplicate node                    &   selection       &   no change   \\
-        Create trivial selection edge                   &   selection       &   no change   \\
-        Delete trivial selection edge                   &   selection       &   augmented   \\
-        \bottomrule
-    \end{tabular}
-    \caption{Summary of SIG transformations.}
-    \label{Tab.Viewpoints.SIGTransformations}
-\end{table}
-
-%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%
 
@@ -490,6 +467,30 @@ Miller et al.\ \cite{Miller.R-1994a-Schema} describe the following equivalence p
     
 \end{description}
 
+These SIG transformations and their effects are summarised in Table~\ref{Tab.Viewpoints.SIGTransformations}.
+
+%%%%%%%%%%%%%%%%%%%%
+
+\begin{table}[htb]
+    \centering
+    \small
+    \begin{tabular}{lcc}
+        \toprule
+                                                        &                   &   \textbf{Effect on infor-}   \\
+        \textbf{Transformation}                         &   \textbf{Type}   &   \textbf{mation capacity}    \\
+        \midrule
+        Delete annotation or \(\RelProject\)/\(\RelRestrict\) constraint    &   annotation      &   augmented   \\
+        Move/copy edge                                  &   composition     &   augmented   \\
+        Create/delete duplicate node                    &   selection       &   no change   \\
+        Create trivial selection edge                   &   selection       &   no change   \\
+        Delete trivial selection edge                   &   selection       &   augmented   \\
+        \bottomrule
+    \end{tabular}
+    \caption{Summary of SIG transformations.}
+    \label{Tab.Viewpoints.SIGTransformations}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -500,12 +501,6 @@ Miller et al.\ \cite{Miller.R-1994a-Schema} describe the following equivalence p
 \noindent The direct correspondence between relational types and SIG domains noted in Section~\ref{sec-relations-types} enables us to use SIGs to represent the structure and constraints of relational schemas. Equating tuple types to the cartesian product of their attributes (equation \ref{eqn-tuple-type}) means that these can also be mapped directly to a constructed SIG node.
 
 Let us again consider the relvar \(S\{\Sno, \Sname, \Status, \City\}\) from Date's suppliers-and-parts schema. In addition to type constraints on the attributes, tuples, and the relvar as a whole, \(S\!\) is subject to a (primary) key constraint on \Sno. Taken together with the collection of types \(\T{\Sno}\), \(\T{\Sname}\), \(\T{\Status}\), \(\T{\City}\), \(\TT{S}\), and \(\T{S}\), and assuming that \(S\!\) is the only relvar in the schema, we can construct the SIG shown in Figure~\ref{fig-sig-s-alone} as explained below.
-
-As noted in Section~\ref{sec-relations-types}, any given value of \(S\!\) must comprise a subset of \(\TT{S}\), so the association between \(\T{S}\) and \(\TT{S}\) is total. Similarly, every tuple in \(\TT{S}\) must appear in at least one value of \(S\!\), so the association is also surjective. The association is neither functional nor injective, however, as a value of \(S\!\) in general may contain multiple tuples, and each tuple in \(\TT{S}\) can appear in multiple values of \(S\!\). This gives us \(\T{S}\SurTotal\TT{S}\).
-    
-The key constraint on \Sno\ implies that the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) holds in \(S\!\). From equation \ref{eqn-tuple-type}, we can infer the type of \(\{\Sname, \Status, \City\}\) as \(\TSSC\). The association is functional and not injective by definition. As not every supplier number may appear in any given value of \(S\!\), there may be elements of \(\T{\Sno}\) that are not associated with an element of \(\TSSC\), and vice versa. This implies that the association is neither total nor surjective. This gives us \(\T{\Sno} \KeyEdge \TSSC\) (we introduce the label \(\mathit{key}\) to indicate that this edge represents a key constraint).
-    
-Both \(\T{\Sno}\) and \(\TSSC\) are projections of \(\TT{S}\), so we can add (non-trivial) projection edges \(\TT{S} \ProjectionEdge \T{\Sname} \times \T{\Status} \times T_{\City}\) and \(\TT{S} \ProjectionEdge \T{\Sno}\). Similarly, \(\T{\Sname}\), \(\T{\Status}\), and \(\T{\City}\) are each projections of \(\TSSC\), so we can add further projection edges to these nodes, as shown in Figure~\ref{fig-sig-s-alone}.
 
 %%%%%%%%%%%%%%%%%%%%
 
@@ -541,6 +536,12 @@ Both \(\T{\Sno}\) and \(\TSSC\) are projections of \(\TT{S}\), so we can add (no
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%
+
+As noted in Section~\ref{sec-relations-types}, any given value of \(S\!\) must comprise a subset of \(\TT{S}\), so the association between \(\T{S}\) and \(\TT{S}\) is total. Similarly, every tuple in \(\TT{S}\) must appear in at least one value of \(S\!\), so the association is also surjective. The association is neither functional nor injective, however, as a value of \(S\!\) in general may contain multiple tuples, and each tuple in \(\TT{S}\) can appear in multiple values of \(S\!\). This gives us \(\T{S}\SurTotal\TT{S}\).
+    
+The key constraint on \Sno\ implies that the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) holds in \(S\!\). From equation \ref{eqn-tuple-type}, we can infer the type of \(\{\Sname, \Status, \City\}\) as \(\TSSC\). The association is functional and not injective by definition. As not every supplier number may appear in any given value of \(S\!\), there may be elements of \(\T{\Sno}\) that are not associated with an element of \(\TSSC\), and vice versa. This implies that the association is neither total nor surjective. This gives us \(\T{\Sno} \KeyEdge \TSSC\) (we introduce the label \(\mathit{key}\) to indicate that this edge represents a key constraint).
+    
+Both \(\T{\Sno}\) and \(\TSSC\) are projections of \(\TT{S}\), so we can add (non-trivial) projection edges \(\TT{S} \ProjectionEdge \T{\Sname} \times \T{\Status} \times T_{\City}\) and \(\TT{S} \ProjectionEdge \T{\Sno}\). Similarly, \(\T{\Sname}\), \(\T{\Status}\), and \(\T{\City}\) are each projections of \(\TSSC\), so we can add further projection edges to these nodes, as shown in Figure~\ref{fig-sig-s-alone}.
 
 Looking at Figure~\ref{fig-sig-s-alone}, it could be argued that the \(T_{\dots}\) type notation is redundant and unnecessarily complicates the diagram. Why not just use, e.g., \(S\!\) instead of \(\T{S}\), \(\Sno\) instead of \(\T{\Sno}\), and \(\Sno \times \Sname \times \Status \times \City\) instead of \(\TT{S}\)? It is important to remember, however, that SIGs like that shown in Figure~\ref{fig-sig-s-alone} include multiple elements of quite different kinds, including relations, tuples, and various combinations of attributes. Discarding the type notation might be reasonable in informal situations, but could lead to confusion between the different kinds of elements represented. The explicit type notation protects the semantics of the various elements of the schema and makes it clear what is being considered.
 
