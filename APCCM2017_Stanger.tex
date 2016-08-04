@@ -8,7 +8,7 @@
 \usepackage{relalg}
 \usepackage{txfonts}
 \usepackage{bm}
-\usepackage{subfigure}
+\usepackage{subfig}
 \usepackage{booktabs}
 
 \usepackage{tikz}
@@ -406,7 +406,7 @@ Miller et al.\ \cite{Miller.R-1994a-Schema} describe the following equivalence p
 
 \begin{figure}[htb]
     \centering
-    \subfigure[Original state\label{fig-sig-composition-original}]{
+    \subfloat[Original state\label{fig-sig-composition-original}]{
         \begin{tikzpicture}
             \node (n1)                      {\(n_{1}\)};
             \node (n2) [below=1cm of n1]    {\(n_{2}\)};
@@ -426,7 +426,7 @@ Miller et al.\ \cite{Miller.R-1994a-Schema} describe the following equivalence p
         \end{tikzpicture}
     }
     
-    \subfigure[Copy edge \(e\) to \(e'\) across path \(P\)\label{fig-sig-composition-copy}]{
+    \subfloat[Copy edge \(e\) to \(e'\) across path \(P\)\label{fig-sig-composition-copy}]{
         \begin{tikzpicture}
             \node (n1)                      {\(n_{1}\)};
             \node (n2) [below=1cm of n1]    {\(n_{2}\)};
@@ -442,7 +442,7 @@ Miller et al.\ \cite{Miller.R-1994a-Schema} describe the following equivalence p
         \end{tikzpicture}
     }
     
-    \subfigure[Move edge \(e\) to \(e'\) across path \(P\)\label{fig-sig-composition-move}]{
+    \subfloat[Move edge \(e\) to \(e'\) across path \(P\)\label{fig-sig-composition-move}]{
         \begin{tikzpicture}
             \node (n1)                      {\(n_{1}\)};
             \node (n2) [below=1cm of n1]    {\(n_{2}\)};
@@ -578,16 +578,16 @@ There are explicit and implicit constraints in \(\SC{0}\) that should also apply
 \label{sec-constraints}
 
 \noindent Date's motivating example in Chapter 4 of \cite{Date.C-2013a-View} explores what is arguably the simplest case of view updating: disjoint restriction views. The example includes a base relvar \(S\!\) and two views \(\LS\) and \(\NLS\) derived\footnote{Although as Date notes \cite{Date.C-2013a-View}, we could just as easily define \(\LS\) and \(\NLS\) as base relvars and then derive \(S = \LS \RelUnion \NLS\), or even define all three as base relvars. The constraints will remain the same regardless.} from \(S\!\):
-\begin{eqnarray}
-    \LS  & = & \RelRestrict_{\City = \mathit{'London'}}S \label{eqn-ls}   \\
-    \NLS & = & \RelRestrict_{\City \ne \mathit{'London'}}S \label{eqn-nls}
-\end{eqnarray}
+\begin{align}
+    \LS  &= \RelRestrict_{\City = \mathit{'London'}}S \label{eqn-ls}   \\
+    \NLS &= \RelRestrict_{\City \ne \mathit{'London'}}S \label{eqn-nls}
+\end{align}
 
 Informally, \LS\ contains details of London suppliers, while \NLS\ contains details of non-London suppliers. \(\LS\) and  \(\NLS\) represent disjoint restrictions of \(S\!\) with the same heading. They have the following tuple types:
-\begin{eqnarray}
-    \TT{\LS}  & = & \T{\Sno} \times \T{\Sname} \times \T{\LS} \times \CityLondon \nonumber    \\
-    \TT{\NLS} & = & \T{\Sno} \times \T{\Sname} \times \T{\Status} \times (\TCityMinusLondon) \nonumber
-\end{eqnarray}
+\begin{align}
+    \TT{\LS}  &= \T{\Sno} \times \T{\Sname} \times \T{\LS} \times \CityLondon \nonumber    \\
+    \TT{\NLS} &= \T{\Sno} \times \T{\Sname} \times \T{\Status} \times (\TCityMinusLondon) \nonumber
+\end{align}
 
 The base schema for this example is \(\SC{0} = \{S, \LS, \NLS\}\). This is subject to type constraints as specified by the various types noted previously, and the following additional constraints:
 \begin{ConstraintList}
