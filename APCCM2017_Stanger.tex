@@ -645,7 +645,7 @@ Note that in the following analysis, we omit the foreign key constraints \Constr
 \noindent A user granted access only to \(\SC{1}\) sees only relvar \(S\). Constraint \Constraint{\ref{constraint-key}}(a) can be propagated directly into \(\SC{1}\) because it is expressed only in terms of \(S\). Constraints \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}} do not mention any relvars and thus can also be directly propagated into \(\SC{1}\). Constraints \Constraint{\ref{constraint-key}}(b), \Constraint{\ref{constraint-key}}(c), and \Constraint{\ref{constraint-union}}--\Constraint{\ref{constraint-tuple-types}} can be propagated to \(\SC{1}\) (written as, e.g., \Constraint[\SC{1}]{\ref{constraint-union}}) by rewriting them in terms of \(S\) only. We can do this by substituting the definitions of \(\LS\) (equation~\ref{eqn-ls}) and \(\NLS\) (equation~\ref{eqn-nls}) into the constraints. For brevity, we shall write these substitutions as \(\LSsub\) (\(= \RelRestrict_{\City = \mathit{'London'}}S\)) and \(\NLSsub\) (\(= \RelRestrict_{\City \ne \mathit{'London'}}S\)), so as to distinguish them from the \(\LS\) and \(\NLS\) relvars in \(\SC{0}\), \(\SC{2}\), and \(\SC{3}\). Thus:
 \begin{ConstraintList}[\SC{1}]
     
-    \item \Sno\ is a key for each of \(\LS\), and \(\NLS\), therefore the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) also holds in each of (a) \(S\), (b) \(\LS\), and (c) \(\NLS\).
+    \item \Sno\ is a key for each of \(\LSsub\) and \(\NLSsub\), therefore the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) also holds in each of (b) \(\LSsub\) and (c) \(\NLSsub\). [The fact that we are dealing with two disjoint subsets of \(\City\) does not change this.]
     
     \setcounter{constraint}{3}
     \item \(S = \LSsub \RelUnion \NLSsub\) [or even just \(S = S\)]
@@ -663,9 +663,6 @@ Note that in the following analysis, we omit the foreign key constraints \Constr
     \item (a) \(\T{\NLSsub} \subset \T{S}\); (b) \(\TT{\NLSsub} \subset \TT{S}\) [from (\ref{eqn-nls}) above]
     
 \end{ConstraintList}
-We can also rewrite \Constraint{\ref{constraint-key}}(b) and \Constraint{\ref{constraint-key}}(c) to \Constraint[\SC{1}]{\ref{constraint-key}}(b) and \Constraint[\SC{1}]{\ref{constraint-key}}(c), so that the functional dependency applies to the substitutions \(\LSsub\) and \(\NLSsub\) instead of \(\LS\) and \(\NLS\).
-
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -674,9 +671,11 @@ We can also rewrite \Constraint{\ref{constraint-key}}(b) and \Constraint{\ref{co
 \subsubsection{Schema \(\SC{2}\)}
 \label{sec-constraints-s-ii}
 
-\noindent A user granted access only to \(\SC{2}\) sees only relvars \(\LS\) and \(\NLS\). Constraints \Constraint{\ref{constraint-key}}(b),  \Constraint{\ref{constraint-key}}(c), and \Constraint{\ref{constraint-notlondon}}--\Constraint{\ref{constraint-disjoint}} can be directly propagated into \(\SC{2}\) as they are defined only in terms of \(\LS\) and \(\NLS\). \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}} can be directly propagated into \(\SC{2}\) as they do not mention any relvars. \Constraint{\ref{constraint-union}}, \Constraint{\ref{constraint-relation-type-union}}, \Constraint{\ref{constraint-relation-types}}, and \Constraint{\ref{constraint-tuple-types}} can be rewritten in terms of \(\LS\) and \(\NLS\) only:
+\noindent A user granted access only to \(\SC{2}\) sees only relvars \(\LS\) and \(\NLS\). Constraints \Constraint{\ref{constraint-key}}(b),  \Constraint{\ref{constraint-key}}(c), and \Constraint{\ref{constraint-notlondon}}--\Constraint{\ref{constraint-disjoint}} can be directly propagated into \(\SC{2}\) as they are defined only in terms of \(\LS\) and \(\NLS\). \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}} can be directly propagated into \(\SC{2}\) as they do not mention any relvars. \Constraint{\ref{constraint-key}}(a), \Constraint{\ref{constraint-union}}, \Constraint{\ref{constraint-relation-type-union}}, \Constraint{\ref{constraint-relation-types}}, and \Constraint{\ref{constraint-tuple-types}} can be rewritten in terms of \(\LS\) and \(\NLS\) only:
 \begin{ConstraintList}[\SC{2}]
 
+    \item \Sno\ is a key for \(\LS \RelUnion \NLS\), therefore the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) also holds in (a) \(\LS \RelUnion \NLS\).
+    
     \setcounter{constraint}{3}
     \item \(\LS \RelUnion \NLS = \LS \RelUnion \NLS\)
     
@@ -688,7 +687,6 @@ We can also rewrite \Constraint{\ref{constraint-key}}(b) and \Constraint{\ref{co
     \item (a) \(\T{\NLS} \subset \T{\LS} \RelUnion \T{\NLS}\); (b) \(\TT{\NLS} \subset \TT{\LS} \RelUnion \TT{\NLS}\)
     
 \end{ConstraintList}
-We can also rewrite \Constraint{\ref{constraint-key}}(a) to \Constraint[\SC{2}]{\ref{constraint-key}}(a), so that the functional dependency applies to \(\LS \RelUnion \NLS\) instead of \(S\).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
