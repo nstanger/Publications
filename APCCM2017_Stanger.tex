@@ -714,6 +714,8 @@ Note that in the following analysis, we omit the foreign key constraints \Constr
 
 The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone}. The constraints within the schema imply the existence of several subtype nodes (e.g., the two subtypes of \(\T{City}\) implied by \Constraint{\ref{constraint-implied-types-london}} and \Constraint{\ref{constraint-implied-types-nonlondon}}), along with corresponding selection and projection edges, which are listed in Table~\ref{Tab.SIG.Implied.Edges}. \Constraint[\SC{1}]{\ref{constraint-union}}, \Constraint[\SC{1}]{\ref{constraint-relation-type-union}}(a), and \Constraint[\SC{1}]{\ref{constraint-relation-type-union}}(b) are effectively tautologies that add no new information, and can thus be safely ignored. The completed SIG for \(\SC{1}\) is shown in Figure~\ref{fig-sig-s}.
 
+%%%%%%%%%%%%%%%%%%%%
+
 \begin{table*}
     \centering
     \begin{tabular}{cl}
@@ -821,7 +823,7 @@ The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone
 \subsubsection{Schema \(\SC{2}\)}
 \label{sec-sigs-s-ii}
 
-\noindent The constraints appearing in \(\SC{2}\) are \Constraint[\SC{2}]{\ref{constraint-key}}(a), \Constraint{\ref{constraint-key}}(b), \Constraint{\ref{constraint-key}}(c), \Constraint[\SC{2}]{\ref{constraint-union}}, \Constraint{\ref{constraint-notlondon}}--\Constraint{\ref{constraint-disjoint}}, \Constraint[\SC{2}]{\ref{constraint-relation-type-union}}--\Constraint[\SC{2}]{\ref{constraint-tuple-types}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}. This is the same set of constraints, albeit with different rewritings, as \(\SC{1}\). This means that the SIG for \(\SC{2}\) can be built in essentially the same manner as for \(\SC{1}\), with some nodes differently named. In particular, \Constraint{\ref{constraint-relation-type-union}} implies that there will be nodes \(\TLSPlusNLS\) and \(\TTLSPlusNLS\) instead of \(\T{S}\) and \(\TT{S}\). There will also be \(\T{\LS}\) instead of \(\T{\LSsub}\), etc. The complete SIG for \(\SC{2}\) is shown in Figure~\ref{fig-sig-ls-nls}.
+\noindent The constraints appearing in \(\SC{2}\) are \Constraint[\SC{2}]{\ref{constraint-key}}(a), \Constraint{\ref{constraint-key}}(b), \Constraint{\ref{constraint-key}}(c), \Constraint[\SC{2}]{\ref{constraint-union}}, \Constraint{\ref{constraint-notlondon}}--\Constraint{\ref{constraint-disjoint}}, \Constraint[\SC{2}]{\ref{constraint-relation-type-union}}--\Constraint[\SC{2}]{\ref{constraint-tuple-types}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}. This is essentially the same set of constraints as \(\SC{1}\), albeit with different rewritings. This means that the SIG for \(\SC{2}\) can be built in the same manner as for \(\SC{1}\), with some nodes named differently. In particular, \Constraint[\SC{2}]{\ref{constraint-relation-type-union}} implies that there will be nodes \(\TLSPlusNLS\) and \(\TTLSPlusNLS\) instead of \(\T{S}\) and \(\TT{S}\), respectively. There will also be \(\T{\LS}\) instead of \(\T{\LSsub}\), etc. The complete SIG for \(\SC{2}\) is shown in Figure~\ref{fig-sig-ls-nls}.
 
 %%%%%%%%%%%%%%%%%%%%
 
@@ -965,12 +967,12 @@ The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone
 
 Looking at the SIGs for \(\SC{1}\) and \(\SC{2}\), we can see immediately that both SIGs have the same node and edge structure; indeed the only difference is in the names of some of the nodes. However, we already know from the discussion in Sections~\ref{sec-constraints-s-i} and~\ref{sec-constraints-s-ii} that these differently-named nodes represent the same domains. We therefore have an immediate isomorphism between the two SIGs and can conclude that the information capacities of \(\SC{1}\) and \(\SC{2}\) are equivalent, i.e., \(\Equivalent{\SC{1}}{\SC{2}}\).
 
-The comparison between \(\SC{1}\) and \(\SC{3}\) is more interesting. There are some shared structures, but the two SIGs are clearly different. Since the SIG transformations discussed in Section~\ref{sec-sig-compare} only ever preserve or enhance information capacity, intuitively we should attempt to transform the ``smaller'' SIG for \(\SC{3}\) into the ``larger'' SIG for \(\SC{1}\). SIG transformations can generally be carried out in two broad phases (using the current transformation as an example):
+The comparison between \(\SC{1}\) and \(\SC{3}\) is more interesting. There are some shared structures, but the two SIGs are clearly different. Since the SIG transformations discussed in Section~\ref{sec-sig-compare} only ever preserve or enhance information capacity, intuitively we should attempt to transform the ``smaller'' SIG for \(\SC{3}\) into the ``larger'' SIG for \(\SC{1}\). SIG transformations can generally be carried out in two broad phases (using the \(\SC{3} \rightarrow \SC{1}\) transformation as an example):
 \begin{description}
 
-    \item[Duplicate nodes] in \(\SC{3}\) (producing \(\SC{3}'\)) that correspond to supertypes in \(\SC{1}\), to produce nodes corresponding to the extra nodes that \(\SC{1}\) has over \(\SC{3}\). The goal is to produce a node structure similar to that of \(\SC{1}\). The duplicated nodes will be connected to their original nodes by trivial selection edges. These transformations (if applicable) will not alter the information capacity of \(\SC{3}'\) (i.e., \(\equiv\)).
+    \item[Duplicate nodes] in \(\SC{3}\) (producing \(\SC{3}'\)) that correspond to supertypes in \(\SC{1}\), in order to create nodes corresponding to the extra nodes that \(\SC{1}\) has over \(\SC{3}\). The goal is to produce a node structure similar to that of \(\SC{1}\). The duplicated nodes will be connected to their original nodes by trivial selection edges. These transformations (if applicable) will not alter the information capacity of \(\SC{3}'\) (i.e., \(\SC{3}' \equiv \SC{3}\)).
     
-    \item[Copy and move edges] across the trivial selection edges connecting the new duplicated nodes in \(\SC{3}'\). The goal is to produce an edge structure similar to that of \(\SC{1}\). The paths that the edges are copied or moved across are bijective, so the annotations of the affected edges will remain unchanged. These transformations (if applicable) will \emph{increase} the information capacity of \(\SC{3}'\) (i.e., \(\preceq\)).
+    \item[Copy and move edges] across the trivial selection edges connecting the new duplicated nodes in \(\SC{3}'\). The goal is to produce an edge structure similar to that of \(\SC{1}\). The paths that the edges are copied or moved across are bijective, so the annotations of the affected edges will remain unchanged. These transformations (if applicable) will \emph{increase} the information capacity of \(\SC{3}'\) (i.e., \(\SC{3}' \preceq \SC{3}\)).
     
 \end{description}
 
@@ -984,7 +986,7 @@ These two phases generally occur in order, but may be interspersed throughout wi
 \end{description}
 For example, we might duplicate some nodes, remove some totality annotations, move or copy some edges, delete some no longer needed nodes, move or copy some more edges, then remove some more totality annotations.
 
-Following this process, we first duplicate node \(\T{\LS}\) to \(\T{S}\) and node \(\TT{\LS}\) to \(\TT{S}\). To obtain a node structure similar to that of \(\SC{1}\), we also need to further duplicate \(\T{S}\) to \(\T{\NLS}\) and \(\TT{S}\) to \(\TT{\NLS}\). The result of these duplications is shown in Figure~\ref{fig-transform-all-duplicates}. The transformed SIG now has essentially the same node structure as that for \(\SC{1}\).
+Applying this process to \(\SC{3}\), we first duplicate node \(\T{\LS}\) to \(\T{S}\) and node \(\TT{\LS}\) to \(\TT{S}\). To obtain a node structure similar to that of \(\SC{1}\), we also need to further duplicate \(\T{S}\) to \(\T{\NLS}\) and \(\TT{S}\) to \(\TT{\NLS}\). The result of these duplications is shown in Figure~\ref{fig-transform-all-duplicates}. The transformed SIG now has essentially the same node structure as that for \(\SC{1}\).
 
 %%%%%%%%%%%%%%%%%%%%
 
