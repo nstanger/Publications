@@ -1,5 +1,5 @@
 %%
-%% MAX 12 PAGES (all material)
+%% MAX 10 PAGES (all material)
 %%
 
 \documentclass{sig-alternate-05-2015}
@@ -46,14 +46,12 @@
 }
         
 % projection and selection edge annotations for TikZ
-\makeatletter
 \newcommand{\ProjectionAnnotation}[3][]{%
     \path (#2) to node[above,#1] {\scriptsize\(\RelProject\)} (#3);%
 }
 \newcommand{\SelectionAnnotation}[3][]{%
     \path (#2) to node[above,#1] {\scriptsize\(\RelRestrict\)} (#3);%
 }
-\makeatother
 
 
 \newcounter{constraint}
@@ -173,6 +171,20 @@
 \newcommand{\TrivialProjection}{\ensuremath{\LabelledEdge{\Bijective}{\RelProject}}}
 \newcommand{\TrivialSelection}{\ensuremath{\LabelledEdge{\Bijective}{\RelRestrict}}}
 \newcommand{\KeyEdge}{\ensuremath{\LabelledEdge{\Functional}{\mathit{key}}}}
+
+% Constraints.
+\newcommand{\Constraint}[2][]{C\ensuremath{_{#2}\ifx&#1&\else^{#1}\fi}}
+\newenvironment{ConstraintList}[1][]{%
+    \begin{list}{%
+        \bfseries%
+        \ifx&#1&%
+            \Constraint{\ensuremath{\bm{\arabic{constraint}}}}%
+        \else%
+            \Constraint[\ensuremath{\bm{#1}}]{\ensuremath{\bm{\arabic{constraint}}}}%
+        \fi%
+    }%
+    {\usecounter{constraint}}%
+}{\end{list}}
 
 
 \hyphenation{co-pied sche-ma}
@@ -556,7 +568,7 @@ Looking at Figure~\ref{fig-sig-s-alone}, it could be argued that the \(T_{\dots}
 
 Views and the base relvars they are derived from normally exist within the same ``base'' database schema (although this is not strictly required), which we shall refer to as \(\SC{0}\). However, an end user may be granted access only to the views, and thus not be aware of the existence of the base relvar(s), or vice versa. This effectively partitions the schema into sub-schemas \(\SC{1}, \SC{2}, \dotsc, \SC{n}\).
 
-There are explicit and implicit constraints in \(\SC{0}\) that should also apply to the sub-schemas. Ignoring these constraints in a sub-schema \(\SC{k}\) will affect its information capacity, and could negatively impact the information equivalence of view updates involving \(\SC{k}\). In the next section we will show how such constraints can be propagated into sub-schemas by rewriting them in terms of the sub-schema alone, which enables us to explicitly incorporate into the sub-schema the type information implicit in \(\SC{0}\) that would otherwise be omitted. We will then discuss the construction of SIGs for Date's restriction view example (Section~\ref{sec-date-sigs}), and show how to transform and compare these (Section~\ref{sec-transforming}).
+There are explicit and implicit constraints in \(\SC{0}\) that should also apply to the sub-schemas \cite{Date.C-2013a-View}. Ignoring these constraints in a sub-schema \(\SC{k}\) will affect its information capacity, and could negatively impact the information equivalence of view updates involving \(\SC{k}\). In the next section we will show how such constraints can be propagated into sub-schemas by rewriting them in terms of the sub-schema alone, which enables us to explicitly incorporate into the sub-schema the type information implicit in \(\SC{0}\) that would otherwise be omitted. We will then discuss the construction of SIGs for Date's restriction view example (Section~\ref{sec-date-sigs}), and show how to transform and compare these (Section~\ref{sec-transforming}).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -578,7 +590,7 @@ Informally, \LS\ contains details of London suppliers, while \NLS\ contains deta
 \end{eqnarray}
 
 The base schema for this example is \(\SC{0} = \{S, \LS, \NLS\}\). This is subject to type constraints as specified by the various types noted previously, and the following additional constraints:
-\begin{list}{\textbf{C\(\bm{_{\arabic{constraint}}}\):}}{\usecounter{constraint}}
+\begin{ConstraintList}
 
     \item\label{constraint-key} \Sno\ is a key for each of \(S\!\), \LS, and \NLS, therefore the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) also holds in each of (a) \(S\!\), (b) \(\LS\), and (c) \(\NLS\).
     
@@ -592,13 +604,13 @@ The base schema for this example is \(\SC{0} = \{S, \LS, \NLS\}\). This is subje
     
     \item\label{constraint-union} \(S = \LS \RelUnion \NLS\) [from (\ref{eqn-ls}) and (\ref{eqn-nls}) above]
     
-    \item\label{constraint-disjoint} \(\LS \RelIntersect \NLS = \emptyset\) [\LS\ and \NLS\ are disjoint]
+    \item\label{constraint-disjoint} \(\LS \RelIntersect \NLS = \emptyset\) [\LS\ and \NLS\ are disjoint by definition]
     
     \item\label{constraint-notlondon} \(\RelRestrict_{\City \ne \mathit{'London'}}\LS = \emptyset\) [from (\ref{eqn-ls}) above]
     
     \item\label{constraint-london} \(\RelRestrict_{\City = \mathit{'London'}}\NLS = \emptyset\) [from (\ref{eqn-nls}) above]
     
-    \item\label{constraint-relation-type-union} (a) \(\T{S} = \T{\LS} \RelUnion \T{\NLS}\); (b) \(\TT{S} = \TT{\LS} \RelUnion \TT{\NLS}\) [from C\(_{\ref{constraint-union}}\)]
+    \item\label{constraint-relation-type-union} (a) \(\T{S} = \T{\LS} \RelUnion \T{\NLS}\); (b) \(\TT{S} = \TT{\LS} \RelUnion \TT{\NLS}\) [from \Constraint{\ref{constraint-union}}]
     
     \item\label{constraint-relation-types} (a) \(\T{\LS} \subset \T{S}\); (b) \(\TT{\LS} \subset \TT{S}\) [from (\ref{eqn-ls}) above]
     
@@ -612,15 +624,15 @@ The base schema for this example is \(\SC{0} = \{S, \LS, \NLS\}\). This is subje
     
     \item\label{constraint-implied-types-TSSNL} \(\TSSNL \subset \TSSC\)
     
-\end{list}
+\end{ConstraintList}
 
-Constraints C\(_{\ref{constraint-union}}\)--C\(_{\ref{constraint-london}}\) enforce that \(\LS\) and \(\NLS\) are disjoint restrictions of \(S\!\), while C\(_{\ref{constraint-relation-type-union}}\)--C\(_{\ref{constraint-implied-types-TSSNL}}\) are additional type constraints that specify specialisation associations implied by the subtypes and supertypes occurring in \(\SC{0}\).
+Constraints \Constraint{\ref{constraint-union}}--\Constraint{\ref{constraint-london}} enforce that \(\LS\) and \(\NLS\) are disjoint restrictions of \(S\!\), while \Constraint{\ref{constraint-relation-type-union}}--\Constraint{\ref{constraint-implied-types-TSSNL}} are additional type constraints that specify specialisation associations implied by the subtypes and supertypes occurring in \(\SC{0}\).
 
-In most typical database schemas, only constraints C\(_{\ref{constraint-key}}\), C\(_{\ref{constraint-lsfk}}\), and C\(_{\ref{constraint-nlsfk}}\) will be explicitly declared. Some database schemas may also explicitly declare constraints C\(_{\ref{constraint-union}}\) and C\(_{\ref{constraint-disjoint}}\), but it is more likely that these and all the remaining constraints will be implicit in the definition of \(\SC{0}\). It is important for the purposes of this analysis to clearly identify all such implicit constraints, so that nothing is missed when constructing corresponding SIGs.
+In most typical database schemas, only constraints \Constraint{\ref{constraint-key}}, \Constraint{\ref{constraint-lsfk}}, and \Constraint{\ref{constraint-nlsfk}} will be explicitly declared. Some database schemas may also explicitly declare constraints \Constraint{\ref{constraint-union}} and \Constraint{\ref{constraint-disjoint}}, but it is more likely that these and all the remaining constraints will be implicit in the definition of \(\SC{0}\). It is important for the purposes of this analysis to clearly identify all such implicit constraints, so that nothing is missed when constructing corresponding SIGs.
 
 Let us partition \(\SC{0}\) into three sub-schemas: \(\SC{1} = \{S\}\), \(\SC{2} = \{\LS, \NLS\}\), and \(\SC{3} = \{LS\}\). We wish to compare the relative information capacities of the schema pairs \((\SC{1}, \SC{2})\) and \((\SC{1}, \SC{3})\), in order to characterise the view update compatibility of the schemas in each pair.
 
-Note that in the following analysis, we omit the foreign key constraints C\(_{\ref{constraint-lsfk}}\) and C\(_{\ref{constraint-nlsfk}}\), as we have yet to determine the best way to represent inclusion dependencies of this nature in a SIG, or indeed whether such dependencies are significant.
+Note that in the following analysis, we omit the foreign key constraints \Constraint{\ref{constraint-lsfk}} and \Constraint{\ref{constraint-nlsfk}}, as we have yet to determine the best way to represent inclusion dependencies of this nature in a SIG, or indeed whether such dependencies are significant.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -629,8 +641,8 @@ Note that in the following analysis, we omit the foreign key constraints C\(_{\r
 \subsubsection{Schema \(\SC{1}\)}
 \label{sec-constraints-s-i}
 
-\noindent A user granted access only to \(\SC{1}\) sees only relvar \(S\!\). Constraint C\(_{\ref{constraint-key}}\)(a) can be propagated directly into \(\SC{1}\) because it is expressed only in terms of \(S\!\). Constraints C\(_{\ref{constraint-implied-types-london}}\)--C\(_{\ref{constraint-implied-types-TSSNL}}\) do not mention any relvars and can thus also be directly propagated into \(\SC{1}\). Constraints C\(_{\ref{constraint-union}}\)--C\(_{\ref{constraint-tuple-types}}\) can be propagated to \(\SC{1}\) by rewriting them in terms of \(S\!\) only. We can do this by substituting the definitions of \(\LS\) (equation~\ref{eqn-ls}) and \(\NLS\) (equation~\ref{eqn-nls}) into the constraints. For brevity, we shall denote these substitutions as \(\LSsub\) (\(= \RelRestrict_{\City = \mathit{'London'}}S\)) and \(\NLSsub\) (\(= \RelRestrict_{\City \ne \mathit{'London'}}S\)), so as to distinguish them from the \(\LS\) and \(\NLS\) relvars in \(\SC{0}\), \(\SC{2}\), and \(\SC{3}\). A superscript ``1'' on a constraint denotes that it has been rewritten in \(\SC{1}\):
-\begin{list}{\textbf{C\(\bm{_{\arabic{constraint}}^{1}}\):}}{\usecounter{constraint}\setcounter{constraint}{3}}
+\noindent A user granted access only to \(\SC{1}\) sees only relvar \(S\!\). Constraint \Constraint{\ref{constraint-key}}(a) can be propagated directly into \(\SC{1}\) because it is expressed only in terms of \(S\!\). Constraints \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}} do not mention any relvars and thus can also be directly propagated into \(\SC{1}\). Constraints \Constraint{\ref{constraint-union}}--\Constraint{\ref{constraint-tuple-types}} can be propagated to \(\SC{1}\) (written as, e.g., \Constraint[\SC{1}]{\ref{constraint-union}}) by rewriting them in terms of \(S\!\) only. We can do this by substituting the definitions of \(\LS\) (equation~\ref{eqn-ls}) and \(\NLS\) (equation~\ref{eqn-nls}) into the constraints. For brevity, we shall write these substitutions as \(\LSsub\) (\(= \RelRestrict_{\City = \mathit{'London'}}S\)) and \(\NLSsub\) (\(= \RelRestrict_{\City \ne \mathit{'London'}}S\)), so as to distinguish them from the \(\LS\) and \(\NLS\) relvars in \(\SC{0}\), \(\SC{2}\), and \(\SC{3}\). Thus:
+\begin{ConstraintList}[\SC{1}]
 
     \item \(S = \LSsub \RelUnion \NLSsub\) (or even just \(S = S\))
     
@@ -646,8 +658,8 @@ Note that in the following analysis, we omit the foreign key constraints C\(_{\r
     
     \item (a) \(\T{\NLSsub} \subset \T{S}\); (b) \(\TT{\NLSsub} \subset \TT{S}\) [from (\ref{eqn-nls}) above]
     
-\end{list}
-We can also rewrite C\(_{\ref{constraint-key}}\)(b) and C\(_{\ref{constraint-key}}\)(c) to C\(_{\ref{constraint-key}}^{1}\)(b) and C\(_{\ref{constraint-key}}^{1}\)(c), so that the functional dependency applies to \(\LSsub\) and \(\NLSsub\) instead of \(\LS\) and \(\NLS\).
+\end{ConstraintList}
+We can also rewrite \Constraint{\ref{constraint-key}}(b) and \Constraint{\ref{constraint-key}}(c) to \Constraint[\SC{1}]{\ref{constraint-key}}(b) and \Constraint[\SC{1}]{\ref{constraint-key}}(c), so that the functional dependency applies to \(\LSsub\) and \(\NLSsub\) instead of \(\LS\) and \(\NLS\).
 
 
 
@@ -658,8 +670,8 @@ We can also rewrite C\(_{\ref{constraint-key}}\)(b) and C\(_{\ref{constraint-key
 \subsubsection{Schema \(\SC{2}\)}
 \label{sec-constraints-s-ii}
 
-\noindent A user granted access only to \(\SC{2}\) sees only relvars \(\LS\) and \(\NLS\). Constraints C\(_{\ref{constraint-key}}\)(b),  C\(_{\ref{constraint-key}}\)(c), and C\(_{\ref{constraint-disjoint}}\)--C\(_{\ref{constraint-london}}\) can be directly propagated into \(\SC{2}\) as they are defined only in terms of \(\LS\) and \(\NLS\). C\(_{\ref{constraint-implied-types-london}}\)--C\(_{\ref{constraint-implied-types-TSSNL}}\) can be directly propagated into \(\SC{2}\) as they do not mention any relvars. C\(_{\ref{constraint-union}}\), C\(_{\ref{constraint-relation-type-union}}\), C\(_{\ref{constraint-relation-types}}\), and C\(_{\ref{constraint-tuple-types}}\) can be rewritten in terms of \(\LS\) and \(\NLS\) only:
-\begin{list}{\textbf{C\(\bm{_{\arabic{constraint}}^{2}}\):}}{\usecounter{constraint}\setcounter{constraint}{3}}
+\noindent A user granted access only to \(\SC{2}\) sees only relvars \(\LS\) and \(\NLS\). Constraints \Constraint{\ref{constraint-key}}(b),  \Constraint{\ref{constraint-key}}(c), and \Constraint{\ref{constraint-disjoint}}--\Constraint{\ref{constraint-london}} can be directly propagated into \(\SC{2}\) as they are defined only in terms of \(\LS\) and \(\NLS\). \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}} can be directly propagated into \(\SC{2}\) as they do not mention any relvars. \Constraint{\ref{constraint-union}}, \Constraint{\ref{constraint-relation-type-union}}, \Constraint{\ref{constraint-relation-types}}, and \Constraint{\ref{constraint-tuple-types}} can be rewritten in terms of \(\LS\) and \(\NLS\) only:
+\begin{ConstraintList}[\SC{2}]
 
     \item \(\LS \RelUnion \NLS = \LS \RelUnion \NLS\)\setcounter{constraint}{7}
     
@@ -669,8 +681,8 @@ We can also rewrite C\(_{\ref{constraint-key}}\)(b) and C\(_{\ref{constraint-key
     
     \item (a) \(\T{\NLS} \subset \T{\LS} \RelUnion \T{\NLS}\); (b) \(\TT{\NLS} \subset \TT{\LS} \RelUnion \TT{\NLS}\)
     
-\end{list}
-We can also rewrite C\(_{\ref{constraint-key}}\)(a) to C\(_{\ref{constraint-key}}^{2}\)(a), so that the functional dependency applies to \(\LS \RelUnion \NLS\) instead of \(S\!\).
+\end{ConstraintList}
+We can also rewrite \Constraint{\ref{constraint-key}}(a) to \Constraint[\SC{2}]{\ref{constraint-key}}(a), so that the functional dependency applies to \(\LS \RelUnion \NLS\) instead of \(S\!\).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -679,7 +691,7 @@ We can also rewrite C\(_{\ref{constraint-key}}\)(a) to C\(_{\ref{constraint-key}
 \subsubsection{Schema \(\SC{3}\)}
 \label{sec-constraints-s-iii}
 
-\noindent A user granted access only to \(\SC{3}\) sees only relvar \(\LS\). Constraints C\(_{\ref{constraint-key}}\)(b) and C\(_{\ref{constraint-notlondon}}\) can be directly propagated into \(\SC{3}\) as they are defined only  in terms of \(\LS\). C\(_{\ref{constraint-implied-types-london}}\)--C\(_{\ref{constraint-implied-types-TSSNL}}\) can also be directly propagated as previously discussed. The remaining constraints cannot be rewritten in terms of \(\LS\) only, and therefore cannot be propagated to \(\SC{3}\).
+\noindent A user granted access only to \(\SC{3}\) sees only relvar \(\LS\). Constraints \Constraint{\ref{constraint-key}}(b) and \Constraint{\ref{constraint-notlondon}} can be directly propagated into \(\SC{3}\) as they are defined only  in terms of \(\LS\). \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}} can also be directly propagated as previously discussed. The remaining constraints cannot be rewritten in terms of \(\LS\) only, and therefore cannot be propagated to \(\SC{3}\).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -694,9 +706,9 @@ We can also rewrite C\(_{\ref{constraint-key}}\)(a) to C\(_{\ref{constraint-key}
 \subsubsection{Schema \(\SC{1}\)}
 \label{sec-sigs-s-i}
 
-\noindent The SIG for \(\SC{1}\) will not just be that for relvar \(S\!\) (see Figure~\ref{fig-sig-s-alone}), as that schema did not incorporate the constraints implicit in \(\SC{0}\). The process for constructing the SIG will be similar to that for the earlier example, however. The constraints appearing in \(\SC{1}\) are C\(_{\ref{constraint-key}}\)(a), C\(_{\ref{constraint-key}}^{1}\)(b), C\(_{\ref{constraint-key}}^{1}\)(c), C\(_{\ref{constraint-union}}^{1}\)--C\(_{\ref{constraint-tuple-types}}^{1}\), and C\(_{\ref{constraint-implied-types-london}}\)--C\(_{\ref{constraint-implied-types-TSSNL}}\).
+\noindent The SIG for \(\SC{1}\) will not just be that for relvar \(S\!\) (see Figure~\ref{fig-sig-s-alone}), as that schema did not incorporate the constraints implicit in \(\SC{0}\). The process for constructing the SIG will be similar to that for the earlier example, however. The constraints appearing in \(\SC{1}\) are \Constraint{\ref{constraint-key}}(a), \Constraint[\SC{1}]{\ref{constraint-key}}(b), \Constraint[\SC{1}]{\ref{constraint-key}}(c), \Constraint[\SC{1}]{\ref{constraint-union}}--\Constraint[\SC{1}]{\ref{constraint-tuple-types}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}.
 
-The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone}. \(\T{S} \SurTotal \TT{S}\) implies \(\T{\LSsub} \SurTotal \TT{\LSsub}\) and \(\T{\NLSsub} \SurTotal \TT{\NLSsub}\). Constraints C\(_{\ref{constraint-implied-types-london}}\)--C\(_{\ref{constraint-implied-types-TSSNL}}\) imply the existence of several subtype nodes, plus corresponding selection and projection edges:
+The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone}. \(\T{S} \SurTotal \TT{S}\) implies \(\T{\LSsub} \SurTotal \TT{\LSsub}\) and \(\T{\NLSsub} \SurTotal \TT{\NLSsub}\). Constraints \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}} imply the existence of several subtype nodes, plus corresponding selection and projection edges:
 \begin{itemize}
    
     \item \(\TT{\LSsub} \ProjectionEdge \T{\Sno}\) and \(\TT{\NLSsub} \ProjectionEdge \T{\Sno}\)
@@ -718,7 +730,7 @@ The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone
     \item \(\TSSNL \ProjectionEdge \T{\City} -\) \newline \(\CityLondon\)
 
 \end{itemize}
-C\(_{\ref{constraint-key}}^{1}\)(b) and C\(_{\ref{constraint-key}}^{1}\)(c) imply two additional key edges:
+\Constraint[\SC{1}]{\ref{constraint-key}}(b) and \Constraint[\SC{1}]{\ref{constraint-key}}(c) imply two additional key edges:
 \begin{itemize}
    
     \item \(\T{\Sno} \KeyEdge \TSSL\)
@@ -727,9 +739,9 @@ C\(_{\ref{constraint-key}}^{1}\)(b) and C\(_{\ref{constraint-key}}^{1}\)(c) impl
    
 \end{itemize}
 
-C\(_{\ref{constraint-relation-type-union}}^{1}\)(a) implies node \(\TLSPlusNLSsub\) to represent \(\T{\LSsub} \RelUnion \T{\NLSsub}\). However, this node would be identical to \(\T{S}\!\), so we can ignore C\(_{\ref{constraint-relation-type-union}}^{1}\)(a) and just continue to use \(\T{S}\!\). A similar argument applies for C\(_{\ref{constraint-relation-type-union}}^{1}\)(b) and \(\TT{S}\).
+\Constraint[\SC{1}]{\ref{constraint-relation-type-union}}(a) implies node \(\TLSPlusNLSsub\) to represent \(\T{\LSsub} \RelUnion \T{\NLSsub}\). However, this node would be identical to \(\T{S}\!\), so we can ignore \Constraint[\SC{1}]{\ref{constraint-relation-type-union}}(a) and just continue to use \(\T{S}\!\). A similar argument applies for \Constraint[\SC{1}]{\ref{constraint-relation-type-union}}(b) and \(\TT{S}\).
 
-C\(_{\ref{constraint-relation-types}}^{1}\)--C\(_{\ref{constraint-implied-types-TSSNL}}^{1}\) imply the following selection edges:
+\Constraint[\SC{1}]{\ref{constraint-relation-types}}--\Constraint[\SC{1}]{\ref{constraint-implied-types-TSSNL}} imply the following selection edges:
 \begin{itemize}
 
     \item \(\T{S} \SelectionEdge \T{\LSsub}\) and \(\TT{S} \SelectionEdge \TT{\LSsub}\)
@@ -820,7 +832,7 @@ The complete SIG for \(\SC{1}\) is shown in Figure~\ref{fig-sig-s}.
 \subsubsection{Schema \(\SC{2}\)}
 \label{sec-sigs-s-ii}
 
-\noindent The constraints appearing in \(\SC{2}\) are C\(_{\ref{constraint-key}}^{2}\)(a), C\(_{\ref{constraint-key}}\)(b), C\(_{\ref{constraint-key}}\)(c), C\(_{\ref{constraint-union}}^{2}\), C\(_{\ref{constraint-disjoint}}\)--C\(_{\ref{constraint-london}}\), C\(_{\ref{constraint-relation-type-union}}^{2}\)--C\(_{\ref{constraint-tuple-types}}^{2}\), and C\(_{\ref{constraint-implied-types-london}}\)--C\(_{\ref{constraint-implied-types-TSSNL}}\). This is the same set of constraints, albeit with different rewritings, as \(\SC{1}\). This means that the SIG for \(\SC{2}\) can be built in essentially the same manner as for \(\SC{1}\), with some nodes differently named. In particular, C\(_{\ref{constraint-relation-type-union}}\) implies that there will be nodes \(\TLSPlusNLS\) and \(\TTLSPlusNLS\) instead of \(\T{S}\) and \(\TT{S}\). There will also be \(\T{\LS}\) instead of \(\T{\LSsub}\), etc. The complete SIG for \(\SC{2}\) is shown in Figure~\ref{fig-sig-ls-nls}.
+\noindent The constraints appearing in \(\SC{2}\) are \Constraint[\SC{2}]{\ref{constraint-key}}(a), \Constraint{\ref{constraint-key}}(b), \Constraint{\ref{constraint-key}}(c), \Constraint[\SC{2}]{\ref{constraint-union}}, \Constraint{\ref{constraint-disjoint}}--\Constraint{\ref{constraint-london}}, \Constraint[\SC{2}]{\ref{constraint-relation-type-union}}--\Constraint[\SC{2}]{\ref{constraint-tuple-types}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}. This is the same set of constraints, albeit with different rewritings, as \(\SC{1}\). This means that the SIG for \(\SC{2}\) can be built in essentially the same manner as for \(\SC{1}\), with some nodes differently named. In particular, \Constraint{\ref{constraint-relation-type-union}} implies that there will be nodes \(\TLSPlusNLS\) and \(\TTLSPlusNLS\) instead of \(\T{S}\) and \(\TT{S}\). There will also be \(\T{\LS}\) instead of \(\T{\LSsub}\), etc. The complete SIG for \(\SC{2}\) is shown in Figure~\ref{fig-sig-ls-nls}.
 
 %%%%%%%%%%%%%%%%%%%%
 
@@ -895,7 +907,7 @@ The complete SIG for \(\SC{1}\) is shown in Figure~\ref{fig-sig-s}.
 \subsubsection{Schema \(\SC{3}\)}
 \label{sec-sigs-s-iii}
 
-\noindent The constraints appearing in \(\SC{3}\) are C\(_{\ref{constraint-key}}\)(b), C\(_{\ref{constraint-notlondon}}\), and C\(_{\ref{constraint-implied-types-london}}\)--C\(_{\ref{constraint-implied-types-TSSNL}}\). The SIG will only include edges and nodes that relate either directly to \(\LS\) or are independent of any relvar, such as the subtype node \(\TSSNL\). The complete SIG for \(\SC{3}\) is shown in Figure~\ref{fig-sig-ls}.
+\noindent The constraints appearing in \(\SC{3}\) are \Constraint{\ref{constraint-key}}(b), \Constraint{\ref{constraint-notlondon}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}. The SIG will only include edges and nodes that relate either directly to \(\LS\) or are independent of any relvar, such as the subtype node \(\TSSNL\). The complete SIG for \(\SC{3}\) is shown in Figure~\ref{fig-sig-ls}.
 
 %%%%%%%%%%%%%%%%%%%%
 
