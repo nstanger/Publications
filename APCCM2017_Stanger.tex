@@ -584,7 +584,7 @@ There are explicit and implicit constraints in \(\SC{0}\) that should also apply
     \NLS &= \RelRestrict_{\City \ne \mathit{'London'}}S \label{eqn-nls}
 \end{align}
 
-Informally, \LS\ contains details of London suppliers, while \NLS\ contains details of non-London suppliers. \(\LS\) and  \(\NLS\) represent disjoint restrictions of \(S\) with the same heading. They have the following tuple types:
+Informally, \(\LS\) contains details of London suppliers, while \(\NLS\) contains details of non-London suppliers. \(\LS\) and  \(\NLS\) represent disjoint restrictions of \(S\) with the same heading. They have the following tuple types:
 \begin{align}
     \TT{\LS}  &= \T{\Sno} \times \T{\Sname} \times \T{\LS} \times \CityLondon \nonumber    \\
     \TT{\NLS} &= \T{\Sno} \times \T{\Sname} \times \T{\Status} \times (\TCityMinusLondon) \nonumber
@@ -593,7 +593,7 @@ Informally, \LS\ contains details of London suppliers, while \NLS\ contains deta
 The base schema for this example is \(\SC{0} = \{S, \LS, \NLS\}\). This is subject to type constraints as specified by the various types noted previously, and the following additional constraints:
 \begin{ConstraintList}
 
-    \item\label{constraint-key} \Sno\ is a key for each of \(S\), \LS, and \NLS, therefore the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) also holds in each of (a) \(S\), (b) \(\LS\), and (c) \(\NLS\).
+    \item\label{constraint-key} \Sno\ is a key for each of \(S\), \(\LS\), and \(\NLS\), therefore the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) also holds in each of (a) \(S\), (b) \(\LS\), and (c) \(\NLS\).
     
     % not sure how relevant the FK constraints are?
     % how to represent? FK is a subset of the original key, so selection edge between S.Sno and each of LS.Sno and NLS.Sno
@@ -645,7 +645,7 @@ Note that in the following analysis, we omit the foreign key constraints \Constr
 \noindent A user granted access only to \(\SC{1}\) sees only relvar \(S\). Constraint \Constraint{\ref{constraint-key}}(a) can be propagated directly into \(\SC{1}\) because it is expressed only in terms of \(S\). Constraints \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}} do not mention any relvars and thus can also be directly propagated into \(\SC{1}\). Constraints \Constraint{\ref{constraint-key}}(b), \Constraint{\ref{constraint-key}}(c), and \Constraint{\ref{constraint-union}}--\Constraint{\ref{constraint-tuple-types}} can be propagated to \(\SC{1}\) (written as, e.g., \Constraint[\SC{1}]{\ref{constraint-union}}) by rewriting them in terms of \(S\) only. We can do this by substituting the definitions of \(\LS\) (equation~\ref{eqn-ls}) and \(\NLS\) (equation~\ref{eqn-nls}) into the constraints. For brevity, we shall write these substitutions as \(\LSsub\) (\(= \RelRestrict_{\City = \mathit{'London'}}S\)) and \(\NLSsub\) (\(= \RelRestrict_{\City \ne \mathit{'London'}}S\)), so as to distinguish them from the \(\LS\) and \(\NLS\) relvars in \(\SC{0}\), \(\SC{2}\), and \(\SC{3}\). Thus:
 \begin{ConstraintList}[\SC{1}]
     
-    \item \Sno\ is a key for each of \LS, and \NLS, therefore the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) also holds in each of (a) \(S\), (b) \(\LS\), and (c) \(\NLS\).
+    \item \Sno\ is a key for each of \(\LS\), and \(\NLS\), therefore the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) also holds in each of (a) \(S\), (b) \(\LS\), and (c) \(\NLS\).
     
     \setcounter{constraint}{3}
     \item \(S = \LSsub \RelUnion \NLSsub\) [or even just \(S = S\)]
