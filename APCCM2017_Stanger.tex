@@ -709,7 +709,7 @@ We can also rewrite \Constraint{\ref{constraint-key}}(a) to \Constraint[\SC{2}]{
 \subsubsection{Schema \(\SC{1}\)}
 \label{sec-sigs-s-i}
 
-\noindent The SIG for \(\SC{1}\) will not just be that for relvar \(S\!\) (see Figure~\ref{fig-sig-s-alone}), as that schema did not incorporate the constraints implicit in \(\SC{0}\). The process for constructing the SIG will be similar to that for the earlier example, however. The constraints appearing in \(\SC{1}\) are \Constraint{\ref{constraint-key}}(a), \Constraint[\SC{1}]{\ref{constraint-key}}(b), \Constraint[\SC{1}]{\ref{constraint-key}}(c), \Constraint[\SC{1}]{\ref{constraint-union}}--\Constraint[\SC{1}]{\ref{constraint-tuple-types}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}.
+\noindent The SIG for \(\SC{1}\) will not just be that for relvar \(S\!\) (see Figure~\ref{fig-sig-s-alone}), as that schema did not incorporate all the constraints implicit in \(\SC{0}\). The process for constructing the SIG will be similar to that for the earlier example, however. The constraints appearing in \(\SC{1}\) are \Constraint{\ref{constraint-key}}(a), \Constraint[\SC{1}]{\ref{constraint-key}}(b), \Constraint[\SC{1}]{\ref{constraint-key}}(c), \Constraint[\SC{1}]{\ref{constraint-union}}--\Constraint[\SC{1}]{\ref{constraint-tuple-types}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}.
 
 The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone}. \(\T{S} \SurTotal \TT{S}\) implies \(\T{\LSsub} \SurTotal \TT{\LSsub}\) and \(\T{\NLSsub} \SurTotal \TT{\NLSsub}\). Constraints \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}} imply the existence of several subtype nodes, plus corresponding selection and projection edges:
 \begin{itemize}
@@ -730,9 +730,15 @@ The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone
 
     \item \(\TSSNL \ProjectionEdge \T{\Status}\)
 
-    \item \(\TSSNL \ProjectionEdge \T{\City} -\) \newline \(\CityLondon\)
+    \item \(\TSSNL \ProjectionEdge \T{\City} \setminus \CityLondon\)
 
 \end{itemize}
+
+% \begin{tabular}{ll}
+%     \textbf{Constraint}                                 &   \textbf{Implied edge(s)}    \\
+%     {\Constraint{\ref{constraint-implied-types-london}}}  &   \(\TSSL \ProjectionEdge\,\CityLondon\)  \\
+% \end{tabular}
+
 \Constraint[\SC{1}]{\ref{constraint-key}}(b) and \Constraint[\SC{1}]{\ref{constraint-key}}(c) imply two additional key edges:
 \begin{itemize}
    
@@ -757,7 +763,7 @@ The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone
     
     \item \(\TSSC \SelectionEdge\) \(\TSSL\)
     
-    \item \(\TSSC \SelectionEdge \T{\Sname} \times \T{\Status} \times \T{\City} -\) \newline \(\CityLondon\)
+    \item \(\TSSC \SelectionEdge \T{\Sname} \times \T{\Status} \times \T{\City} \setminus \CityLondon\)
 
 \end{itemize}
 The complete SIG for \(\SC{1}\) is shown in Figure~\ref{fig-sig-s}.
