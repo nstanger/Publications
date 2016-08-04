@@ -480,7 +480,7 @@ Miller et al.\ \cite{Miller.R-1994a-Schema} describe the following equivalence p
     
 \end{description}
 
-These SIG transformations and their effects are summarised in Table~\ref{Tab.Viewpoints.SIGTransformations}.
+These SIG transformations and their effects are summarised in Table~\ref{Tab.SIG.Transformations}.
 
 %%%%%%%%%%%%%%%%%%%%
 
@@ -500,7 +500,7 @@ These SIG transformations and their effects are summarised in Table~\ref{Tab.Vie
         \bottomrule
     \end{tabular}
     \caption{Summary of SIG transformations.}
-    \label{Tab.Viewpoints.SIGTransformations}
+    \label{Tab.SIG.Transformations}
 \end{table}
 
 %%%%%%%%%%%%%%%%%%%%
@@ -713,60 +713,91 @@ Note that in the following analysis, we omit the foreign key constraints \Constr
 \noindent The SIG for \(\SC{1}\) will not just be that for relvar \(S\) (see Figure~\ref{fig-sig-s-alone}), as that schema did not incorporate all the constraints implicit in \(\SC{0}\). The process for constructing the SIG will be similar to that for the earlier example, however. The constraints appearing in \(\SC{1}\) are \Constraint{\ref{constraint-key}}(a), \Constraint[\SC{1}]{\ref{constraint-key}}(b), \Constraint[\SC{1}]{\ref{constraint-key}}(c), \Constraint[\SC{1}]{\ref{constraint-union}}--\Constraint[\SC{1}]{\ref{constraint-tuple-types}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}.
 
 The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone}. \(\T{S} \SurTotal \TT{S}\) implies \(\T{\LSsub} \SurTotal \TT{\LSsub}\) and \(\T{\NLSsub} \SurTotal \TT{\NLSsub}\). Constraints \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}} imply the existence of several subtype nodes, plus corresponding selection and projection edges:
-\begin{itemize}
-   
-    \item \(\TT{\LSsub} \ProjectionEdge \T{\Sno}\) and \(\TT{\NLSsub} \ProjectionEdge \T{\Sno}\)
+% \begin{itemize}
+%    
+%     \item \(\TT{\LSsub} \ProjectionEdge \T{\Sno}\) and \(\TT{\NLSsub} \ProjectionEdge \T{\Sno}\)
+% 
+%     \item \(\TT{\LSsub} \ProjectionEdge \TSSL\)
+% 
+%     \item \(\TT{\NLSsub} \ProjectionEdge \TSSNL\)
+% 
+%     \item \(\TSSL \ProjectionEdge \T{\Sname}\)
+% 
+%     \item \(\TSSL \ProjectionEdge \T{\Status}\)
+% 
+%     \item \(\TSSL \ProjectionEdge\,\CityLondon\)
+% 
+%     \item \(\TSSNL \ProjectionEdge \T{\Sname}\)
+% 
+%     \item \(\TSSNL \ProjectionEdge \T{\Status}\)
+% 
+%     \item \(\TSSNL \ProjectionEdge \T{\City} \setminus \CityLondon\)
+% 
+% \end{itemize}
 
-    \item \(\TT{\LSsub} \ProjectionEdge \TSSL\)
+\begin{table*}
+    \centering
+    \begin{tabular}{cl}
+        \toprule
+        \textbf{Constraint}                                     &   \textbf{Implied edge(s)}    \\
+        \midrule
+        {\Constraint[\SC{1}]{\ref{constraint-key}}}(b)          &   \(\T{\Sno} \KeyEdge \TSSL\)   \\
+        {\Constraint[\SC{1}]{\ref{constraint-key}}}(c)          &   \(\T{\Sno} \KeyEdge \TSSNL\)   \\
+        \midrule
+        {\Constraint[\SC{1}]{\ref{constraint-relation-types}}}  &   \(\T{S} \SelectionEdge \T{\LSsub}\)   \\
+            &   \(\TT{S} \SelectionEdge \TT{\LSsub}\)   \\
+        \midrule
+        {\Constraint[\SC{1}]{\ref{constraint-tuple-types}}}     &   \(\T{S} \SelectionEdge \T{\NLSsub}\)   \\
+            &   \(\TT{S} \SelectionEdge \TT{\NLSsub}\)   \\
+        \midrule
+        {\Constraint{\ref{constraint-implied-types-london}}}    &   \(\T{\City} \SelectionEdge \CityLondon\)   \\
+        \midrule
+        {\Constraint{\ref{constraint-implied-types-nonlondon}}} &   \(\T{\City} \SelectionEdge (\TCityMinusLondon)\)   \\
+        \midrule
+        {\Constraint{\ref{constraint-implied-types-TSSL}}}      &   \(\TSSC \SelectionEdge \TSSL\)    \\
+            &   \(\TT{\LSsub} \ProjectionEdge \TSSL\)   \\
+            &   \(\TSSL \ProjectionEdge \T{\Sname}\)   \\
+            &   \(\TSSL \ProjectionEdge \T{\Status}\)   \\
+            &   \(\TSSL \ProjectionEdge\,\CityLondon\)  \\
+        \midrule
+        {\Constraint{\ref{constraint-implied-types-TSSNL}}}     &   \(\TSSC \SelectionEdge \TSSNL\) \\
+            &   \(\TT{\NLSsub} \ProjectionEdge \TSSNL\)  \\
+            &   \(\TSSNL \ProjectionEdge \T{\Sname}\)  \\
+            &   \(\TSSNL \ProjectionEdge \T{\Status}\)  \\
+            &   \(\TSSNL \ProjectionEdge \TCityMinusLondon\)  \\
+        \bottomrule
+    \end{tabular}
+    \caption{CAPTION.}
+    \label{Tab.SIG.Implied.Edges}
+\end{table*}
 
-    \item \(\TT{\NLSsub} \ProjectionEdge \TSSNL\)
-
-    \item \(\TSSL \ProjectionEdge \T{\Sname}\)
-
-    \item \(\TSSL \ProjectionEdge \T{\Status}\)
-
-    \item \(\TSSL \ProjectionEdge\,\CityLondon\)
-
-    \item \(\TSSNL \ProjectionEdge \T{\Sname}\)
-
-    \item \(\TSSNL \ProjectionEdge \T{\Status}\)
-
-    \item \(\TSSNL \ProjectionEdge \T{\City} \setminus \CityLondon\)
-
-\end{itemize}
-
-% \begin{tabular}{ll}
-%     \textbf{Constraint}                                 &   \textbf{Implied edge(s)}    \\
-%     {\Constraint{\ref{constraint-implied-types-london}}}  &   \(\TSSL \ProjectionEdge\,\CityLondon\)  \\
-% \end{tabular}
-
-\Constraint[\SC{1}]{\ref{constraint-key}}(b) and \Constraint[\SC{1}]{\ref{constraint-key}}(c) imply two additional key edges:
-\begin{itemize}
-   
-    \item \(\T{\Sno} \KeyEdge \TSSL\)
-
-    \item \(\T{\Sno} \KeyEdge \TSSNL\)
-   
-\end{itemize}
+% \Constraint[\SC{1}]{\ref{constraint-key}}(b) and \Constraint[\SC{1}]{\ref{constraint-key}}(c) imply two additional key edges:
+% \begin{itemize}
+%    
+%     \item \(\T{\Sno} \KeyEdge \TSSL\)
+% 
+%     \item \(\T{\Sno} \KeyEdge \TSSNL\)
+%    
+% \end{itemize}
 
 \Constraint[\SC{1}]{\ref{constraint-relation-type-union}}(a) implies node \(\TLSPlusNLSsub\) to represent \(\T{\LSsub} \RelUnion \T{\NLSsub}\). However, this node would be identical to \(\T{S}\), so we can ignore \Constraint[\SC{1}]{\ref{constraint-relation-type-union}}(a) and just continue to use \(\T{S}\). A similar argument applies for \Constraint[\SC{1}]{\ref{constraint-relation-type-union}}(b) and \(\TT{S}\).
 
-\Constraint[\SC{1}]{\ref{constraint-relation-types}}--\Constraint[\SC{1}]{\ref{constraint-implied-types-TSSNL}} imply the following selection edges:
-\begin{itemize}
-
-    \item \(\T{S} \SelectionEdge \T{\LSsub}\) and \(\TT{S} \SelectionEdge \TT{\LSsub}\)
-    
-    \item \(\T{S} \SelectionEdge \T{\NLSsub}\) and \(\TT{S} \SelectionEdge \TT{\NLSsub}\)
-    
-    \item \(\T{\City} \SelectionEdge\,\CityLondon\)
-    
-    \item \(\T{\City} \SelectionEdge\,(\TCityMinusLondon)\)
-    
-    \item \(\TSSC \SelectionEdge\) \(\TSSL\)
-    
-    \item \(\TSSC \SelectionEdge \T{\Sname} \times \T{\Status} \times \T{\City} \setminus \CityLondon\)
-
-\end{itemize}
+% \Constraint[\SC{1}]{\ref{constraint-relation-types}}--\Constraint[\SC{1}]{\ref{constraint-implied-types-TSSNL}} imply the following selection edges:
+% \begin{itemize}
+% 
+%     \item \(\T{S} \SelectionEdge \T{\LSsub}\) and \(\TT{S} \SelectionEdge \TT{\LSsub}\)
+%     
+%     \item \(\T{S} \SelectionEdge \T{\NLSsub}\) and \(\TT{S} \SelectionEdge \TT{\NLSsub}\)
+%     
+%     \item \(\T{\City} \SelectionEdge\,\CityLondon\)
+%     
+%     \item \(\T{\City} \SelectionEdge\,(\TCityMinusLondon)\)
+%     
+%     \item \(\TSSC \SelectionEdge\) \(\TSSL\)
+%     
+%     \item \(\TSSC \SelectionEdge \T{\Sname} \times \T{\Status} \times \T{\City} \setminus \CityLondon\)
+% 
+% \end{itemize}
 The complete SIG for \(\SC{1}\) is shown in Figure~\ref{fig-sig-s}.
 
 %%%%%%%%%%%%%%%%%%%%
