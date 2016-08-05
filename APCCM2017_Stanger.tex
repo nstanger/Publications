@@ -635,6 +635,44 @@ Let us partition \(\SC{0}\) into three sub-schemas: \(\SC{1} = \{S\}\), \(\SC{2}
 
 Note that in the following analysis, we omit the foreign key constraints \Constraint{\ref{constraint-lsfk}} and \Constraint{\ref{constraint-nlsfk}}, as we have yet to determine the best way to represent inclusion dependencies of this nature in a SIG, or indeed whether such dependencies are significant.
 
+%%%%%%%%%%%%%%%%%%%%
+
+\begin{table*}
+    \centering
+    \begin{tabular}{cl}
+        \toprule
+        \textbf{Constraint}                                     &   \textbf{Implied edge(s)}    \\
+        \midrule
+        {\Constraint[\SC{1}]{\ref{constraint-key}}}(b)          &   \(\T{\Sno} \KeyEdge \TSSL\)   \\
+        \phantom{\Constraint[\SC{1}]{\ref{constraint-key}}}(c)  &   \(\T{\Sno} \KeyEdge \TSSNL\)   \\
+        \midrule
+        {\Constraint[\SC{1}]{\ref{constraint-relation-types}}}  &   \(\T{\LSsub} \SurTotal \TT{\LSsub}\) \quad\quad \(\T{S} \SelectionEdge \T{\LSsub}\) \quad\quad \(\TT{S} \SelectionEdge \TT{\LSsub}\)   \\
+        \midrule
+        {\Constraint[\SC{1}]{\ref{constraint-tuple-types}}}     &   \(\T{\NLSsub} \SurTotal \TT{\NLSsub}\) \quad\quad \(\T{S} \SelectionEdge \T{\NLSsub}\) \quad\quad \(\TT{S} \SelectionEdge \TT{\NLSsub}\)   \\
+        \midrule
+        {\Constraint{\ref{constraint-implied-types-london}}}    &   \(\T{\City} \SelectionEdge \CityLondon\)   \\
+        \midrule
+        {\Constraint{\ref{constraint-implied-types-nonlondon}}} &   \(\T{\City} \SelectionEdge (\TCityMinusLondon)\)   \\
+        \midrule
+        {\Constraint{\ref{constraint-implied-types-TSSL}}}      &   \(\TSSC \SelectionEdge \TSSL\)    \\
+            &   \(\TT{\LSsub} \ProjectionEdge \TSSL\)   \\
+            &   \(\TSSL \ProjectionEdge \T{\Sname}\)   \\
+            &   \(\TSSL \ProjectionEdge \T{\Status}\)   \\
+            &   \(\TSSL \ProjectionEdge\,\CityLondon\)  \\
+        \midrule
+        {\Constraint{\ref{constraint-implied-types-TSSNL}}}     &   \(\TSSC \SelectionEdge \TSSNL\) \\
+            &   \(\TT{\NLSsub} \ProjectionEdge \TSSNL\)  \\
+            &   \(\TSSNL \ProjectionEdge \T{\Sname}\)  \\
+            &   \(\TSSNL \ProjectionEdge \T{\Status}\)  \\
+            &   \(\TSSNL \ProjectionEdge \TCityMinusLondon\)  \\
+        \bottomrule
+    \end{tabular}
+    \caption{Constraints and the SIG edges they imply for schema \(\SC{1}\).}
+    \label{Tab.SIG.Implied.Edges}
+\end{table*}
+
+%%%%%%%%%%%%%%%%%%%%
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -713,44 +751,6 @@ Note that in the following analysis, we omit the foreign key constraints \Constr
 \noindent The SIG for \(\SC{1}\) will not just be that for relvar \(S\) (see Figure~\ref{fig-sig-s-alone}), as that schema did not incorporate all the constraints implicit in \(\SC{0}\). The process for constructing the SIG will be similar to that for the earlier example, however. The constraints appearing in \(\SC{1}\) are \Constraint{\ref{constraint-key}}(a), \Constraint[\SC{1}]{\ref{constraint-key}}(b), \Constraint[\SC{1}]{\ref{constraint-key}}(c), \Constraint[\SC{1}]{\ref{constraint-union}}--\Constraint[\SC{1}]{\ref{constraint-tuple-types}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}.
 
 The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone}. The constraints within the schema imply the existence of several subtype nodes (e.g., the two subtypes of \(\T{City}\) implied by \Constraint{\ref{constraint-implied-types-london}} and \Constraint{\ref{constraint-implied-types-nonlondon}}), along with corresponding selection and projection edges, which are listed in Table~\ref{Tab.SIG.Implied.Edges}. \Constraint[\SC{1}]{\ref{constraint-union}}, \Constraint[\SC{1}]{\ref{constraint-relation-type-union}}(a), and \Constraint[\SC{1}]{\ref{constraint-relation-type-union}}(b) are effectively tautologies that add no new information, and can thus be safely ignored. The completed SIG for \(\SC{1}\) is shown in Figure~\ref{fig-sig-s}.
-
-%%%%%%%%%%%%%%%%%%%%
-
-\begin{table*}
-    \centering
-    \begin{tabular}{cl}
-        \toprule
-        \textbf{Constraint}                                     &   \textbf{Implied edge(s)}    \\
-        \midrule
-        {\Constraint[\SC{1}]{\ref{constraint-key}}}(b)          &   \(\T{\Sno} \KeyEdge \TSSL\)   \\
-        \phantom{\Constraint[\SC{1}]{\ref{constraint-key}}}(c)  &   \(\T{\Sno} \KeyEdge \TSSNL\)   \\
-        \midrule
-        {\Constraint[\SC{1}]{\ref{constraint-relation-types}}}  &   \(\T{\LSsub} \SurTotal \TT{\LSsub}\) \quad\quad \(\T{S} \SelectionEdge \T{\LSsub}\) \quad\quad \(\TT{S} \SelectionEdge \TT{\LSsub}\)   \\
-        \midrule
-        {\Constraint[\SC{1}]{\ref{constraint-tuple-types}}}     &   \(\T{\NLSsub} \SurTotal \TT{\NLSsub}\) \quad\quad \(\T{S} \SelectionEdge \T{\NLSsub}\) \quad\quad \(\TT{S} \SelectionEdge \TT{\NLSsub}\)   \\
-        \midrule
-        {\Constraint{\ref{constraint-implied-types-london}}}    &   \(\T{\City} \SelectionEdge \CityLondon\)   \\
-        \midrule
-        {\Constraint{\ref{constraint-implied-types-nonlondon}}} &   \(\T{\City} \SelectionEdge (\TCityMinusLondon)\)   \\
-        \midrule
-        {\Constraint{\ref{constraint-implied-types-TSSL}}}      &   \(\TSSC \SelectionEdge \TSSL\)    \\
-            &   \(\TT{\LSsub} \ProjectionEdge \TSSL\)   \\
-            &   \(\TSSL \ProjectionEdge \T{\Sname}\)   \\
-            &   \(\TSSL \ProjectionEdge \T{\Status}\)   \\
-            &   \(\TSSL \ProjectionEdge\,\CityLondon\)  \\
-        \midrule
-        {\Constraint{\ref{constraint-implied-types-TSSNL}}}     &   \(\TSSC \SelectionEdge \TSSNL\) \\
-            &   \(\TT{\NLSsub} \ProjectionEdge \TSSNL\)  \\
-            &   \(\TSSNL \ProjectionEdge \T{\Sname}\)  \\
-            &   \(\TSSNL \ProjectionEdge \T{\Status}\)  \\
-            &   \(\TSSNL \ProjectionEdge \TCityMinusLondon\)  \\
-        \bottomrule
-    \end{tabular}
-    \caption{Constraints and the SIG edges they imply for schema \(\SC{1}\).}
-    \label{Tab.SIG.Implied.Edges}
-\end{table*}
-
-%%%%%%%%%%%%%%%%%%%%
 
 \begin{figure*}
     \centering
@@ -891,15 +891,6 @@ The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone
 
 %%%%%%%%%%%%%%%%%%%%
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-\subsubsection{Schema \(\SC{3}\)}
-\label{sec-sigs-s-iii}
-
-\noindent The constraints appearing in \(\SC{3}\) are \Constraint{\ref{constraint-key}}(b), \Constraint{\ref{constraint-notlondon}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}. The SIG will only include edges and nodes that relate either directly to \(\LS\) or are independent of any relvar, such as the subtype node \(\TSSNL\). The complete SIG for \(\SC{3}\) is shown in Figure~\ref{fig-sig-ls}.
-
 %%%%%%%%%%%%%%%%%%%%
 
 \begin{figure*}
@@ -955,6 +946,15 @@ The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone
 \end{figure*}
 
 %%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsubsection{Schema \(\SC{3}\)}
+\label{sec-sigs-s-iii}
+
+\noindent The constraints appearing in \(\SC{3}\) are \Constraint{\ref{constraint-key}}(b), \Constraint{\ref{constraint-notlondon}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}. The SIG will only include edges and nodes that relate either directly to \(\LS\) or are independent of any relvar, such as the subtype node \(\TSSNL\). The complete SIG for \(\SC{3}\) is shown in Figure~\ref{fig-sig-ls}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
