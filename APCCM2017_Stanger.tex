@@ -1051,7 +1051,7 @@ Applying this process to \(\SC{3}\), we first duplicate node \(\T{\LS}\) to \(\T
 
 The next phase is to copy and move edges. To produce the edge \(\T{S} \SurTotal \TT{S}\), we first \emph{copy} \(\T{\LS} \SurTotal \TT{\LS}\) across the path \(\TT{S} \TrivialSelection \TT{\LS}\) (giving \(\T{\LS} \SurTotal \TT{S}\)), then \emph{move} it across \(\T{S} \TrivialSelection \T{\LS}\). We can carry out a similar series of transformations to copy and move \(\T{S} \SurTotal \TT{S}\) to \(\T{\NLS} \SurTotal \TT{\NLS}\).
 
-Next, we copy and move the projection edge \(\TT{\LS} \ProjectionEdge \T{\Sno}\) to produce the edges \(\TT{S} \ProjectionEdge \T{\Sno}\) and \(\TT{\NLS} \ProjectionEdge \T{\Sno}\). Similarly, we copy and move \(\TT{\LS} \ProjectionEdge \TSSL\) to produce \(\TT{S} \LabelledEdge{\sigedge{12}}{\RelProject} \TSSC\) and \(\TT{\NLS} \LabelledEdge{\sigedge{02}}{\RelProject} \TSSNL\). Note that the first edge in the latter pair of transformations loses the totality annotation, and the second edge the surjectivity annotation, as a result of composition with the pre-existing non-bijective selection edges in the middle of the SIG.
+Next, we copy and move the projection edge \(\TT{\LS} \ProjectionEdge \T{\Sno}\) to produce the edges \(\TT{S} \ProjectionEdge \T{\Sno}\) and \(\TT{\NLS} \ProjectionEdge \T{\Sno}\). Similarly, we copy and move \(\TT{\LS} \ProjectionEdge \TSSL\) to produce \(\TT{S} \LabelledEdge{\sigedge{12}}{\RelProject} \TSSC\) and \(\TT{\NLS} \LabelledEdge{\sigedge{02}}{\RelProject} \TSSNL\). Note that the first edge in the latter pair of transformations loses the totality annotation, and the second edge the surjectivity annotation, as a result of composition with the pre-existing non-bijective selection edges running vertically down the middle of the SIG.
 
 Finally, we carry out similar copy and move transformations to copy the key edge \(\T{\Sno} \KeyEdge \TSSC\) to \(\T{\Sno} \KeyEdge \TSSL\) and \(\T{\Sno} \KeyEdge \TSSNL\). The annotations for these edges are unaffected. The result of all these edge transformations is shown in Figure~\ref{fig-transform-edge-moves}.
 
@@ -1128,11 +1128,9 @@ Finally, we carry out similar copy and move transformations to copy the key edge
 
 %%%%%%%%%%%%%%%%%%%%
 
-If we compare Figure~\ref{fig-sig-s} with Figure~\ref{fig-transform-edge-moves}, we can see that the transformed SIG for \(\SC{3}'\) now has the same node and edge structure as the SIG for \(\SC{1}\). We still need to remove the totality annotations from the four remaining trivial selection edges, but even when this is done, we do not achieve the desired isomorphism, as the projection edges \(\TT{S} \LabelledEdge{\sigedge{12}}{\RelProject} \TSSC\) and \(\TT{\NLS} \LabelledEdge{\sigedge{02}}{\RelProject} \TSSNL\) have different annotations from the corresponding edges in the SIG for \(\SC{1}\). (Indeed, it is debatable as to whether these two edges can even still be considered projection edges, as they no longer match the definition in Section~\ref{sec-sig-build}). This clearly shows that the information capacities of \(\SC{1}\) and \(\SC{3}\) are incomparable, and that view updates based on this pair of schemas will be problematic.
+If we compare Figure~\ref{fig-sig-s} with Figure~\ref{fig-transform-edge-moves}, we can see that the transformed SIG for \(\SC{3}'\) now has the same topology as the SIG for \(\SC{1}\). We still need to remove the totality annotations from the four remaining trivial selection edges, but even when this is done, we do not achieve the desired isomorphism, as the projection edges \(\TT{S} \LabelledEdge{\sigedge{12}}{\RelProject} \TSSC\) and \(\TT{\NLS} \LabelledEdge{\sigedge{02}}{\RelProject} \TSSNL\) have different annotations from the corresponding edges in the SIG for \(\SC{1}\). (Indeed, it is debatable as to whether these two edges can even still be considered projection edges, as they no longer match the definition in Section~\ref{sec-sig-build}). This clearly shows that the information capacities of \(\SC{1}\) and \(\SC{3}\) are incomparable, and that view updates based on this pair of schemas will be problematic.
 
-Incidentally, if we created a fourth sub-schema \(\SC{4} = \{\NLS\}\) and compared this with \(\SC{1}\), the result would be similar to \(\SC{3}\).
-
-% Note that in the equivalent schemas, all constraints were able to be propagated, whereas in the non-comparable schemas they weren't. Is this a general rule?
+If we were to create a fourth sub-schema \(\SC{4} = \{\NLS\}\) and compare this with \(\SC{1}\), the result would be similar to that for \(\SC{3}\).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1143,21 +1141,25 @@ Incidentally, if we created a fourth sub-schema \(\SC{4} = \{\NLS\}\) and compar
 
 % shows promise as a means of formally characterising and modelling Date's notion of information equivalence, and thus validating his approach
 
-\noindent In this paper we have shown how to use the concept of relative information capacity and an extension of the schema intension graph (SIG) formalism to model information equivalence with respect to relational view updating. The results of our analysis of Date's restriction view example \cite{Date.C-2013a-View} are consistent with his findings. The information capacities of \(\SC{1} = \{S\}\) and \(\SC{2} = \{\LS,\NLS\}\) are equivalent, so it should be possible to effectively propagate view updates between \(\SC{1}\) and \(\SC{2}\), regardless of the configuration of views and base relvars. Conversely, the information capacity of \(\SC{3} = \{\LS\}\) is not comparable with that of \(\SC{1}\), implying that there are updates that cannot be propagated between \(\SC{1}\) and \(\SC{3}\).
+\noindent In this paper we have shown how to use the concept of relative information capacity and an extension of the schema intension graph (SIG) formalism to more formally model Date's notion of information equivalence with respect to relational view updates. Our analysis of Date's restriction view example \cite{Date.C-2013a-View} using these techniques is consistent with his findings. The information capacities of \(\SC{1} = \{S\}\) and \(\SC{2} = \{\LS,\NLS\}\) are equivalent, so it should be possible to effectively propagate view updates between \(\SC{1}\) and \(\SC{2}\), regardless of the configuration of views and base relvars. Conversely, the information capacity of \(\SC{3} = \{\LS\}\) is not comparable with that of \(\SC{1}\), implying that there are updates that cannot be propagated between \(\SC{1}\) and \(\SC{3}\).
 
 Our analysis shows the importance of clearly identifying all explicit and implicit constraints that can be propagated from the base schema \(\SC{0}\) to its sub-schemas. Omission of constraints could lead to a different SIG structure that might not be comparable, or might lead to an erroneous conclusion about a schema's information capacity relative to another.
 
-There are several avenues for future work. While the discussion in this paper focused on the relational context, relative information capacity and the SIG formalism are data model agnostic, and thus should be applicable in non-relational view contexts (e.g., XML).
+There are several avenues for future work. First, the proof of concept discussed in this paper only deals with disjoint restriction views, which are arguably the simplest case of view updating. Further work needs to be done to characterise other types of view configuration, such as projection views, join views, and union views. This will enable us to test and refine the application of SIGs in this context.
 
-It is unclear at present whether the omission of inclusion dependencies such as foreign keys is significant. If such dependencies are significant, the question then is how best to represent them in the SIG formalism. It is also unclear at present whether copying or moving an edge across a bijective path should necessarily increase information capacity, as no annotations are lost in such a transformation. It may be that the structural change to the SIG implies an increase in information capacity regardless. Further investigation is required.
+The discussion in this paper focused on the relational context, but relative information capacity and the SIG formalism are data model agnostic. It would therefore be interesting to investigate the application of this approach to non-relational view updating contexts (e.g., XML).
 
-Finally, we have only examined disjoint restriction views in this paper, which are arguably the simplest case of view updating. Further work needs to be done to characterise other types of view configuration, such as projection views, join views, and union views. This will enable us to further refine the application of SIGs in this context.
+It is unclear at present whether the omission of inclusion dependencies such as foreign keys is significant. If such dependencies are significant, the question then is how best to represent them in the SIG formalism.
+
+It is also unclear at present whether copying or moving an edge across a bijective path should necessarily increase information capacity, as no annotations are lost in such a transformation. It may be that the structural change to the SIG implies an increase in information capacity regardless. Further investigation is required.
+
+Finally, it is interesting to note that with the equivalent schemas \(\SC{1}\) and \(\SC{2}\), we were able to propagate all of the constraints from the base schema \(\SC{0}\) (Section~\ref{sec-constraints-s-ii}), whereas with the incomparable schemas \(\SC{1}\) and \(\SC{3}\), only a subset of the constraints could be propagated (Section~\ref{sec-constraints-s-iii}). Intuitively, it seems reasonable that the degree to which constraints can be propagated from \(\SC{0}\) to sub-schemas could be an indicator of information capacity equivalence among the sub-schemas, but this need to be further investigated.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\balance
+% \balance
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
