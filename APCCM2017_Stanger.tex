@@ -297,7 +297,7 @@ Finally, Date has published several books on the theoretical underpinnings of th
 
 Date's work is interesting and compelling, and raises several questions worthy of further investigation. However, there are still situations where the correct view translation may be ambiguous, e.g., views based on certain types of join, as previously noted by Keller \cite{Keller.A-1985a-Algorithms}. Somewhat disappointingly, given his stated goal of ``solving'' the view update problem, Date took a pragmatic approach in such cases. While his justification was well argued and logical, even he agreed that it involved ``a certain degree of pragma'' \cite{Date.C-2013a-View}.
 
-Date characterises the ability to define an appropriate and effective view translation using the notion of \emph{information equivalence}. Two schemas \(\SC{1}\) and \(\SC{2}\) are said to be information equivalent ``if and only if the constraints that apply to [\(\SC{1}\)] and [\(\SC{2}\)] are such that every proposition that can be represented by [\(\SC{1}\)] can be represented by [\(\SC{2}\)] and vice versa'' \cite{Date.C-2013a-View}. While Date's information equivalence is a formal concept, its definition and characterisation in \cite{Date.C-2013a-View} are more operational and pragmatic in nature. This is what we explore further in this paper.
+Date characterises the ability to define an appropriate and effective view translation using the notion of \emph{information equivalence}. Two schemas \(\SC{1}\) and \(\SC{2}\) are said to be information equivalent ``if and only if the constraints that apply to [\(\SC{1}\)] and [\(\SC{2}\)] are such that every proposition that can be represented by [\(\SC{1}\)] can be represented by [\(\SC{2}\)] and vice versa'' \cite{Date.C-2013a-View}. While Date's information equivalence is a formal concept, its definition and characterisation in \cite{Date.C-2013a-View} are more operational in nature. This is what we explore further in this paper.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -308,7 +308,7 @@ Date characterises the ability to define an appropriate and effective view trans
 
 \noindent We generally follow Date's \cite{Date.C-2012a-SQL-and-Relational} notation and terminology regarding the Relational Model. We do not use Date's Tutorial D notation, preferring instead a more classical algebraic style.
 
-In this paper, \(A\) represents an attribute (comprising a name:type pair), \(R\) represents a relation variable (\emph{relvar}), and \(v\) represents a value (of an attribute, tuple, relation, etc.). In the following discussion it will generally be clear which attribute a value is associated with, but where necessary, the value will be prefixed with the attribute name, i.e., \(\mathit{name}\colon\mathit{value}\).
+In this paper, \(A\) represents an attribute (comprising a \emph{name}:\emph{type} pair), \(R\) represents a relation variable (\emph{relvar}), and \(v\) represents a value of an attribute, tuple, relation, etc. In the following discussion it will generally be clear which attribute a value is associated with, but where necessary, the value will be prefixed with the attribute name, i.e., \(\mathit{name}\colon\mathit{value}\).
 
 Date defines a \emph{type} \(\T{i}\) as ``essentially a \emph{named, finite set of values}'' \cite{Date.C-2012a-SQL-and-Relational}, representing every possible value of some specific kind, e.g., every possible ASCII string of length 5, every possible city name, or every possible relation value with a particular heading. That is:
 \begin{equation}\label{eqn-type}
@@ -316,7 +316,7 @@ Date defines a \emph{type} \(\T{i}\) as ``essentially a \emph{named, finite set 
 \end{equation}
 where \(k\) is some finite upper bound. Thus, the type of an attribute \(A_{i}\) (denoted \(\T{A_{i}}\)) is by definition the set of all possible values of \(A_{i}\).
 
-Consider a relvar \(R\) with heading \(\{A_{1}, A_{2}, \dotsc, A_{n}\}\). Following from equation~\ref{eqn-type}, the (relation) type of \(R\), denoted here as \(\T{R}\), is the set of all possible relation values with \(R\)'s heading. Similarly, the (tuple) type of \(R\)'s tuples, denoted here as \TT{R}, is the set of all possible tuple values with \(R\)'s heading, which equates to the cartesian product of \(R\)'s attribute types, i.e.:
+Consider a relvar \(R\) with heading \(\{A_{1}, A_{2}, \dotsc, A_{n}\}\). Following from equation~\ref{eqn-type}, the (relation) type of \(R\), denoted here as \(\T{R}\), is the set of all possible relation values with \(R\)'s heading. Similarly, the (tuple) type of \(R\)'s tuples, denoted here as \TT{R}, is the set of all possible tuple values with \(R\)'s heading, which equates to the Cartesian product of \(R\)'s attribute types, i.e.:
 \begin{equation}\label{eqn-tuple-type}
 \TT{R} = \T{A_{1}} \times \T{A_{2}} \times\dotsb\times \T{A_{n}}\text{.}
 \end{equation}
@@ -324,7 +324,7 @@ By definition any given value of \(R\) must comprise a set (possibly empty) of t
 
 For example, Date's usual suppliers-and-parts schema \cite{Date.C-2013a-View} includes a relvar \(S\) with heading \(\{\Sno, \Sname, \Status, \City\}\), which contains details of suppliers. From equation~\ref{eqn-tuple-type}, the tuples of \(S\) have type \(\TT{S} = \T{\Sno} \times \TSSC\).
 
-This notion of type as a set of possible values is synonymous with Codd's original definition of domains in the Relational Model \cite{Codd.E-1970a-Relational,Date.C-2012a-SQL-and-Relational}, and in particular with the notion of domains as ``sets of values'' in schema intension graphs \cite{Miller.R-1994a-Schema,Miller.R-1994a-SIG}. The implications of the latter point will be explored further in Section~\ref{sec-relational-sigs}, after we have introduced relative information capacity and schema intension graphs in Section~\ref{sec-info-capacity}.
+This notion of type as a set of possible values is synonymous with Codd's original definition of domains in the Relational Model \cite{Codd.E-1970a-Relational,Date.C-2012a-SQL-and-Relational}, and also with the notion of domains as ``sets of values'' in schema intension graphs \cite{Miller.R-1994a-Schema,Miller.R-1994a-SIG}. The implications of the latter point will be explored further in Section~\ref{sec-relational-sigs}, after we have introduced relative information capacity and schema intension graphs in Section~\ref{sec-info-capacity}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -358,7 +358,7 @@ Relative information capacity can only be used in a comparative manner. To this 
 \subsection{Constructing SIGs}
 \label{sec-sig-build}
 
-\noindent A SIG is a graph \(G = (N, E)\) \cite{Miller.R-1994a-Schema}. The nodes \(n_{i} \in N\) represent typed domains (i.e., sets of values). Nodes may be \emph{simple} (atomic) or \emph{constructed} (composite). Simple nodes are denoted by the name of the domain that they represent. Constructed nodes represent a collection of domains and are built using the \(\times\) (cartesian product) and \(+\) (union) operators.
+\noindent A SIG is a graph \(G = (N, E)\) \cite{Miller.R-1994a-Schema}. The nodes \(n_{i} \in N\) represent typed domains (i.e., sets of values). Nodes may be \emph{simple} (atomic) or \emph{constructed} (composite). Simple nodes are denoted by the name of the domain that they represent. Constructed nodes represent a collection of domains and are built using the \(\times\) (Cartesian product) and \(+\) (union) operators.
 
 The edges \(e_{i} \in E\) represent binary relations (in the mathematical sense) between domains. Edges are denoted by lines with an optional label, and may be composed to form a \emph{path} between two nodes (the notation \(e_{2} \circ e_{1}\) means ``edge \(e_{1}\) followed by edge \(e_{2}\)''). Some edges may be designated as \emph{selection} edges, labelled \(\RelRestrict\), or \emph{projection} edges, labelled \(\RelProject\). These correspond to the relational algebra operators of the same name \cite{Codd.E-1972a-Completeness}.
 
@@ -511,7 +511,7 @@ These SIG transformations and their effects are summarised in Table~\ref{Tab.SIG
 \section{Extending SIGs to model relational concepts}
 \label{sec-relational-sigs}
 
-\noindent The direct correspondence between relational types and SIG domains noted in Section~\ref{sec-relations-types} enables us to use SIGs to represent the structure and constraints of relational schemas. Equating tuple types to the cartesian product of their attributes (equation \ref{eqn-tuple-type}) means that these can also be mapped directly to a constructed SIG node.
+\noindent The direct correspondence between relational types and SIG domains noted in Section~\ref{sec-relations-types} enables us to use SIGs to represent the structure and constraints of relational schemas. Equating tuple types to the Cartesian product of their attributes (equation \ref{eqn-tuple-type}) means that these can also be mapped directly to a constructed SIG node.
 
 Let us again consider the relvar \(S\{\Sno, \Sname, \Status, \City\}\) from Date's suppliers-and-parts schema. In addition to type constraints on the attributes, tuples, and the relvar as a whole, \(S\) is subject to a (primary) key constraint on \Sno. Taken together with the collection of types \(\T{\Sno}\), \(\T{\Sname}\), \(\T{\Status}\), \(\T{\City}\), \(\TT{S}\), and \(\T{S}\), and assuming that \(S\) is the only relvar in the schema, we can construct the SIG shown in Figure~\ref{fig-sig-s-alone} as explained below.
 
