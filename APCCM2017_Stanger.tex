@@ -515,7 +515,7 @@ These SIG transformations and their effects are summarised in Table~\ref{Tab.SIG
 
 \noindent The direct correspondence between relational types and SIG domains noted in Section~\ref{sec-relations-types} enables us to use SIGs to represent the structure and constraints of relational schemas. Equating tuple types to the Cartesian product of their attributes (equation \ref{eqn-tuple-type}) means that these can also be mapped directly to a constructed SIG node.
 
-Let us again consider the relvar \(S\{\Sno, \Sname, \Status, \City\}\) from Date's suppliers-and-parts schema. In addition to type constraints on the attributes, tuples, and the relvar as a whole, \(S\) is subject to a (primary) key constraint on \Sno. Taken together with the collection of types \(\T{\Sno}\), \(\T{\Sname}\), \(\T{\Status}\), \(\T{\City}\), \(\TT{S}\), and \(\T{S}\), and assuming that \(S\) is the only relvar in the schema, we can construct the SIG shown in Figure~\ref{fig-sig-s-alone} as explained below.
+Let us again consider the relvar \(S\{\Sno, \Sname, \Status, \City\}\) from Date's suppliers-and-parts schema \cite{Date.C-2013a-View}. In addition to type constraints on the attributes, tuples, and the relvar as a whole, \(S\) is subject to a (primary) key constraint on \Sno. Taken together with the collection of types \(\T{\Sno}\), \(\T{\Sname}\), \(\T{\Status}\), \(\T{\City}\), \(\TT{S}\), and \(\T{S}\), and assuming that \(S\) is the only relvar in the schema, we can construct the SIG shown in Figure~\ref{fig-sig-s-alone} as explained below.
 
 %%%%%%%%%%%%%%%%%%%%
 
@@ -554,11 +554,11 @@ Let us again consider the relvar \(S\{\Sno, \Sname, \Status, \City\}\) from Date
 
 As discussed in Section~\ref{sec-relations-types}, any given value of \(S\) must comprise a subset of \(\TT{S}\), so the association between \(\T{S}\) and \(\TT{S}\) is total. Similarly, every tuple in \(\TT{S}\) must appear in at least one value of \(S\), so the association is also surjective. The association is neither functional nor injective, however, as a value of \(S\) in general may contain multiple tuples, and each tuple in \(\TT{S}\) can appear in multiple values of \(S\). This gives us \(\T{S}\SurTotal\TT{S}\).
     
-The key constraint on \Sno\ implies that the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) holds in \(S\). From equation \ref{eqn-tuple-type}, we can infer the type of \(\{\Sname, \Status, \City\}\) as \(\TSSC\). The association is functional and not injective by definition. As not every supplier number may appear in any given value of \(S\), there may be elements of \(\T{\Sno}\) that are not associated with an element of \(\TSSC\), and vice versa. This implies that the association is neither total nor surjective. Indeed, this will be true for every edge that represents a key constraints. We introduce the edge label \(\mathit{key}\) to indicate that an edge represents a key constraint, which gives us \(\T{\Sno} \KeyEdge \TSSC\) in Figure~\ref{fig-sig-s-alone}. 
+The key constraint on \Sno\ implies that the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) holds in \(S\). From equation \ref{eqn-tuple-type}, we can infer the type of \(\{\Sname, \Status, \City\}\) as \(\TSSC\). The association is functional and not injective by definition. As not every supplier number may appear in any given value of \(S\), there may be elements of \(\T{\Sno}\) that are not associated with an element of \(\TSSC\), and vice versa. This implies that the association is neither total nor surjective. Indeed, this will be true for every edge that represents a key constraint. We introduce the edge label \(\mathit{key}\) to indicate that an edge represents a key constraint, which gives us \(\T{\Sno} \KeyEdge \TSSC\) in Figure~\ref{fig-sig-s-alone}. 
     
 Both \(\T{\Sno}\) and \(\TSSC\) are projections of \(\TT{S}\), so we can add (non-trivial) projection edges \(\TT{S} \ProjectionEdge \T{\Sname} \times \T{\Status} \times T_{\City}\) and \(\TT{S} \ProjectionEdge \T{\Sno}\). Similarly, \(\T{\Sname}\), \(\T{\Status}\), and \(\T{\City}\) are all projections of \(\TSSC\), so we can add further projection edges to these nodes, as shown in Figure~\ref{fig-sig-s-alone}.
 
-Looking at Figure~\ref{fig-sig-s-alone}, it could be argued that the \(T_{\dots}\) type notation is redundant and unnecessarily complicates the diagram. Why not just use, e.g., \(S\) instead of \(\T{S}\), \(\Sno\) instead of \(\T{\Sno}\), and \(\Sno \times \Sname \times \Status \times \City\) instead of \(\TT{S}\)? It is important to remember, however, that SIGs like that shown in Figure~\ref{fig-sig-s-alone} include multiple elements of quite different kinds, including relations, tuples, and various combinations of attributes. Discarding the type notation might be reasonable in informal situations, but could lead to confusion between the different kinds of elements represented. The explicit type notation protects the semantics of the various elements of the schema and makes it clear what is being considered.
+Looking at Figure~\ref{fig-sig-s-alone}, it could be argued that the \(T_{\dots}\) type notation is redundant and unnecessarily complicates the diagram. Why not just use, e.g., \(S\) instead of \(\T{S}\), \(\Sno\) instead of \(\T{\Sno}\), and \(\Sno \times \Sname \times \Status \times \City\) instead of \(\TT{S}\)? It is important to remember, however, that SIGs like that shown in Figure~\ref{fig-sig-s-alone} refer to multiple elements of quite different kinds, including relations, tuples, and various combinations of attributes. Discarding the type notation might be reasonable in informal situations, but could lead to confusion between the different kinds of elements represented. The explicit type notation protects the semantics of the various elements of the schema and makes it clear what is being considered.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -569,7 +569,7 @@ Looking at Figure~\ref{fig-sig-s-alone}, it could be argued that the \(T_{\dots}
 
 \noindent In this section we show how the extended SIG formalism can be used to model the information equivalence of relational view updates, using Date's motivating example of restriction views as a proof of concept \cite{Date.C-2013a-View}.
 
-Views and the base relvars they are derived from normally exist within the same ``base'' database schema (although this is not strictly required), which we shall refer to as \(\SC{0}\). However, an end user may be granted access only to the views, and thus not be aware of the existence of the base relvar(s), or vice versa. This effectively partitions the schema into sub-schemas \(\SC{1}, \SC{2}, \dotsc, \SC{n}\).
+Views and the base relvars they are derived from normally exist within the same ``base'' database schema (although this is not strictly required), which we shall refer to as \(\SC{0}\). However, an end user may be granted access only to the views, and thus not be aware of the existence of the base relvar(s), or vice versa. This effectively partitions the schema into logical sub-schemas \(\SC{1}, \SC{2}, \dotsc, \SC{n}\).
 
 There are explicit and implicit constraints in \(\SC{0}\) that should also apply to the sub-schemas \cite{Date.C-2013a-View}. Ignoring these constraints in a sub-schema \(\SC{k}\) will affect its information capacity, and could negatively impact the information equivalence of view updates involving \(\SC{k}\). In the next section we will show how such constraints can be propagated into sub-schemas by rewriting them in terms of the sub-schema alone, which enables us to explicitly incorporate into the sub-schema the type information implicit in \(\SC{0}\) that would otherwise be omitted. We will then discuss the construction of SIGs for Date's restriction view example (Section~\ref{sec-date-sigs}), and show how to transform and compare these (Section~\ref{sec-transforming}).
 
@@ -580,13 +580,13 @@ There are explicit and implicit constraints in \(\SC{0}\) that should also apply
 \subsection{Constraint derivation and propagation}
 \label{sec-constraints}
 
-\noindent Date's motivating example in Chapter 4 of \cite{Date.C-2013a-View} explores what is arguably the simplest case of view updating: disjoint restriction views. The example includes a base relvar \(S\) and two views \(\LS\) and \(\NLS\) derived\footnote{Although as Date notes \cite{Date.C-2013a-View}, we could just as easily define \(\LS\) and \(\NLS\) as base relvars and then derive \(S = \LS \RelUnion \NLS\), or even define all three as base relvars. The constraints will remain the same regardless.} from \(S\):
+\noindent Date's motivating example in Chapter 4 of \cite{Date.C-2013a-View} explores what is arguably the simplest case of view updating: disjoint restriction views. The example includes a base relvar \(S\) and two views \(\LS\) and \(\NLS\) derived\footnote{Although as Date notes \cite{Date.C-2013a-View}, we could just as easily define \(\LS\) and \(\NLS\) as base relvars and then derive \(S = \LS \RelUnion \NLS\), or even define all three as base relvars. The constraints remain the same regardless.} from \(S\):
 \begin{align}
     \LS  &= \RelRestrict_{\City = \mathit{'London'}}S \label{eqn-ls}   \\
     \NLS &= \RelRestrict_{\City \ne \mathit{'London'}}S \label{eqn-nls}
 \end{align}
 
-Informally, \(\LS\) contains details of London suppliers, while \(\NLS\) contains details of non-London suppliers. \(\LS\) and  \(\NLS\) represent disjoint restrictions of \(S\) with the same heading. They have the following tuple types:
+Informally, \(\LS\) contains details of London suppliers, while \(\NLS\) contains details of non-London suppliers. \(\LS\) and  \(\NLS\) represent disjoint restrictions of \(S\) with the same heading, and have the following tuple types:
 \begin{align}
     \TT{\LS}  &= \T{\Sno} \times \T{\Sname} \times \T{\LS} \times \CityLondon \nonumber    \\
     \TT{\NLS} &= \T{\Sno} \times \T{\Sname} \times \T{\Status} \times (\TCityMinusLondon) \nonumber
@@ -595,7 +595,7 @@ Informally, \(\LS\) contains details of London suppliers, while \(\NLS\) contain
 The base schema for this example is \(\SC{0} = \{S, \LS, \NLS\}\). This is subject to type constraints as specified by the various types noted previously, and the following additional constraints:
 \begin{ConstraintList}
 
-    \item\label{constraint-key} \Sno\ is a key for each of \(S\), \(\LS\), and \(\NLS\), therefore the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) also holds in each of (a) \(S\), (b) \(\LS\), and (c) \(\NLS\).
+    \item\label{constraint-key} \Sno\ is a key for each of \(S\), \(\LS\), and \(\NLS\), therefore the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) also holds in each of (a) \(S\); (b) \(\LS\); and (c) \(\NLS\).
     
     % not sure how relevant the FK constraints are?
     % how to represent? FK is a subset of the original key, so selection edge between S.Sno and each of LS.Sno and NLS.Sno
@@ -629,7 +629,7 @@ The base schema for this example is \(\SC{0} = \{S, \LS, \NLS\}\). This is subje
     
 \end{ConstraintList}
 
-Constraints \Constraint{\ref{constraint-union}}--\Constraint{\ref{constraint-disjoint}} enforce that \(\LS\) and \(\NLS\) are disjoint restrictions of \(S\), while \Constraint{\ref{constraint-relation-type-union}}--\Constraint{\ref{constraint-implied-types-TSSNL}} are additional type constraints that specify specialisation associations implied by the subtypes and supertypes occurring in \(\SC{0}\).
+Constraints \Constraint{\ref{constraint-union}}--\Constraint{\ref{constraint-disjoint}} enforce that \(\LS\) and \(\NLS\) are disjoint restrictions of \(S\), while \Constraint{\ref{constraint-relation-type-union}}--\Constraint{\ref{constraint-implied-types-TSSNL}} are additional type constraints that enforce specialisation associations implied by the subtypes and supertypes occurring in \(\SC{0}\).
 
 In most typical database schemas, only constraints \Constraint{\ref{constraint-key}}, \Constraint{\ref{constraint-lsfk}}, and \Constraint{\ref{constraint-nlsfk}} will be explicitly declared. Some database schemas may also explicitly declare constraints \Constraint{\ref{constraint-union}} and \Constraint{\ref{constraint-disjoint}}, but it is more likely that these and all the remaining constraints will be implicit in the definition of \(\SC{0}\). It is important for the purposes of this analysis to clearly identify all such implicit constraints, so that nothing is missed when constructing corresponding SIGs.
 
