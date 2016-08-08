@@ -226,11 +226,17 @@ In 2013, Chris Date published a book about the view update problem in the contex
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+\keywords{view update problem, information equivalence, relative information capacity, schema intension graph, schema transformation, relational model}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 \section{Introduction}
 
 \noindent The view update problem is a well known and long standing problem of great practical significance in the database field. Indeed, Date \cite{Date.C-2013a-View} likens it to significant unsolved problems in other fields such as the Riemann Hypothesis in mathematics or ``\(P = \mathit{NP}\)?'' in computational complexity theory. In his 2013 book \cite{Date.C-2013a-View} Date developed a comprehensive set of principles for updating relational views, based on the notion of \emph{information equivalence}. However, that notion was defined more operationally than formally.
 
-View updating can be considered a special case of schema translation: we effectively have one schema comprising a set of views and another schema comprising a set of base relations, and need to translate updates from one schema to the other.\footnote{These schemas may be actually separate, or more likely may be sub-schemas of a larger database schema, with effective separation achieved via the access privilege mechanism.} It therefore makes sense that formalisms developed to characterise sche\-ma translations would also be applicable to view updates. We therefore propose to use Hull's notion of \emph{relative information capacity} \cite{Hull.R-1986a-Relative} as a means to formally characterise the information equivalence of the schemas that make up a given view configuration.
+View updating can be considered a special case of schema translation: we effectively have one schema comprising a set of views and another schema comprising a set of base relations, and need to translate updates from one schema to the other.\footnote{These schemas may be actually separate, or more likely may be sub-schemas of a larger database schema, with effective separation achieved via the access privilege mechanism.} It therefore makes sense that formalisms developed to characterise schema translations would also be applicable to view updates. We therefore propose to use Hull's notion of \emph{relative information capacity} \cite{Hull.R-1986a-Relative} as a means to formally characterise the information equivalence of the schemas that make up a given view configuration.
 
 In particular, we develop an extension of Miller's \emph{schema intension graph} (SIG) formalism, which was originally designed to facilitate the comparison of relative information capacity across schemas. We first extend the SIG formalism with relevant relational concepts such as relation and tuple types, key constraints, and functional dependencies. We then show a proof of concept of how this extended formalism can be used to model the information equivalence of a view configuration, by applying it to Date's example of disjoint restriction views \cite{Date.C-2013a-View}. Our results are consistent with Date's operational characterisation of information equivalence for this example.
 
@@ -337,13 +343,14 @@ This notion of type as a set of possible values is synonymous with Codd's origin
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\newpage
 
 \section{Relative information capacity}
 \label{sec-info-capacity}
 
 \noindent A schema conveys information about the phenomenon it models. Hull \cite{Hull.R-1986a-Relative} defined the concept of \emph{relative information capacity} to describe the information content of different schemas. The relative information capacity of a schema determines the set of all valid instances of that schema \cite{Hull.R-1986a-Relative,Miller.R-1994a-PhD,Miller.R-1993a-Information}. Relative information capacity, as its name implies, is not a quantitative measure; rather it is an indicator of the relative information content of different schemas.
 
-Relative information capacity can be used as a basis for identifying the differences between schema instances, and can therefore be used as an aid to schema integration and translation \cite{Miller.R-1994a-PhD}. As noted earlier, view updating is a special case of this, so it follows that information capacity can also be used to characterise the information content of views compared to the base relvar(s) from which they are derived.
+Relative information capacity provides a means to identify the differences between schema instances, and can therefore be used as an aid to schema integration and translation \cite{Miller.R-1994a-PhD}. As noted earlier, view updating is a special case of this, so it follows that information capacity can also be used to characterise the information content of views compared to the base relvar(s) from which they are derived.
 
 Miller et al.\ \cite{Miller.R-1993a-Information} defined relative information capacity in terms of two types of mapping. An \emph{information (capacity) preserving mapping} from schema \(\SC{1}\) to schema \(\SC{2}\) maps every element of \(\SC{1}\) to an element of \(\SC{2}\), but only some elements of \(\SC{2}\) to elements of \(\SC{1}\). \(\SC{2}\) has an information capacity greater than \(\SC{1}\), and is said to \emph{dominate} \(\SC{1}\), denoted \Dominates{\SC{2}}{\SC{1}}. An \emph{equivalence preserving mapping} from \(\SC{1}\) to \(\SC{3}\) maps every element of \(\SC{1}\) to an element \(\SC{3}\) and vice versa (i.e., both the mapping and its inverse are information preserving). The information capacities of \(\SC{1}\) and \(\SC{3}\) are identical, and the schemas are said to be \emph{equivalent}, denoted \Equivalent{\SC{1}}{\SC{3}}.
 
@@ -682,7 +689,7 @@ Note that in the following analysis, we omit the foreign key constraints \Constr
 \subsubsection{Schema \(\SC{1}\)}
 \label{sec-constraints-s-i}
 
-\noindent A user granted access only to \(\SC{1}\) sees only relvar \(S\). Constraint \Constraint{\ref{constraint-key}}(a) can be propagated directly into \(\SC{1}\) because it is expressed only in terms of \(S\). Constraints \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}} do not mention any relvars and thus can also be directly propagated into \(\SC{1}\). Constraints \Constraint{\ref{constraint-key}}(b), \Constraint{\ref{constraint-key}}(c), and \Constraint{\ref{constraint-union}}--\Constraint{\ref{constraint-tuple-types}} can be propagated to \(\SC{1}\) (written as, e.g., \Constraint[\SC{1}]{\ref{constraint-union}}) by rewriting them in terms of \(S\) only. We can do this by substituting the definitions of \(\LS\) (equation~\ref{eqn-ls}) and \(\NLS\) (equation~\ref{eqn-nls}) into the constraints. For brevity, we shall write these substitutions as \(\LSsub\) (\(= \RelRestrict_{\City = \mathit{'London'}}S\)) and \(\NLSsub\) (\(= \RelRestrict_{\City \ne \mathit{'London'}}S\)), so as to distinguish them from the \(\LS\) and \(\NLS\) relvars in \(\SC{0}\), \(\SC{2}\), and \(\SC{3}\). Thus:
+\noindent A user granted access only to \(\SC{1}\) can see only relvar \(S\). Constraint \Constraint{\ref{constraint-key}}(a) can be propagated directly from \(\SC{0}\) into \(\SC{1}\) because it is already expressed in terms of \(S\) only. Constraints \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}} are not expressed in terms of any named relvars in \(\SC{0}\), and thus can also be propagated directly from \(\SC{0}\) into \(\SC{1}\). Constraints \Constraint{\ref{constraint-key}}(b), \Constraint{\ref{constraint-key}}(c), and \Constraint{\ref{constraint-union}}--\Constraint{\ref{constraint-tuple-types}} cannot be propagated directly from \(\SC{0}\) to \(\SC{1}\), but can all be rewritten in terms of \(S\) only by substituting the definitions of \(\LS\) (equation~\ref{eqn-ls}) and \(\NLS\) (equation~\ref{eqn-nls}), as appropriate. To simplify expressions in the following discussion, we shall use \(\LSsub\) to represent \(\RelRestrict_{\City = \mathit{'London'}}S\) (\ref{eqn-ls}) and \(\NLSsub\) to represent \(\RelRestrict_{\City \ne \mathit{'London'}}S\) (\ref{eqn-nls}). (This also clearly distinguishes the substitutions from the \(\LS\) and \(\NLS\) relvars in \(\SC{0}\), \(\SC{2}\), and \(\SC{3}\).) A constraint that has been rewritten so that it can be propagated from \(\SC{0}\) into \(\SC{1}\) is denoted by, e.g., \Constraint[\SC{1}]{\ref{constraint-union}}. Consequently we can derive the following set of rewritten constraints for \(\SC{1}\):
 \begin{ConstraintList}[\SC{1}]
     
     \item \Sno\ is a key for each of \(\LSsub\) and \(\NLSsub\), therefore the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) also holds in each of (b) \(\LSsub\); and (c) \(\NLSsub\). [The fact that we are dealing with two disjoint subsets of \(\City\) does not change this.]
@@ -696,7 +703,8 @@ Note that in the following analysis, we omit the foreign key constraints \Constr
     
     \item \(\LSsub \RelIntersect \NLSsub = \emptyset\)
 
-    \item (a) \(\T{S} = \T{\LSsub} \RelUnion \T{\NLSsub}\); (b) \(\TT{S} = \TT{\LSsub} \RelUnion \TT{\NLSsub}\) [or even just \(\T{S} = \T{S}\) and \(\TT{S} = \TT{S}\)]
+    \item (a) \(\T{S} = \T{\LSsub} \RelUnion \T{\NLSsub}\); (b) \(\TT{S} = \TT{\LSsub} \RelUnion \TT{\NLSsub}\) \newline
+    {[or even just \(\T{S} = \T{S}\) and \(\TT{S} = \TT{S}\)]}
     
     \item (a) \(\T{\LSsub} \subset \T{S}\); (b) \(\TT{\LSsub} \subset \TT{S}\) [from (\ref{eqn-ls}) above]
     
@@ -711,7 +719,7 @@ Note that in the following analysis, we omit the foreign key constraints \Constr
 \subsubsection{Schema \(\SC{2}\)}
 \label{sec-constraints-s-ii}
 
-\noindent A user granted access only to \(\SC{2}\) sees only relvars \(\LS\) and \(\NLS\). Constraints \Constraint{\ref{constraint-key}}(b),  \Constraint{\ref{constraint-key}}(c), and \Constraint{\ref{constraint-notlondon}}--\Constraint{\ref{constraint-disjoint}} can be directly propagated into \(\SC{2}\) as they are defined only in terms of \(\LS\) and \(\NLS\). \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}} can be directly propagated into \(\SC{2}\) as they do not mention any relvars. \Constraint{\ref{constraint-key}}(a), \Constraint{\ref{constraint-union}}, \Constraint{\ref{constraint-relation-type-union}}, \Constraint{\ref{constraint-relation-types}}, and \Constraint{\ref{constraint-tuple-types}} can be rewritten as follows in terms of \(\LS\) and \(\NLS\) only:
+\noindent A user granted access only to \(\SC{2}\) can see only relvars \(\LS\) and \(\NLS\). Constraints \Constraint{\ref{constraint-key}}(b),  \Constraint{\ref{constraint-key}}(c), and \Constraint{\ref{constraint-notlondon}}--\Constraint{\ref{constraint-disjoint}} can be propagated directly from \(\SC{0}\) into \(\SC{2}\) as they are defined only in terms of \(\LS\) and \(\NLS\). \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}} can be propagated directly into \(\SC{2}\) as they are not expressed in terms of any named relvars in \(\SC{0}\). \Constraint{\ref{constraint-key}}(a), \Constraint{\ref{constraint-union}}, \Constraint{\ref{constraint-relation-type-union}}, \Constraint{\ref{constraint-relation-types}}, and \Constraint{\ref{constraint-tuple-types}} can be rewritten in terms of \(\LS\) and \(\NLS\) only, giving us:
 \begin{ConstraintList}[\SC{2}]
 
     \item \Sno\ is a key for \(\LS \RelUnion \NLS\), therefore the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) also holds in (a) \(\LS \RelUnion \NLS\).
@@ -720,7 +728,8 @@ Note that in the following analysis, we omit the foreign key constraints \Constr
     \item \(\LS \RelUnion \NLS = \LS \RelUnion \NLS\)
     
     \setcounter{constraint}{7}
-    \item (a) \(\T{\LS} \RelUnion \T{\NLS} = \T{\LS} \RelUnion \T{\NLS}\); (b) \(\TT{\LS} \RelUnion \TT{\NLS} = \TT{\LS} \RelUnion \TT{\NLS}\)
+    \item (a) \(\T{\LS} \RelUnion \T{\NLS} = \T{\LS} \RelUnion \T{\NLS}\); \newline
+          (b) \(\TT{\LS} \RelUnion \TT{\NLS} = \TT{\LS} \RelUnion \TT{\NLS}\)
     
     \item (a) \(\T{\LS} \subset \T{\LS} \RelUnion \T{\NLS}\); (b) \(\TT{\LS} \subset \TT{\LS} \RelUnion \TT{\NLS}\)
     
@@ -735,7 +744,7 @@ Note that in the following analysis, we omit the foreign key constraints \Constr
 \subsubsection{Schema \(\SC{3}\)}
 \label{sec-constraints-s-iii}
 
-\noindent A user granted access only to \(\SC{3}\) sees only relvar \(\LS\). Constraints \Constraint{\ref{constraint-key}}(b) and \Constraint{\ref{constraint-notlondon}} can be directly propagated into \(\SC{3}\) as they are defined only  in terms of \(\LS\). \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}} can also be directly propagated as previously discussed. The remaining constraints cannot be rewritten in terms of \(\LS\) only, and therefore cannot be propagated to \(\SC{3}\). Given that we were able to propagate all constraints from \(\SC{0}\) to \(\SC{1}\), this indicates a qualitative difference between \(\SC{1}\) and \(\SC{3}\), which means it is likely that their relative information capacities will also differ.
+\noindent A user granted access only to \(\SC{3}\) can see only relvar \(\LS\). Constraints \Constraint{\ref{constraint-key}}(b) and \Constraint{\ref{constraint-notlondon}} can be propagated directly into \(\SC{3}\), as they are defined in terms of \(\LS\) only. \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}} can also be propagated directly into \(\SC{3}\) as previously discussed. The remaining constraints cannot be rewritten in terms of \(\LS\) only, and so cannot be propagated into \(\SC{3}\). As we were able to propagate all constraints into \(\SC{1}\), this indicates a qualitative difference between \(\SC{1}\) and \(\SC{3}\). It therefore seems likely that the relative information capacities of \(\SC{1}\) and \(\SC{3}\) will also differ.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -750,9 +759,11 @@ Note that in the following analysis, we omit the foreign key constraints \Constr
 \subsubsection{Schema \(\SC{1}\)}
 \label{sec-sigs-s-i}
 
-\noindent The SIG for \(\SC{1}\) will not just be that for relvar \(S\) (see Figure~\ref{fig-sig-s-alone}), as that schema did not incorporate all the constraints implicit in \(\SC{0}\). The process for constructing the SIG will be similar to that for the earlier example, however. The constraints appearing in \(\SC{1}\) are \Constraint{\ref{constraint-key}}(a), \Constraint[\SC{1}]{\ref{constraint-key}}(b), \Constraint[\SC{1}]{\ref{constraint-key}}(c), \Constraint[\SC{1}]{\ref{constraint-union}}--\Constraint[\SC{1}]{\ref{constraint-tuple-types}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}.
+\noindent The SIG for \(\SC{1}\) will not just be that for relvar \(S\) as shown in Figure~\ref{fig-sig-s-alone}, as that schema did not incorporate all the constraints implicit in \(\SC{0}\). The process for constructing the SIG will be similar to that for the earlier example, however. The constraints appearing in \(\SC{1}\) are \Constraint{\ref{constraint-key}}(a), \Constraint[\SC{1}]{\ref{constraint-key}}(b), \Constraint[\SC{1}]{\ref{constraint-key}}(c), \Constraint[\SC{1}]{\ref{constraint-union}}--\Constraint[\SC{1}]{\ref{constraint-tuple-types}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}.
 
-The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone}. The constraints within the schema also imply the existence of several subtype nodes (e.g., the two subtypes of \(\T{City}\) implied by \Constraint{\ref{constraint-implied-types-london}} and \Constraint{\ref{constraint-implied-types-nonlondon}}), along with corresponding selection and projection edges, which are listed in Table~\ref{Tab.SIG.Implied.Edges}. \Constraint[\SC{1}]{\ref{constraint-union}}, \Constraint[\SC{1}]{\ref{constraint-relation-type-union}}(a), and \Constraint[\SC{1}]{\ref{constraint-relation-type-union}}(b) are effectively tautologies that add no new information, and can thus be safely ignored. The completed SIG for \(\SC{1}\) is shown in Figure~\ref{fig-sig-s}.
+The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone}. The constraints within the schema also imply the existence of several subtype nodes (e.g., the two subtypes of \(\T{City}\) implied by \Constraint{\ref{constraint-implied-types-london}} and \Constraint{\ref{constraint-implied-types-nonlondon}}), along with corresponding selection and projection edges, which are listed in Table~\ref{Tab.SIG.Implied.Edges} above. \Constraint[\SC{1}]{\ref{constraint-union}}, \Constraint[\SC{1}]{\ref{constraint-relation-type-union}}(a), and \Constraint[\SC{1}]{\ref{constraint-relation-type-union}}(b) are effectively tautologies that add no new information, and can thus be safely ignored. The completed SIG for \(\SC{1}\) is shown in Figure~\ref{fig-sig-s}.
+
+%%%%%%%%%%%%%%%%%%%%
 
 \begin{figure*}
     \centering
@@ -817,15 +828,6 @@ The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone
 \end{figure*}
 
 %%%%%%%%%%%%%%%%%%%%
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-\subsubsection{Schema \(\SC{2}\)}
-\label{sec-sigs-s-ii}
-
-\noindent The constraints appearing in \(\SC{2}\) are \Constraint[\SC{2}]{\ref{constraint-key}}(a), \Constraint{\ref{constraint-key}}(b), \Constraint{\ref{constraint-key}}(c), \Constraint[\SC{2}]{\ref{constraint-union}}, \Constraint{\ref{constraint-notlondon}}--\Constraint{\ref{constraint-disjoint}}, \Constraint[\SC{2}]{\ref{constraint-relation-type-union}}--\Constraint[\SC{2}]{\ref{constraint-tuple-types}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}. This is essentially the same set of constraints as \(\SC{1}\), but with different rewritings. This means that the SIG for \(\SC{2}\) can be built in the same manner as for \(\SC{1}\), with some nodes named differently. In particular, \Constraint[\SC{2}]{\ref{constraint-relation-type-union}} implies that there will be nodes \(\TLSPlusNLS\) and \(\TTLSPlusNLS\) instead of \(\T{S}\) and \(\TT{S}\), respectively. There will also be \(\T{\LS}\) instead of \(\T{\LSsub}\), etc. The complete SIG for \(\SC{2}\) is shown in Figure~\ref{fig-sig-ls-nls}.
 
 %%%%%%%%%%%%%%%%%%%%
 
@@ -953,10 +955,19 @@ The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+\subsubsection{Schema \(\SC{2}\)}
+\label{sec-sigs-s-ii}
+
+\noindent The constraints appearing in \(\SC{2}\) are \Constraint[\SC{2}]{\ref{constraint-key}}(a), \Constraint{\ref{constraint-key}}(b), \Constraint{\ref{constraint-key}}(c), \Constraint[\SC{2}]{\ref{constraint-union}}, \Constraint{\ref{constraint-notlondon}}--\Constraint{\ref{constraint-disjoint}}, \Constraint[\SC{2}]{\ref{constraint-relation-type-union}}--\Constraint[\SC{2}]{\ref{constraint-tuple-types}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}. This is essentially the same set of constraints as \(\SC{1}\), but with different rewritings. This means that the SIG for \(\SC{2}\) can be built in the same manner as for \(\SC{1}\), with some nodes named differently. In particular, \Constraint[\SC{2}]{\ref{constraint-relation-type-union}} implies that there will be nodes \(\TLSPlusNLS\) and \(\TTLSPlusNLS\) instead of \(\T{S}\) and \(\TT{S}\), respectively. There will also be \(\T{\LS}\) instead of \(\T{\LSsub}\), etc. The complete SIG for \(\SC{2}\) is shown in Figure~\ref{fig-sig-ls-nls} on the previous page.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 \subsubsection{Schema \(\SC{3}\)}
 \label{sec-sigs-s-iii}
 
-\noindent The constraints appearing in \(\SC{3}\) are \Constraint{\ref{constraint-key}}(b), \Constraint{\ref{constraint-notlondon}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}. The SIG will only include edges and nodes that relate either directly to \(\LS\) or are independent of any relvar, such as the subtype node \(\TSSNL\). The complete SIG for \(\SC{3}\) is shown in Figure~\ref{fig-sig-ls}.
+\noindent The constraints appearing in \(\SC{3}\) are \Constraint{\ref{constraint-key}}(b), \Constraint{\ref{constraint-notlondon}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}. The SIG will only include edges and nodes that relate either directly to \(\LS\) or are independent of any relvar, such as the subtype node \(\TSSNL\). The complete SIG for \(\SC{3}\) is shown in Figure~\ref{fig-sig-ls} on the previous page.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -972,9 +983,9 @@ Looking at the SIGs for \(\SC{1}\) and \(\SC{2}\), we can see immediately that b
 The comparison between \(\SC{1}\) and \(\SC{3}\) is more interesting. There are some shared structures, but the two SIGs are clearly different. Since the SIG transformations discussed in Section~\ref{sec-sig-compare} only ever preserve or enhance information capacity, intuitively we should attempt to transform the ``smaller'' SIG for \(\SC{3}\) into the ``larger'' SIG for \(\SC{1}\). SIG transformations can generally be carried out in two broad phases (using the \(\SC{3} \rightarrow \SC{1}\) transformation as an example):
 \begin{description}
 
-    \item[Duplicate nodes] in \(\SC{3}\) (producing \(\SC{3}'\)) that correspond to supertypes in \(\SC{1}\), in order to create nodes corresponding to the extra nodes that \(\SC{1}\) has over \(\SC{3}\). The goal is to produce a node structure similar to that of \(\SC{1}\). The duplicated nodes will be connected to their original nodes by trivial selection edges. These transformations (if applicable) will not alter the information capacity of \(\SC{3}'\) (i.e., \(\SC{3} \equiv \SC{3}'\)).
+    \item[Duplicate nodes] in \(\SC{3}\) (producing \(\SC{3}'\)) that correspond to supertypes in \(\SC{1}\), in order to create nodes corresponding to the extra nodes that \(\SC{1}\) has over \(\SC{3}\). The goal is to produce a node structure similar to that of \(\SC{1}\). The duplicated nodes will be connected to their original nodes by trivial selection edges. These transformations (if applicable) will not alter the information capacity of \(\SC{3}'\) (i.e., \(\Equivalent{\SC{3}}{\SC{3}'}\)).
     
-    \item[Copy and move edges] across around the SIG to produce an edge structure similar to that of \(\SC{1}\). The annotations of each moved or copied edge will be determined by the path it is composed with, as discussed in Section~\ref{sec-sig-compare}. These transformations (if applicable) will \emph{increase} the information capacity of \(\SC{3}'\) (i.e., \(\SC{3} \preceq \SC{3}'\)).
+    \item[Copy and move edges] across around the SIG to produce an edge structure similar to that of \(\SC{1}\). The annotations of each moved or copied edge will be determined by the path it is composed with, as discussed in Section~\ref{sec-sig-compare}. These transformations (if applicable) will \emph{increase} the information capacity of \(\SC{3}'\) (i.e., \(\Dominates{\SC{3}'}{\SC{3}}\)).
     
 \end{description}
 
@@ -1045,7 +1056,7 @@ Applying this process to \(\SC{3}\), we first duplicate node \(\T{\LS}\) to \(\T
             (TSSC) -- [projection left] (TCity);
         };
     \end{tikzpicture}
-    \caption{SIG for modified schema \(S_{3}'\) after duplicating \T{\LS} and \TT{\LS} to produce analogues of the additional nodes in \(S_{1}\). Inputs to the transformations are coloured \textcolor{blue}{blue}, outputs are coloured \textcolor{red}{red}. [\(\equiv\)]}
+    \caption{SIG for transformed schema \(S_{3}'\) after duplicating \T{\LS} and \TT{\LS} to produce analogues of the additional nodes in \(S_{1}\). Inputs to the transformations are coloured \textcolor{blue}{blue}, outputs are coloured \textcolor{red}{red}. [\(\equiv\)]}
     \label{fig-transform-all-duplicates}
 \end{figure*}
 
@@ -1124,7 +1135,7 @@ Finally, we carry out similar copy and move transformations to copy the key edge
             (TTLSPlusNLS) -- [projection right,arrows={:{crossbar}->},bend right,output] (TSSC),
         };
     \end{tikzpicture}
-    \caption{SIG for modified schema \(S_{3}'\) after copying and moving edges. [\(\preceq\)]}
+    \caption{SIG for transformed schema \(S_{3}'\) after copying and moving various edges. [\(\preceq\)]}
     \label{fig-transform-edge-moves}
 \end{figure*}
 
