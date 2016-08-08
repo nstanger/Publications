@@ -1147,13 +1147,13 @@ Our analysis shows the importance of clearly identifying all explicit and implic
 
 There are several avenues for future work. First, the proof of concept discussed in this paper only deals with disjoint restriction views, which are arguably the simplest case of view updating. Further work needs to be done to characterise other types of view configuration, such as projection views, join views, and union views. This will enable us to test and refine the application of SIGs in this context.
 
-The discussion in this paper focused on the relational context, but relative information capacity and the SIG formalism are data model agnostic. It would therefore be interesting to investigate the application of this approach to non-relational view updating contexts (e.g., XML).
+The discussion in this paper focused only on the relational context, but relative information capacity and the SIG formalism are data model agnostic. It would therefore be interesting to investigate the application of these techniques to non-relational view updating contexts (e.g., XML).
 
 It is unclear at present whether the omission of inclusion dependencies such as foreign keys is significant. If such dependencies are significant, the question then is how best to represent them in the SIG formalism.
 
-It is also unclear at present whether copying or moving an edge across a bijective path should necessarily increase information capacity, as no annotations are lost in such a transformation. It may be that the structural change to the SIG implies an increase in information capacity regardless. Further investigation is required.
+It is also unclear at present whether copying or moving an edge across a bijective path should necessarily increase information capacity, as no annotations are changed in such a transformation. It may be that the structural change to the SIG implies an increase in information capacity regardless. Further investigation is required.
 
-Finally, it is interesting to note that with the equivalent schemas \(\SC{1}\) and \(\SC{2}\), we were able to propagate all of the constraints from the base schema \(\SC{0}\) (Section~\ref{sec-constraints-s-ii}), whereas with the incomparable schemas \(\SC{1}\) and \(\SC{3}\), only a subset of the constraints could be propagated (Section~\ref{sec-constraints-s-iii}). Intuitively, it seems reasonable that the degree to which constraints can be propagated from \(\SC{0}\) to sub-schemas could be an indicator of information capacity equivalence among the sub-schemas, but this need to be further investigated.
+Finally, it is interesting to note that with the equivalent schemas \(\SC{1}\) and \(\SC{2}\), we were able to propagate all of the constraints from the base schema \(\SC{0}\) (Section~\ref{sec-constraints-s-ii}), whereas with the incomparable schemas \(\SC{1}\) and \(\SC{3}\), only a subset of the constraints could be propagated (Section~\ref{sec-constraints-s-iii}). Intuitively, it seems reasonable to conjecture that the degree to which constraints can be propagated from \(\SC{0}\) to its sub-schemas could be an indicator of information capacity equivalence among the sub-schemas, but this needs to be further investigated.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
