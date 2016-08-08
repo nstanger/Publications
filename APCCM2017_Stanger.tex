@@ -341,7 +341,7 @@ This notion of type as a set of possible values is synonymous with Codd's origin
 \section{Relative information capacity}
 \label{sec-info-capacity}
 
-\noindent A schema conveys information about the phenomenon that it models. Hull \cite{Hull.R-1986a-Relative} defined the concept of \emph{relative information capacity} to describe the information content of different schemas. The relative information capacity of a schema determines the set of all valid instances of that schema \cite{Hull.R-1986a-Relative,Miller.R-1994a-PhD,Miller.R-1993a-Information}. Relative information capacity, as its name implies, is not a quantitative measure; rather it is an indicator of the relative information content of different schemas.
+\noindent A schema conveys information about the phenomenon it models. Hull \cite{Hull.R-1986a-Relative} defined the concept of \emph{relative information capacity} to describe the information content of different schemas. The relative information capacity of a schema determines the set of all valid instances of that schema \cite{Hull.R-1986a-Relative,Miller.R-1994a-PhD,Miller.R-1993a-Information}. Relative information capacity, as its name implies, is not a quantitative measure; rather it is an indicator of the relative information content of different schemas.
 
 Relative information capacity can be used as a basis for identifying the differences between schema instances, and can therefore be used as an aid to schema integration and translation \cite{Miller.R-1994a-PhD}. As noted earlier, view updating is a special case of this, so it follows that information capacity can also be used to characterise the information content of views compared to the base relvar(s) from which they are derived.
 
@@ -370,7 +370,7 @@ A \emph{bijection} is a binary relation that has all four properties \cite{Mille
 
 The use of the term ``relation'' here, while mathematically correct, is potentially confusing in any discussion that also involves the Relational Model. From now on, we shall therefore refer to the binary relations represented by SIG edges as ``associations''.
 
-A selection edge \(e : A \LabelledEdge{\sigedge{00}}{\RelRestrict} B\) indicates that the elements of \(B\) comprise a subset (or specialisation) of the elements of \(A\). If \(B = A\), we have what we term a \emph{trivial} selection. Every element of B must appear in A, and vice versa, and every element of \(A\) is associated with exactly one element of \(B\), and vice versa. Trivial selection edges are therefore bijective, i.e., \(A \TrivialSelection B\). If \(B \subset A\), we have what we term a \emph{non-trivial} selection. Every element of \(B\) must appear in \(A\), but not vice versa. The mapping remains one-to-one, as before. From the perspective of the supertype (\(A\) in this example), non-trivial selection edges are therefore surjective, functional, and injective, i.e., \(A \SelectionEdge B\).
+A selection edge \(e : A \LabelledEdge{\sigedge{00}}{\RelRestrict} B\) indicates that the elements of \(B\) comprise a subset or specialisation of the elements of \(A\). If \(B = A\), we have what we term a \emph{trivial} selection. Every element of B must appear in A, and vice versa, and every element of \(A\) is associated with exactly one element of \(B\), and vice versa. Trivial selection edges are therefore bijective, i.e., \(A \TrivialSelection B\). If \(B \subset A\), we have what we term a \emph{non-trivial} selection. Every element of \(B\) must appear in \(A\), but not vice versa. The mapping remains one-to-one, as before. From the perspective of the supertype (\(A\) in this example), non-trivial selection edges are therefore surjective, functional, and injective, i.e., \(A \SelectionEdge B\).
 
 A projection edge \(e : A \LabelledEdge{\sigedge{00}}{\RelProject} B\), indicates that the elements of \(B\) are a projection of \(A\), where \(A\) is a constructed node of the form \(C \times D \times \dotsb\). Trivial projection edges (\(B = A\)) are bijective, i.e., \(A \TrivialProjection B\), for the same reasons as trivial selection edges. For non-trivial projections (i.e., \(B \ne A\)), every element of \(A\) must have a corresponding element in \(B\), and vice versa. Similarly, every element of \(A\) can be associated with at most one element of \(B\), but not vice versa. Thus, non-trivial projection edges are total, surjective, and functional, i.e., \(A \ProjectionEdge B\).
 
@@ -381,7 +381,7 @@ A projection edge \(e : A \LabelledEdge{\sigedge{00}}{\RelProject} B\), indicate
 \subsection{Comparing SIGs}
 \label{sec-sig-compare}
 
-\noindent It is possible to determine the relationship between the relative information capacities of two schemas by comparing SIGs for the two schemas. Consider two schemas \(\SC{1}\) and \(\SC{2}\), with corresponding SIGs \(G_{\SC{1}}\) and \(G_{\SC{2}}\). Intuitively, if \(G_{\SC{1}}\) and \(G_{\SC{2}}\) are isomorphic, then \(\SC{1}\) and \(\SC{2}\) are equivalent \cite{Miller.R-1994a-SIG}. \(G_{\SC{1}}\) and \(G_{\SC{2}}\) are considered isomorphic if they have identical structure and semantics, i.e., the same nodes, edges, node types, and annotations.
+\noindent It is possible to determine the relationship between the relative information capacities of two schemas by comparing SIGs for the two schemas. Consider two schemas \(\SC{1}\) and \(\SC{2}\), with corresponding SIGs \(G_{\SC{1}}\) and \(G_{\SC{2}}\). Intuitively, if \(G_{\SC{1}}\) and \(G_{\SC{2}}\) are isomorphic, then \(\SC{1}\) and \(\SC{2}\) are equivalent \cite{Miller.R-1994a-SIG}. \(G_{\SC{1}}\) and \(G_{\SC{2}}\) are considered isomorphic if they have identical structure and semantics, i.e., the same nodes, edges, node types, constraints, and annotations.
 
 Miller et al.\ \cite{Miller.R-1994a-SIG} identify three possible results from comparing two SIGs \(G_{\SC{1}}\) and \(G_{\SC{2}}\):
 \begin{enumerate}
@@ -399,9 +399,11 @@ Miller et al.\ \cite{Miller.R-1994a-Schema} describe the following equivalence p
     
     \item[Annotation transformations] allow the removal of annotations or projection and selection constraints from edges (e.g., \(n_{1} \sigedge{23} n_{2} \Rightarrow n_{1} \sigedge{03} n_{2}\), or \(n_{3} \TrivialSelection n_{4} \Rightarrow n_{3} \Bijective n_{4}\)). If an annotation transformation on \(G_{\SC{1}}\) makes it isomorphic to \(G_{\SC{2}}\), then the information capacity of \(\SC{2}\) dominates that of \(\SC{1}\) (i.e., \Dominates{\SC{2}}{\SC{1}}).
     
-    \item[Composition transformations] allow edges to be moved and copied around the graph. Consider an edge \(e : n_{1} \sigedge{00} n_{2}\), as shown in Figure~\ref{fig-sig-composition-original}. If there is a path \(P = e_{m} \circ \dotsb \circ e_{k}\) of functional edges from some other node \(n_{k}\) to \(n_{2}\), \(e\) may be copied to a new edge \(e' : n_{1} \sigedge{00} n_{k}\), as shown in Figure~\ref{fig-sig-composition-copy}. The original \(e\) can then be deleted if desired, effectively moving \(e\) to \(e'\) as shown in Figure~\ref{fig-sig-composition-move}.
+    \item[Composition transformations] allow edges to be moved and copied around the graph. Consider an edge \(e : n_{1} \sigedge{00} n_{2}\), as shown in Figure~\ref{fig-sig-composition}\subref{fig-sig-composition-original}. If there is a path \(P = e_{m} \circ \dotsb \circ e_{k}\) of functional edges from some other node \(n_{k}\) to \(n_{2}\), \(e\) may be copied to a new edge \(e' : n_{1} \sigedge{00} n_{k}\), as shown in Figure~\ref{fig-sig-composition}\subref{fig-sig-composition-copy}. The original \(e\) can then be deleted if desired, effectively moving \(e\) to \(e'\) as shown in Figure~\ref{fig-sig-composition}\subref{fig-sig-composition-move}.
     
-    The annotation of \(e'\) is determined by composing \(P\) with \(e\), i.e., \(e \circ P\). If an edge with a particular annotation (such as surjectivity) is composed with an edge without that annotation, the resulting edge also does not have the annotation. For example, the composition of the edges \(\Functional\) and \(\Surjective\) would be an edge with no annotations (\(\Edge\)), whereas the composition of \(\Functional\) and \(\sigedge{03}\) would be \(\Functional\). If a composition transformation on \(G_{\SC{1}}\) makes it isomorphic to \(G_{\SC{2}}\), then \Dominates{\SC{2}}{\SC{1}}.
+    The annotation of \(e'\) is determined by composing \(P\) with \(e\), i.e., \(e \circ P\). If an edge with a particular annotation (such as surjectivity) is composed with an edge without that annotation, the resulting edge also does not have the annotation. For example, the composition of the edges \(\Functional\) and \(\Surjective\) would be an edge with no annotations (\(\Edge\)), whereas the composition of \(\Functional\) and \(\sigedge{03}\) would be \(\Functional\).
+    
+    If a composition transformation on \(G_{\SC{1}}\) makes it isomorphic to \(G_{\SC{2}}\), then \Dominates{\SC{2}}{\SC{1}}.
 
 %%%%%%%%%%%%%%%%%%%%
 
@@ -411,19 +413,19 @@ Miller et al.\ \cite{Miller.R-1994a-Schema} describe the following equivalence p
         \begin{tikzpicture}
             \node (n1)                      {\(n_{1}\)};
             \node (n2) [below=1cm of n1]    {\(n_{2}\)};
-            \node (n3) [right=1cm of n2]    {\(n_{3}\)};
-            \node (ee) [right=0.75cm of n3] {\ldots};
-            \node (nk) [right=0.75cm of ee] {\(n_{k}\)};
+            \node (n3) [left=1cm of n2]     {\(n_{3}\)};
+            \node (ee) [left=0.75cm of n3]  {\ldots};
+            \node (nk) [left=0.75cm of ee]  {\(n_{k}\)};
         
             \graph{
-                (n1) -- [edge label={\(e\)},swap] (n2);
-                (nk) -> [edge label={\(e_{k}\)}] (ee) -> [edge label={\(e_{m+1}\)}] (n3) -> [edge label={\(e_{m}\)}] (n2);
+                (n1) -- [edge label={\(e\)}] (n2);
+                (nk) -> [edge label={\(e_{k}\)},swap] (ee) -> [edge label={\(e_{m+1}\)},swap] (n3) -> [edge label={\(e_{m}\)},swap] (n2);
             };
             
-            \node (Pleft) [above=2mm of n2.north east] {};
-            \node (Pright) [above=2mm of nk.north west] {};
+            \node (Pleft) [above=2mm of nk.north east] {};
+            \node (Pright) [above=2mm of n2.north west] {};
             \node (P) at ($(Pleft)!0.5!(Pright)$) {\(P\)};
-            \draw[decorate,decoration=brace] (n2.north east) -- (nk.north west);
+            \draw[decorate,decoration=brace] (nk.north east) -- (n2.north west);
         \end{tikzpicture}
     }
     
@@ -431,14 +433,14 @@ Miller et al.\ \cite{Miller.R-1994a-Schema} describe the following equivalence p
         \begin{tikzpicture}
             \node (n1)                      {\(n_{1}\)};
             \node (n2) [below=1cm of n1]    {\(n_{2}\)};
-            \node (n3) [right=1cm of n2]    {\(n_{3}\)};
-            \node (ee) [right=0.75cm of n3] {\ldots};
-            \node (nk) [right=0.75cm of ee] {\(n_{k}\)};
+            \node (n3) [left=1cm of n2]     {\(n_{3}\)};
+            \node (ee) [left=0.75cm of n3]  {\ldots};
+            \node (nk) [left=0.75cm of ee]  {\(n_{k}\)};
         
             \graph{
-                (n1) -- [edge label={\(e\)},swap] (n2);
-                (n1) -- [edge label={\(e'\)}]     (nk);
-                (nk) -> [edge label={\(e_{k}\)}] (ee) -> [edge label={\(e_{m+1}\)}] (n3) -> [edge label={\(e_{m}\)}] (n2);
+                (n1) -- [edge label={\(e\)}]        (n2);
+                (n1) -- [edge label={\(e'\)},swap]  (nk);
+                (nk) -> [edge label={\(e_{k}\)},swap] (ee) -> [edge label={\(e_{m+1}\)},swap] (n3) -> [edge label={\(e_{m}\)},swap] (n2);
             };
         \end{tikzpicture}
     }
@@ -447,13 +449,13 @@ Miller et al.\ \cite{Miller.R-1994a-Schema} describe the following equivalence p
         \begin{tikzpicture}
             \node (n1)                      {\(n_{1}\)};
             \node (n2) [below=1cm of n1]    {\(n_{2}\)};
-            \node (n3) [right=1cm of n2]    {\(n_{3}\)};
-            \node (ee) [right=0.75cm of n3] {\ldots};
-            \node (nk) [right=0.75cm of ee] {\(n_{k}\)};
+            \node (n3) [left=1cm of n2]     {\(n_{3}\)};
+            \node (ee) [left=0.75cm of n3]  {\ldots};
+            \node (nk) [left=0.75cm of ee]  {\(n_{k}\)};
         
             \graph{
-                (n1) -- [edge label={\(e'\)}] (nk);
-                (nk) -> [edge label={\(e_{k}\)}] (ee) -> [edge label={\(e_{m+1}\)}] (n3) -> [edge label={\(e_{m}\)}] (n2);
+                (n1) -- [edge label={\(e'\)},swap]  (nk);
+                (nk) -> [edge label={\(e_{k}\)},swap] (ee) -> [edge label={\(e_{m+1}\)},swap] (n3) -> [edge label={\(e_{m}\)},swap] (n2);
             };
         \end{tikzpicture}
     }
@@ -468,7 +470,7 @@ Miller et al.\ \cite{Miller.R-1994a-Schema} describe the following equivalence p
         
         \item An existing node \(n\) may be duplicated to create a new node \(n'\!\). A trivial selection edge \(e:n \TrivialSelection n'\) is added to enforce the constraint that \(n'\) is a duplicate of \(n\).
         
-        \item A node \(n_{1}\) may be deleted if it is associated with exactly one other node \(n_{2}\) by a single trivial selection edge \(e:n_{1} \TrivialSelection n_{2}\) (implying \(n_{1}\) is a duplicate of \(n_{2}\)). This also implies deleting the trivial selection edge.
+        \item A node \(n_{1}\) may be deleted if it is associated with exactly one other node \(n_{2}\) by a single trivial selection edge \(e:n_{1} \TrivialSelection n_{2}\) (implying \(n_{1}\) is a duplicate of \(n_{2}\)). This also deletes the trivial selection edge.
         
         \item A trivial selection edge \(e:n \TrivialSelection n\) may be created that connects a node \(n\) to itself.
         
@@ -493,8 +495,8 @@ These SIG transformations and their effects are summarised in Table~\ref{Tab.SIG
         \textbf{Transformation}                         &   \textbf{Type}   &   \textbf{mation capacity}    \\
         \midrule
         Delete annotation or \(\RelProject\)/\(\RelRestrict\) constraint    &   annotation      &   augmented   \\
-        Move/copy edge                                  &   composition     &   augmented   \\
-        Create/delete duplicate node                    &   selection       &   no change   \\
+        Move or copy edge                               &   composition     &   augmented   \\
+        Create or delete duplicate node                 &   selection       &   no change   \\
         Create trivial selection edge                   &   selection       &   no change   \\
         Delete trivial selection edge                   &   selection       &   augmented   \\
         \bottomrule
