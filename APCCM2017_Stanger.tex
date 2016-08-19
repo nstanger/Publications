@@ -35,15 +35,15 @@
     projection right/.style={arrows={:{crossbar}-{crossbar}>},edge label'={\scriptsize\(\RelProject\)}},
     selection left/.style={arrows={<-{crossbar}>},edge label={\scriptsize\(\RelRestrict\)}},
     selection right/.style={arrows={<-{crossbar}>},edge label'={\scriptsize\(\RelRestrict\)}},
-    funcdep left/.style={arrows={->},edge node={node[sloped,midway,above] {\scriptsize\emph{key}}}},
-    funcdep right/.style={arrows={->},edge node={node[sloped,midway,below] {\scriptsize\emph{key}}}},
+    funcdep left/.style={arrows={:{crossbar}-{crossbar}>},edge node={node[sloped,midway,above] {\scriptsize\emph{key}}}},
+    funcdep right/.style={arrows={:{crossbar}-{crossbar}>},edge node={node[sloped,midway,below] {\scriptsize\emph{key}}}},
     surtotal/.style={arrows={:{crossbar}-{crossbar}:}},
     input keep/.style={blue,thick},
     input delete/.style={blue!40,thick,dashed},
     output/.style={red,thick},
     output temp/.style={red,thick,dashed},
     path 1/.style={green!60!black,thick},
-    path 2/.style={orange,thick}
+    path 2/.style={orange,thick},
 }
         
 % projection and selection edge annotations for TikZ
@@ -70,28 +70,28 @@
 \newcommand{\Status}{\ensuremath{\mathit{Status}}}
 \newcommand{\City}{\ensuremath{\mathit{City}}}
 
-\newcommand{\T}[1]{\ensuremath{T_{#1}}}
+\newcommand{\Type}[1]{\ensuremath{T_{#1}}}
 \newcommand{\TT}[1]{\ensuremath{T_{\{#1\}}}}
 
-\newcommand{\CityLondon}{\ensuremath{\{\City\colon\allowbreak\mathit{'London'}\}}}
-\newcommand{\TCityMinusLondon}{\ensuremath{\T{\City} \setminus \CityLondon}}
-\newcommand{\TSSC}{\ensuremath{\T{\Sname} \times \T{\Status} \times \T{\City}}}
-\newcommand{\TSSL}{\ensuremath{\T{\Sname} \times \T{\Status} \times \CityLondon}}
-\newcommand{\TSSNL}{\ensuremath{\T{\Sname} \times \T{\Status} \times (\TCityMinusLondon)}}
+\newcommand{\CityLondon}{\ensuremath{\{\City\colon\allowbreak\text{`\emph{London}'}\}}}
+\newcommand{\TCityMinusLondon}{\ensuremath{\Type{\City} \setminus \CityLondon}}
+\newcommand{\TSSC}{\ensuremath{\Type{\Sname} \times \Type{\Status} \times \Type{\City}}}
+\newcommand{\TSSL}{\ensuremath{\Type{\Sname} \times \Type{\Status} \times \CityLondon}}
+\newcommand{\TSSNL}{\ensuremath{\Type{\Sname} \times \Type{\Status} \times (\TCityMinusLondon)}}
 
-\newcommand{\TLSPlusNLS}{\ensuremath{\T{\LS} + \T{\NLS}}}
+\newcommand{\TLSPlusNLS}{\ensuremath{\Type{\LS} + \Type{\NLS}}}
 \newcommand{\TTLSPlusNLS}{\ensuremath{\TT{\LS} + \TT{\NLS}}}
-\newcommand{\TLSPlusNLSsub}{\ensuremath{\T{\LSsub} + \T{\NLSsub}}}
+\newcommand{\TLSPlusNLSsub}{\ensuremath{\Type{\LSsub} + \Type{\NLSsub}}}
 \newcommand{\TTLSPlusNLSsub}{\ensuremath{\TT{\LSsub} + \TT{\NLSsub}}}
 
-\newcommand{\StackTLSPlusNLS}{\ensuremath{\begin{array}{c}\T{\LS}\,+ \\ \T{\NLS}\end{array}}}
+\newcommand{\StackTLSPlusNLS}{\ensuremath{\begin{array}{c}\Type{\LS}\,+ \\ \Type{\NLS}\end{array}}}
 \newcommand{\StackTTLSPlusNLS}{\ensuremath{\begin{array}{c}\TT{\LS}\,+ \\ \TT{\NLS}\end{array}}}
-\newcommand{\StackTLSPlusNLSsub}{\ensuremath{\begin{array}{c}\T{\LSsub}\,+ \\ \T{\NLSsub}\end{array}}}
+\newcommand{\StackTLSPlusNLSsub}{\ensuremath{\begin{array}{c}\Type{\LSsub}\,+ \\ \Type{\NLSsub}\end{array}}}
 \newcommand{\StackTTLSPlusNLSsub}{\ensuremath{\begin{array}{c}\TT{\LSsub}\,+ \\ \TT{\NLSsub}\end{array}}}
-\newcommand{\StackTSSC}{\ensuremath{\begin{array}{c}\T{\Sname}\,\times \\ \T{\Status} \times \T{\City}\end{array}}}
-\newcommand{\StackTSSL}{\ensuremath{\begin{array}{c}\T{\Sname} \times \T{\Status}\,\times \\ \CityLondon\end{array}}}
-\newcommand{\StackTSSNL}{\ensuremath{\begin{array}{c}\T{\Sname} \times \T{\Status}\,\times \\ (\TCityMinusLondon)\end{array}}}
-\newcommand{\StackTCityMinusLondon}{\ensuremath{\begin{array}{c}\T{\City}\,\setminus \\ \CityLondon\end{array}}}
+\newcommand{\StackTSSC}{\ensuremath{\begin{array}{c}\Type{\Sname}\,\times \\ \Type{\Status} \times \Type{\City}\end{array}}}
+\newcommand{\StackTSSL}{\ensuremath{\begin{array}{c}\Type{\Sname} \times \Type{\Status}\,\times \\ \CityLondon\end{array}}}
+\newcommand{\StackTSSNL}{\ensuremath{\begin{array}{c}\Type{\Sname} \times \Type{\Status}\,\times \\ (\TCityMinusLondon)\end{array}}}
+\newcommand{\StackTCityMinusLondon}{\ensuremath{\begin{array}{c}\Type{\City}\,\setminus \\ \CityLondon\end{array}}}
 
 \newcommand{\SC}[1]{\ensuremath{\mathcal{S}_{#1}}}
 
@@ -171,7 +171,7 @@
 \newcommand{\SelectionEdge}{\LabelledEdge{\sigedge{23}}{\RelRestrict}}
 \newcommand{\TrivialProjection}{\ensuremath{\LabelledEdge{\Bijective}{\RelProject}}}
 \newcommand{\TrivialSelection}{\ensuremath{\LabelledEdge{\Bijective}{\RelRestrict}}}
-\newcommand{\KeyEdge}{\ensuremath{\LabelledEdge{\Functional}{\mathit{key}}}}
+\newcommand{\KeyEdge}{\ensuremath{\LabelledEdge{\sigedge{13}}{\mathit{key}}}}
 
 % Constraints.
 \newcommand{\Constraint}[2][]{C\ensuremath{_{#2}\ifx&#1&\else^{#1}\fi}}
@@ -316,19 +316,19 @@ Date characterises the ability to define an appropriate and effective view trans
 
 In this paper, \(A\) represents an attribute (comprising a \emph{name}:\emph{type} pair), \(R\) represents a relation variable (\emph{relvar}), and \(v\) represents a value of an attribute, tuple, relation, etc. In the following discussion it will generally be clear which attribute a value is associated with, but where necessary, the value will be prefixed with the attribute name, i.e., \(\mathit{name}\colon\mathit{value}\).
 
-Date defines a \emph{type} \(\T{i}\) as ``essentially a \emph{named, finite set of values}'' \cite{Date.C-2012a-SQL-and-Relational}, representing every possible value of some specific kind, e.g., every possible ASCII string of length 5, every possible city name, or every possible relation value with a particular heading. That is:
+Date defines a \emph{type} \(\Type{i}\) as ``essentially a \emph{named, finite set of values}'' \cite{Date.C-2012a-SQL-and-Relational}, representing every possible value of some specific kind, e.g., every possible ASCII string of length 5, every possible city name, or every possible relation value with a particular heading. That is:
 \begin{equation}\label{eqn-type}
-    \T{i} = \{v_{1}, v_{2}, \dotsc, v_{m}\}, 0 < m < k
+    \Type{i} = \{v_{1}, v_{2}, \dotsc, v_{m}\}, 0 < m < k
 \end{equation}
-where \(k\) is some finite upper bound. Thus, the type of an attribute \(A_{i}\) (denoted \(\T{A_{i}}\)) is by definition the set of all possible values of \(A_{i}\).
+where \(k\) is some finite upper bound. Thus, the type of an attribute \(A_{i}\) (denoted \(\Type{A_{i}}\)) is by definition the set of all possible values of \(A_{i}\).
 
-Consider a relvar \(R\) with heading \(\{A_{1}, A_{2}, \dotsc, A_{n}\}\). Following from equation~\ref{eqn-type}, the (relation) type of \(R\), denoted here as \(\T{R}\), is the set of all possible relation values with \(R\)'s heading. Similarly, the (tuple) type of \(R\)'s tuples, denoted here as \TT{R}, is the set of all possible tuple values with \(R\)'s heading, which equates to the Cartesian product of \(R\)'s attribute types, i.e.:
+Consider a relvar \(R\) with heading \(\{A_{1}, A_{2}, \dotsc, A_{n}\}\). Following from equation~\ref{eqn-type}, the (relation) type of \(R\), denoted here as \(\Type{R}\), is the set of all possible relation values with \(R\)'s heading. Similarly, the (tuple) type of \(R\)'s tuples, denoted here as \TT{R}, is the set of all possible tuple values with \(R\)'s heading, which equates to the Cartesian product of \(R\)'s attribute types, i.e.:
 \begin{equation}\label{eqn-tuple-type}
-\TT{R} = \T{A_{1}} \times \T{A_{2}} \times\dotsb\times \T{A_{n}}\text{.}
+\TT{R} = \Type{A_{1}} \times \Type{A_{2}} \times\dotsb\times \Type{A_{n}}\text{.}
 \end{equation}
-By definition any given value of \(R\) must comprise a set (possibly empty) of tuples \(\{t_{1}, t_{2}, \dotsc, t_{m}\} \subseteq \TT{R}\). \(\T{R}\) therefore represents every possible \(k\)-combination of the elements of \TT{R}, for \(0 \le k \le \left|\TT{R}\right|\).
+By definition any given value of \(R\) must comprise a set (possibly empty) of tuples \(\{t_{1}, t_{2}, \dotsc, t_{m}\} \subseteq \TT{R}\). \(\Type{R}\) therefore represents every possible \(k\)-combination of the elements of \TT{R}, for \(0 \le k \le \left|\TT{R}\right|\).
 
-For example, Date's usual suppliers-and-parts schema \cite{Date.C-2013a-View} includes a relvar \(S\) with heading \(\{\Sno, \Sname, \Status, \City\}\), which contains details of suppliers. From equation~\ref{eqn-tuple-type}, the tuples of \(S\) have type \(\TT{S} = \T{\Sno} \times \TSSC\).
+For example, Date's usual suppliers-and-parts schema \cite{Date.C-2013a-View} includes a relvar \(S\) with heading \(\{\Sno, \Sname, \Status, \City\}\), which contains details of suppliers. From equation~\ref{eqn-tuple-type}, the tuples of \(S\) have type \(\TT{S} = \Type{\Sno} \times \TSSC\).
 
 This notion of type as a set of possible values is synonymous with Codd's original definition of domains in the Relational Model \cite{Codd.E-1970a-Relational,Date.C-2012a-SQL-and-Relational}, and also with the notion of domains as ``sets of values'' in schema intension graphs \cite{Miller.R-1994a-Schema,Miller.R-1994a-SIG}. The implications of the latter point will be explored further in Section~\ref{sec-relational-sigs}, after we have introduced relative information capacity and schema intension graphs in Section~\ref{sec-info-capacity}.
 
@@ -379,7 +379,7 @@ The use of the term ``relation'' here, while mathematically correct, is potentia
 
 A selection edge \(e : A \LabelledEdge{\sigedge{00}}{\RelRestrict} B\) indicates that the elements of \(B\) comprise a subset or specialisation of the elements of \(A\). If \(B = A\), we have what we term a \emph{trivial} selection. Every element of B must appear in A, and vice versa, and every element of \(A\) is associated with exactly one element of \(B\), and vice versa. Trivial selection edges are therefore bijective, i.e., \(A \TrivialSelection B\). If \(B \subset A\), we have what we term a \emph{non-trivial} selection. Every element of \(B\) must appear in \(A\), but not vice versa. The mapping remains one-to-one, as before. From the perspective of the supertype (\(A\) in this example), non-trivial selection edges are therefore surjective, functional, and injective, i.e., \(A \SelectionEdge B\).
 
-A projection edge \(e : A \LabelledEdge{\sigedge{00}}{\RelProject} B\), indicates that the elements of \(B\) are a projection of \(A\), where \(A\) is a constructed node of the form \(C \times D \times \dotsb\). Trivial projection edges (\(B = A\)) are bijective, i.e., \(A \TrivialProjection B\), for the same reasons as trivial selection edges. For non-trivial projections (i.e., \(B \ne A\)), every element of \(A\) must have a corresponding element in \(B\), and vice versa. Similarly, every element of \(A\) can be associated with at most one element of \(B\), but not vice versa. Thus, non-trivial projection edges are total, surjective, and functional, i.e., \(A \ProjectionEdge B\).
+A projection edge \(e : A \LabelledEdge{\sigedge{00}}{\RelProject} B\), indicates that the elements of \(B\) are a projection of \(A\), where \(A\) is a constructed node of the form \(C \times D \times \dotsb\). A bijective projection edge, i.e., \(A \TrivialProjection B\), indicates that \(B\) is unique with respect to \(A\). For non-unique projections, every element of \(A\) must have a corresponding element in \(B\), and vice versa. Every element of \(A\) is also associated with at most one element of \(B\), but not vice versa. Non-unique projection edges are therefore total, surjective, and functional, i.e., \(A \ProjectionEdge B\).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -522,28 +522,28 @@ These SIG transformations and their effects are summarised in Table~\ref{Tab.SIG
 
 \noindent The direct correspondence between relational types and SIG domains noted in Section~\ref{sec-relations-types} enables us to use SIGs to represent the structure and constraints of relational schemas. Equating tuple types to the Cartesian product of their attributes (equation \ref{eqn-tuple-type}) means that these can also be mapped directly to a constructed SIG node.
 
-Let us again consider the relvar \(S\{\Sno, \Sname, \Status, \City\}\) from Date's suppliers-and-parts schema \cite{Date.C-2013a-View}. In addition to type constraints on the attributes, tuples, and the relvar as a whole, \(S\) is subject to a (primary) key constraint on \Sno. Taken together with the collection of types \(\T{\Sno}\), \(\T{\Sname}\), \(\T{\Status}\), \(\T{\City}\), \(\TT{S}\), and \(\T{S}\), and assuming that \(S\) is the only relvar in the schema, we can construct the SIG shown in Figure~\ref{fig-sig-s-alone} as explained below.
+Let us again consider the relvar \(S\{\Sno, \Sname, \Status, \City\}\) from Date's suppliers-and-parts schema \cite{Date.C-2013a-View}. In addition to type constraints on the attributes, tuples, and the relvar as a whole, \(S\) is subject to a (primary) key constraint on \Sno. Taken together with the collection of types \(\Type{\Sno}\), \(\Type{\Sname}\), \(\Type{\Status}\), \(\Type{\City}\), \(\TT{S}\), and \(\Type{S}\), and assuming that \(S\) is the only relvar in the schema, we can construct the SIG shown in Figure~\ref{fig-sig-s-alone} as explained below.
 
 %%%%%%%%%%%%%%%%%%%%
 
 \begin{figure}[htb]
     \centering
     \begin{tikzpicture}[level distance=12mm]
-        \node (TS) {\(\T{S}\)};
+        \node (TS) {\(\Type{S}\)};
         \node (TTS) [right=1cm of TS] {\(\TT{S}\)}
             [sibling distance=3cm]
-            child[arrows={:{crossbar}-{crossbar}>}] {node (TSno) {\(\T{\Sno}\)}}
+            child[arrows={<{crossbar}-{crossbar}>}] {node (TSno) {\(\Type{\Sno}\)}}
             child[arrows={:{crossbar}-{crossbar}>}] {node (TSSC) {\(\TSSC\)}
                 [sibling distance=15mm]
-                child[arrows={:{crossbar}-{crossbar}>}] {node (TSname) {\(\T{\Sname}\)}}
-                child[arrows={:{crossbar}-{crossbar}>}] {node (TStatus) {\(\T{\Status}\)}}
-                child[arrows={:{crossbar}-{crossbar}>}] {node (TCity) {\(\T{\City}\)}}};
+                child[arrows={:{crossbar}-{crossbar}>}] {node (TSname) {\(\Type{\Sname}\)}}
+                child[arrows={:{crossbar}-{crossbar}>}] {node (TStatus) {\(\Type{\Status}\)}}
+                child[arrows={:{crossbar}-{crossbar}>}] {node (TCity) {\(\Type{\City}\)}}};
         
         % TS to T{S}
         \draw[arrows={:{crossbar}-{crossbar}:}] (TS) to (TTS);
         
         % FD
-        \draw[arrows={->}] (TSno) to node[below=-2pt] {\scriptsize\emph{key}} (TSSC);
+        \draw[arrows={:{crossbar}-{crossbar}>}] (TSno) to node[below=-2pt] {\scriptsize\emph{key}} (TSSC);
         
         % projection edges
         \ProjectionAnnotation[above left=-2pt and -4pt]{TTS}{TSno}
@@ -559,13 +559,13 @@ Let us again consider the relvar \(S\{\Sno, \Sname, \Status, \City\}\) from Date
 
 %%%%%%%%%%%%%%%%%%%%
 
-As discussed in Section~\ref{sec-relations-types}, any given value of \(S\) must comprise a subset of \(\TT{S}\), so the association between \(\T{S}\) and \(\TT{S}\) is total. Similarly, every tuple in \(\TT{S}\) must appear in at least one value of \(S\), so the association is also surjective. The association is neither functional nor injective, however, as a value of \(S\) in general may contain multiple tuples, and each tuple in \(\TT{S}\) can appear in multiple values of \(S\). This gives us \(\T{S}\SurTotal\TT{S}\).
+As discussed in Section~\ref{sec-relations-types}, any given value of \(S\) must comprise a subset of \(\TT{S}\), so the association between \(\Type{S}\) and \(\TT{S}\) is total. Similarly, every tuple in \(\TT{S}\) must appear in at least one value of \(S\), so the association is also surjective. The association is neither functional nor injective, however, as a value of \(S\) in general may contain multiple tuples, and each tuple in \(\TT{S}\) can appear in multiple values of \(S\). This gives us \(\Type{S}\SurTotal\TT{S}\).
     
-The key constraint on \Sno\ implies that the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) holds in \(S\). From equation \ref{eqn-tuple-type}, we can infer the type of \(\{\Sname, \Status, \City\}\) as \(\TSSC\). The association is functional and not injective by definition. As not every supplier number may appear in any given value of \(S\), there may be elements of \(\T{\Sno}\) that are not associated with an element of \(\TSSC\), and vice versa. This implies that the association is neither total nor surjective. Indeed, this will be true for every edge that represents a key constraint. We introduce the edge label \(\mathit{key}\) to indicate that an edge represents a key constraint, which gives us \(\T{\Sno} \KeyEdge \TSSC\) in Figure~\ref{fig-sig-s-alone}. 
+The key constraint on \Sno\ implies that the functional dependency \(\{\Sno\} \rightarrow \{\Sname, \Status, \City\}\) holds in \(S\). From equation \ref{eqn-tuple-type}, we can infer the type of \(\{\Sname, \Status, \City\}\) as \(\TSSC\). The association is functional and not injective by definition. Every supplier number (when used in a value of \(S\)) must be associated with an element of \(\TSSC\), and vice versa. This implies that the association is both total and surjective. Indeed, this will be true for every edge that represents a key constraint \cite{Miller.R-1994a-SIG}. We introduce the edge label \(\mathit{key}\) to indicate that an edge represents a key constraint, which gives us \(\Type{\Sno} \KeyEdge \TSSC\) in Figure~\ref{fig-sig-s-alone}. 
     
-Both \(\T{\Sno}\) and \(\TSSC\) are projections of \(\TT{S}\), so we can add (non-trivial) projection edges \(\TT{S} \ProjectionEdge \T{\Sname} \times \T{\Status} \times T_{\City}\) and \(\TT{S} \ProjectionEdge \T{\Sno}\). Similarly, \(\T{\Sname}\), \(\T{\Status}\), and \(\T{\City}\) are all projections of \(\TSSC\), so we can add further projection edges to these nodes, as shown in Figure~\ref{fig-sig-s-alone}.
+Both \(\Type{\Sno}\) and \(\TSSC\) are projections of \(\TT{S}\), so we can add (non-unique) projection edges \(\TT{S} \ProjectionEdge \Type{\Sname} \times \Type{\Status} \times T_{\City}\) and \(\TT{S} \ProjectionEdge \Type{\Sno}\). Similarly, \(\Type{\Sname}\), \(\Type{\Status}\), and \(\Type{\City}\) are all projections of \(\TSSC\), so we can add further projection edges to these nodes, as shown in Figure~\ref{fig-sig-s-alone}.
 
-Looking at Figure~\ref{fig-sig-s-alone}, it could be argued that the \(T_{\dots}\) type notation is redundant and unnecessarily complicates the diagram. Why not just use, e.g., \(S\) instead of \(\T{S}\), \(\Sno\) instead of \(\T{\Sno}\), and \(\Sno \times \Sname \times \Status \times \City\) instead of \(\TT{S}\)? It is important to remember, however, that SIGs like that shown in Figure~\ref{fig-sig-s-alone} refer to multiple elements of quite different kinds, including relations, tuples, and various combinations of attributes. Discarding the type notation might be reasonable in informal situations, but could lead to confusion between the different kinds of elements represented. The explicit type notation protects the semantics of the various elements of the schema and makes it clear what is being considered.
+Looking at Figure~\ref{fig-sig-s-alone}, it could be argued that the \(T_{\dots}\) type notation is redundant and unnecessarily complicates the diagram. Why not just use, e.g., \(S\) instead of \(\Type{S}\), \(\Sno\) instead of \(\Type{\Sno}\), and \(\Sno \times \Sname \times \Status \times \City\) instead of \(\TT{S}\)? It is important to remember, however, that SIGs like that shown in Figure~\ref{fig-sig-s-alone} refer to multiple elements of quite different kinds, including relations, tuples, and various combinations of attributes. Discarding the type notation might be reasonable in informal situations, but could lead to confusion between the different kinds of elements represented. The explicit type notation protects the semantics of the various elements of the schema and makes it clear what is being considered.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -595,8 +595,8 @@ There are explicit and implicit constraints in \(\SC{0}\) that should also apply
 
 Informally, \(\LS\) contains details of London suppliers, while \(\NLS\) contains details of non-London suppliers. \(\LS\) and  \(\NLS\) represent disjoint restrictions of \(S\) with the same heading, and have the following tuple types:
 \begin{align}
-    \TT{\LS}  &= \T{\Sno} \times \T{\Sname} \times \T{\LS} \times \CityLondon \nonumber    \\
-    \TT{\NLS} &= \T{\Sno} \times \T{\Sname} \times \T{\Status} \times (\TCityMinusLondon) \nonumber
+    \TT{\LS}  &= \Type{\Sno} \times \Type{\Sname} \times \Type{\LS} \times \CityLondon \nonumber    \\
+    \TT{\NLS} &= \Type{\Sno} \times \Type{\Sname} \times \Type{\Status} \times (\TCityMinusLondon) \nonumber
 \end{align}
 
 The base schema for this example is \(\SC{0} = \{S, \LS, \NLS\}\). This is subject to type constraints as specified by the various types noted previously, and the following additional constraints:
@@ -607,7 +607,7 @@ The base schema for this example is \(\SC{0} = \{S, \LS, \NLS\}\). This is subje
     % not sure how relevant the FK constraints are?
     % how to represent? FK is a subset of the original key, so selection edge between S.Sno and each of LS.Sno and NLS.Sno
     % or perhaps a selection edge from Sno to itself? (labelled FK)
-    % Notation: \T{\Sno}, \T{\LS.\Sno}, \T{\NLS.\Sno}?
+    % Notation: \Type{\Sno}, \Type{\LS.\Sno}, \Type{\NLS.\Sno}?
     \item\label{constraint-lsfk} \(\RelProject_{\{\Sno\}}\LS \subseteq \RelProject_{\{\Sno\}}S\) [foreign key from \(\LS\) to \(S\)]
     
     \item\label{constraint-nlsfk} \(\RelProject_{\{\Sno\}}\NLS \subseteq \RelProject_{\{\Sno\}}S\) [foreign key from \(\NLS\) to \(S\)]
@@ -620,15 +620,15 @@ The base schema for this example is \(\SC{0} = \{S, \LS, \NLS\}\). This is subje
     
     \item\label{constraint-disjoint} \(\LS \RelIntersect \NLS = \emptyset\) [from \Constraint{\ref{constraint-notlondon}} and \Constraint{\ref{constraint-london}}]
     
-    \item\label{constraint-relation-type-union} (a) \(\T{S} = \T{\LS} \RelUnion \T{\NLS}\); (b) \(\TT{S} = \TT{\LS} \RelUnion \TT{\NLS}\) [from \Constraint{\ref{constraint-union}}]
+    \item\label{constraint-relation-type-union} (a) \(\Type{S} = \Type{\LS} \RelUnion \Type{\NLS}\); (b) \(\TT{S} = \TT{\LS} \RelUnion \TT{\NLS}\) [from \Constraint{\ref{constraint-union}}]
     
-    \item\label{constraint-relation-types} (a) \(\T{\LS} \subset \T{S}\); (b) \(\TT{\LS} \subset \TT{S}\) [from (\ref{eqn-ls}) above]
+    \item\label{constraint-relation-types} (a) \(\Type{\LS} \subset \Type{S}\); (b) \(\TT{\LS} \subset \TT{S}\) [from (\ref{eqn-ls}) above]
     
-    \item\label{constraint-tuple-types} (a) \(\T{\NLS} \subset \T{S}\); (b) \(\TT{\NLS} \subset \TT{S}\) [from (\ref{eqn-nls}) above]
+    \item\label{constraint-tuple-types} (a) \(\Type{\NLS} \subset \Type{S}\); (b) \(\TT{\NLS} \subset \TT{S}\) [from (\ref{eqn-nls}) above]
     
-    \item\label{constraint-implied-types-london} \(\CityLondon \subset \T{\City}\)
+    \item\label{constraint-implied-types-london} \(\CityLondon \subset \Type{\City}\)
     
-    \item\label{constraint-implied-types-nonlondon} \((\TCityMinusLondon) \subset \T{\City}\)
+    \item\label{constraint-implied-types-nonlondon} \((\TCityMinusLondon) \subset \Type{\City}\)
     
     \item\label{constraint-implied-types-TSSL} \(\TSSL \subset \TSSC\)
     
@@ -642,7 +642,7 @@ In most typical database schemas, only constraints \Constraint{\ref{constraint-k
 
 Let us partition \(\SC{0}\) into three sub-schemas: \(\SC{1} = \{S\}\), \(\SC{2} = \{\LS, \NLS\}\), and \(\SC{3} = \{LS\}\). We wish to compare the relative information capacities of the schema pairs \((\SC{1}, \SC{2})\) and \((\SC{1}, \SC{3})\), in order to characterise the view update compatibility of the schemas in each pair.
 
-Note that in the following analysis, we omit the foreign key constraints \Constraint{\ref{constraint-lsfk}} and \Constraint{\ref{constraint-nlsfk}}, as we have yet to determine the best way to represent inclusion dependencies of this nature in a SIG, or indeed whether such dependencies are significant.
+Note that in the following analysis, we omit the foreign key constraints \Constraint{\ref{constraint-lsfk}} and \Constraint{\ref{constraint-nlsfk}}, as we have yet to determine the best way to represent inclusion dependencies of this nature in a SIG\footnote{Miller et al.\ \cite{Miller.R-1994a-SIG} briefly mention inclusion dependencies, but do not discuss how to represent them in a SIG.}, or indeed whether such dependencies are significant.
 
 %%%%%%%%%%%%%%%%%%%%
 
@@ -652,27 +652,27 @@ Note that in the following analysis, we omit the foreign key constraints \Constr
         \toprule
         \textbf{Constraint}                                     &   \textbf{Implied edge(s)}    \\
         \midrule
-        {\Constraint[\SC{1}]{\ref{constraint-key}}}(b)          &   \(\T{\Sno} \KeyEdge \TSSL\)   \\
-        \phantom{\Constraint[\SC{1}]{\ref{constraint-key}}}(c)  &   \(\T{\Sno} \KeyEdge \TSSNL\)   \\
+        {\Constraint[\SC{1}]{\ref{constraint-key}}}(b)          &   \(\Type{\Sno} \KeyEdge \TSSL\)   \\
+        \phantom{\Constraint[\SC{1}]{\ref{constraint-key}}}(c)  &   \(\Type{\Sno} \KeyEdge \TSSNL\)   \\
         \midrule
-        {\Constraint[\SC{1}]{\ref{constraint-relation-types}}}  &   \(\T{\LSsub} \SurTotal \TT{\LSsub}\) \quad\quad \(\T{S} \SelectionEdge \T{\LSsub}\) \quad\quad \(\TT{S} \SelectionEdge \TT{\LSsub}\)   \\
+        {\Constraint[\SC{1}]{\ref{constraint-relation-types}}}  &   \(\Type{\LSsub} \SurTotal \TT{\LSsub}\) \quad\quad \(\Type{S} \SelectionEdge \Type{\LSsub}\) \quad\quad \(\TT{S} \SelectionEdge \TT{\LSsub}\)   \\
         \midrule
-        {\Constraint[\SC{1}]{\ref{constraint-tuple-types}}}     &   \(\T{\NLSsub} \SurTotal \TT{\NLSsub}\) \quad\quad \(\T{S} \SelectionEdge \T{\NLSsub}\) \quad\quad \(\TT{S} \SelectionEdge \TT{\NLSsub}\)   \\
+        {\Constraint[\SC{1}]{\ref{constraint-tuple-types}}}     &   \(\Type{\NLSsub} \SurTotal \TT{\NLSsub}\) \quad\quad \(\Type{S} \SelectionEdge \Type{\NLSsub}\) \quad\quad \(\TT{S} \SelectionEdge \TT{\NLSsub}\)   \\
         \midrule
-        {\Constraint{\ref{constraint-implied-types-london}}}    &   \(\T{\City} \SelectionEdge \CityLondon\)   \\
+        {\Constraint{\ref{constraint-implied-types-london}}}    &   \(\Type{\City} \SelectionEdge \CityLondon\)   \\
         \midrule
-        {\Constraint{\ref{constraint-implied-types-nonlondon}}} &   \(\T{\City} \SelectionEdge (\TCityMinusLondon)\)   \\
+        {\Constraint{\ref{constraint-implied-types-nonlondon}}} &   \(\Type{\City} \SelectionEdge (\TCityMinusLondon)\)   \\
         \midrule
         {\Constraint{\ref{constraint-implied-types-TSSL}}}      &   \(\TSSC \SelectionEdge \TSSL\)    \\
             &   \(\TT{\LSsub} \ProjectionEdge \TSSL\)   \\
-            &   \(\TSSL \ProjectionEdge \T{\Sname}\)   \\
-            &   \(\TSSL \ProjectionEdge \T{\Status}\)   \\
+            &   \(\TSSL \ProjectionEdge \Type{\Sname}\)   \\
+            &   \(\TSSL \ProjectionEdge \Type{\Status}\)   \\
             &   \(\TSSL \ProjectionEdge\,\CityLondon\)  \\
         \midrule
         {\Constraint{\ref{constraint-implied-types-TSSNL}}}     &   \(\TSSC \SelectionEdge \TSSNL\) \\
             &   \(\TT{\NLSsub} \ProjectionEdge \TSSNL\)  \\
-            &   \(\TSSNL \ProjectionEdge \T{\Sname}\)  \\
-            &   \(\TSSNL \ProjectionEdge \T{\Status}\)  \\
+            &   \(\TSSNL \ProjectionEdge \Type{\Sname}\)  \\
+            &   \(\TSSNL \ProjectionEdge \Type{\Status}\)  \\
             &   \(\TSSNL \ProjectionEdge \TCityMinusLondon\)  \\
         \bottomrule
     \end{tabular}
@@ -703,12 +703,12 @@ Note that in the following analysis, we omit the foreign key constraints \Constr
     
     \item \(\LSsub \RelIntersect \NLSsub = \emptyset\)
 
-    \item (a) \(\T{S} = \T{\LSsub} \RelUnion \T{\NLSsub}\); (b) \(\TT{S} = \TT{\LSsub} \RelUnion \TT{\NLSsub}\) \newline
-    {[or even just \(\T{S} = \T{S}\) and \(\TT{S} = \TT{S}\)]}
+    \item (a) \(\Type{S} = \Type{\LSsub} \RelUnion \Type{\NLSsub}\); (b) \(\TT{S} = \TT{\LSsub} \RelUnion \TT{\NLSsub}\) \newline
+    {[or even just \(\Type{S} = \Type{S}\) and \(\TT{S} = \TT{S}\)]}
     
-    \item (a) \(\T{\LSsub} \subset \T{S}\); (b) \(\TT{\LSsub} \subset \TT{S}\) [from (\ref{eqn-ls}) above]
+    \item (a) \(\Type{\LSsub} \subset \Type{S}\); (b) \(\TT{\LSsub} \subset \TT{S}\) [from (\ref{eqn-ls}) above]
     
-    \item (a) \(\T{\NLSsub} \subset \T{S}\); (b) \(\TT{\NLSsub} \subset \TT{S}\) [from (\ref{eqn-nls}) above]
+    \item (a) \(\Type{\NLSsub} \subset \Type{S}\); (b) \(\TT{\NLSsub} \subset \TT{S}\) [from (\ref{eqn-nls}) above]
     
 \end{ConstraintList}
 
@@ -728,12 +728,12 @@ Note that in the following analysis, we omit the foreign key constraints \Constr
     \item \(\LS \RelUnion \NLS = \LS \RelUnion \NLS\)
     
     \setcounter{constraint}{7}
-    \item (a) \(\T{\LS} \RelUnion \T{\NLS} = \T{\LS} \RelUnion \T{\NLS}\); \newline
+    \item (a) \(\Type{\LS} \RelUnion \Type{\NLS} = \Type{\LS} \RelUnion \Type{\NLS}\); \newline
           (b) \(\TT{\LS} \RelUnion \TT{\NLS} = \TT{\LS} \RelUnion \TT{\NLS}\)
     
-    \item (a) \(\T{\LS} \subset \T{\LS} \RelUnion \T{\NLS}\); (b) \(\TT{\LS} \subset \TT{\LS} \RelUnion \TT{\NLS}\)
+    \item (a) \(\Type{\LS} \subset \Type{\LS} \RelUnion \Type{\NLS}\); (b) \(\TT{\LS} \subset \TT{\LS} \RelUnion \TT{\NLS}\)
     
-    \item (a) \(\T{\NLS} \subset \T{\LS} \RelUnion \T{\NLS}\); (b) \(\TT{\NLS} \subset \TT{\LS} \RelUnion \TT{\NLS}\)
+    \item (a) \(\Type{\NLS} \subset \Type{\LS} \RelUnion \Type{\NLS}\); (b) \(\TT{\NLS} \subset \TT{\LS} \RelUnion \TT{\NLS}\)
     
 \end{ConstraintList}
 
@@ -761,7 +761,7 @@ Note that in the following analysis, we omit the foreign key constraints \Constr
 
 \noindent The SIG for \(\SC{1}\) will not just be that for relvar \(S\) as shown in Figure~\ref{fig-sig-s-alone}, as that schema did not incorporate all the constraints implicit in \(\SC{0}\). The process for constructing the SIG will be similar to that for the earlier example, however. The constraints appearing in \(\SC{1}\) are \Constraint{\ref{constraint-key}}(a), \Constraint[\SC{1}]{\ref{constraint-key}}(b), \Constraint[\SC{1}]{\ref{constraint-key}}(c), \Constraint[\SC{1}]{\ref{constraint-union}}--\Constraint[\SC{1}]{\ref{constraint-tuple-types}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}.
 
-The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone}. The constraints within the schema also imply the existence of several subtype nodes (e.g., the two subtypes of \(\T{City}\) implied by \Constraint{\ref{constraint-implied-types-london}} and \Constraint{\ref{constraint-implied-types-nonlondon}}), along with corresponding selection and projection edges, which are listed in Table~\ref{Tab.SIG.Implied.Edges} above. \Constraint[\SC{1}]{\ref{constraint-union}}, \Constraint[\SC{1}]{\ref{constraint-relation-type-union}}(a), and \Constraint[\SC{1}]{\ref{constraint-relation-type-union}}(b) are effectively tautologies that add no new information, and can thus be safely ignored. The completed SIG for \(\SC{1}\) is shown in Figure~\ref{fig-sig-s}.
+The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone}. The constraints within the schema also imply the existence of several subtype nodes (e.g., the two subtypes of \(\Type{City}\) implied by \Constraint{\ref{constraint-implied-types-london}} and \Constraint{\ref{constraint-implied-types-nonlondon}}), along with corresponding selection and projection edges, which are listed in Table~\ref{Tab.SIG.Implied.Edges} above. \Constraint[\SC{1}]{\ref{constraint-union}}, \Constraint[\SC{1}]{\ref{constraint-relation-type-union}}(a), and \Constraint[\SC{1}]{\ref{constraint-relation-type-union}}(b) are effectively tautologies that add no new information, and can thus be safely ignored. The completed SIG for \(\SC{1}\) is shown in Figure~\ref{fig-sig-s}.
 
 %%%%%%%%%%%%%%%%%%%%
 
@@ -770,11 +770,11 @@ The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone
     \begin{tikzpicture}
         \matrix[row sep=0.5cm]
         { 
-            \node (TLS) {\(\T{\LSsub}\)};   &[7mm]  \node (TTLS) {\(\TT{\LSsub}\)};     &[7mm]                              &[4mm]                                  &[-4mm] \node (TSSL) {\(\StackTSSL\)};      &                                       &   \node (LSCity) {\(\CityLondon\)};   \\
-                                            &                                           &                                   &   \node (TSname) {\(\T{\Sname}\)};    \\
-            \node (TLSPlusNLS) {\(\T{S}\)}; &       \node (TTLSPlusNLS) {\(\TT{S}\)};   &   \node (TSno) {\(\T{\Sno}\)};    &                                       &       \node (TSSC) {\(\StackTSSC\)};      &                                       &   \node (TCity) {\(\T{City}\)};   \\
-                                            &                                           &                                   &                                       &                                           &   \node (TStatus) {\(\T{\Status}\)};  \\
-            \node (TNLS) {\(\T{\NLSsub}\)}; &       \node (TTNLS) {\(\TT{\NLSsub}\)};   &                                   &                                       &       \node (TSSNL) {\(\StackTSSNL\)};    &                                       &   \node (NLSCity) {\(\StackTCityMinusLondon\)}; \\
+            \node (TLS) {\(\Type{\LSsub}\)};   &[7mm]  \node (TTLS) {\(\TT{\LSsub}\)};     &[7mm]                              &[4mm]                                  &[-4mm] \node (TSSL) {\(\StackTSSL\)};      &                                       &   \node (LSCity) {\(\CityLondon\)};   \\
+                                            &                                           &                                   &   \node (TSname) {\(\Type{\Sname}\)};    \\
+            \node (TLSPlusNLS) {\(\Type{S}\)}; &       \node (TTLSPlusNLS) {\(\TT{S}\)};   &   \node (TSno) {\(\Type{\Sno}\)};    &                                       &       \node (TSSC) {\(\StackTSSC\)};      &                                       &   \node (TCity) {\(\Type{City}\)};   \\
+                                            &                                           &                                   &                                       &                                           &   \node (TStatus) {\(\Type{\Status}\)};  \\
+            \node (TNLS) {\(\Type{\NLSsub}\)}; &       \node (TTNLS) {\(\TT{\NLSsub}\)};   &                                   &                                       &       \node (TSSNL) {\(\StackTSSNL\)};    &                                       &   \node (NLSCity) {\(\StackTCityMinusLondon\)}; \\
         };
         
         \graph{
@@ -788,14 +788,21 @@ The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone
             (TSno) -- [funcdep right] (TSSNL);
             
             % projection edges
+            { [edges=bijection,edge label={\scriptsize\(\RelProject\)}]
+                { (TTLSPlusNLS), (TTLS) } -- (TSno)
+            };
+            
+            { [edges=bijection,edge label'={\scriptsize\(\RelProject\)}]
+                (TTNLS) -- (TSno)
+            };
+            
             { [edges=projection left]
-                (TTLSPlusNLS) -- (TSno),
-                (TTLS)  -- { (TSno), (TSSL) },
+                (TTLS)  -- (TSSL),
                 (TSSL)  -- { (TStatus), (LSCity) },
             };
             
             { [edges=projection right]
-                (TTNLS) -- { (TSno), (TSSNL) },
+                (TTNLS) -- (TSSNL),
                 (TSSC)  -- { (TSname),  (TStatus) },
                 (TSSL)  -- (TSname),
                 (TSSNL) -- { (TStatus), (NLSCity), (TSname) },
@@ -836,11 +843,11 @@ The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone
     \begin{tikzpicture}
         \matrix[row sep=0.5cm]
         { 
-            \node (TLS) {\(\T{\LS}\)};                  &[7mm]  \node (TTLS) {\(\TT{\LS}\)};                    &[7mm]                              &[4mm]                                  &[-4mm] \node (TSSL) {\(\StackTSSL\)};      &                                       &   \node (LSCity) {\(\CityLondon\)};   \\
-                                                        &                                                       &                                   &   \node (TSname) {\(\T{\Sname}\)};    \\
-            \node (TLSPlusNLS) {\(\StackTLSPlusNLS\)};  &       \node (TTLSPlusNLS) {\(\StackTTLSPlusNLS\)};    &   \node (TSno) {\(\T{\Sno}\)};    &                                       &       \node (TSSC) {\(\StackTSSC\)};      &                                       &   \node (TCity) {\(\T{City}\)};   \\
-                                                        &                                                       &                                   &                                       &                                           &   \node (TStatus) {\(\T{\Status}\)};  \\
-            \node (TNLS) {\(\T{\NLS}\)};                &       \node (TTNLS) {\(\TT{\NLS}\)};                  &                                   &                                       &       \node (TSSNL) {\(\StackTSSNL\)};    &                                       &   \node (NLSCity) {\(\StackTCityMinusLondon\)}; \\
+            \node (TLS) {\(\Type{\LS}\)};                  &[7mm]  \node (TTLS) {\(\TT{\LS}\)};                    &[7mm]                              &[4mm]                                  &[-4mm] \node (TSSL) {\(\StackTSSL\)};      &                                       &   \node (LSCity) {\(\CityLondon\)};   \\
+                                                        &                                                       &                                   &   \node (TSname) {\(\Type{\Sname}\)};    \\
+            \node (TLSPlusNLS) {\(\StackTLSPlusNLS\)};  &       \node (TTLSPlusNLS) {\(\StackTTLSPlusNLS\)};    &   \node (TSno) {\(\Type{\Sno}\)};    &                                       &       \node (TSSC) {\(\StackTSSC\)};      &                                       &   \node (TCity) {\(\Type{City}\)};   \\
+                                                        &                                                       &                                   &                                       &                                           &   \node (TStatus) {\(\Type{\Status}\)};  \\
+            \node (TNLS) {\(\Type{\NLS}\)};                &       \node (TTNLS) {\(\TT{\NLS}\)};                  &                                   &                                       &       \node (TSSNL) {\(\StackTSSNL\)};    &                                       &   \node (NLSCity) {\(\StackTCityMinusLondon\)}; \\
         };
         
         \graph{
@@ -854,14 +861,21 @@ The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone
             (TSno) -- [funcdep right] (TSSNL);
             
             % projection edges
+            { [edges=bijection,edge label={\scriptsize\(\RelProject\)}]
+                { (TTLSPlusNLS), (TTLS) } -- (TSno)
+            };
+            
+            { [edges=bijection,edge label'={\scriptsize\(\RelProject\)}]
+                (TTNLS) -- (TSno)
+            };
+            
             { [edges=projection left]
-                (TTLSPlusNLS) -- (TSno),
-                (TTLS)  -- { (TSno), (TSSL) },
+                (TTLS)  -- (TSSL),
                 (TSSL)  -- { (TStatus), (LSCity) },
             };
             
             { [edges=projection right]
-                (TTNLS) -- { (TSno), (TSSNL) },
+                (TTNLS) -- (TSSNL),
                 (TSSC)  -- { (TSname),  (TStatus) },
                 (TSSL)  -- (TSname),
                 (TSSNL) -- { (TStatus), (NLSCity), (TSname) },
@@ -902,10 +916,10 @@ The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone
     \begin{tikzpicture}
         \matrix[row sep=0.5cm]
         { 
-            \node (TLS) {\(\T{\LS}\)};  &[7.5mm]  \node (TTLS) {\(\TT{\LS}\)};  &[7mm]                              &[4mm]                                  &[-4mm] \node (TSSL) {\(\StackTSSL\)};      &                                       &   \node (LSCity) {\(\CityLondon\)};   \\
-                                        &                                       &                                   &   \node (TSname) {\(\T{\Sname}\)};    \\
-                                        &                                       &   \node (TSno) {\(\T{\Sno}\)};    &                                       &       \node (TSSC) {\(\StackTSSC\)};      &                                       &   \node (TCity) {\(\T{City}\)};   \\
-                                        &                                       &                                   &                                       &                                           &   \node (TStatus) {\(\T{\Status}\)};  \\
+            \node (TLS) {\(\Type{\LS}\)};  &[7.5mm]  \node (TTLS) {\(\TT{\LS}\)};  &[7mm]                              &[4mm]                                  &[-4mm] \node (TSSL) {\(\StackTSSL\)};      &                                       &   \node (LSCity) {\(\CityLondon\)};   \\
+                                        &                                       &                                   &   \node (TSname) {\(\Type{\Sname}\)};    \\
+                                        &                                       &   \node (TSno) {\(\Type{\Sno}\)};    &                                       &       \node (TSSC) {\(\StackTSSC\)};      &                                       &   \node (TCity) {\(\Type{City}\)};   \\
+                                        &                                       &                                   &                                       &                                           &   \node (TStatus) {\(\Type{\Status}\)};  \\
                                         &                                       &                                   &                                       &       \node (TSSNL) {\(\StackTSSNL\)};    &                                       &   \node (NLSCity) {\(\StackTCityMinusLondon\)}; \\
         };
         
@@ -916,8 +930,12 @@ The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone
             };
             
             % projection edges
+            { [edges=bijection,edge label={\scriptsize\(\RelProject\)}]
+                (TTLS) -- (TSno)
+            };
+            
             { [edges=projection left]
-                (TTLS)  -- { (TSno), (TSSL) },
+                (TTLS)  -- (TSSL),
                 (TSSL)  -- { (TStatus), (LSCity) },
             };
             
@@ -958,7 +976,7 @@ The SIG will include all of the edges that appear in Figure~\ref{fig-sig-s-alone
 \subsubsection{Schema \(\SC{2}\)}
 \label{sec-sigs-s-ii}
 
-\noindent The constraints appearing in \(\SC{2}\) are \Constraint[\SC{2}]{\ref{constraint-key}}(a), \Constraint{\ref{constraint-key}}(b), \Constraint{\ref{constraint-key}}(c), \Constraint[\SC{2}]{\ref{constraint-union}}, \Constraint{\ref{constraint-notlondon}}--\Constraint{\ref{constraint-disjoint}}, \Constraint[\SC{2}]{\ref{constraint-relation-type-union}}--\Constraint[\SC{2}]{\ref{constraint-tuple-types}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}. This is essentially the same set of constraints as \(\SC{1}\), but with different rewritings. This means that the SIG for \(\SC{2}\) can be built in the same manner as for \(\SC{1}\), with some nodes named differently. In particular, \Constraint[\SC{2}]{\ref{constraint-relation-type-union}} implies that there will be nodes \(\TLSPlusNLS\) and \(\TTLSPlusNLS\) instead of \(\T{S}\) and \(\TT{S}\), respectively. There will also be \(\T{\LS}\) instead of \(\T{\LSsub}\), etc. The complete SIG for \(\SC{2}\) is shown in Figure~\ref{fig-sig-ls-nls} on the previous page.
+\noindent The constraints appearing in \(\SC{2}\) are \Constraint[\SC{2}]{\ref{constraint-key}}(a), \Constraint{\ref{constraint-key}}(b), \Constraint{\ref{constraint-key}}(c), \Constraint[\SC{2}]{\ref{constraint-union}}, \Constraint{\ref{constraint-notlondon}}--\Constraint{\ref{constraint-disjoint}}, \Constraint[\SC{2}]{\ref{constraint-relation-type-union}}--\Constraint[\SC{2}]{\ref{constraint-tuple-types}}, and \Constraint{\ref{constraint-implied-types-london}}--\Constraint{\ref{constraint-implied-types-TSSNL}}. This is essentially the same set of constraints as \(\SC{1}\), but with different rewritings. This means that the SIG for \(\SC{2}\) can be built in the same manner as for \(\SC{1}\), with some nodes named differently. In particular, \Constraint[\SC{2}]{\ref{constraint-relation-type-union}} implies that there will be nodes \(\TLSPlusNLS\) and \(\TTLSPlusNLS\) instead of \(\Type{S}\) and \(\TT{S}\), respectively. There will also be \(\Type{\LS}\) instead of \(\Type{\LSsub}\), etc. The complete SIG for \(\SC{2}\) is shown in Figure~\ref{fig-sig-ls-nls} on the previous page.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -999,7 +1017,7 @@ These two phases generally occur in order, but may be interspersed throughout wi
 \end{description}
 For example, we might duplicate some nodes, remove some totality annotations, move or copy some edges, delete some no longer needed nodes, move or copy some more edges, then remove some more totality annotations.
 
-Applying this process to \(\SC{3}\), we first duplicate node \(\T{\LS}\) to \(\T{S}\) and node \(\TT{\LS}\) to \(\TT{S}\). To obtain a node structure similar to that of \(\SC{1}\), we also need to further duplicate \(\T{S}\) to \(\T{\NLS}\) and \(\TT{S}\) to \(\TT{\NLS}\). The result of these duplications is shown in Figure~\ref{fig-transform-all-duplicates}. The transformed SIG now has essentially the same node structure as that for \(\SC{1}\).
+Applying this process to \(\SC{3}\), we first duplicate node \(\Type{\LS}\) to \(\Type{S}\) and node \(\TT{\LS}\) to \(\TT{S}\). To obtain a node structure similar to that of \(\SC{1}\), we also need to further duplicate \(\Type{S}\) to \(\Type{\NLS}\) and \(\TT{S}\) to \(\TT{\NLS}\). The result of these duplications is shown in Figure~\ref{fig-transform-all-duplicates}. The transformed SIG now has essentially the same node structure as that for \(\SC{1}\).
 
 %%%%%%%%%%%%%%%%%%%%
 
@@ -1008,11 +1026,11 @@ Applying this process to \(\SC{3}\), we first duplicate node \(\T{\LS}\) to \(\T
     \begin{tikzpicture}
         \matrix[row sep=0.5cm]
         { 
-            \node [input keep] (TLS) {\(\T{\LS}\)};     &[7mm]  \node [input keep] (TTLS) {\(\TT{\LS}\)};   &[7mm]                              &[4mm]                                  &[-4mm] \node (TSSL) {\(\StackTSSL\)};      &                                       &   \node (LSCity) {\(\CityLondon\)};   \\
-                                                        &                                                   &                                   &   \node (TSname) {\(\T{\Sname}\)};    \\
-            \node [output] (TLSPlusNLS) {\(\T{S}\)};    &       \node [output] (TTLSPlusNLS) {\(\TT{S}\)};  &   \node (TSno) {\(\T{\Sno}\)};    &                                       &       \node (TSSC) {\(\StackTSSC\)};      &                                       &   \node (TCity) {\(\T{City}\)};   \\
-                                                        &                                                   &                                   &                                       &                                           &   \node (TStatus) {\(\T{\Status}\)};  \\
-            \node [output] (TNLS) {\(\T{\NLS}\)};       &       \node [output] (TTNLS) {\(\TT{\NLS}\)};     &                                   &                                       &       \node (TSSNL) {\(\StackTSSNL\)};    &                                       &   \node (NLSCity) {\(\StackTCityMinusLondon\)}; \\
+            \node [input keep] (TLS) {\(\Type{\LS}\)};     &[7mm]  \node [input keep] (TTLS) {\(\TT{\LS}\)};   &[7mm]                              &[4mm]                                  &[-4mm] \node (TSSL) {\(\StackTSSL\)};      &                                       &   \node (LSCity) {\(\CityLondon\)};   \\
+                                                        &                                                   &                                   &   \node (TSname) {\(\Type{\Sname}\)};    \\
+            \node [output] (TLSPlusNLS) {\(\Type{S}\)};    &       \node [output] (TTLSPlusNLS) {\(\TT{S}\)};  &   \node (TSno) {\(\Type{\Sno}\)};    &                                       &       \node (TSSC) {\(\StackTSSC\)};      &                                       &   \node (TCity) {\(\Type{City}\)};   \\
+                                                        &                                                   &                                   &                                       &                                           &   \node (TStatus) {\(\Type{\Status}\)};  \\
+            \node [output] (TNLS) {\(\Type{\NLS}\)};       &       \node [output] (TTNLS) {\(\TT{\NLS}\)};     &                                   &                                       &       \node (TSSNL) {\(\StackTSSNL\)};    &                                       &   \node (NLSCity) {\(\StackTCityMinusLondon\)}; \\
         };
         
         \graph{
@@ -1022,8 +1040,12 @@ Applying this process to \(\SC{3}\), we first duplicate node \(\T{\LS}\) to \(\T
             };
             
             % projection edges
+            { [edges=bijection,edge label={\scriptsize\(\RelProject\)}]
+                (TTLS) -- (TSno)
+            };
+            
             { [edges=projection left]
-                (TTLS)  -- { (TSno), (TSSL) },
+                (TTLS)  -- (TSSL),
                 (TSSL)  -- { (TStatus), (LSCity) },
             };
             
@@ -1042,7 +1064,7 @@ Applying this process to \(\SC{3}\), we first duplicate node \(\T{\LS}\) to \(\T
                 (TCity) -- (LSCity),
             };
             
-            { [edges={bijection,output},edge label={\scriptsize\(\RelRestrict\)}]
+            { [edges={bijection,output},edge label'={\scriptsize\(\RelRestrict\)}]
                 { (TLS), (TTLS) } -- { (TLSPlusNLS), (TTLSPlusNLS) },
                 { (TLSPlusNLS), (TTLSPlusNLS) } -- { (TNLS), (TTNLS) },
             };
@@ -1056,17 +1078,17 @@ Applying this process to \(\SC{3}\), we first duplicate node \(\T{\LS}\) to \(\T
             (TSSC) -- [projection left] (TCity);
         };
     \end{tikzpicture}
-    \caption{SIG for transformed schema \(S_{3}'\) after duplicating \T{\LS} and \TT{\LS} to produce analogues of the additional nodes in \(S_{1}\). Inputs to the transformations are coloured \textcolor{blue}{blue}, outputs are coloured \textcolor{red}{red}. [\(\equiv\)]}
+    \caption{SIG for transformed schema \(S_{3}'\) after duplicating \Type{\LS} and \TT{\LS} to produce analogues of the additional nodes in \(S_{1}\). Inputs to the transformations are coloured \textcolor{blue}{blue}, outputs are coloured \textcolor{red}{red}. [\(\equiv\)]}
     \label{fig-transform-all-duplicates}
 \end{figure*}
 
 %%%%%%%%%%%%%%%%%%%%
 
-The next phase is to copy and move edges. To produce the edge \(\T{S} \SurTotal \TT{S}\), we can first \emph{copy} \(\T{\LS} \SurTotal \TT{\LS}\) across the path \(\TT{S} \TrivialSelection \TT{\LS}\) (giving \(\T{\LS} \SurTotal \TT{S}\)), then \emph{move} it across \(\T{S} \TrivialSelection \T{\LS}\). We can carry out a similar series of transformations to copy and move \(\T{S} \SurTotal \TT{S}\) to \(\T{\NLS} \SurTotal \TT{\NLS}\).
+The next phase is to copy and move edges. To produce the edge \(\Type{S} \SurTotal \TT{S}\), we can first \emph{copy} \(\Type{\LS} \SurTotal \TT{\LS}\) across the path \(\TT{S} \TrivialSelection \TT{\LS}\) (giving \(\Type{\LS} \SurTotal \TT{S}\)), then \emph{move} it across \(\Type{S} \TrivialSelection \Type{\LS}\). We can carry out a similar series of transformations to copy and move \(\Type{S} \SurTotal \TT{S}\) to \(\Type{\NLS} \SurTotal \TT{\NLS}\).
 
-Next, we copy and move the projection edge \(\TT{\LS} \ProjectionEdge \T{\Sno}\) to produce the edges \(\TT{S} \ProjectionEdge \T{\Sno}\) and \(\TT{\NLS} \ProjectionEdge \T{\Sno}\). Similarly, we copy and move \(\TT{\LS} \ProjectionEdge \TSSL\) to produce \(\TT{S} \LabelledEdge{\sigedge{12}}{\RelProject} \TSSC\) and \(\TT{\NLS} \LabelledEdge{\sigedge{02}}{\RelProject} \TSSNL\). Note that the first edge in the latter pair of transformations loses the totality annotation, and the second edge the surjectivity annotation, as a result of composition with the pre-existing non-bijective selection edges running vertically down the centre of the SIG.
+Next, we copy and move the projection edge \(\TT{\LS} \TrivialProjection \Type{\Sno}\) to produce the edges \(\TT{S} \TrivialProjection \Type{\Sno}\) and \(\TT{\NLS} \TrivialProjection \Type{\Sno}\). Similarly, we copy and move \(\TT{\LS} \ProjectionEdge \TSSL\) to produce \(\TT{S} \LabelledEdge{\sigedge{12}}{\RelProject} \TSSC\) and \(\TT{\NLS} \LabelledEdge{\sigedge{02}}{\RelProject} \TSSNL\). Note that the first edge in the latter pair of transformations loses the totality annotation, and the second edge the surjectivity annotation, as a result of composition with the pre-existing non-bijective selection edges running vertically down the centre of the SIG.
 
-Finally, we carry out similar copy and move transformations to copy the key edge \(\T{\Sno} \KeyEdge \TSSC\) to \(\T{\Sno} \KeyEdge \TSSL\), and \(\T{\Sno} \KeyEdge \TSSNL\). The annotations for these edges are unaffected. The result of all these edge transformations is shown in Figure~\ref{fig-transform-edge-moves}.
+Finally, we carry out similar copy and move transformations to copy the key edge \(\Type{\Sno} \KeyEdge \TSSC\) to \(\Type{\Sno} \LabelledEdge{\sigedge{03}}{\mathit{key}} \TSSL\), and \(\Type{\Sno} \LabelledEdge{\sigedge{03}}{\mathit{key}} \TSSNL\). Both new edges lose the totality annotation for the same reason as the projection edges above. The result of all these edge transformations is shown in Figure~\ref{fig-transform-edge-moves}.
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -1076,11 +1098,11 @@ Finally, we carry out similar copy and move transformations to copy the key edge
     \begin{tikzpicture}
         \matrix[row sep=0.5cm]
         { 
-            \node (TLS) {\(\T{\LS}\)};      &[7mm]  \node (TTLS) {\(\TT{\LS}\)};        &[7mm]                              &[4mm]                                  &[-4mm] \node (TSSL) {\(\StackTSSL\)};      &                                       &   \node (LSCity) {\(\CityLondon\)};   \\
-                                            &                                           &                                   &   \node (TSname) {\(\T{\Sname}\)};    \\
-            \node (TLSPlusNLS) {\(\T{S}\)}; &       \node (TTLSPlusNLS) {\(\TT{S}\)};   &   \node (TSno) {\(\T{\Sno}\)};    &                                       &       \node (TSSC) {\(\StackTSSC\)};      &                                       &   \node (TCity) {\(\T{City}\)};   \\
-                                            &                                           &                                   &                                       &                                           &   \node (TStatus) {\(\T{\Status}\)};  \\
-            \node (TNLS) {\(\T{\NLS}\)};    &       \node (TTNLS) {\(\TT{\NLS}\)};      &                                   &                                       &       \node (TSSNL) {\(\StackTSSNL\)};    &                                       &   \node (NLSCity) {\(\StackTCityMinusLondon\)}; \\
+            \node (TLS) {\(\Type{\LS}\)};      &[7mm]  \node (TTLS) {\(\TT{\LS}\)};        &[7mm]                              &[4mm]                                  &[-4mm] \node (TSSL) {\(\StackTSSL\)};      &                                       &   \node (LSCity) {\(\CityLondon\)};   \\
+                                            &                                           &                                   &   \node (TSname) {\(\Type{\Sname}\)};    \\
+            \node (TLSPlusNLS) {\(\Type{S}\)}; &       \node (TTLSPlusNLS) {\(\TT{S}\)};   &   \node (TSno) {\(\Type{\Sno}\)};    &                                       &       \node (TSSC) {\(\StackTSSC\)};      &                                       &   \node (TCity) {\(\Type{City}\)};   \\
+                                            &                                           &                                   &                                       &                                           &   \node (TStatus) {\(\Type{\Status}\)};  \\
+            \node (TNLS) {\(\Type{\NLS}\)};    &       \node (TTNLS) {\(\TT{\NLS}\)};      &                                   &                                       &       \node (TSSNL) {\(\StackTSSNL\)};    &                                       &   \node (NLSCity) {\(\StackTCityMinusLondon\)}; \\
         };
         
         \graph{
@@ -1092,24 +1114,31 @@ Finally, we carry out similar copy and move transformations to copy the key edge
             };
             
             % FDs
-            (TSno) -- [funcdep left,bend left,output] (TSSL);
-            (TSno) -- [funcdep right,output] (TSSNL);
+            (TSno) -- [funcdep left,arrows={-{crossbar}>},bend left,output] (TSSL);
+            (TSno) -- [funcdep right,arrows={-{crossbar}>},output] (TSSNL);
             
             % projection edges
-            { [edges=projection left]
-                (TTLS)  -- [input keep] { (TSno), (TSSL) },
-                (TSSL)  -- { (TStatus), (LSCity) },
+            { [edges=bijection,edge label={\scriptsize\(\RelProject\)}]
+                (TTLS)        -- [input keep] (TSno),
                 (TTLSPlusNLS) -- [output] (TSno),
             };
             
-            { [edges=projection right]
-                (TSSC)  -- { (TSname),  (TStatus) },
-                (TSSL)  -- (TSname),
-                (TSSNL) -- { (TStatus), (NLSCity), (TSname) },
-                (TTNLS)  -- [output] (TSno),
-                (TTNLS)  -- [arrows={:->},output] (TSSNL),
+            { [edges=bijection,edge label'={\scriptsize\(\RelProject\)}]
+                (TTNLS)       -- [output] (TSno),
             };
             
+            { [edges=projection left]
+                (TTLS)  -- [input keep] (TSSL),
+                (TSSL)  -- { (TStatus), (LSCity) },
+            };
+            
+            { [edges=projection right]
+                (TSSC)   -- { (TSname),  (TStatus) },
+                (TSSL)   -- (TSname),
+                (TSSNL)  -- { (TStatus), (NLSCity), (TSname) },
+                (TTNLS)  -- [arrows={:->},output] (TSSNL),
+            };
+
             % selection edges
             { [edges=selection left]
                 (TSSC)  -- { (TSSL), (TSSNL) },
@@ -1119,8 +1148,8 @@ Finally, we carry out similar copy and move transformations to copy the key edge
                 (TCity) -- (LSCity),
             };
             
-            { [edges=bijection,edge label={\scriptsize\(\RelRestrict\)}]
-                { (TLS), (TTLS) } -- { (TLSPlusNLS), (TTLSPlusNLS) },
+            { [edges=bijection,edge label'={\scriptsize\(\RelRestrict\)}]
+                { (TLS), (TTLS) }               -- { (TLSPlusNLS), (TTLSPlusNLS) },
                 { (TLSPlusNLS), (TTLSPlusNLS) } -- { (TNLS), (TTNLS) },
             };
             
@@ -1141,7 +1170,7 @@ Finally, we carry out similar copy and move transformations to copy the key edge
 
 %%%%%%%%%%%%%%%%%%%%
 
-If we compare Figure~\ref{fig-sig-s} with Figure~\ref{fig-transform-edge-moves}, we can see that the transformed SIG for \(\SC{3}'\) now has the same topology as the SIG for \(\SC{1}\). We still need to remove the totality annotations from the newly created trivial selection edges on the left, but even when this is done, we do not achieve the desired isomorphism, as the projection edges \(\TT{S} \LabelledEdge{\sigedge{12}}{\RelProject} \TSSC\) and \(\TT{\NLS} \LabelledEdge{\sigedge{02}}{\RelProject} \TSSNL\) have different annotations from the corresponding edges in the SIG for \(\SC{1}\). (Indeed, it is debatable as to whether these two edges can even still be considered projection edges, as they no longer match the definition in Section~\ref{sec-sig-build}). This clearly shows that the information capacities of \(\SC{1}\) and \(\SC{3}\) are incomparable, and that view updates based on this pair of schemas will be problematic.
+If we compare Figure~\ref{fig-sig-s} with Figure~\ref{fig-transform-edge-moves}, we can see that the transformed SIG for \(\SC{3}'\) now has the same topology as the SIG for \(\SC{1}\). We still need to remove the totality annotations from the newly created trivial selection edges on the left, but even when this is done, we do not achieve the desired isomorphism, as the edges \(\TT{S} \LabelledEdge{\sigedge{12}}{\RelProject} \TSSC\), \(\TT{\NLS} \LabelledEdge{\sigedge{02}}{\RelProject} \TSSNL\), \(\Type{\Sno} \LabelledEdge{\sigedge{03}}{\mathit{key}} \TSSL\), and \(\Type{\Sno} \LabelledEdge{\sigedge{03}}{\mathit{key}} \TSSNL\) all have different annotations from the corresponding edges in the SIG for \(\SC{1}\). This clearly shows that the information capacities of \(\SC{1}\) and \(\SC{3}\) are incomparable, and that view updates based on this pair of schemas will be problematic.
 
 If we were to create a fourth sub-schema \(\SC{4} = \{\NLS\}\) and compare this with \(\SC{1}\), the result would be similar to that for \(\SC{3}\).
 
@@ -1162,7 +1191,7 @@ The discussion in this paper focused only on the relational context, but relativ
 
 It is unclear at present whether the omission of inclusion dependencies such as foreign keys is significant. If such dependencies are significant, the question then is how best to represent them in the SIG formalism.
 
-It is also unclear at present whether copying or moving an edge across a bijective path should necessarily increase information capacity, as no annotations are changed in such a transformation. It may be that the structural change to the SIG implies an increase in information capacity regardless. Further investigation is required.
+% It is also unclear at present whether copying or moving an edge across a bijective path should necessarily increase information capacity, as no annotations are changed in such a transformation. It may be that the structural change to the SIG implies an increase in information capacity regardless. Further investigation is required.
 
 Finally, it is interesting to note that with the equivalent schemas \(\SC{1}\) and \(\SC{2}\), we were able to propagate all of the constraints from the base schema \(\SC{0}\) (Section~\ref{sec-constraints-s-ii}), whereas with the incomparable schemas \(\SC{1}\) and \(\SC{3}\), only a subset of the constraints could be propagated (Section~\ref{sec-constraints-s-iii}). Intuitively, it seems reasonable to conjecture that the degree to which constraints can be propagated from \(\SC{0}\) to its sub-schemas could be an indicator of information capacity equivalence among the sub-schemas, but this needs to be further investigated.
 
