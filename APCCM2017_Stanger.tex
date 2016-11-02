@@ -1,3 +1,10 @@
+% APCCM2017_Stanger.tex
+% Author: Nigel Stanger
+% Built using Tex Live 2016 distribution.
+% All packages used should be in the default TeX Live installation.
+% Revisions: 22 Aug 2016 Initial submission.
+%            xx Nov 2016 Camera-ready version.
+
 %%
 %% MAX 10 PAGES (all material)
 %%
@@ -23,7 +30,7 @@
 \pgfarrowsdeclare{:}{:}{}{}
 % custom bar arrow tip, offset from end of line (use "empty" tip at line ends if no >)
 \tikzset{crossbar/.tip={|[scale width=1.75,sep=0.25em]}}
-% various edge styles for TikZ
+% various edge styles for SIG diagrams in TikZ
 \tikzset{
     function/.style={arrows={->}},
     injection/.style={arrows={<-}},
@@ -58,7 +65,7 @@
 \newcounter{constraint}
 
 % misc
-\newcommand{\todo}[1]{\textbf{!!TODO!!} {[#1]}}
+% \newcommand{\todo}[1]{\textbf{!!TODO!!} {[#1]}}
 
 % commonly used elements
 \newcommand{\LS}{\ensuremath{\mathit{LS}}}
@@ -198,10 +205,12 @@
 
 \begin{document}
 
-\setcopyright{none}
-% \conferenceinfo{APCCM 2017}{January 31--February 3, 2017, Geelong, VIC, Australia}
+\setcopyright{acmlicensed}
+\conferenceinfo{APCCM 2017}{January 31--February 3, 2017, Geelong, VIC, Australia}
+\doi{TODO}
+\isbn{TODO}
 
-\title{Characterising relational view updates using relative information capacity}
+\title{Characterising relational view updates \\ using relative information capacity}
 
 \numberofauthors{1}
 \author{
@@ -211,6 +220,36 @@
     \affaddr{Dunedin, New Zealand}\\
     \email{nigel.stanger@otago.ac.nz}
 }
+
+\begin{CCSXML}
+<ccs2012>
+<concept>
+<concept_id>10002951.10002952.10002953.10002955</concept_id>
+<concept_desc>Information systems~Relational database model</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10002951.10002952.10003190.10003205</concept_id>
+<concept_desc>Information systems~Database views</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10003752.10010070.10010111.10010112</concept_id>
+<concept_desc>Theory of computation~Data modeling</concept_desc>
+<concept_significance>300</concept_significance>
+</concept>
+<concept>
+<concept_id>10003752.10010070.10010111.10011733</concept_id>
+<concept_desc>Theory of computation~Data integration</concept_desc>
+<concept_significance>300</concept_significance>
+</concept>
+</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Information systems~Relational database model}
+\ccsdesc[500]{Information systems~Database views}
+\ccsdesc[300]{Theory of computation~Data modeling}
+\ccsdesc[300]{Theory of computation~Data integration}
 
 \maketitle
 
@@ -226,7 +265,7 @@ In 2013, Chris Date published a book about the view update problem in the contex
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\keywords{view update problem, information equivalence, relative information capacity, schema intension graph, schema transformation, relational model}
+\keywords{view update problem, information equivalence, relative information capacity, schema intension graph, schema transformation}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -253,47 +292,9 @@ In Section~\ref{sec-view-update-problem}, we briefly review the view update prob
 
 There has been considerable research into this problem over the last four decades, and numerous different approaches have been suggested. We shall now briefly review some key developments in the relational context.
 
-% Paolini?
-
 Banchilhon and Spyratos proposed the concept of \emph{constant complement} \cite{Bancilhon.F-1981a-Update} as a way to resolve view update issues. The \emph{complement} of a view describes all the information from the original database that does not appear in the view, so composing a view with its complement provides enough information to reconstruct the original database. Keeping the complement invariant under view update facilitates translation construction. This is a useful approach that has been developed further by other authors \cite{Hegner.S-2004a-Order-based,Lechtenborger.J-2003a-Impact}, but it has been shown that reasonable translations exist that cannot be carried out under constant complement \cite{Keller.A-1987a-Comment}. Computing the complement of a given view is also difficult, and several authors have worked on computing complements more efficiently \cite{Cosmadakis.S-1984a-Updates,Laurent.D-2001a-Monotonic,Lechtenborger.J-2003a-Computation}. Finally, this approach is purely structural in nature and does not consider the semantics of the schema, which is necessary to properly resolve translation ambiguity \cite{Keller.A-1986a-Role}.
 
 Gottlob et al.\ generalised the idea of constant complement into the class of \emph{consistent views} \cite{Gottlob.G-1988a-Properties}. They define consistent views as having the property that ``if the effect of a view update on a view state is determined, then the effect of the corresponding database update is unambiguously determined'' \cite{Gottlob.G-1988a-Properties}. However, there are still reasonable views that are not consistent under this definition, and this approach again does not consider schema semantics.
-
-% not sure this is really needed?
-%Keller nicely illustrated the view update problem in terms of mappings between database states \cite{Keller.A-1985a-Algorithms}, as shown in Figure~\ref{fig-equivalence}. A view \(V(\mathit{DB})\) is derived via a view mapping \(V\) from the original database \(\mathit{DB}\). When an update \(U\) is applied to \(V(\mathit{DB})\), a view translator \(T\) translates it into an update \(T(U)\) on \(\mathit{DB}\), resulting in a new database state \(\mathit{DB}'\). The new view state \(V(\mathit{DB}')\) is then derived. Problems arise if \(V(\mathit{DB}')\) does not match what we would expect if \(U\) were applied directly to \(V(\mathit{DB})\), because of side effects introduced by \(T\). Ideally, we would be able to find a side effect free translator \(T\) for any given view, but there are some views that cannot be translated without side effects (e.g. certain joins) \cite{Keller.A-1985a-Algorithms}.
-
-% Date \cite{Date.C-2013a-View} notes that this arises from a lack of \emph{information equivalence} between \(\mathit{DB}\) and \(V(\mathit{DB})\).
-
-%%%%%%%%%%%%%%%%%%%%
-
-%\newcommand{\qeq}{\ensuremath{\mathop{\smash[t]{\overset{?}{=}}}}}
-%
-%\begin{figure}
-%    \centering
-%    \begin{tikzpicture}[every edge/.style={draw,semithick}]
-%        \node (vdb)                         {\(V(\mathit{DB})\)};
-%        \node (db)   [below=11mm of vdb]     {\(\mathit{DB}\vphantom{(')}\)};
-%    
-%        \node (vdbp) [right=3cm of vdb]     {\(V(\mathit{DB}')\)};
-%        \node (uvdb) [left=-1mm of vdbp]    {\(U(V(\mathit{DB})) \qeq\)};
-%    
-%        \node (dbp)  at (db -| vdbp)        {\(\mathit{DB}\smash[t]{'}\vphantom{()}\)};
-%        \node (tudb) [left=-1mm of dbp]     {\(T(U)(\mathit{DB}) =\)};
-%        
-%        \graph{
-%            { (db), (dbp) } -> [edge label={\(V\)},swap] { (vdb), (vdbp) };
-%            
-%            (vdb) -> [edge node={node (u)  [above=-0.6mm] {\(U\)}}]    (uvdb);
-%            (db)  -> [edge node={node (tu) [above=-0.6mm] {\(T(U)\)}}] (tudb);
-%            
-%            (u) -> [double equal sign distance=2pt,-implies] (tu);
-%        };
-%    \end{tikzpicture}
-%    \caption{Equivalence of view updates \protect\cite{Keller.A-1985a-Algorithms}.}
-%    \label{fig-equivalence}
-%\end{figure}
-
-%%%%%%%%%%%%%%%%%%%%
 
 Keller noted that semantic information is essential in order to choose an appropriate translation \cite{Keller.A-1986a-Role}, and suggested that the da\-ta\-base administrator (DBA) could provide this at view definition time \cite{Keller.A-1985a-Algorithms}. Masunaga argued, however, that this would be insufficient to completely resolve ambiguity, and suggested collecting further semantic information from end users at update time \cite{Masunaga.Y-1984a-Relational}. Shu \cite{Shu.H-2000a-Using} discussed an interesting approach to this kind of information gathering, by treating the problem of generating suitable view translations as a constraint satisfaction problem. This enables constraints to be added incrementally at view update time. However, while collecting such information from the DBA seems reasonable, collecting it from the end user at update time could be seen as too burdensome, and could impact the usability of query interfaces. It is also unclear which information needs to be captured, and how best to capture it.
 
@@ -1193,15 +1194,13 @@ The discussion in this paper focused only on the relational context, but relativ
 
 It is unclear at present whether the omission of inclusion dependencies such as foreign keys is significant. If such dependencies are significant, the question then is how best to represent them in the SIG formalism. Adding such constraints will clearly change the structure of a SIG, but we suspect that this will not change the relationship between the relative information capacities of different schemas.
 
-% It is also unclear at present whether copying or moving an edge across a bijective path should necessarily increase information capacity, as no annotations are changed in such a transformation. It may be that the structural change to the SIG implies an increase in information capacity regardless. Further investigation is required.
-
 Finally, it is interesting to note that with the equivalent schemas \(\SC{1}\) and \(\SC{2}\), we were able to propagate all of the constraints from the base schema \(\SC{0}\) (Section~\ref{sec-constraints-s-ii}), whereas with the incomparable schemas \(\SC{1}\) and \(\SC{3}\), only a subset of the constraints could be propagated (Section~\ref{sec-constraints-s-iii}). Intuitively, it seems reasonable to conjecture that the degree to which constraints can be propagated from \(\SC{0}\) to its sub-schemas could be a direct indicator of information equivalence among the sub-schemas, but this needs to be further investigated.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-% \balance
+\balance
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
