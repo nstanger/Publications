@@ -2,6 +2,7 @@
 % Author: Nigel Stanger
 % Built using Tex Live 2016 distribution.
 % All packages used should be in the default TeX Live installation.
+% Diagrams rely heavily on TikZ.
 % Revisions: 22 Aug 2016 Initial submission.
 %            xx Nov 2016 Camera-ready version.
 
@@ -1079,6 +1080,12 @@ Applying this process to \(\SC{3}\), we first duplicate node \(\Type{\LS}\) to \
             };
             (TSno) -- [funcdep right] (TSSC);
             (TSSC) -- [projection left] (TCity);
+            
+            % transformation indicators
+            { [edges={->,gray,dashed,bend left=45}]
+                (TLS) -- [edge node={node[sloped,above]{\small\emph{copy}}}] (TLSPlusNLS),
+                (TLSPlusNLS) -- [edge node={node[sloped,above,rotate=180]{\small\emph{copy}}}] (TNLS)
+            };
         };
     \end{tikzpicture}
     \caption{SIG for transformed schema \(S_{3}'\) after duplicating \Type{\LS} and \TT{\LS} to produce analogues of the additional nodes in \(S_{1}\). Inputs to the transformations are coloured \textcolor{blue}{blue}, outputs are coloured \textcolor{red}{red}. [\(\equiv\)]}
@@ -1110,9 +1117,9 @@ Finally, we carry out similar copy and move transformations to copy the key edge
         \graph{
             % relation types to tuple types
             { [edges=surtotal]
-                (TLS)        -- [input keep] (TTLS),
-                (TLSPlusNLS) -- [output] (TTLSPlusNLS),
-                (TNLS)       -- [output] (TTNLS),
+                (TLS)        -- [input keep,edge node={node (c1a) {}}] (TTLS),
+                (TLSPlusNLS) -- [output,edge node={node (c1b) {}}]     (TTLSPlusNLS),
+                (TNLS)       -- [output,edge node={node (c1c) {}}]     (TTNLS),
             };
             
             % FDs
@@ -1130,7 +1137,7 @@ Finally, we carry out similar copy and move transformations to copy the key edge
             };
             
             { [edges=projection left]
-                (TTLS)  -- [input keep] (TSSL),
+                (TTLS)  -- [input keep,edge node={node (c2a) {}}] (TSSL),
                 (TSSL)  -- { (TStatus), (LSCity) },
             };
             
@@ -1138,7 +1145,7 @@ Finally, we carry out similar copy and move transformations to copy the key edge
                 (TSSC)   -- { (TSname),  (TStatus) },
                 (TSSL)   -- (TSname),
                 (TSSNL)  -- { (TStatus), (NLSCity), (TSname) },
-                (TTNLS)  -- [arrows={:->},output] (TSSNL),
+                (TTNLS)  -- [arrows={:->},output,edge node={node (c2c) {}}] (TSSNL),
             };
 
             % selection edges
@@ -1163,7 +1170,15 @@ Finally, we carry out similar copy and move transformations to copy the key edge
             };
             (TSno) -- [funcdep right,input keep] (TSSC);
             (TSSC) -- [projection left] (TCity);
-            (TTLSPlusNLS) -- [projection right,arrows={:{crossbar}->},bend right,output] (TSSC),
+            (TTLSPlusNLS) -- [projection right,arrows={:{crossbar}->},bend right,output,edge node={node (c2b) {}}] (TSSC),
+            
+            % transformation indicators
+            { [edges={->,gray,dashed}]
+                (c1a) -- [edge node={node[sloped,above]{\small\emph{copy \& move}}}] (c1b),
+                (c1a) -- [bend right=12] (c1c),
+                (c2a) -- [bend right=12] (c2b),
+                (c2a) -- [bend right=12,edge node={node[above,sloped,pos=0.175]{\small\emph{copy \& move}}}] (c2c)
+            };
         };
     \end{tikzpicture}
     \caption{SIG for transformed schema \(S_{3}'\) after copying and moving various edges. [\(\preceq\)]}
