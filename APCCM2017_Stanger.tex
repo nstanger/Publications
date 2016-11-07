@@ -2,8 +2,9 @@
 % Author: Nigel Stanger
 %
 % Built using Tex Live 2016 distribution.
-% All packages used should be in the default TeX Live installation.
-% Diagrams rely heavily on TikZ.
+% All packages except perhaps PGF should be in the standard TeX Live packages.
+% REQUIRES PGF v3.0 or later for diagrams (custom arrow tips).
+% REQUIRES TeX Gyre fonts (newtxmath package).
 % NOTE: the last two figures use a small amount of colour.
 %
 % Revisions: 22 Aug 2016 Initial submission.
@@ -16,7 +17,6 @@
 \documentclass{sig-alternate-05-2015}
 
 \usepackage{balance}
-\usepackage{relalg}
 \usepackage{newtxtext}
 \usepackage{newtxmath}
 \usepackage{bm}
@@ -29,6 +29,14 @@
 \usetikzlibrary{decorations.pathreplacing}
 \usetikzlibrary{calc}
 \usetikzlibrary{arrows}
+
+
+% Relational algebra operators
+\newcommand{\RelRestrict}{\ensuremath{\sigma}}
+\newcommand{\RelProject}{\ensuremath{\pi}}
+\newcommand{\RelUnion}{\ensuremath{\cup}}
+\newcommand{\RelIntersect}{\ensuremath{\cap}}
+
 
 % "empty" arrow tip
 \pgfarrowsdeclare{:}{:}{}{}
