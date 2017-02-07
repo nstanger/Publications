@@ -610,7 +610,7 @@ There are explicit and implicit constraints in \(\SC{0}\) that should also apply
 
 Informally, \(\LS\) and \(\NLS\) contain details of London and non-London suppliers, respectively. They represent disjoint restrictions of \(S\) with the same heading, and have the following tuple types:
 \begin{align}
-    \TT{\LS}  &= \Type{\Sno} \times \Type{\Sname} \times \Type{\LS} \times \CityLondon \nonumber    \\
+    \TT{\LS}  &= \Type{\Sno} \times \Type{\Sname} \times \Type{\Status} \times \CityLondon \nonumber    \\
     \TT{\NLS} &= \Type{\Sno} \times \Type{\Sname} \times \Type{\Status} \times (\TCityMinusLondon) \nonumber
 \end{align}
 
@@ -1099,7 +1099,7 @@ Applying this process to \(\SC{3}\), we first duplicate node \(\Type{\LS}\) to \
             };
         };
     \end{tikzpicture}
-    \caption{SIG for transformed schema \(S_{3}'\) after duplicating \Type{\LS} and \TT{\LS} to produce analogues of the additional nodes in \(S_{1}\). Inputs to the transformations are coloured \textcolor{blue}{blue}, outputs are coloured \textcolor{red}{red}. [\(\equiv\)]}
+    \caption{SIG for transformed schema \(\SC{3}'\) after duplicating \Type{\LS} and \TT{\LS} to produce analogues of the additional nodes in \(\SC{1}\). Inputs to the transformations are coloured \textcolor{blue}{blue}, outputs are coloured \textcolor{red}{red}. [\(\equiv\)]}
     \label{fig-transform-all-duplicates}
 \end{figure*}
 
@@ -1192,7 +1192,7 @@ Finally, we carry out similar copy and move transformations to copy the key edge
             };
         };
     \end{tikzpicture}
-    \caption{SIG for transformed schema \(S_{3}'\) after copying and moving various edges. [\(\preceq\)]}
+    \caption{SIG for transformed schema \(\SC{3}'\) after copying and moving various edges. [\(\preceq\)]}
     \label{fig-transform-edge-moves}
 \end{figure*}
 
