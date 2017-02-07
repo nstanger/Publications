@@ -1,0 +1,1829 @@
+\documentclass{beamer}
+
+
+\usepackage[no-math]{fontspec}
+\usepackage{xunicode}
+\usepackage{xltxtra}
+\usepackage{bm}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{relalg}
+\usepackage{booktabs}
+\usepackage{mathtools}
+\usepackage{hyperref}
+
+
+% Beamer setup
+\usefonttheme{structurebold}
+\useinnertheme{rectangles}
+\usenavigationsymbolstemplate{}
+\setbeamertemplate{footline}[frame number]
+
+
+% TikZ setup
+\usetikzlibrary{positioning}
+\usetikzlibrary{graphs}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows}
+
+
+% fontspec setup
+\defaultfontfeatures{Mapping=tex-text}
+\setmainfont{Minion Pro}
+\setsansfont[Scale=MatchUppercase,BoldFont={Open Sans}]{Open Sans Light}
+\setmonofont[Scale=MatchLowercase]{Letter Gothic 12 Pitch}
+
+
+% graphicx setup
+\graphicspath{{images/}}
+
+
+% custom macros
+% "empty" arrow tip
+\pgfarrowsdeclare{:}{:}{}{}
+% custom bar arrow tip, offset from end of line (use "empty" tip at line ends if no >)
+\tikzset{crossbar/.tip={|[scale width=1.75,sep=0.25em]}}
+% various edge styles for TikZ
+\tikzset{
+    function/.style={arrows={->}},
+    injection/.style={arrows={<-}},
+    total/.style={arrows={:{crossbar}-}},
+    surjection/.style={arrows={-{crossbar}:}},
+    bijection/.style={arrows={<{crossbar}-{crossbar}>}},
+    projection/.style={arrows={:{crossbar}-{crossbar}>}},
+    projection left/.style={arrows={:{crossbar}-{crossbar}>},edge label={\scriptsize\(\RelProject\)}},
+    projection right/.style={arrows={:{crossbar}-{crossbar}>},edge label'={\scriptsize\(\RelProject\)}},
+    selection left/.style={arrows={<-{crossbar}>},edge label={\scriptsize\(\RelRestrict\)}},
+    selection right/.style={arrows={<-{crossbar}>},edge label'={\scriptsize\(\RelRestrict\)}},
+    funcdep left/.style={arrows={:{crossbar}-{crossbar}>},edge node={node[sloped,midway,above] {\scriptsize\emph{key}}}},
+    funcdep right/.style={arrows={:{crossbar}-{crossbar}>},edge node={node[sloped,midway,below] {\scriptsize\emph{key}}}},
+    surtotal/.style={arrows={:{crossbar}-{crossbar}:}},
+    input keep/.style={structure,thick},
+    input delete/.style={structure!40,thick,dashed},
+    output/.style={alert,thick},
+    output temp/.style={alert,thick,dashed},
+    path 1/.style={green!60!black,thick},
+    path 2/.style={orange,thick},
+    invisible/.style={opacity=0},
+    visible on/.style={alt=#1{}{invisible}},
+    input on/.style={alt=#1{input keep}{}},
+    output on/.style={alt=#1{output}{}},
+    alt/.code args={<#1>#2#3}{\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}}}
+}
+        
+% projection and selection edge annotations for TikZ
+\newcommand{\ProjectionAnnotation}[3][]{%
+    \path (#2) to node[above,#1] {\scriptsize\(\RelProject\)} (#3);%
+}
+\newcommand{\SelectionAnnotation}[3][]{%
+    \path (#2) to node[above,#1] {\scriptsize\(\RelRestrict\)} (#3);%
+}
+
+
+\newcounter{constraint}
+
+% misc
+\newcommand{\todo}[1]{\textbf{!!TODO!!} {[#1]}}
+
+% commonly used elements
+\newcommand{\identifier}[1]{\ensuremath{\mathit{#1}}}
+\newcommand{\LS}{\identifier{LS}}
+\newcommand{\NLS}{\identifier{NLS}}
+\newcommand{\LSsub}{\identifier{L}}
+\newcommand{\NLSsub}{\identifier{N}}
+\newcommand{\ST}{\identifier{ST}}
+\newcommand{\SC}{\identifier{SC}}
+\newcommand{\STsub}{\identifier{T}}
+\newcommand{\SCsub}{\identifier{C}}
+\newcommand{\TC}{\identifier{TC}}
+\newcommand{\TCsub}{\identifier{C}}
+\newcommand{\Sno}{\identifier{Sno}}
+\newcommand{\Sname}{\identifier{Sname}}
+\newcommand{\Status}{\identifier{Status}}
+\newcommand{\City}{\identifier{City}}
+
+\newcommand{\Type}[1]{\ensuremath{T_{#1}}}
+\newcommand{\TT}[1]{\ensuremath{T_{\{#1\}}}}
+
+\newcommand{\CityLondon}{\ensuremath{\{\City\colon\allowbreak\text{`\emph{London}'}\}}}
+\newcommand{\TCityMinusLondon}{\ensuremath{\Type{\City} \setminus \CityLondon}}
+\newcommand{\TSSC}{\ensuremath{\Type{\Sname} \times \Type{\Status} \times \Type{\City}}}
+\newcommand{\TSSL}{\ensuremath{\Type{\Sname} \times \Type{\Status} \times \CityLondon}}
+\newcommand{\TSSNL}{\ensuremath{\Type{\Sname} \times \Type{\Status} \times (\TCityMinusLondon)}}
+
+\newcommand{\TLSPlusNLS}{\ensuremath{\Type{\LS} + \Type{\NLS}}}
+\newcommand{\TTLSPlusNLS}{\ensuremath{\TT{\LS} + \TT{\NLS}}}
+\newcommand{\TLSPlusNLSsub}{\ensuremath{\Type{\LSsub} + \Type{\NLSsub}}}
+\newcommand{\TTLSPlusNLSsub}{\ensuremath{\TT{\LSsub} + \TT{\NLSsub}}}
+
+\newcommand{\StackTLSPlusNLS}{\ensuremath{\begin{array}{c}\Type{\LS}\,+ \\ \Type{\NLS}\end{array}}}
+\newcommand{\StackTTLSPlusNLS}{\ensuremath{\begin{array}{c}\TT{\LS}\,+ \\ \TT{\NLS}\end{array}}}
+\newcommand{\StackTLSPlusNLSsub}{\ensuremath{\begin{array}{c}\Type{\LSsub}\,+ \\ \Type{\NLSsub}\end{array}}}
+\newcommand{\StackTTLSPlusNLSsub}{\ensuremath{\begin{array}{c}\TT{\LSsub}\,+ \\ \TT{\NLSsub}\end{array}}}
+\newcommand{\StackTSSC}{\ensuremath{\begin{array}{c}\Type{\Sname}\,\times \\ \Type{\Status} \times \Type{\City}\end{array}}}
+\newcommand{\StackTSSL}{\ensuremath{\begin{array}{c}\Type{\Sname} \times \Type{\Status}\,\times \\ \CityLondon\end{array}}}
+\newcommand{\StackTSSNL}{\ensuremath{\begin{array}{c}\Type{\Sname} \times \Type{\Status}\,\times \\ (\TCityMinusLondon)\end{array}}}
+\newcommand{\StackTCityMinusLondon}{\ensuremath{\begin{array}{c}\Type{\City}\,\setminus \\ \CityLondon\end{array}}}
+
+\newcommand{\schema}[1]{\ensuremath{\mathcal{S}_{#1}}}
+
+% dominates
+\newcommand{\Dominates}[2]{\ensuremath{#2 \preceq #1}}
+\newcommand{\Equivalent}[2]{\ensuremath{#1 \equiv #2}}
+
+% SIG notation (in text)
+\newcommand{\Sedge}[1]{\ensuremath{\sigma_{\textrm{#1}}}}
+\newcommand{\SedgeP}[1]{\ensuremath{\sigma_{\textrm{#1}}^{'}}}
+
+\newcommand{\medmid}{\raise.125ex\hbox{\scalebox{1}[0.75]{$\mid$}}}
+
+% General SIG edges for use in formulas.
+% Adapted from: http://tex.stackexchange.com/questions/96330/adding-symbols-at-the-ends-of-a-horizontal-line
+\makeatletter
+\newlength{\@annotskipleft}
+\newlength{\@annotskipright}
+% #1 = left edge component
+% #2 = right edge component
+% #3 = left bar annotation
+% #4 = right bar annotation
+\newcommand\@sig@edge[4]{%
+    \let\@middle\joinrel%
+    \ifx#1\relbar%
+        \@annotskipleft=.3em%
+        % scrunch up the bare line so it's similar length to \long...arrow
+        \ifx#2\relbar\def\@middle{\joinrel\joinrel\relbar\joinrel\joinrel}\fi%
+    \else% 
+        % arrows need a little more clearance
+        \@annotskipleft=.4em%
+    \fi%
+    \ifx#2\relbar\@annotskipright=.3em\else\@annotskipright=.4em\fi%
+    \mathrel{\ooalign{$#1\@middle#2$\cr\hskip\@annotskipleft$#3$\hfil$#4$\hskip\@annotskipright\cr}}%
+}
+
+% 0 = nothing
+% 1 = bar
+% 2 = arrowhead
+% 3 = both
+\def\@sigedge#1#2{%
+    \ifcase\numexpr#1*4+#2\relax%
+        \@sig@edge{\relbar}{\relbar}{}{}\or                     % 00 = -----
+        \@sig@edge{\relbar}{\relbar}{}{\medmid}\or              % 01 = ---+-
+        \@sig@edge{\relbar}{\rightarrow}{}{}\or                 % 02 = ---->
+        \@sig@edge{\relbar}{\rightarrow}{}{\medmid}\or          % 03 = ---+>
+        \@sig@edge{\relbar}{\relbar}{\medmid}{}\or              % 10 = -+---
+        \@sig@edge{\relbar}{\relbar}{\medmid}{\medmid}\or       % 11 = -+-+-
+        \@sig@edge{\relbar}{\rightarrow}{\medmid}{}\or          % 12 = -+-->
+        \@sig@edge{\relbar}{\rightarrow}{\medmid}{\medmid}\or   % 13 = -+-+>
+        \@sig@edge{\leftarrow}{\relbar}{}{}\or                  % 20 = <----
+        \@sig@edge{\leftarrow}{\relbar}{}{\medmid}\or           % 21 = <--+-
+        \@sig@edge{\leftarrow}{\rightarrow}{}{}\or              % 22 = <--->
+        \@sig@edge{\leftarrow}{\rightarrow}{}{\medmid}\or       % 23 = <--+>
+        \@sig@edge{\leftarrow}{\relbar}{\medmid}{}\or           % 30 = <+---
+        \@sig@edge{\leftarrow}{\relbar}{\medmid}{\medmid}\or    % 31 = <+-+-
+        \@sig@edge{\leftarrow}{\rightarrow}{\medmid}{}\or       % 32 = <+-->
+        \@sig@edge{\leftarrow}{\rightarrow}{\medmid}{\medmid}   % 33 = <+-+>
+    \fi%
+}
+
+\newcommand{\sigedge}[1]{\ensuremath{\@sigedge#1}}
+\makeatother
+
+\newcommand{\Edge}{\sigedge{00}}
+\newcommand{\Total}{\sigedge{10}}
+\newcommand{\Surjective}{\sigedge{01}}
+\newcommand{\SurTotal}{\sigedge{11}}
+\newcommand{\Functional}{\sigedge{02}}
+\newcommand{\Injective}{\sigedge{20}}
+\newcommand{\Bijective}{\sigedge{33}}
+
+% Hack to get the overset symbols to appear at the right height.
+% \smash removes the spacing around the operator, hence \mathop.
+\newcommand{\LabelledEdge}[2]{\mathop{\overset{\raisebox{0.3em}{\scriptsize\ensuremath{#2}}}{\smash[t]{#1}}}}
+\newcommand{\ProjectionEdge}{\LabelledEdge{\sigedge{13}}{\RelProject}}
+\newcommand{\SelectionEdge}{\LabelledEdge{\sigedge{23}}{\RelRestrict}}
+\newcommand{\TrivialProjection}{\ensuremath{\LabelledEdge{\Bijective}{\RelProject}}}
+\newcommand{\TrivialSelection}{\ensuremath{\LabelledEdge{\Bijective}{\RelRestrict}}}
+\newcommand{\KeyEdge}{\ensuremath{\LabelledEdge{\sigedge{13}}{\mathit{key}}}}
+
+% Constraints.
+\newcommand{\Constraint}[2][]{C\ensuremath{_{#2}\ifx&#1&\else^{#1}\fi}}
+\newenvironment{ConstraintList}[1][]{%
+    \begin{list}{%
+        \bfseries%
+        \ifx&#1&%
+            \Constraint{\ensuremath{\bm{\arabic{constraint}}}}%
+        \else%
+            \Constraint[\ensuremath{\bm{#1}}]{\ensuremath{\bm{\arabic{constraint}}}}%
+        \fi%
+    }%
+    {\usecounter{constraint}}%
+}{\end{list}}
+
+
+% Draw a grid to aid TikZ picture drawing/debugging.
+\newcommand{\DrawGridTikZ}[2]{%
+	\begin{scope}[color=lightgray]
+		\draw[thin,step=1mm]  (0.0,0.0)   grid (#1,#2);%
+		\draw[thick,step=1cm] (-0.1,-0.1) grid (#1+0.1,#2+0.1);%
+		\pgftext[top,at={\pgfxy(0.0,-0.2)}]{\tiny 0}%
+		\pgftext[right,at={\pgfxy(-0.2,0.0)}]{\tiny 0}%
+		\foreach \x in {1,...,#1} {\pgftext[top,at={\pgfxy(\x,-0.2)}]{\tiny\x}}%
+		\foreach \y in {1,...,#2} {\pgftext[right,at={\pgfxy(-0.2,\y)}]{\tiny\y}}%
+	\end{scope}
+}
+
+
+% Sometimes we want to put a comment in tiny text on the next line, but the default line skip
+% will insert too much vertical space. Put a \tinyskip at the end of the line instead.
+\def\tinyskip{\\[-0.33\baselineskip]}
+
+
+% Bold-face text using the structure colour.
+\newcommand<>{\structurebf}[1]{\structure#2{\textbf{#1}}}
+
+
+% preamble
+\title{Characterising relational view updates \\ using relative information capacity}
+\author{\large Nigel Stanger \\[0.75cm]
+    \hspace*{0.5cm}
+    \includegraphics[scale=0.2]{Business_School_LS_ID_crop}
+    \hspace*{0.57cm}
+    \rule{1pt}{1.482cm}
+    \hspace*{0.46cm}
+    \rmfamily\small
+    \raisebox{0.4cm}{\shortstack[l]{Department of \\ Information Science}}
+}
+\date{February 1, 2017}
+
+
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \thispagestyle{empty}
+    \titlepage
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \centering
+    \begin{tikzpicture}
+        \node (book) {\includegraphics[height=8cm,keepaspectratio]{Date-ViewUpdatingandRelationalTheory-large.png}};
+        \node[anchor=north] (url) at (book.south) {\tiny\href{http://shop.oreilly.com/product/0636920028437.do}{http://shop.oreilly.com/product/0636920028437.do} (2013)};
+        \node (date) [below=0.8cm of book.east] {\includegraphics[height=2.2cm,keepaspectratio]{date.png}};
+        \only<2->{\fill[fill,yellow,semitransparent] (-0.25,-0.75) rectangle (2.55,-0.4);}
+%         \DrawGridTikZ{7.0}{8.0}
+    \end{tikzpicture}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{Some quick terminology}
+    
+    \begin{columns}
+        \begin{column}{0.4\textwidth}
+            \centering
+            \includegraphics[width=0.95\columnwidth,keepaspectratio]{Date-SQLandRelationalTheory.png}
+            
+            \tiny\href{http://shop.oreilly.com/product/0636920022879.do}{http://shop.oreilly.com/product/0636920022879.do} \\
+            (second edition, 2011)
+            
+            \note<1>[item]{This is the second edition; the third edition is now available.}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \structurebf{Value vs.\ variable}
+            \begin{itemize}
+                \item a value is immutable (“2”)
+                \item a variable contains a value
+                \item[\(\Rightarrow\)] \emph{relation} value, variable (\emph{relvar})
+            \end{itemize}
+            \medskip
+            
+            \structurebf{Relation \alert<2>{heading} \& \alert<3>{body}}
+            \medskip
+            
+            {\scriptsize
+            \begin{tabular}{c|l|l|r|l|}
+                \cline{2-5}
+                \textbf{S}  &   \textbf{\alert<2>{Sno}} &   \textbf{\alert<2>{Sname}}   &   \textbf{\alert<2>{Status}}  &   \textbf{\alert<2>{City}}    \\
+                \cline{2-5}
+                            &   \alert<3>{S1}           &   \alert<3>{Smith}            &   \alert<3>{20}               &   \alert<3>{London}   \\
+                            &   \alert<3>{S2}           &   \alert<3>{Jones}            &   \alert<3>{30}               &   \alert<3>{Paris}    \\
+                \cline{2-5}
+            \end{tabular}}
+            \bigskip
+            
+            \structurebf{Type (\(\bm{\Type{x}}\))}
+            \begin{itemize}
+                \item (finite) set of values that something (\(x\)) can take
+            \end{itemize}
+            \medskip
+            
+            \structurebf{Date doesn’t believe in nulls}\tinyskip
+            {\tiny (but it doesn’t really matter here)}
+        \end{column}
+    \end{columns}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{More on types}
+    
+    \structurebf{Attribute type (\(\bm{\Type{A}}\))}
+    \begin{itemize}
+        \item set of all possible values that \(A\) can take
+        \item[=] \(\{v_{1}\text{,}\, v_{2}\text{,}\, \dotsc\text{,}\, v_{m}\}\) {\tiny (for finite \(m\))}
+    \end{itemize}
+    \medskip
+    
+    \structurebf{Tuple type (\(\bm{\TT{R}}\)) of relvar \(\bm{R}\)}
+    \begin{itemize}
+        \item set of all possible tuple values with \(R\)’s heading
+        \item[=] Cartesian product of \(R\)’s attribute types
+        \item[=] \(\Type{A_{1}} \times \Type{A_{2}} \times \dotsb \times \Type{A_{n}}\)
+    \end{itemize}
+    \medskip
+    
+    \structurebf{Relation type (\(\bm{\Type{R}}\)) of relvar \(\bm{R}\)}
+    \begin{itemize}
+        \item set of all possible relation values with \(R\)’s heading
+        \item[=] every possible combination of elements of \(\TT{R}\)
+    \end{itemize}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{Date’s (hoary and clichéd) suppliers-and-parts schema}
+    
+    \structurebf{\(\bm{S\{\Sno\text{,}\, \Sname\text{,}\, \Status\text{,}\, \City\}}\)}
+    
+    \begin{quote}
+        \upshape
+        Supplier \(\Sno\) is under contract, is named \(\Sname\), has status \(\Status\), and is located in city \(\City\)
+    \end{quote}
+    \bigskip
+    
+    \structurebf{\(\bm{P\{\mathit{Pno}\text{,}\, \mathit{Pname}\text{,}\, \mathit{Colour}\text{,}\, \mathit{Weight}\text{,}\, \City\}}\)}
+    
+    \begin{quote}
+        \upshape
+        Part \(\mathit{Pno}\) is used in the enterprise, is named \(\mathit{Pname}\), has colour \(\mathit{Colour}\), and weight \(\mathit{Weight}\)
+    \end{quote}
+    \bigskip
+    
+    \structurebf{\(\bm{SP\{\Sno\text{,}\, \mathit{Pno}\text{,}\, \mathit{Qty}\}}\)}
+    
+    \begin{quote}
+        \upshape
+        Supplier \(\Sno\) supplies (ships) part \(\mathit{Pno}\) in quantity \(\mathit{Qty}\)
+    \end{quote}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{The view update problem}
+
+    \centering
+    \Large
+    \begin{tikzpicture}[every edge/.style={draw,semithick}]
+        \node (vdb)                         {\(V(\mathit{DB})\)};
+        \node (db)   [below=18mm of vdb]    {\(\mathit{DB}\vphantom{(')}\)};
+
+        \node (vdbp) [right=4cm of vdb]     {\(V(\mathit{DB}')\)};
+        \node (uvdb) [left=-1mm of vdbp]    {\(U(V(\mathit{DB})) \stackrel{?}{=}\)};
+
+        \node (dbp)  at (db -| vdbp)        {\(\mathit{DB}\smash[t]{'}\vphantom{()}\)};
+        \node (tudb) [left=-1mm of dbp]     {\(T(U)(\mathit{DB}) =\)};
+
+        \graph{
+            { (db), (dbp) } -> [edge label={\(V\)},swap] { (vdb), (vdbp) };
+
+            (vdb) -> [edge node={node (u)  [above=-0.6mm] {\(U\)}}]    (uvdb);
+            (db)  -> [edge node={node (tu) [above=-0.6mm] {\(T(U)\)}}] (tudb);
+
+            (u)   -> [double equal sign distance=2pt,-implies,edge label={\(T\)}] (tu);
+        };
+    \end{tikzpicture}
+    \\
+    \tiny Keller (1985) \emph{Algorithms for translating view updates to database updates for views involving selections, projections, and joins}
+    
+    \note<1>{Keller: “The user specifies update \(U\) against the view of the database, \(V(\mathit{DB})\). The view update translator \(T\) supplies the database update \(T(U)\), which results in \(DB'\) when applied to the database. The new view state is \(V(\mathit{DB}')\). This translation has no side effects in the view if \(V(\mathit{DB}') = U(V(\mathit{DB}))\), that is, if the view has changed precisely in accordance with the user’s request.”}
+    
+    \bigskip
+    \normalsize
+    
+    \begin{uncoverenv}<2->
+        \structurebf{Problem:} there are often multiple update translations \(T(U)\) that produce the effect of \(U\) but have quite different effects on \(\mathit{DB}\).
+        \bigskip
+    
+        How do we choose?
+    \end{uncoverenv}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{The view update problem}
+    
+    \begin{columns}
+        \begin{column}[T]{0.45\textwidth}
+            \footnotesize\color{gray!70}
+            \begin{tabular}{|l|l|r|l|}
+                \multicolumn{4}{l}{\textbf{S}}  \\
+                \hline
+                \textbf{Sno}        &   \textbf{Sname}      &   \textbf{Status}     &   \textbf{City}   \\
+                \hline
+                S1                  & Smith                 & 20                    & London \\
+                S2                  & Jones                 & 30                    & Paris \\
+                S3                  & Blake                 & 30                    & Paris \\
+                \only<1-2,4->{S4}  & \only<1-2,4->{Clark} & \only<1-2,4->{20}    & \only<1-2,4,6>{London}\only<5>{\alert{???}}\only<7->{\alert{Paris}} \\
+                S5                  & Adams                 & 30                    & Athens \\
+                \hline
+            \end{tabular}
+        \end{column}
+        \begin{column}[T]{0.45\textwidth}
+            \footnotesize
+            \begin{tabular}{|l|l|r|l|}
+                \multicolumn{4}{l}{\(\bm{\text{\textbf{LS}} = \RelRestrict_{\text{\textbf{City}} = \text{\textbf{`London'}}} \,\text{\textbf{S}}}\)}  \\
+                \hline
+                \textbf{Sno}    &   \textbf{Sname}  &   \textbf{Status} &   \textbf{City}   \\
+                \hline
+                S1              & Smith             & 20                & London \\
+                \only<1-2,4,6>{S4} & \only<1-2,4,6>{Clark}& \only<1-2,4,6>{20}   & \only<1-2,4,6>{London} \\
+                \hline
+            \end{tabular}
+        \end{column}
+    \end{columns}
+    \bigskip
+    
+    \structurebf{Delete S4 from LS?}
+    
+    \begin{enumerate}
+        \item<2-> Delete S4 from S.
+        \item<4-> Change S4’s city to anything other than London.
+    \end{enumerate}
+    \bigskip
+    
+    \begin{uncoverenv}<6->
+        \structurebf{What if we instead \emph{change} S4’s city to Paris in LS?}
+        \begin{itemize}
+            \item<7->[\(\Rightarrow\)] changing S4’s city to Paris in S
+            \item<7-> side effect: some changes behave like deletes!
+        \end{itemize}
+    \end{uncoverenv}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{The view update problem}
+    
+    \tiny
+    \begin{columns}
+        \begin{column}[T]{0.35\textwidth}
+            \color{gray!70}
+            \begin{tabular}{|l|l|r|l|}
+                \multicolumn{4}{l}{\textbf{S}}  \\
+                \hline
+                \textbf{Sno}        &   \textbf{Sname}      &   \textbf{Status}     &   \textbf{City}   \\
+                \hline
+                \only<1-6,8-9>{S1}\only<7>{\alert{S6}} & \only<1-9>{Smith} & \only<1-9>{20} & \only<1-9>{London} \\
+                S2                  & Jones                 & 30                    & Paris \\
+                S3                  & Blake                 & 30                    & Paris \\
+                S4                  & Clark                 & 20                    & London \\
+                S5                  & Adams                 & 30                    & Athens \\
+                \hline
+            \end{tabular}
+            \bigskip
+            
+            \begin{tabular}{|l|l|r|}
+                \multicolumn{3}{l}{\textbf{SP}}  \\
+                \hline
+                \textbf{Sno}        &   \textbf{Pno}      &   \textbf{Qty}   \\
+                \hline
+                \only<1-2,4,6,8-9>{S1}\only<5>{\alert{S3}}\only<7>{\alert{S6}} & \only<1-2,4-9>{P1} & \only<1-2,4-9>{300} \\
+                S1 & P2 & 200 \\
+                S1 & P3 & 400 \\
+                S1 & P4 & 200 \\
+                S1 & P5 & 100 \\
+                S1 & P6 & 100 \\
+                S2 & P1 & 300 \\
+                S2 & P2 & 400 \\
+                S3 & P2 & 200 \\
+                S4 & P2 & 300 \\
+                S4 & P4 & 300 \\
+                S4 & P5 & 400 \\
+                \hline
+            \end{tabular}
+            \bigskip\medskip
+            
+            \color{black}
+        \end{column}
+        \begin{column}[T]{0.55\textwidth}
+            \begin{tabular}{|l|l|r|l|l|r|}
+                \multicolumn{4}{l}{\(\bm{\mathsf{SSP} = \mathsf{S} \RelNaturalJoin \mathsf{SP}}\)}  \\
+                \hline
+                \textbf{Sno}        &   \textbf{Sname}      &   \textbf{Status}     &   \textbf{City}   &   \textbf{Pno}    &   \textbf{Qty}   \\
+                \hline
+                \only<1-2,4,6,8-9>{S1}\only<5>{\alert{S3}}\only<7>{\alert{S6}} & \only<1-2,4,6-9>{Smith}\only<5>{\alert{Blake}} & \only<1-2,4,6-9>{20}\only<5>{\alert{30}} & \only<1-2,4,6-9>{London}\only<5>{\alert{Paris}} & \only<1-2,4-9>{P1} & \only<1-2,4-9>{300} \\
+                \only<1-6,8-9>{S1}\only<7>{\alert{S6}} & \only<1-9>{Smith} & \only<1-9>{20} & \only<1-9>{London} & \only<1-9>{P2} & \only<1-9>{200} \\
+                \only<1-6,8-9>{S1}\only<7>{\alert{S6}} & \only<1-9>{Smith} & \only<1-9>{20} & \only<1-9>{London} & \only<1-9>{P3} & \only<1-9>{400} \\
+                \only<1-6,8-9>{S1}\only<7>{\alert{S6}} & \only<1-9>{Smith} & \only<1-9>{20} & \only<1-9>{London} & \only<1-9>{P4} & \only<1-9>{200} \\
+                \only<1-6,8-9>{S1}\only<7>{\alert{S6}} & \only<1-9>{Smith} & \only<1-9>{20} & \only<1-9>{London} & \only<1-9>{P5} & \only<1-9>{100} \\
+                \only<1-6,8-9>{S1}\only<7>{\alert{S6}} & \only<1-9>{Smith} & \only<1-9>{20} & \only<1-9>{London} & \only<1-9>{P6} & \only<1-9>{100} \\
+                S2 & Jones & 30 & Paris & P1 & 300 \\
+                S2 & Jones & 30 & Paris & P2 & 400 \\
+                S3 & Blake & 30 & Paris & P2 & 200 \\
+                S4 & Clark & 20 & London & P4 & 300 \\
+                S4 & Clark & 20 & London & P5 & 400 \\
+                S4 & Clark & 20 & London & P2 & 200 \\
+                \hline
+            \end{tabular}
+            \bigskip
+            
+            \scriptsize
+            \structurebf{Delete first row of SSP?}
+            
+            \begin{enumerate}
+                \item<2-> Delete \(\text{SP}\{\text{S1}\text{,}\, \text{P1}\text{,}\, \text{300}\}\).
+                \item<4-|alert@8> Change supplier number in \(\text{SP}\{\text{S1}\text{,}\, \text{P1}\text{,}\, \text{300}\}\).
+                \item<6-|alert@8> Change S1’s supplier number in S.
+                \item<9-> Delete S1 from S. {\tiny (nuclear option)}
+            \end{enumerate}
+            \uncover<8>{\tiny\alert{\beamerbutton{technically correct}}}
+            
+            \uncover<11>{\structurebf{Changes are even more problematic}}
+        \end{column}
+    \end{columns}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{Date's solution}
+    
+    \begin{itemize}
+    
+        \item Explicitly specify \emph{all} constraints in advance.\tinyskip
+        {\tiny (``metadata approach'' with similar issues to many earlier attempts)}
+        
+        \item Automatically generate \emph{compensatory rules} from constraints.\tinyskip
+        {\tiny (kind of like declarative triggers)}
+        
+        \item No problem if original and view schemas are \emph{information equivalent}.
+        {\tiny (no hidden information)}
+        \begin{itemize}
+        
+            \item[] ``…if and only if the constraints that apply to [schema \(\schema{1}\)] and [schema \(\schema{2}\)] are such that every proposition that can be represented by [\(\schema{1}\)] can be represented by [\(\schema{2}\)] and vice versa''\\
+            \hfill{\tiny Date (2013) \emph{View Updating \& Relational Theory}}
+        
+        \end{itemize}
+        \medskip
+        
+        \item[BUT:] Still potential for ambiguity when views hide information.\tinyskip
+        {\tiny(i.e., no longer information equivalent)}
+        \medskip
+                
+        \item Date’s approach involves “\emph{…a clear element of pragma…}”.\tinyskip
+        {\tiny (essentially he argues for “common sense” ambiguity resolution)}
+    
+    \end{itemize}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{Relative information capacity}
+    \framesubtitle{}
+    
+    \begin{itemize}
+    
+        \item “Information content” of a schema. {\tiny (including constraints)}
+        
+        \item Determines set of all valid instances of a schema.
+        
+        \item Can only be compared, not quantitatively measured.
+        \begin{description}
+            \item[equivalence] \(\Equivalent{\schema{1}}{\schema{2}}\)
+            \item[dominance] \(\Dominates{\schema{2}}{\schema{1}}\)
+        \end{description}
+        
+        \item Mappings between schemas can preserve:
+        \begin{description}
+            \item[information] information capacity increases (\(\Rightarrow\Dominates{\schema{2}}{\schema{1}}\))
+            \item[equivalence] information capacity stays the same (\(\Rightarrow\Equivalent{\schema{1}}{\schema{2}}\))
+        \end{description}
+    
+    \end{itemize}
+    
+    \flushright\tiny
+    Hull (1986) \emph{Relative information capacity of simple relational database schemata} \\
+    Miller (1993) \emph{The use of information capacity in schema integration and translation}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{Schema intension graphs (SIGs)}
+    
+    \structurebf{Nodes = typed domains (sets of values)}
+    \begin{itemize}
+        \item simple
+        \item constructed (\(\times\), \(+\))
+    \end{itemize}
+    \medskip
+    
+    \structurebf{Edges = associations between domains} {\tiny (binary relations)}
+    \begin{itemize}
+        \item Simple constraints:
+        \begin{itemize}
+            \item total (\(A \Total B\)): defined for all \(a \in A\)
+            \item surjective (\(A \Surjective B\)): defined for all \(b \in B\)
+            \item functional (\(A \Functional B\)): \(a\) maps to at most one \(b\)
+            \item injective (\(A \Injective B\)): \(b\) maps to at most one \(a\)
+            \item bijective (\(A \Bijective B\)): all four
+        \end{itemize}
+        \item Selection (\(A \SelectionEdge B\)): \(B\) is a subset of \(A\). {\tiny (\(\Rightarrow B\) is a specialisation or subtype of \(A\))}
+        \item Projection (\(A \ProjectionEdge B\)): \(B\) is a projection of \(A\). {\tiny (\(\Rightarrow A\) is a constructed tuple type)}
+    \end{itemize}
+
+    \flushright\tiny
+    Miller (1994) \emph{Schema equivalence in heterogeneous systems: Bridging theory and practice} \\
+    Miller (1994) \emph{Schema intension graphs: A formal model for the study of schema equivalence}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame<1-2>[label=frame.SIG.example]
+{
+    \frametitle{Example SIG for relvar \(\bm{S\{\Sno\text{,}\, \Sname\text{,}\, \Status\text{,}\, \City\}}\)}
+    \framesubtitle{\uncover<3>{\hyperlink{frame.SIG.Sone}{\beamerreturnbutton{Back}}}}
+    
+    \centering\Large
+    \begin{tikzpicture}[level distance=18mm]
+        \node (TS) {\(\Type{S}\)};
+        \node (TTS) [right=1.5cm of TS] {\(\TT{S}\)}
+            [sibling distance=4.5cm]
+            child[arrows={<{crossbar}-{crossbar}>}] {node (TSno) {\(\Type{\Sno}\)}}
+            child[arrows={:{crossbar}-{crossbar}>}] {node (TSSC) {\(\TSSC\)}
+                [sibling distance=22mm]
+                child[arrows={:{crossbar}-{crossbar}>}] {node (TSname) {\(\Type{\Sname}\)}}
+                child[arrows={:{crossbar}-{crossbar}>}] {node (TStatus) {\(\Type{\Status}\)}}
+                child[arrows={:{crossbar}-{crossbar}>}] {node (TCity) {\(\Type{\City}\)}}};
+        
+        \node (TTSexpansion) [right=-2mm of TTS,visible on=<2>,alert] {\tiny\(= \Type{\Sno} \times \Type{\Sname} \times \Type{\Status} \times \Type{\City}\)};
+        
+        % TS to T{S}
+        \draw[arrows={:{crossbar}-{crossbar}:}] (TS) to (TTS);
+        
+        % FD
+        \draw[arrows={:{crossbar}-{crossbar}>}] (TSno) to node[below=-2pt] {\scriptsize\emph{key}} (TSSC);
+        
+        % projection edges
+        \ProjectionAnnotation[above left=-2pt and -4pt]{TTS}{TSno}
+        \ProjectionAnnotation[above right=-2pt and -4pt]{TTS}{TSSC}
+
+        \ProjectionAnnotation[above left=-2pt and -4pt]{TSSC}{TSname}
+        \ProjectionAnnotation[right=-2pt]{TSSC}{TStatus}
+        \ProjectionAnnotation[above right=-2pt and -4pt]{TSSC}{TCity}
+    \end{tikzpicture}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame}[fragile]
+    \frametitle{SIGs for relational schemas}
+    
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        \textbf{Relational} &   \textbf{SIG}                    &   \textbf{Notation}   \\
+        \midrule
+        attribute type      &   simple domain                   &   \(\Type{A}\)    \\
+        tuple type          &   constructed domain (\(\times\)) &   \(\TT{R}\) or \(\Type{A} \times \Type{B} \times \dotsc\)  \\
+        relation type       &   simple domain\footnote{Or possibly a complex constructed type involving union?}               &   \(\Type{R}\)    \\
+        \midrule
+        key\footnote{Implied by functional dependency.}       &   func., total, surj.\ edge                 &   \(\Type{A} \KeyEdge \Type{B}\)    \\
+        foreign key\footnote{Inclusion dependency.}         &   —                               &   —   \\
+        \midrule
+        restrict (\(\RelRestrict\))  &   selection edge  &   \(A \SelectionEdge B\) or \(A \TrivialSelection B\)\footnote{Trivial case.} \\
+        project (\(\RelProject\))  &   projection edge  &   \(A \ProjectionEdge B\) or \(A \TrivialProjection B\) \\
+        \bottomrule
+    \end{tabular}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{Comparing and transforming SIGs}
+    
+    \begin{itemize}
+    
+        \item Isomorphism between SIGs for \(\schema{1}\) and \(\schema{2}\) (both structure and semantics) indicates information equivalence:
+        \begin{itemize}
+            \item \(\Equivalent{\schema{1}}{\schema{2}}\) if we can make \(\schema{1}\) isomorphic to \(\schema{2}\) using equivalence preserving transformations {\tiny (or vice versa)}
+            \item \(\Dominates{\schema{2}}{\schema{1}}\) if we can make \(\schema{1}\) isomorphic to \(\schema{2}\) using information preserving transformations {\tiny (or vice versa)}
+            \item \(\schema{1}\) \& \(\schema{2}\) non-comparable if we can’t make them isomorphic
+        \end{itemize}
+        \medskip
+        
+        \item Transforming a SIG effectively transforms the schema.
+        \begin{itemize}
+            \item delete annotation, \(\RelRestrict\), \(\RelProject\) (\(\preceq\))
+            \item move and/or copy edge (\(\preceq\))
+            \item create/delete duplicate node: \(A \Rightarrow A \TrivialSelection A'\) (\(\equiv\))
+            \item delete bijective (trivial) selection edge: \(A \TrivialSelection A' \Rightarrow A \quad A'\) (\(\preceq\))
+            \item create recursive bijective selection edge: \(A \Rightarrow\)\smash{\tikz[baseline={(A.base)},every loop/.style={out=-25,in=25,bijection}]{\node (A) {\(A\)}; \path (A) edge [loop right] node {\scriptsize\(\RelRestrict\)} ();}}(\(\equiv\))
+        \end{itemize}
+        
+    \end{itemize}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{Gotta catch ’em all…}
+    \framesubtitle{(constraints, that is)}
+    
+    \begin{columns}
+        \begin{column}[T]{0.5\textwidth}
+            \structurebf{Consider {\tiny (disjoint restriction views, Date Ch. 4)}}
+            
+            \small
+            \begin{itemize}
+                \item \(S\{\Sno\text{,}\,\Sname\text{,}\,\Status\text{,}\,\City\}\)
+                \item view \(\LS = \RelRestrict_{\City = \text{`\emph{London}'}}S\)
+                \item view \(\NLS = \RelRestrict_{\City \ne \text{`\emph{London}'}}S\)
+                \item Base schema \(\schema{0} = \{S\text{,}\, \LS\text{,}\, \NLS\}\)
+                \item Sub-schemas \(\schema{1} = \{S\}\), \(\schema{2} = \{\LS\text{,}\, \NLS\}\), \(\schema{3} = \{LS\}\)
+                \item Date says \((\schema{1}\text{,}\, \schema{2})\) are informa- tion equivalent, \((\schema{1}\text{,}\, \schema{3})\) aren’t.\tinyskip
+                {\tiny (due to information hiding)}
+            \end{itemize}
+            
+            \alert{To construct truly comparable SIGs, we need to propagate all the constraints that we can from \(\schema{0}\) to \(\schema{1}\), \(\schema{2}\), and \(\schema{3}\).}
+        \end{column}
+        \begin{column}[T]{0.5\textwidth}
+            \begin{uncoverenv}<2->
+                \structurebf{Constraints in \(\bm{\schema{0}}\)}
+            
+                \tiny
+                \begin{ConstraintList}
+                    \item \(\{\Sno\} \rightarrow \{\Sname\text{,}\, \Status\text{,}\, \City\}\) holds in (a) \(S\); (b) \(\LS\); and (c) \(\NLS\)\quad [key]
+    
+                    \item \(\RelProject_{\{\Sno\}}\LS \subseteq \RelProject_{\{\Sno\}}S\)\quad [FK \(\LS \rightarrow S\)]
+    
+                    \item \(\RelProject_{\{\Sno\}}\NLS \subseteq \RelProject_{\{\Sno\}}S\)\quad [FK \(\NLS \rightarrow S\)]
+    
+                    \item \(S = \LS \RelUnion \NLS\)
+    
+                    \item \(\RelRestrict_{\City \ne \text{`\emph{London}'}}\LS = \emptyset\)
+    
+                    \item \(\RelRestrict_{\City = \text{`\emph{London}'}}\NLS = \emptyset\)
+    
+                    \item \(\LS \RelIntersect \NLS = \emptyset\)
+    
+                    \item (a) \(\Type{S} = \Type{\LS} \RelUnion \Type{\NLS}\); (b) \(\TT{S} = \TT{\LS} \RelUnion \TT{\NLS}\)
+    
+                    \item (a) \(\Type{\LS} \subset \Type{S}\); (b) \(\TT{\LS} \subset \TT{S}\)
+    
+                    \item (a) \(\Type{\NLS} \subset \Type{S}\); (b) \(\TT{\NLS} \subset \TT{S}\)
+    
+                    \item \(\CityLondon \subset \Type{\City}\)
+    
+                    \item \((\TCityMinusLondon) \subset \Type{\City}\)
+    
+                    \item \(\TSSL \subset \TSSC\)
+    
+                    \item \(\TSSNL \subset \TSSC\)
+                \end{ConstraintList}
+            \end{uncoverenv}
+        \end{column}
+    \end{columns}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{Propagating constraints to sub-schemas}
+    \framesubtitle{(ignoring \(\bm{\text{C}_{2}}\) and \(\bm{\text{C}_{3}}\) for now)}
+    
+    \small
+    
+    \structurebf{Directly propagate constraints that reference no relvars}
+    \begin{itemize}
+        \item[] \(\text{C}_{11}\), \(\text{C}_{12}\), \(\text{C}_{13}\), \(\text{C}_{14}\)
+    \end{itemize}
+    \medskip
+    
+    \structurebf{Directly propagate constraints that reference sub-schema relvars only}
+    \begin{itemize}
+        \item[\(\schema{1}\)] \(\text{C}_{1}\)(a)
+        \item[\(\schema{2}\)] \(\text{C}_{1}\)(b), \(\text{C}_{1}\)(c), \(\text{C}_{5}\), \(\text{C}_{6}\), \(\text{C}_{7}\)
+        \item[\(\schema{3}\)] \(\text{C}_{1}\)(b), \(\text{C}_{5}\)
+    \end{itemize}
+    \medskip
+    
+    \structurebf{Rewrite remaining constraints in terms of sub-schema relvars {\tiny (if possible)}}
+    
+    \begin{itemize}
+        \item[\(\schema{1}\)] Replace \(\LS\) with \(\RelRestrict_{\City = \text{`\emph{London}'}}\,S\) and \(\NLS\) with \(\RelRestrict_{\City \ne \text{`\emph{London}'}}\,S\) in \(\text{C}_{1}\)(b), \(\text{C}_{1}\)(c), \(\text{C}_{4}\), \(\text{C}_{5}\), \(\text{C}_{6}\), \(\text{C}_{7}\), \(\text{C}_{8}\), \(\text{C}_{9}\), \(\text{C}_{10}\).
+        
+        \item[\(\schema{2}\)] Replace \(S\) with \(\LS \RelUnion \NLS\) in \(\text{C}_{1}\)(a), \(\text{C}_{4}\), \(\text{C}_{8}\), \(\text{C}_{9}\), \(\text{C}_{10}\).
+        
+        \item[\(\schema{3}\)] Can’t rewrite any remaining constraints.
+    \end{itemize}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{Propagating constraints to sub-schemas}
+    
+    \structurebf{Example}
+    \medskip
+    
+    \begin{tabular}{lll}
+        \textcolor{structure}{\(\schema{0}\)}    &   \(\text{C}_{4}\)            &   \(S = \LS \RelUnion \NLS\)    \\[4pt]
+                                        &                               &   \Large\quad\(\Downarrow\)  \\[4pt]
+        \textcolor{structure}{\(\schema{1}\)}    &   \(\text{C}_{4}^{\schema{1}}\)   &   \(S = (\RelRestrict_{\City = \text{`\emph{London}'}}\,S) \RelUnion (\RelRestrict_{\City \ne \text{`\emph{London}'}}\,S)\)    \\[8pt]
+        \textcolor{structure}{\(\schema{2}\)}    &   \(\text{C}_{4}^{\schema{2}}\)   &   \(\LS \RelUnion \NLS = \LS \RelUnion \NLS\) \\[8pt]
+        \textcolor{structure}{\(\schema{3}\)}    &  —                            &   (can’t be propagated)   \\
+    \end{tabular}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame<1>[label=frame.SIG.Sone]
+{
+    \frametitle{The SIGs: \(\bm{\schema{1} = \{S\}}\)}
+    \framesubtitle{\alt<1>{\hyperlink{frame.SIG.example<3>}{\beamergotobutton{Compare}}}{\hyperlink{frame.SIG.transform<9>}{\beamerreturnbutton{Back}}}}
+    
+    \centering
+    \begin{tikzpicture}[ampersand replacement=\&,transform canvas={scale=0.8}]
+        \matrix[row sep=0.5cm]
+        { 
+            \node (TLS) {\(\mathrlap{\,\Type{\LSsub}}\hphantom{\Type{\LS}}\)};    \&[7mm]  \node (TTLS) {\(\mathrlap{\,\TT{\LSsub}}\hphantom{\TT{\LS}}\)};     \&[7mm]                              \&[4mm]                                  \&[-4mm] \node (TSSL) {\(\StackTSSL\)};      \&                                       \&   \node (LSCity) {\(\CityLondon\)};   \\
+                                                \&                                           \&                                   \&   \node (TSname) {\(\Type{\Sname}\)};    \\
+            \node (TLSPlusNLS) {\(\Type{S}\)};  \&       \node (TTLSPlusNLS) {\(\TT{S}\)};   \&   \node (TSno) {\(\Type{\Sno}\)}; \&                                       \&       \node (TSSC) {\(\StackTSSC\)};      \&                                       \&   \node (TCity) {\(\Type{City}\)};   \\
+                                                \&                                           \&                                   \&                                       \&                                           \&   \node (TStatus) {\(\Type{\Status}\)};  \\
+            \node (TNLS) {\(\mathrlap{\,\:\Type{\NLSsub}}\hphantom{\Type{\NLS}}\)};  \&       \node (TTNLS) {\(\mathrlap{\,\:\TT{\NLSsub}}\hphantom{\TT{\NLS}}\)};   \&                                   \&                                       \&       \node (TSSNL) {\(\StackTSSNL\)};    \&                                       \&   \node (NLSCity) {\(\StackTCityMinusLondon\)}; \\
+        };
+        
+        \graph{
+            % relation types to tuple types
+            { [edges=surtotal]
+                { (TLS), (TNLS), (TLSPlusNLS) } -- { (TTLS), (TTNLS), (TTLSPlusNLS) },
+            };
+            
+            % FDs
+            (TSno) -- [funcdep left,bend left] (TSSL);
+            (TSno) -- [funcdep right] (TSSNL);
+            
+            % projection edges
+            { [edges=bijection,edge label={\scriptsize\(\RelProject\)}]
+                { (TTLSPlusNLS), (TTLS) } -- (TSno)
+            };
+            
+            { [edges=bijection,edge label'={\scriptsize\(\RelProject\)}]
+                (TTNLS) -- (TSno)
+            };
+            
+            { [edges=projection left]
+                (TTLS)  -- (TSSL),
+                (TSSL)  -- { (TStatus), (LSCity) },
+            };
+            
+            { [edges=projection right]
+                (TTNLS) -- (TSSNL),
+                (TSSC)  -- { (TSname),  (TStatus) },
+                (TSSL)  -- (TSname),
+                (TSSNL) -- { (NLSCity), (TStatus) },
+                (TSSNL) -- [bend left=10] (TSname),
+            };
+            
+            % selection edges
+            { [edges=selection left]
+                { (TLSPlusNLS), (TTLSPlusNLS) } -- { (TLS), (TTLS) },
+                (TSSC)  -- { (TSSL), (TSSNL) },
+                (TCity) -- (NLSCity),
+            };
+            { [edges=selection right]
+                { (TLSPlusNLS), (TTLSPlusNLS) } -- { (TNLS), (TTNLS) },
+                (TCity) -- (LSCity),
+            };
+            
+            % insert "gaps" into crossed edges
+            { [edges={white,line width=1.5mm}]
+                (TSno) -- (TSSC),
+                (TSSC) -- (TCity),
+                (TTLSPlusNLS) -- [bend right] (TSSC),
+            };
+            (TSno) -- [funcdep right] (TSSC);
+            (TSSC) -- [projection left] (TCity);
+            (TTLSPlusNLS) -- [projection right,bend right] (TSSC),
+        };
+        
+        \node[below=5mm of NLSCity,alert] (caption) {\scriptsize\shortstack[r]{\textbf{Note:} \(\LSsub = \RelRestrict_{\City = \text{`\emph{London}'}}\,S\) \\ \(\NLSsub = \RelRestrict_{\City \ne \text{`\emph{London}'}}\,S\)}};
+    \end{tikzpicture}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{The SIGs: \(\bm{\schema{2} = \{\LS\text{,}\, \NLS\}}\)}
+    \framesubtitle{\invisible{\beamergotobutton{Compare}}}
+    
+    \centering
+    \begin{tikzpicture}[ampersand replacement=\&,transform canvas={scale=0.8}]
+        \matrix[row sep=0.5cm]
+        {
+            \node (TLS) {\(\Type{\LS}\)};                  \&[7mm]  \node (TTLS) {\(\TT{\LS}\)};                    \&[7mm]                              \&[4mm]                                  \&[-4mm] \node (TSSL) {\(\StackTSSL\)};      \&                                       \&   \node (LSCity) {\(\CityLondon\)};   \\
+                                                        \&                                                       \&                                   \&   \node (TSname) {\(\Type{\Sname}\)};    \\
+            \node (TLSPlusNLS) {\(\StackTLSPlusNLS\)};  \&       \node (TTLSPlusNLS) {\(\StackTTLSPlusNLS\)};    \&   \node (TSno) {\(\Type{\Sno}\)};    \&                                       \&       \node (TSSC) {\(\StackTSSC\)};      \&                                       \&   \node (TCity) {\(\Type{City}\)};   \\
+                                                        \&                                                       \&                                   \&                                       \&                                           \&   \node (TStatus) {\(\Type{\Status}\)};  \\
+            \node (TNLS) {\(\Type{\NLS}\)};                \&       \node (TTNLS) {\(\TT{\NLS}\)};                  \&                                   \&                                       \&       \node (TSSNL) {\(\StackTSSNL\)};    \&                                       \&   \node (NLSCity) {\(\StackTCityMinusLondon\)}; \\
+        };
+        
+        \graph{
+            % relation types to tuple types
+            { [edges=surtotal]
+                { (TLS), (TNLS), (TLSPlusNLS) } -- { (TTLS), (TTNLS), (TTLSPlusNLS) },
+            };
+            
+            % FDs
+            (TSno) -- [funcdep left,bend left] (TSSL);
+            (TSno) -- [funcdep right] (TSSNL);
+            
+            % projection edges
+            { [edges=bijection,edge label={\scriptsize\(\RelProject\)}]
+                { (TTLSPlusNLS), (TTLS) } -- (TSno)
+            };
+            
+            { [edges=bijection,edge label'={\scriptsize\(\RelProject\)}]
+                (TTNLS) -- (TSno)
+            };
+            
+            { [edges=projection left]
+                (TTLS)  -- (TSSL),
+                (TSSL)  -- { (TStatus), (LSCity) },
+            };
+            
+            { [edges=projection right]
+                (TTNLS) -- (TSSNL),
+                (TSSC)  -- { (TSname),  (TStatus) },
+                (TSSL)  -- (TSname),
+                (TSSNL) -- { (NLSCity), (TStatus) },
+                (TSSNL) -- [bend left=10] (TSname),
+            };
+            
+            % selection edges
+            { [edges=selection left]
+                { (TLSPlusNLS), (TTLSPlusNLS) } -- { (TLS), (TTLS) },
+                (TSSC)  -- { (TSSL), (TSSNL) },
+                (TCity) -- (NLSCity),
+            };
+            { [edges=selection right]
+                { (TLSPlusNLS), (TTLSPlusNLS) } -- { (TNLS), (TTNLS) },
+                (TCity) -- (LSCity),
+            };
+            
+            % insert "gaps" into crossed edges
+            { [edges={white,line width=1.5mm}]
+                (TSno) -- (TSSC),
+                (TSSC) -- (TCity),
+                (TTLSPlusNLS) -- [bend right] (TSSC),
+            };
+            (TSno) -- [funcdep right] (TSSC);
+            (TSSC) -- [projection left] (TCity);
+            (TTLSPlusNLS) -- [projection right,bend right] (TSSC),
+        };
+        
+        \node[below=4cm of current page.south west,structure] (caption) {\Large This is already isomorphic to the SIG for \(\schema{1}\), so \(\Equivalent{\schema{1}}{\schema{2}}\).};
+    \end{tikzpicture}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{The SIGs: \(\bm{\schema{3} = \{\LS\}}\)}
+    \framesubtitle{\invisible{\beamergotobutton{Compare}}}
+    
+    \centering
+    \begin{tikzpicture}[ampersand replacement=\&,transform canvas={scale=0.8}]
+        \matrix[row sep=0.5cm]
+        { 
+            \node (TLS) {\(\Type{\LS}\)};      \&[7mm]  \node (TTLS) {\(\TT{\LS}\)};        \&[7mm]                              \&[4mm]                                  \&[-4mm] \node (TSSL) {\(\StackTSSL\)};      \&                                       \&   \node (LSCity) {\(\CityLondon\)};   \\
+                                            \&                                           \&                                   \&   \node (TSname) {\(\Type{\Sname}\)};    \\
+            \node[invisible] (TLSPlusNLS) {\(\Type{S}\)}; \&       \node[invisible] (TTLSPlusNLS) {\(\TT{S}\)};   \&   \node (TSno) {\(\Type{\Sno}\)};    \&                                       \&       \node (TSSC) {\(\StackTSSC\)};      \&                                       \&   \node (TCity) {\(\Type{City}\)};   \\
+                                            \&                                           \&                                   \&                                       \&                                           \&   \node (TStatus) {\(\Type{\Status}\)};  \\
+            \node[invisible] (TNLS) {\(\Type{\NLS}\)};    \&       \node[invisible] (TTNLS) {\(\TT{\NLS}\)};      \&                                   \&                                       \&       \node (TSSNL) {\(\StackTSSNL\)};    \&                                       \&   \node (NLSCity) {\(\StackTCityMinusLondon\)}; \\
+        };
+        
+        \graph{
+            % relation types to tuple types
+            { [edges=surtotal]
+                (TLS)        -- (TTLS),
+                (TLSPlusNLS) --[invisible] (TTLSPlusNLS),
+                (TNLS)       --[invisible] (TTNLS),
+            };
+            
+            % FDs
+            (TSno) -- [funcdep left,bend left,invisible] (TSSL);
+            (TSno) -- [funcdep right,invisible] (TSSNL);
+            
+            % projection edges
+            { [edges=bijection,edge label={\scriptsize\(\RelProject\)}]
+                (TTLS) -- (TSno)
+            };
+            
+            { [edges=projection left]
+                (TTLS)  -- (TSSL),
+                (TSSL)  -- { (TStatus), (LSCity) },
+                (TTLSPlusNLS) --[invisible] (TSno),
+            };
+            
+            { [edges=projection right]
+                (TSSC)  -- { (TSname),  (TStatus) },
+                (TSSL)  -- (TSname),
+                (TSSNL) -- { (NLSCity), (TStatus) },
+                (TSSNL) -- [bend left=10] (TSname),
+                (TTNLS)  --[invisible] (TSno),
+                (TTNLS)  -- [arrows={:->},invisible] (TSSNL),
+            };
+            
+            % selection edges
+            { [edges=selection left]
+                (TSSC)  -- { (TSSL), (TSSNL) },
+                (TCity) -- (NLSCity),
+            };
+            { [edges=selection right]
+                (TCity) -- (LSCity),
+            };
+            
+            { [edges=bijection,edge label={\scriptsize\(\RelRestrict\)}]
+                { (TLS), (TTLS) }               -- [invisible] { (TLSPlusNLS), (TTLSPlusNLS) },
+                { (TLSPlusNLS), (TTLSPlusNLS) } -- [invisible] { (TNLS), (TTNLS) },
+            };
+            
+            { [edges=selection right]
+                { (TLSPlusNLS), (TTLSPlusNLS) } --[invisible] { (TLS), (TTLS) },
+            };
+            
+            { [edges=selection left]
+                { (TLSPlusNLS), (TTLSPlusNLS) } --[invisible] { (TNLS), (TTNLS) },
+            };
+            
+            % insert "gaps" into crossed edges
+            { [edges={white,line width=1.5mm}]
+                (TSno) -- (TSSC),
+                (TSSC) -- (TCity),
+                (TTLSPlusNLS) -- [bend right,invisible] (TSSC),
+            };
+            (TSno) -- [funcdep right] (TSSC);
+            (TSSC) -- [projection left] (TCity);
+            (TTLSPlusNLS) -- [projection right,arrows={:{crossbar}->},bend right,invisible] (TSSC);
+        };
+        
+        \node[below=4cm of current page.south west,structure] (caption) {\Large Similarities with \(\schema{1}\) but not identical, so we need to transform…};
+    \end{tikzpicture}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame[label=frame.SIG.transform]
+{
+    \frametitle{Transforming \(\bm{\schema{3} \Rightarrow \schema{1}}\)}
+    \framesubtitle{\alt<1-8>{\textcolor{structure}{blue} = input to transformation, \textcolor{alert}{red} = output\invisible{\beamergotobutton{Compare}}}{\hyperlink{frame.SIG.Sone<2>}{\beamergotobutton{Compare}}}}
+    
+    \centering
+    \begin{tikzpicture}[ampersand replacement=\&,transform canvas={scale=0.8}]
+        \matrix[row sep=0.5cm]
+        { 
+            \node[input on=<2>] (TLS) {\(\Type{\LS}\)};      \&[7mm]  \node[input on=<2>] (TTLS) {\(\TT{\LS}\)};        \&[7mm]                              \&[4mm]                                  \&[-4mm] \node (TSSL) {\(\StackTSSL\)};      \&                                       \&   \node (LSCity) {\(\CityLondon\)};   \\
+                                            \&                                           \&                                   \&   \node (TSname) {\(\Type{\Sname}\)};    \\
+            \node[visible on=<2->,output on=<2>,input on=<3>] (TLSPlusNLS) {\(\Type{S}\)}; \&       \node[visible on=<2->,output on=<2>,input on=<3>] (TTLSPlusNLS) {\(\TT{S}\)};   \&   \node (TSno) {\(\Type{\Sno}\)};    \&                                       \&       \node (TSSC) {\(\StackTSSC\)};      \&                                       \&   \node (TCity) {\(\Type{City}\)};   \\
+                                            \&                                           \&                                   \&                                       \&                                           \&   \node (TStatus) {\(\Type{\Status}\)};  \\
+            \node[visible on=<3->,output on=<3>] (TNLS) {\(\Type{\NLS}\)};    \&       \node[visible on=<3->,output on=<3>] (TTNLS) {\(\TT{\NLS}\)};      \&                                   \&                                       \&       \node (TSSNL) {\(\StackTSSNL\)};    \&                                       \&   \node (NLSCity) {\(\StackTCityMinusLondon\)}; \\
+        };
+        
+        \graph{
+            % relation types to tuple types
+            { [edges=surtotal]
+                (TLS)        --[input on=<4>] (TTLS),
+                (TLSPlusNLS) --[visible on=<4->,output on=<4>] (TTLSPlusNLS),
+                (TNLS)       --[visible on=<4->,output on=<4>] (TTNLS),
+            };
+            
+            % FDs
+            (TSno) -- [funcdep left,arrows={:-{crossbar}>},bend left,visible on=<7->,output on=<7>] (TSSL);
+            (TSno) -- [funcdep right,arrows={:-{crossbar}>},visible on=<7->,output on=<7>] (TSSNL);
+            
+            % projection edges
+            { [edges=bijection,edge label={\scriptsize\(\RelProject\)}]
+                (TTLS)  --[input on=<5>] (TSno),
+                (TTLSPlusNLS) --[visible on=<5->,output on=<5>] (TSno)
+            };
+            
+            { [edges=bijection,edge label'={\scriptsize\(\RelProject\)}]
+                (TTNLS)  --[visible on=<5->,output on=<5>] (TSno)
+            };
+            
+            { [edges=projection left]
+                (TTLS)  --[input on=<6>] (TSSL),
+                (TSSL)  -- { (TStatus), (LSCity) }
+            };
+            
+            { [edges=projection right]
+                (TTNLS)  -- [arrows={:->},visible on=<6->,output on=<6>] (TSSNL),
+                (TSSC)  -- { (TSname),  (TStatus) },
+                (TSSL)  -- (TSname),
+                (TSSNL) -- { (NLSCity), (TStatus) },
+                (TSSNL) -- [bend left=10] (TSname),
+            };
+
+            % selection edges
+            { [edges=selection left]
+                (TSSC)  -- { (TSSL), (TSSNL) },
+                (TCity) -- (NLSCity),
+            };
+            { [edges=selection right]
+                (TCity) -- (LSCity),
+            };
+            
+            { [edges=bijection,edge label'={\scriptsize\(\RelRestrict\)}]
+                { (TLS), (TTLS) }               -- [visible on=<2-7>,output on=<2>] { (TLSPlusNLS), (TTLSPlusNLS) },
+                { (TLSPlusNLS), (TTLSPlusNLS) } -- [visible on=<3-7>,output on=<3>] { (TNLS), (TTNLS) },
+            };
+            
+            { [edges=selection left]
+                { (TLSPlusNLS), (TTLSPlusNLS) } --[visible on=<8->] { (TLS), (TTLS) },
+            };
+            
+            { [edges=selection right]
+                { (TLSPlusNLS), (TTLSPlusNLS) } --[visible on=<8->] { (TNLS), (TTNLS) },
+            };
+            
+            % insert "gaps" into crossed edges
+            { [edges={white,line width=1.5mm}]
+                (TSno) -- (TSSC),
+                (TSSC) -- (TCity),
+                (TTLSPlusNLS) -- [bend right,visible on=<6->] (TSSC),
+            };
+            (TSno) -- [funcdep right,input on=<7>] (TSSC);
+            (TSSC) -- [projection left] (TCity);
+            (TTLSPlusNLS) -- [projection right,arrows={:{crossbar}->},bend right,visible on=<6->,output on=<6>] (TSSC);
+        };
+        
+        \begin{scope}[circle,visible on=<8>,output on=<8>]
+            \node[draw] (c1) at (TLSPlusNLS) [above=11.5pt] {};
+            \node[draw] (c2) at (TLSPlusNLS) [below=11.5pt] {};
+            \node[draw] (c3) at (c1 -| TTLSPlusNLS) {};
+            \node[draw] (c4) at (c2 -| TTLSPlusNLS) {};
+        \end{scope}
+        
+        \node[below=4cm of current page.south west,structure] (caption) {
+            \Large
+            \only<1>{Initial state}
+            \only<2>{Duplicate \(\Type{\LS}\) and \(\TT{\LS}\) [\(\equiv\)]}
+            \only<3>{Duplicate \(\Type{S}\) and \(\TT{S}\) [\(\equiv\)]}
+            \only<4>{Copy and move \(\Type{\LS} \SurTotal \TT{\LS}\) edge (\(\times 2\)) [\(\preceq\)]}
+            \only<5>{Copy and move \(\TT{\LS} \ProjectionEdge \Type{\Sno}\) edge (\(\times 2\)) [\(\preceq\)]}
+            \only<6>{Copy and move \(\TT{\LS} \ProjectionEdge \TSSL\) edge (\(\times 2\)) [\(\preceq\)]}
+            \only<7>{Copy and move \(\Type{\Sno} \KeyEdge \TSSC\) edge (\(\times 2\)) [\(\preceq\)]}
+            \only<8>{Remove totality annotations [\(\preceq\)]}
+            \only<9>{Final state: \emph{not} isomorphic to SIG for \(\schema{1} \Rightarrow\) non-comparable.}
+        };
+    \end{tikzpicture}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{So what does this mean?}
+    
+    \structurebf{\(\bm{\schema{1}}\) and \(\bm{\schema{2}}\) are information equivalent}
+    
+    \begin{itemize}
+    
+        \item[\(\Rightarrow\)] all view updates between them should be OK
+    
+    \end{itemize}
+    \bigskip
+    
+    \structurebf{\(\bm{\schema{1}}\) and \(\bm{\schema{3}}\) aren’t information equivalent}
+    
+    \begin{itemize}
+    
+        \item[\(\Rightarrow\)] some view updates between them will cause problems
+    
+    \end{itemize}
+    \bigskip
+    
+    \structurebf{This agrees with what Date found} {\tiny (yay!)}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{More examples}
+    \framesubtitle{(Nonloss projection views, Date Ch. 5)}
+    
+    \(S\{\Sno, \Status, \City\}\); views \(\ST = \RelProject_{\{\Sno, \Status\}}S\), \(\SC = \RelProject_{\{\Sno, \City\}}S\)
+    \medskip\bigskip
+    
+    \begin{columns}
+        \begin{column}{0.33\textwidth}
+            \centering
+            \scalebox{0.5}{%
+                \begin{tikzpicture}
+                    \matrix[row sep=1.5cm,ampersand replacement=\&]
+                    { 
+                        \node (TST) {\(\Type{\STsub}\)};    \&[7mm]  \node (TTST) {\(\TT{\STsub}\)};     \&[10mm]                             \&[10mm] \node (TStatus) {\(\Type{\Status}\)};              \\
+                        \node (TSTPlusSC) {\(\Type{S}\)};   \&       \node (TTSTPlusSC) {\(\TT{S}\)};    \&   \node (TSno) {\(\Type{\Sno}\)}; \& \node (TSSC) {\(\Type{\Status} \times \Type{\City}\)};  \\
+                        \node (TSC) {\(\Type{\SCsub}\)};    \&       \node (TTSC) {\(\TT{\SCsub}\)};     \&                                   \& \node (TCity) {\(\Type{\City}\)};                       \\
+                    };
+        
+                    \graph{
+                        % relation types to tuple types
+                        { [edges=surtotal]
+                            { (TST), (TSC), (TSTPlusSC) } -- { (TTST), (TTSC), (TTSTPlusSC) },
+                        };
+            
+                        % FDs
+                        (TSno) -- [funcdep left] (TStatus);
+                        (TSno) -- [funcdep right] (TCity);
+                        (TSno) -- [funcdep right] (TSSC);
+            
+                        % projection edges
+                        { [edges=bijection,edge label={\scriptsize\(\RelProject\)}]
+                            { (TTSTPlusSC), (TTST) } -- (TSno),
+                        };
+            
+                        { [edges=bijection,edge label'={\scriptsize\(\RelProject\)}]
+                            (TTSC) -- (TSno),
+                        };
+            
+                        { [edges=projection left]
+                            { (TSTPlusSC), (TTSTPlusSC) } -- { (TST), (TTST) },
+                            (TSSC)  -- (TCity),
+                            (TTST)  -- (TStatus),
+                        };
+            
+                        { [edges=projection right]
+                            { (TSTPlusSC), (TTSTPlusSC) } -- { (TSC), (TTSC) },
+                            (TSSC)       -- (TStatus),
+                            (TTSC) -- (TCity),
+                        };
+            
+                        % insert "gaps" into crossed edges
+                        { [edges={white,line width=1.5mm}]
+                            (TTSTPlusSC) -- [bend right] (TSSC),
+                        };
+                        (TTSTPlusSC) -- [projection right, bend right] (TSSC),
+                    };
+                \end{tikzpicture}%
+            } \\
+            \(\schema{1} = \{S\}\)
+        \end{column}
+        \begin{column}{0.33\textwidth}
+            \centering
+            \scalebox{0.5}{%
+                \begin{tikzpicture}
+                    \matrix[row sep=1.5cm,ampersand replacement=\&]
+                    { 
+                        \node (TST) {\(\Type{\ST}\)};       \&[7mm]  \node (TTST) {\(\TT{\ST}\)};        \&[10mm]                             \&[10mm] \node (TStatus) {\(\Type{\Status}\)};              \\
+                        \node (TSTPlusSC) {\(\Type{J}\)};   \&       \node (TTSTPlusSC) {\(\TT{J}\)};    \&   \node (TSno) {\(\Type{\Sno}\)}; \& \node (TSSC) {\(\Type{\Status} \times \Type{\City}\)};  \\
+                        \node (TSC) {\(\Type{\SC}\)};       \&       \node (TTSC) {\(\TT{\SC}\)};        \&                                   \& \node (TCity) {\(\Type{\City}\)};                       \\
+                    };
+        
+                    \graph{
+                        % relation types to tuple types
+                        { [edges=surtotal]
+                            { (TST), (TSC), (TSTPlusSC) } -- { (TTST), (TTSC), (TTSTPlusSC) },
+                        };
+            
+                        % FDs
+                        (TSno) -- [funcdep left] (TStatus);
+                        (TSno) -- [funcdep right] (TCity);
+                        (TSno) -- [funcdep right] (TSSC);
+            
+                        % projection edges
+                        { [edges=bijection,edge label={\scriptsize\(\RelProject\)}]
+                            { (TTSTPlusSC), (TTST) } -- (TSno),
+                        };
+            
+                        { [edges=bijection,edge label'={\scriptsize\(\RelProject\)}]
+                            (TTSC) -- (TSno),
+                        };
+            
+                        { [edges=projection left]
+                            { (TSTPlusSC), (TTSTPlusSC) } -- { (TST), (TTST) },
+                            (TSSC)  -- (TCity),
+                            (TTST)  -- (TStatus),
+                        };
+            
+                        { [edges=projection right]
+                            { (TSTPlusSC), (TTSTPlusSC) } -- { (TSC), (TTSC) },
+                            (TSSC)       -- (TStatus),
+                            (TTSC) -- (TCity),
+                        };
+            
+                        % insert "gaps" into crossed edges
+                        { [edges={white,line width=1.5mm}]
+                            (TTSTPlusSC) -- [bend right] (TSSC),
+                        };
+                        (TTSTPlusSC) -- [projection right, bend right] (TSSC),
+                    };
+                \end{tikzpicture}%
+            } \\
+            \(\schema{2} = \{\ST, \SC\}\)
+        \end{column}
+        \begin{column}{0.33\textwidth}
+            \centering
+            \scalebox{0.5}{%
+                \begin{tikzpicture}
+                    \matrix[row sep=1.5cm,ampersand replacement=\&]
+                    { 
+                        \node (TST) {\(\Type{\ST}\)};   \&[7mm]  \node (TTST) {\(\TT{\ST}\)};    \&[10mm]                             \&[10mm] \node (TStatus) {\(\Type{\Status}\)};    \\
+                                                        \&                                       \&   \node (TSno) {\(\Type{\Sno}\)}; \\
+                    };
+        
+                    \graph{
+                        % relation types to tuple types
+                        { [edges=surtotal]
+                            (TST) -- (TTST),
+                        };
+            
+                        % FDs
+                        (TSno) -- [funcdep left] (TStatus);
+            
+                        % projection edges
+                        { [edges=bijection,edge label={\scriptsize\(\RelProject\)}]
+                            (TTST) -- (TSno),
+                        };
+            
+                        { [edges=projection left]
+                            (TTST)  -- (TStatus),
+                        };
+                    };
+                \end{tikzpicture}%
+            } \\
+            \(\schema{3} = \{\ST\}\)
+        \end{column}
+    \end{columns}
+    \medskip\medskip
+    
+    \begin{tabbing}
+        \structurebf{Results:} \=\(\Equivalent{\schema{1}}{\schema{2}}\) {\tiny (as expected)}    \\
+                               \>\(\schema{1}\) and \(\schema{3}\) incomparable {\tiny (as expected)}
+    \end{tabbing}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{More examples}
+    \framesubtitle{(Lossy projection views, Date Ch. 5)}
+    
+    \small
+    \(S\{\Sno, \Status, \City\}\); views \(\ST = \RelProject_{\{\Sno, \Status\}}S\), \(\TC = \RelProject_{\{\Status, \City\}}S\)
+    \medskip
+    
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \scalebox{0.4}{%
+                \begin{tikzpicture}
+                    \matrix[row sep=1.5cm,ampersand replacement=\&]
+                    { 
+                        \node (TST) {\(\Type{\STsub}\)};    \&[7mm]  \node (TTST) {\(\TT{\STsub}\)};     \&[10mm]                             \&[10mm] \node (TStatus) {\(\Type{\Status}\)};              \\
+                        \node (TSTPlusTC) {\(\Type{S}\)};   \&       \node (TTSTPlusTC) {\(\TT{S}\)};    \&   \node (TSno) {\(\Type{\Sno}\)}; \& \node (TSSC) {\(\Type{\Status} \times \Type{\City}\)};  \\
+                        \node (TTC) {\(\Type{\TCsub}\)};    \&       \node (TTTC) {\(\TT{\TCsub}\)};     \&                                   \& \node (TCity) {\(\Type{\City}\)};                       \\
+                    };
+        
+                    \graph{
+                        % relation types to tuple types
+                        { [edges=surtotal]
+                            { (TST), (TTC), (TSTPlusTC) } -- { (TTST), (TTTC), (TTSTPlusTC) },
+                        };
+            
+                        % FDs
+                        { [edges=funcdep right]
+                            (TSno) -- { (TCity),  (TSSC) },
+                            (TSSC) -- [bend right] (TStatus),
+                        };
+                        { [edges=funcdep left]
+                            (TSno) -- (TStatus),
+                            (TSSC) -- [bend left] (TCity),
+                        };
+            
+                        % projection edges
+                        { [edges=bijection,edge label={\scriptsize\(\RelProject\)}]
+                            { (TTSTPlusTC), (TTST) } -- (TSno),
+                        };
+            
+                        { [edges=projection left]
+                            { (TSTPlusTC), (TTSTPlusTC) } -- { (TST), (TTST) },
+                            (TTST)  -- (TStatus),
+                            (TSSC) -- [bend right] (TCity),
+                        };
+            
+                        { [edges=projection right]
+                            { (TSTPlusTC), (TTSTPlusTC) } -- { (TTC), (TTTC) },
+                            (TSSC) -- [bend left] (TStatus),
+                        };
+            
+                        % insert "gaps" into crossed edges
+                        { [edges={white,line width=1.5mm}]
+                            (TTSTPlusTC) -- [bend right] (TSSC),
+                            (TTTC) -- [bend right=10] (TSSC),
+                        };
+                        (TTSTPlusTC) -- [projection right, bend right] (TSSC),
+                        (TTTC) -- [edges=bijection,edge label'={\scriptsize\(\RelProject\)}, bend right=10] (TSSC),
+                    };
+                \end{tikzpicture}
+            } \\
+            \(\schema{1} = \{S\}\)  \\[\baselineskip]
+            \scalebox{0.4}{%
+                \begin{tikzpicture}
+                    \matrix[row sep=1.5cm,ampersand replacement=\&]
+                    { 
+                        \node (TST) {\(\Type{\ST}\)};   \&[7mm]  \node (TTST) {\(\TT{\ST}\)};    \&[10mm]                             \&[10mm] \node (TStatus) {\(\Type{\Status}\)};    \\
+                                                        \&                                       \&   \node (TSno) {\(\Type{\Sno}\)}; \\
+                    };
+        
+                    \graph{
+                        % relation types to tuple types
+                        { [edges=surtotal]
+                            (TST) -- (TTST),
+                        };
+            
+                        % FDs
+                        (TSno) -- [funcdep left] (TStatus);
+            
+                        % projection edges
+                        { [edges=bijection,edge label={\scriptsize\(\RelProject\)}]
+                            (TTST) -- (TSno),
+                        };
+            
+                        { [edges=projection left]
+                            (TTST)  -- (TStatus),
+                        };
+                    };
+                \end{tikzpicture}
+            } \\
+            \(\schema{3} = \{\ST\}\)
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \scalebox{0.4}{%
+                \begin{tikzpicture}
+                    \matrix[row sep=1.5cm,ampersand replacement=\&]
+                    { 
+                        \node (TST) {\(\Type{\ST}\)};    \&[7mm]  \node (TTST) {\(\TT{\ST}\)};     \&[10mm]                             \&[10mm] \node (TStatus) {\(\Type{\Status}\)};              \\
+                                                         \&                                        \&   \node (TSno) {\(\Type{\Sno}\)}; \& \node (TSSC) {\(\Type{\Status} \times \Type{\City}\)};  \\
+                        \node (TTC) {\(\Type{\TC}\)};    \&       \node (TTTC) {\(\TT{\TC}\)};     \&                                   \& \node (TCity) {\(\Type{\City}\)};                       \\
+                    };
+        
+                    \graph{
+                        % relation types to tuple types
+                        { [edges=surtotal]
+                            { (TST), (TTC) } -- { (TTST), (TTTC) },
+                        };
+            
+                        % FDs
+                        { [edges=funcdep right]
+                            (TSSC) -- [bend right] (TStatus),
+                        };
+                        { [edges=funcdep left]
+                            (TSno) -- (TStatus),
+                            (TSSC) -- [bend left] (TCity),
+                        };
+            
+                        % projection edges
+                        { [edges=bijection,edge label={\scriptsize\(\RelProject\)}]
+                            { (TTST) } -- (TSno),
+                        };
+            
+                        { [edges=bijection,edge label'={\scriptsize\(\RelProject\)}]
+                            (TTTC) -- (TSSC),
+                        };
+            
+                        { [edges=projection left]
+                            (TTST)  -- (TStatus),
+                            (TSSC) -- [bend right] (TCity),
+                        };
+            
+                        { [edges=projection right]
+                            (TSSC) -- [bend left] (TStatus),
+                        };
+                    };
+                \end{tikzpicture}
+            } \\
+            \(\schema{2} = \{\ST, \TC\}\)   \\[\baselineskip]
+            \scalebox{0.4}{%
+                \begin{tikzpicture}
+                    \matrix[row sep=1.5cm,ampersand replacement=\&]
+                    { 
+                                                            \&[7mm]                                      \&[10mm] \node (TStatus) {\(\Type{\Status}\)};              \\
+                        \node (TTC) {\(\Type{\TC}\)};       \&       \node (TTTC) {\(\TT{\TC}\)};        \& \node (TSSC) {\(\Type{\Status} \times \Type{\City}\)};  \\
+                                                            \&                                           \& \node (TCity) {\(\Type{\City}\)};                       \\
+                    };
+        
+                    \graph{
+                        % relation types to tuple types
+                        { [edges=surtotal]
+                            { (TTC) } -- { (TTTC) },
+                        };
+            
+                        % FDs
+                        { [edges=funcdep right]
+                            (TSSC) -- [bend right] (TStatus),
+                        };
+                        { [edges=funcdep left]
+                            (TSSC) -- [bend left] (TCity),
+                        };
+            
+                        % projection edges
+                        { [edges=bijection,edge label'={\scriptsize\(\RelProject\)}]
+                            (TTTC) -- (TSSC),
+                        };
+            
+                        { [edges=projection left]
+                            (TSSC) -- [bend right] (TCity),
+                        };
+            
+                        { [edges=projection right]
+                            (TSSC) -- [bend left] (TStatus),
+                        };
+                    };
+                \end{tikzpicture}
+            } \\
+            \(\schema{4} = \{\TC\}\)
+        \end{column}
+    \end{columns}
+    \bigskip
+    
+    \structurebf{Results:} \(\schema{1}\) isn't comparable with any of \(\schema{2}\), \(\schema{3}\), or \(\schema{4}\) {\tiny (as expected)}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{More examples}
+    \framesubtitle{(Lossy one to one join views, Date Ch. 6)}
+    
+    \(\ST\{\Sno, \Status\}\), \(\SC\{\Sno, \City\}\); view \(S = \ST \RelNaturalJoin \SC\)
+    \medskip\bigskip
+    
+    \begin{columns}
+        \begin{column}{0.33\textwidth}
+            \centering
+            \scalebox{0.5}{%
+                \begin{tikzpicture}
+                    \matrix[row sep=1.5cm,ampersand replacement=\&]
+                    { 
+                                                            \&[7mm]                                      \&[10mm]                             \&[10mm] \node (TStatus) {\(\Type{\Status}\)};              \\
+                        \node (TSTPlusSC) {\(\Type{S}\)};   \&       \node (TTSTPlusSC) {\(\TT{S}\)};    \&   \node (TSno) {\(\Type{\Sno}\)}; \& \node (TSSC) {\(\Type{\Status} \times \Type{\City}\)};  \\
+                                                            \&                                           \&                                   \& \node (TCity) {\(\Type{\City}\)};                       \\
+                    };
+        
+                    \graph{
+                        % relation types to tuple types
+                        { [edges=surtotal]
+                            (TSTPlusSC) -- (TTSTPlusSC),
+                        };
+            
+                        % FDs
+                        (TSno) -- [funcdep left] (TStatus);
+                        (TSno) -- [funcdep right] (TCity);
+                        (TSno) -- [funcdep right] (TSSC);
+            
+                        % projection edges
+                        { [edges=bijection,edge label={\scriptsize\(\RelProject\)}]
+                            { (TTSTPlusSC) } -- (TSno),
+                        };
+            
+                        { [edges=projection left]
+                            (TSSC) -- (TCity),
+                        };
+            
+                        { [edges=projection right]
+                            (TSSC) -- (TStatus),
+                        };
+            
+                        % insert "gaps" into crossed edges
+                        { [edges={white,line width=1.5mm}]
+                            (TTSTPlusSC) -- [bend right] (TSSC),
+                        };
+                        (TTSTPlusSC) -- [projection right, bend right] (TSSC),
+                    };
+                \end{tikzpicture}
+            } \\
+            \(\schema{1} = \{S\}\)
+        \end{column}
+        \begin{column}{0.33\textwidth}
+            \centering
+            \scalebox{0.5}{%
+                \begin{tikzpicture}
+                    \matrix[row sep=1.5cm,ampersand replacement=\&]
+                    { 
+                        \node (TST) {\(\Type{\ST}\)};       \&[7mm]  \node (TTST) {\(\TT{\ST}\)};        \&[10mm]                             \&[10mm] \node (TStatus) {\(\Type{\Status}\)};              \\
+                                                            \&                                           \&   \node (TSno) {\(\Type{\Sno}\)}; \&   \\
+                        \node (TSC) {\(\Type{\SC}\)};       \&       \node (TTSC) {\(\TT{\SC}\)};        \&                                   \& \node (TCity) {\(\Type{\City}\)};                       \\
+                    };
+        
+                    \graph{
+                        % relation types to tuple types
+                        { [edges=surtotal]
+                            { (TST), (TSC) } -- { (TTST), (TTSC) },
+                        };
+            
+                        % FDs
+                        (TSno) -- [funcdep left] (TStatus);
+                        (TSno) -- [funcdep right] (TCity);
+            
+                        % projection edges
+                        { [edges=bijection,edge label={\scriptsize\(\RelProject\)}]
+                            { (TTST) } -- (TSno),
+                        };
+            
+                        { [edges=bijection,edge label'={\scriptsize\(\RelProject\)}]
+                            (TTSC) -- (TSno),
+                        };
+            
+                        { [edges=projection left]
+                            (TTST)  -- (TStatus),
+                        };
+            
+                        { [edges=projection right]
+                            (TTSC) -- (TCity),
+                        };
+                    };
+                \end{tikzpicture}
+            } \\
+            \(\schema{2} = \{\ST, \SC\}\)
+        \end{column}
+        \begin{column}{0.33\textwidth}
+            \centering
+            \scalebox{0.5}{%
+                \begin{tikzpicture}
+                    \matrix[row sep=1.5cm,ampersand replacement=\&]
+                    { 
+                        \node (TST) {\(\Type{\ST}\)};   \&[7mm]  \node (TTST) {\(\TT{\ST}\)};    \&[10mm]                             \&[10mm] \node (TStatus) {\(\Type{\Status}\)};    \\
+                                                        \&                                       \&   \node (TSno) {\(\Type{\Sno}\)}; \\
+                    };
+        
+                    \graph{
+                        % relation types to tuple types
+                        { [edges=surtotal]
+                            (TST) -- (TTST),
+                        };
+            
+                        % FDs
+                        (TSno) -- [funcdep left] (TStatus);
+            
+                        % projection edges
+                        { [edges=bijection,edge label={\scriptsize\(\RelProject\)}]
+                            (TTST) -- (TSno),
+                        };
+            
+                        { [edges=projection left]
+                            (TTST)  -- (TStatus),
+                        };
+                    };
+                \end{tikzpicture}%
+            } \\
+            \(\schema{3} = \{\ST\}\)
+        \end{column}
+    \end{columns}
+    \bigskip\medskip
+    
+    \structurebf{Results:} \(\schema{1}\) isn't comparable with either \(\schema{2}\) or \(\schema{3}\) {\tiny (as expected)}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \frametitle{Now what?}
+    
+    \begin{itemize}
+    
+        \item Is this a useful technique? {\tiny (working on analysing more complex examples)}
+        
+        \item Are inclusion dependencies important? \\
+        If so, how to represent them?
+        
+        \item Do we need the whole transformation process? Determining whether or not all constraints can be propagated from the base schema may already be enough.
+        
+        \item Could it help provide a more formal basis for Date’s “pragma”?
+        
+        \item Might it reveal some interesting new insights about the view update problem?
+        
+    \end{itemize}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\frame
+{
+    \centering\Huge
+    \structurebf{Questions?}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\againframe<3>{frame.SIG.example}
+
+\againframe<2>{frame.SIG.Sone}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}
