@@ -1,0 +1,95 @@
+% IESWorkshop.sty 23 October 2001
+% INITIAL (BJW)
+% Style file for the
+% The 5th  Australasia-Japan Joint Workshop on Intelligent and Evolutionary Systems
+% for LaTeX2e
+% Modified (PAW): 28th March, 2003 for SIRC 2003 Proceedings
+%
+\def\fileversion{1.0}
+\def\filedate{2001/10/16}
+%
+\setlength{\columnsep}{0.25in}
+\setlength{\evensidemargin}{0in}
+\setlength{\headheight}{0pt}
+\setlength{\headsep}{0pt}
+\setlength{\footnotesep}{9pt}
+\setlength{\footskip}{0pt}
+\setlength{\hoffset}{-0.25in} %% CHANGE THIS FOR YOUR PRINTER
+\setlength{\itemsep}{0pt}
+\setlength{\oddsidemargin}{.20in}
+\setlength{\parindent}{0.175in}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
+\setlength{\partopsep}{0pt}
+\setlength{\textheight}{9.5in}
+\setlength{\textwidth}{6.25in}
+\setlength{\topmargin}{0in} %% CHANGE THIS FOR YOUR PRINTER
+\setlength{\topsep}{0pt}
+%
+
+\pagestyle{empty}
+\sloppy
+
+\renewcommand{\author}[1]{\begin{center}\textit{\textbf{\large{#1}}}\end{center}}
+
+\renewcommand{\title}[1]{\begin{center}\textbf{\Large{#1}}\end{center}\vspace{28pt}}
+
+\newcommand{\Address}[2]{\vspace{12pt}\begin{center}\textsuperscript{#1}\normalsize{#2}\end{center}}
+
+\newcommand{\Keywords}[1]{\vspace{10pt}\noindent\textit{\textbf{Keywords and phrases}: }\normalsize{#1}\vspace{6pt}}
+
+\newcommand{\PresentedAt}[0]{
+\begin{center}
+\vspace{10pt}
+\textbf{Presented at SIRC 2006 - The 18\textsuperscript{th} Annual Colloquium of the Spatial Information Research Centre\\ University of Otago, Dunedin, New Zealand\\ November 6\textsuperscript{th}-7\textsuperscript{th} 2006}
+\end{center}
+\vspace{30pt}
+}
+ 
+\renewcommand\abstractname{\large\bfseries ABSTRACT}
+
+\renewenvironment{abstract}{%
+      \if@twocolumn
+        \section*{\abstractname}%
+      \else
+        \normalsize
+        \begin{center}%
+          {\bfseries \abstractname}%
+        \end{center}%
+        \quotation
+        \noindent
+      \fi}
+
+ %make section titles bold and 12 point, 2 blank lines before, 1 after
+ 
+ \renewcommand\section{\@startsection {section}{1}{\z@}{2.0ex plus 1ex minus .2ex} {1.0ex plus 2ex}{\large\bf}}
+ 
+ %make subsection titles bold and 12 point, 1 blank line before, 1 after
+ 
+ \renewcommand\subsection{\@startsection {subsection}{2}{\z@}{2.0ex plus 1ex minus .2ex} {1.0ex plus .2ex}{\large\bf}}
+
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+                                     {2.0ex plus 1ex minus .2ex} {1.0ex plus .2ex}
+                                     {\bfseries}}
+
+
+
+%\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname\hspace{12pt}}
+\renewcommand{\footnoterule}{\kern-2\p@
+ \hrule \@width 2in \kern \p@}
+\renewcommand{\@makefntext}[1]{\setlength{\parindent}{0pt}%
+ \begin{list}{}{\setlength{\labelwidth}{1pt}%
+  \setlength{\leftmargin}{\labelwidth}%
+  \setlength{\labelsep}{0pt}\setlength{\itemsep}{0pt}%
+  \setlength{\parsep}{0pt}\setlength{\topsep}{0pt}%
+  \footnotesize}\item[\hfill\@makefnmark]#1%
+ \end{list}}
+
+\endinput
+
+\fussy
+
+
+
+%
+% End of IESWorkshop.sty
