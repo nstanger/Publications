@@ -1,2 +1,4 @@
 *.pdf
 !er2000.bbl
+!er2000.pdf
+!figures.pdf
