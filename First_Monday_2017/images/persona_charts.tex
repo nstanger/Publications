@@ -1,0 +1,234 @@
+\documentclass[a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{mathpazo}
+\usepackage{helvet}
+
+\graphicspath{{images/}}
+
+\newcommand{\Scale}[6]{
+    \begin{tikzpicture}[font=\small\sffamily,every node/.style={below=2mm}]
+        \node at (0,0) {#1};
+        \node at (2,0) {#2};
+        \node at (4,0) {#3};
+        \node at (6,0) {#4};
+        \draw (0,0) -- (6,0);
+        \foreach \x in {0,2,4,6} \draw (\x,-0.2) -- (\x,0.2);
+        \node[above=1mm] at (#5,0) {\includegraphics[height=5mm,keepaspectratio]{female_red}};
+        \node[above=1mm] at (#6,0) {\includegraphics[height=5mm,keepaspectratio]{male_blue}};
+    \end{tikzpicture}
+    \newpage
+}
+
+\newcommand{\Agreement}[2]{
+    \Scale{\shortstack{Strongly \\ disagree}}{\shortstack{Somewhat \\ agree}}{Agree}{\shortstack{Strongly \\ agree}}{#1}{#2}
+}
+
+\newcommand{\Strength}[2]{
+    \Scale{Weak}{\shortstack{Somewhat \\ strong}}{Strong}{\shortstack{Extremely \\ strong}}{#1}{#2}
+}
+
+\newcommand{\Frequency}[2]{
+    \Scale{Never}{Sometimes}{Frequently}{Always}{#1}{#2}
+}
+
+\pagestyle{empty}
+
+\begin{document}
+
+    \raggedright
+
+    % WHO INFLUENCES
+    
+%     \section*{Who influences Nouf and Ali?}
+%     \newpage
+    
+    % parents
+    \Agreement{5.55}{5.3}
+
+    % partner
+    \Agreement{5.1}{0.45}
+
+    % friends
+    \Agreement{5.6}{5.35}
+
+    % offline network
+    \Agreement{5.6}{5.25}
+
+    % religious leaders
+    \Agreement{5.25}{2.8}
+
+    % religious teaching
+    \Agreement{5.6}{3.85}
+
+    % cultural values & norms
+    \Agreement{5.7}{5.4}
+    
+    % LIFE GOALS
+    
+%     \section*{Life goals}
+%     \newpage
+    
+    % stable & secure life
+    \Agreement{5.7}{5.5}
+
+    % close to & loved by family
+    \Agreement{5.8}{5.5}
+
+    % respected by group
+    \Agreement{5.8}{5.6}
+
+    % DECISION DRIVERS
+    
+%     \section*{Decision drivers}
+%     \newpage
+    
+    % more control over data => higher engagement
+    \Agreement{5.8}{4.3}
+
+    % less chance of being found => higher chance of use
+    \Agreement{5.8}{1.8}
+
+    % access control is important
+    \Agreement{5.8}{4.15}
+
+    % EXPERIENCE GOALS
+    
+%     \section*{Experience goals}
+%     \newpage
+    
+    % reassured about security & privacy
+    \Agreement{5.55}{5.2}
+
+    % full control over data & followers
+    \Agreement{5.55}{4.9}
+
+    % customise relationship with other users
+    \Agreement{5.55}{5.3}
+
+    % END GOALS
+    
+%     \section*{End goals}
+%     \newpage
+    
+    % keep in touch with offline network
+    \Agreement{5.55}{5.3}
+
+    % extend real-world connections
+    \Agreement{4.4}{4.1}
+
+    % contact & follow otherwise inaccessible power-holders
+    \Agreement{5.5}{5.2}
+
+    % discover new things & ideas
+    \Agreement{5.55}{5.3}
+
+    % MOTIVATIONS
+    
+%     \section*{Motivations}
+%     \newpage
+    
+    % family & friends
+    \Strength{5.3}{5.7}
+    
+    % current events
+    \Strength{2.2}{2.6}
+    
+    % getting information
+    \Strength{3.8}{0.1}
+
+    % fun
+    \Strength{2.35}{2.15}
+
+    % occupy spare time
+    \Strength{0.65}{1.85}
+
+    % ATTITUDE
+    
+%     \section*{Attitude}
+%     \newpage
+    
+    % social media sacrifices time for real-world socialisation
+    \Agreement{5.1}{4.8}
+    
+    % social media sacrifices quality of interpersonal communication
+    \Agreement{3.5}{3.25}
+    
+    % social media decreases level of spiritual commitment
+    \Agreement{3.7}{4.4}
+
+    % BEHAVIOURS
+    
+%     \section*{Behaviours}
+%     \newpage
+    
+    % record daily activities & events
+    \Frequency{5.45}{4.45}
+    
+    % share religious content
+    \Frequency{5.35}{3}
+    
+    % share landscape photos
+    \Frequency{5.35}{5.1}
+    
+    % share food photos
+    \Frequency{5.35}{2.2}
+    
+    % share personal photos/videos with strangers
+    \Frequency{0.1}{5.7}
+    
+    % share photos of children
+    \Frequency{5.45}{1.4}
+    
+    % post photos of immodestly dressed people
+    \Frequency{0.175}{0.225}
+    
+    % share jokes and funny videos
+    \Frequency{3.3}{3.75}
+    
+    % post political and social opinions
+    \Frequency{0.1}{0.45}
+    
+    % discuss sensitive religious topics
+    \Frequency{0.175}{0.225}
+    
+    % follow religious leaders
+    \Frequency{5.05}{2.9}
+
+    % BELIEFS
+    
+%     \section*{Beliefs}
+%     \newpage
+    
+    % modesty is critical
+    \Agreement{5.6}{5.2}
+    
+    % must avoid social disapproval
+    \Agreement{5.65}{5.3}
+    
+    % social media negatively influences Muslims' attitudes & behaviour
+    \Agreement{3.9}{3.45}
+    
+    % online actions contrary to Islam are sinful
+    \Agreement{5.6}{5.2}
+    
+    % sharing religious content will be rewarded
+    \Agreement{5.6}{5.3}
+    
+    % followers and followees reflect upon me
+    \Agreement{5.6}{5.3}
+
+    % ONLINE PROFILE
+    
+%     \section*{Online profile}
+%     \newpage
+    
+    % ambiguity of online identity
+    \Strength{5.35}{2.75}
+    
+    % availability of personal information
+    \Strength{0.35}{1.2}
+
+\end{document}
