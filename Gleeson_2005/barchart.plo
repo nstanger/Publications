@@ -1,0 +1,64 @@
+#musthave yrange
+#musthave ylabel
+#musthave field
+#musthave ystubfmt
+
+#proc settings
+	units: cm
+#endproc
+
+#set field_mouse = @field "_mouse"
+#set field_touch = @field "_touch"
+
+#proc getdata
+	delim: comma
+	fieldnameheader: yes
+	data:
+		target_type, throughput_mouse, throughput_touch, movement_time_mouse, movement_time_touch, error_rate_mouse, error_rate_touch
+		Text box, 0.86, 1.016, 0.98, 0.97, 0.233, 15.3
+		Button, 1.461, 1.551, 1.02, 1.05, 1.633, 13.03
+		Check box, 2.155, 1.779, 1.22, 2.06, 4.4, 152.5
+		Combo box, 0.492, 0.51, 2.07, 2.19, 4.667, 62.27
+
+#proc areadef
+	areaname: slide
+	autowidth: 0.9
+	yrange: @yrange
+	xrange: 0.25 4.75
+
+#proc yaxis:
+	stubs: inc
+	stubformat: @ystubfmt
+	stubdetails: size=10
+	label: @ylabel
+	labeldetails: style=B size=10 adjust=-0.1,0
+	grid: color=gray(0.7)
+
+#proc xaxis:
+	stubs: datafields=target_type
+	stubdetails: style=B size=10
+	tics: none
+
+#proc bars
+	lenfield: @field_mouse
+	color: gray(0.3)
+	showvalues: yes
+	labeldetails: size=8 adjust=-0.15,0.1
+	cluster: 1 / 2
+	barwidth: 0.5
+	legendlabel: Mouse
+
+#proc bars
+	lenfield: @field_touch
+	color: white
+	showvalues: yes
+	labeldetails: size=8 adjust=0.15,0.1
+	cluster: 2 / 2
+	barwidth: 0.5
+	legendlabel: Touch
+
+#proc legend
+	format: multiline
+	location: min+1 max-0.9
+	textdetails: size=9
+	outlinecolors: yes
