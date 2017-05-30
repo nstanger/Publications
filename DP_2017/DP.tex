@@ -1,0 +1,40 @@
+\documentclass[12pt]{article}
+
+
+\usepackage[margin=1in]{geometry}
+\usepackage{fontspec}
+\usepackage{harvard}
+
+\setmainfont{Minion Pro}
+\setmonofont{Letter Gothic 12 Pitch}
+
+
+\title{title}
+\author{Nigel Stanger \and Brendon Woodford \and William Sanson}
+
+\pagestyle{empty}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\begin{abstract}
+It’s now common to be unable to open older digital documents because either the creating software has been discontinued, or it no longer supports that format. Worse, modern versions of software may open old documents but lose elements of the original (e.g., formatting). More precise identification of the software version that created a file would enable better recovery or migration of the file. This paper describes preliminary work on attempts to extract such information from old Microsoft Word documents.
+\end{abstract}
+
+\section{Introduction}
+
+The world is awash with digital documents going back several decades, with many of significant historical, cultural, scientific, or legal importance. Most people will probably access only very recent documents during normal activities, but there are many reasons to access older digital documents, such as studying the works of important writers \cite{Kolowich.S-2009a-Archiving}, re-analysing old research data using new methods \cite{Mount.R-2009a-Data,Pringle.H-2010a-NASA}, and finding new evidence for a “cold case” through forensic examination. However, digital documents tend to become progressively more difficult to open over time as the software that created them evolves, or is even discontinued. Even documents younger than 20 years are not safe: e.g., Microsoft Word 2013 cannot open documents created by Word 95 or earlier \cite{Microsoft-2014a-Word2013}, and it can be hard to even find a computer that can run such “antique” software. Vinton \citeasnoun{Cerf.V-2015a-Digital}, one of the creators of the Internet, recently warned that we are in danger of a “forgotten generation, or even a forgotten century” due to this “bit rot”.
+
+A less obvious issue is that even when modern software \emph{can} open an old document, it may not accurately reproduce the document’s original form due to changes in functionality. This is analogous to human languages, where grammar and meaning change significantly over time. A person who knows only modern English will struggle to accurately comprehend Chaucer. Similarly, Word 2013 may struggle to accurately interpret a document created by Word 98. This issue arises much sooner with digital documents due to the rapid pace of software evolution, and may manifest as anything from subtle layout changes through to entire elements (e.g., graphics) being omitted. Thus, when we open an old document with modern software \textbf{we cannot guarantee that it truly represents the original in both appearance and content}. This is a significant issue with historical or cultural material \cite{Kolowich.S-2009a-Archiving}, and is extremely dangerous in a forensic or legal context, where the ability to accurately reproduce a document in its original form may be crucial \cite{Gillespie.J-2004a-Coping}. Imagine, for example, if the Treaty of Waitangi was originally created in digital form, but when opened 20 years later, important parts were either not displayed at all or were differently formatted. This could completely change the meaning of the document.
+
+It is therefore essential from a preservation perspective to open a digital document with the same—or the nearest possible—version of the software that was used to create it. Unfortunately, identifying the correct version is not always a simple task for older digital documents. There are several resources for identifying document formats and extracting useful metadata from them, including the Unix \texttt{file} tool, \citeasnoun{JHOVE-2009a}, DROID \cite{Brown.A-2006a-Automatic}, the UK National Archives’ PRONOM database \cite{Brown.A-2006a-PRONOM}, and the \possessivecite{NatLib.NZ-2007a-Metadata} Metadata Extraction Tool. Most of these use well-known patterns or “signatures” specific to particular document formats. Signature-based methods can typically identify at least the broad class of document format (e.g., Microsoft Word), and can sometimes be more specific (e.g., Word 6/95 vs.\ Word 97–2003). They cannot however identify the specific software version used (e.g., Word 95 version 1.1, or even Word 6 vs.\ Word 95), except in very limited cases. This is because the key differences across software versions are more likely related to the functionality offered (e.g., a new version of a word processor might add “tables”) than to the document format, which may be the same across several different software versions.
+
+\textbf{Features or characteristics indicating specific functionality} may thus help identify the range of possible software versions. \textbf{This is a classification problem that is amenable to automated machine learning}. Machine learning has already been used in digital forensics to identify document formats, but only in the contexts of more reliably identifying the \emph{general type} of a document \cite{Mokhov.S-2008a-File} rather than which specific software version created it, and identifying the format of file \emph{fragments} rather than complete documents \cite{Li.Q-2010a-SVM,Roussev.V-2009a-File}. This research will therefore extend prior work in this area, provide important document classification tools for the digital preservation and digital forensics communities, and open a new application area for machine learning researchers.
+
+
+\bibliographystyle{dcu}
+\bibliography{DP}
+
+\end{document}
