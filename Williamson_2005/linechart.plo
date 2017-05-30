@@ -1,0 +1,74 @@
+// use ploticus -eps -tightcrop -o run_times.eps linechart.plo
+
+#proc settings
+	units: cm
+#endproc
+
+#proc getdata
+	delim: comma
+	fieldnameheader: yes
+	data:
+		num_sources, time_5605, time_11210, time_16815, time_22420
+		1,74.45393801,164.238584,268.4231119,395.5453539
+		2,127.8150412,279.1868954,539.7388149,781.8267632
+		3,149.4828416,406.9234075,841.0447567,1396.823214
+		4,188.2833264,634.3747808,1340.074612,2424.239076
+
+#proc areadef
+	areaname: standard
+	yrange: 0 2500
+	xrange: 0.8 4.2
+	autowidth: 1
+	autoheight: 0.0014
+
+#proc yaxis:
+	stubs: inc
+	stubdetails: size=9
+	label: Time (s)
+	labeldetails: style=B size=10 adjust=-0.3,0
+	grid: color=gray(0.7)
+
+#proc xaxis:
+	stubs: datafields=num_sources
+	stubdetails: size=9
+	label: Number of data sources
+	labeldetails: style=B size=10 adjust=0,-0.2
+
+#proc lineplot
+	xfield: num_sources
+	yfield: time_5605
+	linedetails: color=black
+	pointsymbol: shape=diamond linecolor=black fillcolor=black
+	legendlabel: 5,605 rows
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: num_sources
+	yfield: time_11210
+	linedetails: color=black
+	pointsymbol: shape=square linecolor=black fillcolor=black
+	legendlabel: 11,210 rows
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: num_sources
+	yfield: time_16815
+	linedetails: color=black
+	pointsymbol: shape=circle linecolor=black fillcolor=black
+	legendlabel: 16,815 rows
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: num_sources
+	yfield: time_22420
+	linedetails: color=black
+	pointsymbol: shape=triangle linecolor=black fillcolor=black
+	legendlabel: 22,420 rows
+	legendsampletype: line+symbol
+
+#proc legend
+	format: multiline
+	location: min+1.5 max-0.75
+	textdetails: size=10
+	seglen: 0.25
+	reverseorder: yes
