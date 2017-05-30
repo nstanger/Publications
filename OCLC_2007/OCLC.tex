@@ -1,0 +1,230 @@
+\documentclass[12pt,pdftex,a4paper,titlepage]{article}
+
+
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\usepackage{pifont}
+\usepackage[dcucite]{harvard}
+\usepackage{url}
+
+
+\title{EPrints makes its mark}
+\author{Nigel Stanger\thanks{\protect\url{nstanger@infoscience.otago.ac.nz}} \and Graham McGregor\thanks{\protect\url{gmcgregor@business.otago.ac.nz}}}
+\date{University of Otago, PO Box 56, Dunedin 9054, New Zealand}
+
+
+\renewcommand{\thetable}{\Roman{table}}
+
+
+\begin{document}
+
+
+\maketitle
+
+
+\bibliographystyle{agsm}
+
+
+\begin{abstract}
+
+\noindent\textbf{Purpose} --- To report on the impact and cost/benefit of implementing three EPrints digital repositories at the University of Otago, and to encourage others to follow suit.
+
+\noindent\textbf{Design/methodology/approach} --- Three repositories were successfully implemented at the University of Otago using existing commodity hardware and free open source software. The first pilot repository was implemented within ten days, and is now a fully-functional system that is being championed for institutional-wide use by the University Library. The other two repositories emerged from different community needs. One is academic, concerned with collecting and researching indigenous content; the other is designed to preserve and manage collective memory and heritage content for a small rural community.
+
+\noindent\textbf{Findings} --- Digital repositories can:
+\begin{itemize}
+
+	\item be established quickly and effectively with surprisingly few resources;
+	
+	\item readily incorporate any kind of extant digital content, or non-digital material that is converted to electronic form;
+	
+	\item meet multifarious needs, from academic institutions seeking to enhance research visibility and impact, to individuals and small communities collecting and preserving their unique memory and heritage records; and
+	
+	\item establish connectivity with the global community from the moment they go live.
+
+\end{itemize}
+
+\noindent\textbf{Practical implications} --- The technology and global support community have matured to a state where a fully-featured repository can be quickly and easily implemented.
+
+\noindent\textbf{Originality/value} --- This article describes the short history, development and impact of the first live repositories of their kind in New Zealand. Their utility and implications for the unique communities that have given rise to them are also explored, by way of encouraging others to take up the digital challenge. \\
+
+\noindent \textbf{Article Type:} Case study
+
+\noindent \textbf{Keyword(s):} Digital institutional repositories; Repository implementation; Community repositories; GNU EPrints.
+\end{abstract}
+
+
+\section{Introduction}
+
+Digital institutional repositories have become a hot topic in recent years, and many institutions worldwide are now actively implementing them. This article discusses how low cost, yet fully functional digital institutional repositories (IRs), can be set up in a very short time frame. The authors reflect on the lessons learned while implementing three different repositories at the University of Otago, and discuss some new and exciting applications of digital repositories arising from these. The authors also suggest some best practices for implementing an IR and discuss issues that must be considered when moving from a small-scale pilot implementation to a full roll-out.
+
+Interest in institutional repositories at the University of Otago was sparked by the release of the \emph{New Zealand Digital Strategy} by the New Zealand government in May 2005. The strategy aims to ensure that ``New Zealand is a world leader in using information and technology to realize our economic, environmental, social and cultural goals'' \cite{NZG-2005-digital_strategy}. In parallel with this, the National Library of New Zealand set up an expert working party with representatives from across the research sector to investigate the feasibility of establishing a national institutional repository for New Zealand's research outputs \cite{Rank-J-2005-feasibility}. The National Library is fostering a work program to improve access to New Zealand's research outputs, by collaborating with institutions to stimulate the set-up of research repositories.
+
+In May 2005, two senior University of Otago staff undertook a study tour of Digital Challenges facing universities in the United States. Their report provided the impetus for the first IR pilot in Otago's School of Business. Project work began on November 7 2005, with the following goals \cite{Stan-N-2006-running}:
+\begin{itemize}
+
+	\item To establish a proof of concept demonstrator for storing and providing open access to digital research publications in the School of Business.
+
+	\item To evaluate the potential of the demonstrator for adoption by the wider University of Otago research community.
+
+	\item To connect the School of Business with the global research community, in line with the feasibility study and recommended actions for a national repositories framework \cite{Rank-J-2005-feasibility}.
+
+\end{itemize}
+
+This article discusses how three different repositories were implemented from scratch, the issues that arose during implementation and the process that has lead to their subsequent development and use.
+
+
+\section{EPrints Otago}
+
+The GNU EPrints repository management software was chosen for the pilot repository because it was widely used, well-supported, inexpensive and would not lock the School of Business into specific technologies or vendors  \cite{Sale-A-2005-NZIRW}. The development team also had prior experience with the software. A rapid prototyping methodology was adopted, emphasizing quick releases of visible results with multiple iterations, in order to create interest in the project at an early stage, and enable a positive feedback cycle. A sandbox was used to test entries and entry formats before the material went live. Tools, techniques, development tasks and other relevant issues were documented on an ongoing basis using a private wiki.
+
+The pilot implementation was completed within ten days of assembling the project team, with most of this time spent tweaking the look and feel of the web site and collecting content \cite{Stan-N-2006-running}. This outcome was made possible by establishing a very clear brief to ``prove the concept'', rather than taking on a large scale project involving many different disciplines, researchers and research outputs from the outset. Early decisions were made to restrict the content and content domain for the pilot, in order to speed the collection process and minimize requirements ``creep''. Meetings were kept to a minimum and policy and procedural issues that required institutional decisions were noted as work progressed, rather than tackled head on. The project was widely publicized within the School and Heads of Departments were consulted to ensure top-level buy-in. This approach produced immediate results and the repository was quickly populated with a range of working/discussion papers, conference items, journal articles and theses.
+
+There was no cost associated with the GNU EPrints software or its associated online community, and from a technical point of view the project was wonderfully straightforward. The School of Business repository\footnote{\url{http://eprints.otago.ac.nz/}} was deployed on a spare mid-range server running FreeBSD, which meant that hardware and software costs were essentially nil. In other words, if there happens to be some spare hardware lying around, an initial repository can be set up very cheaply, and expanded later.
+
+A minimalist approach was taken with regard to gathering content; partly because of the prototypical nature of the project, and partly because material in the hand is worth more than promises by authors to supply content at some indeterminate future date. New publications are always being created, and content acquisition is a moving target that has to be effectively managed. Once basic content acquisition and data entry protocols were put in place, an incremental methodology was adopted. Content was limited to voluntary contributions in PDF format from colleagues in the School of Business, but with no constraint on the type of output. As of November 30 2006, the repository contains 409 documents covering a wide range of topics and document types, with new content being continually acquired.
+
+It is remarkable what can be achieved by a small, dedicated, knowledgeable and enthusiastic implementation team. As with any project, the right mix of technical and project management skills is crucial in making things happen. The project team comprised the School's Research Development Coordinator (project management and evangelism), an Information Science lecturer (software implementation), the School's IT manager (hardware and deployment) and two senior students (research, content acquisition and data entry). Oversight was provided by a standing committee comprising representatives from Information Technology Services, the University Library and the School of Business.
+
+
+\section{Impact of the pilot}
+
+Traffic and downloads were generated from the moment the system went live, and the Tasmania statistics package \cite{Sale-A-2006-stats} that sits alongside the repository became an object of fascination in its own right. The initial response to the pilot repository seemed spectacular, with nearly 19,000 downloads recorded within the first three months from eighty different countries. This level of traffic excited considerable interest from both inside and outside the University. However, while the repository had indeed been accessed from eighty countries, it was salutary to discover that the download rates were in fact over-inflated by a factor of about five. This was due to an undocumented assumption in the Tasmania statistics software \cite{Sale-A-2006-stats} that resulted in hits being counted multiple times if statistics were gathered more often than once per day. The lesson here is to always be wary of computers bearing wonderful news!
+
+Despite the downward adjustment to overall download rates, there is still ongoing healthy interest in the repository, as shown in Figure~\ref{fig-otago-growth}. Interestingly, the repository experiences many more abstract views than full text downloads. An informal analysis of hit rates across eight other repositories that generate similar statistics, shows that some experience the same pattern as Otago, while others experience more downloads than abstract views. Further investigation is needed to determine why this variation occurs.
+
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.79]{otago_growth}
+	\caption{Total monthly hit rates (bar chart, left axis) and number of items (line chart, right axis) for the Otago School of Business repository, up to November 30 2006.}
+	\label{fig-otago-growth}
+\end{figure}
+
+
+Otago's rate of traffic growth has also been compared with the repositories mentioned above. Figure~\ref{fig-growth-comparison} indicates that traffic to the Otago repository grew much more rapidly during its early months than for any of the other eight repositories investigated, including some that are much older and larger (see Table~\ref{tab-repositories}). This may be a consequence of growing public awareness of digital repositories, or there may be other factors involved. A research project is currently under way to investigate possible reasons for this finding.
+
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.8]{growth_comparison}
+	\caption{Comparison of traffic growth across nine EPrints repositories, as of November 30 2006. (The different line styles are used only to distinguish the lines; they have no other significance.)}
+	\label{fig-growth-comparison}
+\end{figure}
+
+
+\begin{table}
+	\caption{Details of repositories compared in Figure~\ref{fig-growth-comparison}, as of November 30 2006.}
+	\label{tab-repositories}
+	\begin{center}
+		\begin{tabular}{lrrl}
+															&	\textbf{Age in}	&	\textbf{Num.}	\\
+			\textbf{Repository}								&	\textbf{months}	&	\textbf{items}	\\
+			\hline
+			dLIST (University of Arizona, U.S.A.)			&	\(\approx\) 54				&	843	\\
+			E-LIS (CILEA, Italy)							&	\(\approx\) 48				&	4638	\\
+			University of Melbourne (Australia)				&	\(\approx\) 53			&	1479	\\
+			University of Nottingham (U.K.)					&	\(\approx\) 65			&	242	\\
+			University of Otago/Cardrona					&	6.5				&	17	\\
+			\textbf{University of Otago/School of Business}	&	\textbf{12.5}	&	\textbf{409}	\\
+			University of Otago/Te Tumu						&	7				&	31	\\
+			Rhodes University (South Africa)				&	\(\approx\) 21				&	385	\\
+			University of Tasmania (Australia)				&	\(\approx\) 26				&	355	\\
+		\end{tabular}
+	\end{center}
+\end{table}
+
+
+An exciting outcome of the pilot has been the ability to make available material that might otherwise be difficult or impossible to access, and thus increase the likelihood of it being cited \cite{Harn-S-2005-research,Hajj-C-2005-citation}. For example, Figure~\ref{fig-item-types} shows that nearly three-quarters of the items in the Otago repository are items that might not otherwise be readily accessible, such as theses, dissertations, and departmental working/discussion papers. Indeed, the top ten downloaded items as of November 30 2006 comprise four departmental working papers, two conference papers, two research reports, one journal paper and one PhD thesis. The full text of these items is also readily searchable by major Internet search engines such as Google \cite{Sale-A-2006-OAchapter}, often within only a few days of being deposited.
+
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.8]{otago_items}
+	\caption{Types of item in the Otago School of Business repository, November 30 2006.}
+	\label{fig-item-types}
+\end{figure}
+
+
+The pilot was not only technologically successful, but also generated much local and national interest. Consequently, after a mere six months, the pilot became the official repository for Otago's School of Business. It has also been adopted as a model with potential for roll-out across the entire University. As there are four academic Divisions at Otago (of which the School of Business is one), a federated model of repositories is envisaged that would be centrally linked and managed by the University Library.
+
+Having proved the concept, it has been (and is) relatively simple to develop other repositories with similar speed. The key is having an experienced team and a highly focused project management plan. 
+
+
+\section{EPrints Te Tumu}
+
+The success of the pilot excited considerable interest throughout the University community. In early 2006, Te Tumu, Otago's School of M\={a}ori, Pacific and Indigenous Studies, expressed an interest in implementing a repository for their specific needs. They were particularly interested in the use of a digital repository as a means of disseminating their research and other work, as there are relatively few ``official'' outlets for their discipline. In addition to the usual items found in most typical IRs, Te Tumu wished to store multimedia items such as images of traditional crafts and artwork, and video clips of performances. This was simply a matter of adding appropriate item types to the EPrints metadata configuration and creating corresponding templates.
+
+Drawing on experience from the pilot, the Te Tumu repository\footnote{\url{http://eprintstetumu.otago.ac.nz/}} was implemented in less than a month, and was officially launched on May 3 2006, making it the first repository for indigenous studies in New Zealand. Interest in the repository is evident with almost 4,500 downloads from 70 different countries during its first seven months. The repository currently contains 31 items, including articles, theses, images and video clips.
+
+
+\section{Issues to consider}
+
+
+\subsection{Copyright}
+
+Copyright is an issue that needs to be faced, although concerns that are voiced tend to be perceived rather than actual problems \cite{EPri-O-2005-SelfFAQ,Sale-A-2006-OAchapter}. A substantial fraction of the material loaded into the Otago repositories comprised departmental working or discussion papers, for which permission to publish online had already been granted. Items with uncertain copyright status had full text access restricted until their status was confirmed. The SHERPA web site\footnote{\url{http://www.sherpa.ac.uk/}} was a valuable resource for ascertaining journal copyright agreements.
+
+
+\subsection{Data standards}
+
+The \emph{New Zealand Digital Strategy} proposes the long term goal of linking all New Zealand repositories to share information and avoid isolated ``silos of knowledge'', where each institution has little idea of what is happening elsewhere \cite{NZG-2005-digital_strategy}. It is therefore imperative that open standards such as the Dublin Core Metadata Initiative\footnote{\url{http://www.dublincore.org/}} be applied for both data and metadata. Dublin Core is natively supported by EPrints, and also by many library cataloging systems.
+
+
+\subsection{Data entry}
+
+Data entry may often be carried out by people who are not specifically trained for the task (such as document authors), so it is essential to have well-defined and widely publicized processes and standards for data entry. EPrints allows the data entry process to be heavily customized to the needs of an individual repository. A final editorial verification is also essential to check the quality of the data entered and to ensure that the item is suitable for inclusion in the repository.
+
+
+\subsection{Content acquisition}
+\label{sec-content}
+
+The key issue regarding acquisition of material is whether self-archiving should be compulsory (top-down) or voluntary (bottom-up). \citename{Sale-A-2005-NZIRW} \citeyear{Sale-A-2005-NZIRW,Sale-A-2006-OAchapter} argues that a compulsory policy is much more effective for growing a repository, as illustrated by the growth rates of repositories at the Queensland University of Technology (compulsory, high growth) and the University of Queensland (voluntary, low growth). Compulsory archiving policies are often driven by the need to capture information for research evaluation and funding purposes, but run the risk that authors may react negatively to such a requirement. \citeasnoun{Swan-A-2004-OA} surveyed 157 authors who did not self-archive and found that 69\% of them would willingly deposit their articles in an open access repository if required to do so. A more recent study increased this figure to 81\% \cite{Swan-A-2006-OAchapter}.
+
+Another issue is when authors should deposit new content into a repository. In particular, should pre-prints of submitted papers be immediately deposited, or should authors wait until the paper has been accepted for publication? There are valid arguments for both positions, but in the case of highly popular repositories, waiting for acceptance may prove to be a ``safer'' option. In March 2006, the authors submitted an article to a journal, and concurrently deposited a pre-print \cite{Stan-N-2006-running} into the pilot repository. The pre-print quickly became the most popular download from the repository, with 625 downloads in only three weeks. The journal subsequently rejected the article on the basis that the material had already been widely disseminated and was therefore no longer topical.
+
+
+\subsection{Types of content}
+
+Decisions about the types of material that should be archived (e.g., working papers, theses, lecture material, multimedia files) are also key, as is the question of what historical material to include. Indeed, this has proved to be one of the most challenging issues faced at Otago, since there can be considerable cost associated with scanning to convert non-digitized work into digital format. There are also associated practical and logistical issues.
+
+The value of a repository depends on the number of authors contributing \cite{Rank-J-2005-feasibility}. Ready targets for inclusion are outputs that would otherwise have only limited availability, such as departmental working and discussion papers, and theses and dissertations. The latter in particular are often very difficult to obtain from outside the institution that published them, yet paradoxically, they are often the easiest to obtain for the purposes of populating an IR, because there is a lower likelihood of copyright issues, and departments often have copies of the documents to hand.
+
+Extant and already bound material requires page-by-page scanning, which can be a long and arduous process. While a number of robotic scanners are available, these are likely to be out of the financial reach of most institutions.  The content focus at Otago has thus moved towards the development of a mandatory policy that requires all student theses and dissertations to be submitted in both hard and electronic copy.
+
+
+\section{Looking ahead}
+
+An exciting consequence of the School of Business repository has been an approach from various communities throughout New Zealand to help set up repositories of heritage material relating to their community. The first of these was Cardrona, a small rural Central Otago community with a long and varied history. The Cardrona Community Repository\footnote{\url{http://cardrona.eprints.otago.ac.nz/}} was launched on May 17 2006, and is the first community repository in New Zealand. Digital repositories offer communities a wonderful opportunity to preserve their historical and cultural heritage, and to disseminate it to a much wider audience than normally possible. It can also provide a sense of focus for the community, especially in cases like Cardrona, where the population is quite small and somewhat geographically dispersed. This information can be of academic use too, such as in a recent study that used community historical information to document the long-term effects of climate change \cite{Hopk-M-2006,Mill-AJ-2006}.
+
+The Otago team is also playing a significant role in the Open Access Repositories in New Zealand (OARiNZ) project\footnote{\url{http://www.oarinz.ac.nz/}}. This is a government-funded project to develop a national infrastructure connecting all of New Zealand's digital research repositories. Work is currently under way at Otago on an easy-to-use installer and configurator for EPrints repositories, in order to encourage wider adoption of these technologies.
+
+
+\section{Conclusion}
+
+Experience at Otago demonstrates that in an increasingly digital world, digital repositories are a necessary and welcome means of archiving and making accessible electronic content of all kinds. Global connectedness between scholars and communities at the touch of a keyboard is not a clich\'{e}d dream, but a reality. The  technology has matured to the point where a basic repository can be set up with a very moderate level of technical expertise. Even setting up a heavily customized repository can be achieved in a matter of days rather than weeks, if a dedicated and knowledgeable team is created and given focused, achievable and bounded goals. Software costs are essentially nil, hardware costs are minimal, and there is a hugely supportive and generous worldwide community of scholars who are willing to share their technical knowledge and expertise at no cost.
+
+On the non-technical side, there are now sufficient repository implementations around the world that IR's are becoming less of a novelty and more an integral tool for researchers, librarians and archivists alike. While Otago is yet to adopt an institution-wide repository, there is little doubt that the progress made to date with its three different thrusts has generated widespread interest locally, nationally and globally. In a purely academic context, the tension between traditional (journal based) scholarship and publishing, and digital (repository based) scholarship and publishing has yet to play itself out.
+
+The authors' experience with community preservation and heritage groups, on the other hand, suggests that given appropriate access to the technology, the content flood gates will truly open. The imprint of EPrints at Otago has not only made its mark, it has stimulated a renaissance-like enthusiasm for making available knowledge and ideas and history and scholarship that might otherwise remain hidden or inaccessible. The added value is that the required institutional or community investment, both time and money, in developing a digital repository seems rather trivial.  The authors suggest that prospective repository developers ``hit the ground running'' and welcome contact from anyone who needs help to do so!
+
+
+\section*{Acknowledgments}
+
+The authors would like to thank Professor Arthur Sale of the University of Tasmania, Eve Young of the University of Melbourne and Stevan Harnad of the University of Southampton for their enthusiastic assistance and support. The authors are also indebted to project Research Assistants Monica Ballantine and Jeremy Johnston for their considerable expertise and enthusiasm, and to School IT Manager Brent Jones for deploying and maintaining the repository server. A final acknowledgement must go to Te Tumu and the Cardrona community for the wonderful opportunities that they have provided.
+
+
+\bibliography{OCLC}
+
+
+\section*{About the authors}
+
+Dr.\ Nigel Stanger is a lecturer in the Department of Information Science at the University of Otago School of Business, where he has taught in the areas of systems analysis and database systems since 1989. He has active research interests in digital repositories, distributed and web database systems, XML technologies, physical database design and database performance. He was the project lead and programmer for the School of Business EPrints repository, which he continues to maintain and enhance. He is also heavily involved in projects to increase the uptake of digital repository technology within New Zealand, and is a key member of the Open Access Repositories in New Zealand (OARiNZ) project.
+
+Dr.\ Graham McGregor is the Research Development Coordinator for the University of Otago School of Business. He is an experienced tertiary academic and manager, who has held senior positions in both the polytechnic and university sectors in New Zealand, and worked as an independent consultant. As an academic, he largely published in the field of sociolinguistics. He has also joint authored work on ICT pedagogy and practice and has written reports for several New Zealand government agencies. His current role is to stimulate and coordinate research development activities across New Zealand's business and academic communities. He was instrumental in launching the School of Business EPrints repository.
+
+
+\end{document}

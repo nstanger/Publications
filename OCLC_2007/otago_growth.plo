@@ -1,0 +1,91 @@
+#proc settings
+	units: cm
+#endproc
+
+#proc getdata
+	delim: comma
+	fieldnameheader: yes
+	data:
+		the_month,num_items,num_abstracts,num_downloads
+		15/11/2005,43,402,233
+		15/12/2005,134,2218,712
+		15/01/2006,141,1973,958
+		15/02/2006,214,3246,1556
+		15/03/2006,233,9862,3701
+		15/04/2006,244,7975,4050
+		15/05/2006,253,6071,3438
+		15/06/2006,262,13006,3639
+		15/07/2006,268,12210,2791
+		15/08/2006,313,10083,3888
+		15/09/2006,329,12929,4429
+		15/10/2006,401,11839,5217
+		15/11/2006,409,6088,3975
+
+#proc areadef
+	areaname: standard
+	xscaletype: date dd/mm/yyyy
+	yscaletype: linear
+	xautorange: datafield=the_month
+	yautorange: datafield=num_abstracts
+
+#proc xaxis
+	stubs: datematic
+	stubslide: 15(s)
+	autoyears: yyyy
+	stubdetails: size=12
+	label: Month
+	labeldetails: style=B size=12 adjust=0,-0.5
+	ticlen: 0.25
+
+#proc yaxis
+	stubs: inc 2000
+	stubdetails: size=12
+	label: Number of hits
+	labeldetails: style=B size=12 adjust=-0.7,0
+//	grid: color=gray(0.7)
+	ticlen: 0.25
+
+#proc bars
+	locfield: the_month
+	lenfield: num_abstracts
+	barwidth: 0.5
+	cluster: 1 / 2
+	color: white
+	legendlabel: Abstract views
+
+#proc bars
+	locfield: the_month
+	lenfield: num_downloads
+	barwidth: 0.5
+	cluster: 2 / 2
+	legendlabel: Full text downloads
+
+#proc areadef
+	areaname: standard
+	xscaletype: date dd/mm/yyyy
+	yscaletype: linear
+	xautorange: datafield=the_month
+	yautorange: datafield=num_items
+
+#proc yaxis:
+	stubs: inc 50
+	stubdetails: size=12 adjust=0.8,0 align=left
+	label: Number of items
+	labeldetails: style=B size=12 adjust=2.7,0
+	ticlen: -0.25
+	location: max
+
+#proc lineplot
+	xfield: the_month
+	yfield: num_items
+	legendlabel: Repository size
+	linedetails: width=2
+
+#proc legend
+	location: min+2 max-0.6
+	textdetails: size=12
+	seglen: 0.25
+	swatchsize: 0.25
+	outlinecolors: yes
+	frame: yes
+	backcolor: white
