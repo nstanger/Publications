@@ -1,0 +1,89 @@
+#musthave infile
+#musthave title
+#musthave ytitle
+#musthave ymin
+#musthave ymax
+
+#proc settings
+	units: cm
+#endproc
+
+#proc getdata
+	delim: comma
+	fieldnameheader: yes
+	file: @infile
+
+#proc areadef
+//	title: @title
+//	titledetails: size=10 style=B align=C
+	areaname: standard
+	xscaletype: log
+	yscaletype: log
+	xrange: 1 2000000
+	yrange: @ymin @ymax
+
+#proc xaxis:
+	selflocatingstubs: text
+		#include chunk_logstubs
+	stubdetails: size=10
+	label: Number of points
+	labeldetails: style=B size=10 adjust=0,-0.1
+	ticlen: 0.25
+
+#proc xaxis:
+	axisline: none
+	selflocatingstubs: text
+		#include chunk_logtics
+	ticlen: 0.1
+
+#proc yaxis:
+	selflocatingstubs: text
+		#include chunk_logstubs
+	stubformat: %2.1f
+	stubdetails: size=10
+	label: @ytitle
+	labeldetails: style=B size=10 adjust=-0.3,0
+	grid: color=gray(0.7)
+	ticlen: 0.25
+
+#proc yaxis:
+	axisline: none
+	selflocatingstubs: text
+		#include chunk_logtics
+	ticlen: 0.1
+
+#proc lineplot
+	xfield: points
+	yfield: image_gen
+	pointsymbol: shape=diamond linecolor=black fillcolor=white
+	legendlabel: Image generation
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: points
+	yfield: image_overlay
+	pointsymbol: shape=square style=spokes linecolor=black
+	legendlabel: Image overlay
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: points
+	yfield: html_overlay
+	pointsymbol: shape=square linecolor=black fillcolor=white
+	legendlabel: HTML overlay
+	legendsampletype: line+symbol
+
+#proc lineplot
+	xfield: points
+	yfield: google_maps
+	pointsymbol: shape=triangle linecolor=black fillcolor=white
+	legendlabel: Google Maps
+	legendsampletype: line+symbol
+
+#proc legend
+	format: multiline
+	location: min+2 max-1
+	textdetails: size=10
+	seglen: 0.25
+	frame: yes
+	backcolor: white
