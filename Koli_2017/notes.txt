@@ -1,0 +1,26 @@
+Numerous prior systems for automatic grading of student queries, but these are all focused on the DML side of things.
+
+• esql (Kearns et al., 2008) supports CREATE TABLE only as a pass-through to set up or modify a schema. It uses its own internal DBMS.
+• aSQLg (Kleiner et al., 2013) only supports SELECT. Works with any back end DBMS. Uses the DBMS as a syntax checker.
+• (Kenny & Pahl, 2005) queries only.
+• ActiveSQL (Cumming & Russell, 2005; Russell & Cumming, 2005) only supports SELECT.
+• SQLify (Dekeyser et al., 2007) only supports SELECT.
+• XData (Bhangdiya et al., 2015, Chandra et al., 2015; Chandra et al., 2016) only supports SELECT.
+• SQL-Tutor (Mitrovic, 1998) is an intelligent tutoring system that only only supports SELECT.
+• SQLator (Sadiq et al., 2004) only supports SELECT.
+• AsseSQL (Prior & Lister, 2004) only supports SELECT.
+• RDBI (Dietrich et al., 1997) supports relational algebra, domain and tuple relational calculus, and SQL (SELECT only). Uses its own internal DBMS.
+• “CS 121 Automation Tool” (anjoola, cs12x-automate, GitHub, last updated 2015) Automated marking system for SQL that appears be customisable for all kinds of statements? However the code to test CREATE TABLE “Simply executes the CREATE TABLE statements to make sure they have the correct syntax”. It doesn't check against any form of specification.
+
+On the pure testing side of things:
+
+• SVTe (Farré et al., 2008) tests the “correctness” of a schema, but focuses mainly on consistency of constraints.
+• Ambler (n.d., http://www.agiledata.org/essays/databaseTesting.html) talks purely about testing the database functionality.
+
+There appears to be very little work on automated grading of students’ schema definitions. No-one has used unit testing as a framework for doing so. What use of unit testing there is, is more focused on testing database /applications/ and effective generation of test cases:
+
+• (Binnig et al., 2013) Generating test databases (fixtures) for OLTP applications.
+• (Chays & Shahid, 2008) Generating test inputs for database applications based on analysing the queries used.
+• (Marcozzi et al, 2012) Generating test inputs for database applications using a formal language (ImperDB).
+
+No-one appears to have tried to automatically test whether an extant schema is consistent with its specification. This is almost more of a formal methods thing? These are more focused on /generating/ a conforming schema from the specification (e.g., Vatanawood & Rivepiboon, 2004; Luković et al., 2003), rather than checking that an already existing schema conforms. Also more focused on schema /transformations/ and evolution (e.g., Bench-Capon et al., 1998).
