@@ -24,3 +24,58 @@ There appears to be very little work on automated grading of students’ schema 
 • (Marcozzi et al, 2012) Generating test inputs for database applications using a formal language (ImperDB).
 
 No-one appears to have tried to automatically test whether an extant schema is consistent with its specification. This is almost more of a formal methods thing? These are more focused on /generating/ a conforming schema from the specification (e.g., Vatanawood & Rivepiboon, 2004; Luković et al., 2003), rather than checking that an already existing schema conforms. Also more focused on schema /transformations/ and evolution (e.g., Bench-Capon et al., 1998).
+
+
+
+
+------------------------------------------------------------
+NOTE: Checking structure of table Product.
+TEST: [[ Product ]] 
+    + OK
++++ PASSED: Table Product exists.
+TEST: [[ Product.Product_code ]] 
+    + OK
+...
++++ PASSED: Table Product contains all the expected columns.
+TEST: [[ Product.Product_code: data type is NUMBER | INTEGER ]] 
+    + OK
+...
++++ PASSED: All columns of table Product have data types compatible with the specification.
+TEST: [[ Product.Product_code precision and scale = 8 (with scale 0) ]] 
+    + OK
+...
++++ PASSED: All columns of table Product have lengths compatible with the specification.
+TEST: [[ Product.Product_code nullability should be N ]] 
+    + OK
+...
++++ PASSED: All columns of table Product have the expected nullability.
+TEST: [[ Product PK ]] 
+    + OK
++++ PASSED: Primary key of table Product exists.
+TEST: [[ Product PK: Product_code ]] 
+    + OK
++++ PASSED: Primary key of table Product includes (only) the expected columns.
+TEST: [[ Product check constraint PRODUCT_STOCK_INVALID ]] 
+    + OK
+...
++++ PASSED: All constraints of table Product that should be are explicitly named.
+NOTE: Testing constraints of table Product.
+TEST: [[ Product.Stock_count accepts “0” ]] 
+    + OK
+TEST: [[ Product.Stock_count accepts “99999” ]] 
+    + OK
+TEST: [[ Product.Restock_level accepts “0” ]] 
+    - FAILED! Column Product.Restock_level won’t accept legal value 0 [-0.5].
+Failed asserting that false is true.
+TEST: [[ Product.Restock_level accepts “99999” ]] 
+    + OK
+TEST: [[ Product.Minimum_level accepts “0” ]] 
+    - FAILED! Column Product.Minimum_level won’t accept legal value 0 [-0.5].
+Failed asserting that false is true.
+TEST: [[ Product.Minimum_level accepts “653” ]] 
+    + OK
+TEST: [[ Product.List_price accepts “0” ]] 
+    + OK
+TEST: [[ Product.List_price accepts “99999.99” ]] 
+    + OK
+--- FAILED: 2 of 8 legal values tested were rejected by a CHECK constraint.
