@@ -61,71 +61,70 @@ The requirements specification for the assessment is tightly defined, which mean
 \section{Architecture}
 \label{sec-architecture}
 
-% grey 184 184 184 (72%)
-% green 46 161 31
-% red 146 23 29
-% grey text 177 177 177 (69%)
-\tcbset{boxsep=0pt,boxrule=0pt,arc=0pt,left=0pt,right=0pt,top=0.5pt,bottom=0.5pt}
-\definecolor{bg grey}{rgb}{0.72,0.72,0.72}
+% ANSI terminal colours for Terminal.app; see https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+% grey 203, 204, 205
+% green 37 188 36
+% red 194, 54, 33
+\definecolor{test grey}{rgb}{0.796,0.800,0.804}
+\definecolor{test green}{rgb}{0.145,0.737,0.141}
+\definecolor{test red}{rgb}{0.761,0.212,0.129}
+
+\tcbset{boxsep=0pt, boxrule=0pt, arc=0pt, left=0pt, right=0pt, top=0.5pt, bottom=0.5pt}
+
+\newlength{\dothskip}
+\setlength{\dothskip}{0.72cm}
+\newlength{\dotvskip}
+\setlength{\dotvskip}{-1.25ex}
+\newlength{\codeskip}
+\setlength{\codeskip}{-0.5ex}
+
 \begin{table}
     \ttfamily\scriptsize
     \begin{tabbing}
         0123\=\kill
-        ------------------------------------------------------------ \\
-        \tcbox[colback=bg grey]{NOTE: Checking structure of table Product.} \\
+        \tcbox[colback=test grey]{NOTE: Checking structure of table Product.} \\[\codeskip]
         TEST: [[ Product ]]  \\
-        \>  + OK \\
-        +++ PASSED: Table Product exists. \\
+        \>  \textcolor{test green}{+ OK} \\
+        \tcbox[colback=test green]{+++ PASSED: Table Product exists.} \\[\codeskip]
         TEST: [[ Product.Product\_code ]]  \\
-        \>  + OK \\
-        ... \\
-        +++ PASSED: Table Product contains all the expected columns. \\
+        \>  \textcolor{test green}{+ OK} \\[\dotvskip]
+        \hspace*{\dothskip}\vdots \\
+        \tcbox[colback=test green]{+++ PASSED: Table Product contains all the expected columns.} \\[\codeskip]
         TEST: [[ Product.Product\_code: data type is NUMBER | INTEGER ]]  \\
-        \>  + OK \\
-        ... \\
-        +++ PASSED: All columns of table Product have data types compatible with the\\
-         specification. \\
+        \>  \textcolor{test green}{+ OK} \\[\dotvskip]
+        \hspace*{\dothskip}\vdots \\
+        \tcbox[colback=test green]{+++ PASSED: All columns of table Product have data types compatible with the}\\[\codeskip]
+        \tcbox[colback=test green]{specification.} \\[\codeskip]
         TEST: [[ Product.Product\_code precision and scale = 8 (with scale 0) ]]  \\
-        \>  + OK \\
-        ... \\
-        +++ PASSED: All columns of table Product have lengths compatible with the \\
-        specification. \\
-        TEST: [[ Product.Product\_code nullability should be N ]]  \\
-        \>  + OK \\
-        ... \\
-        +++ PASSED: All columns of table Product have the expected nullability. \\
+        \>  \textcolor{test green}{+ OK} \\[\dotvskip]
+        \hspace*{\dothskip}\vdots \\
+        \tcbox[colback=test green]{+++ PASSED: All columns of table Product have lengths compatible with the} \\[\codeskip]
+        \tcbox[colback=test green]{specification.} \\[\codeskip]
         TEST: [[ Product PK ]]  \\
-        \>  + OK \\
-        +++ PASSED: Primary key of table Product exists. \\
+        \>  \textcolor{test green}{+ OK} \\
+        \tcbox[colback=test green]{+++ PASSED: Primary key of table Product exists.} \\[\codeskip]
         TEST: [[ Product PK: Product\_code ]]  \\
-        \>  + OK \\
-        +++ PASSED: Primary key of table Product includes (only) the expected \\
-        columns. \\
-        TEST: [[ Product check constraint PRODUCT\_STOCK\_INVALID ]]  \\
-        \>  + OK \\
-        ... \\
-        +++ PASSED: All constraints of table Product that should be are explicitly \\
-        named. \\
-        NOTE: Testing constraints of table Product. \\
-        TEST: [[ Product.Stock\_count accepts “0” ]]  \\
-        \>  + OK \\
-        TEST: [[ Product.Stock\_count accepts “99999” ]]  \\
-        \>  + OK \\
-        TEST: [[ Product.Restock\_level accepts “0” ]]  \\
-        \>  - FAILED! Column Product.Restock\_level won’t accept legal value 0. \\
-        Failed asserting that false is true. \\
-        TEST: [[ Product.Restock\_level accepts “99999” ]]  \\
-        \>  + OK \\
-        TEST: [[ Product.Minimum\_level accepts “0” ]]  \\
-        \>  - FAILED! Column Product.Minimum\_level won’t accept legal value 0. \\
-        Failed asserting that false is true. \\
-        TEST: [[ Product.Minimum\_level accepts “653” ]]  \\
-        \>  + OK \\
-        TEST: [[ Product.List\_price accepts “0” ]]  \\
-        \>  + OK \\
-        TEST: [[ Product.List\_price accepts “99999.99” ]]  \\
-        \>  + OK \\
-        --- FAILED: 2 of 8 legal values tested were rejected by a CHECK constraint.
+        \>  \textcolor{test green}{+ OK} \\
+        \tcbox[colback=test green]{+++ PASSED: Primary key of table Product includes (only) the expected} \\[\codeskip]
+        \tcbox[colback=test green]{columns.} \\[\dotvskip]
+        \hspace*{\dothskip}\vdots \\
+        \tcbox[colback=test grey]{NOTE: Testing constraints of table Product.} \\[\codeskip]
+        TEST: [[ Product.Stock\_count accepts ``0'' ]]  \\
+        \>  \textcolor{test green}{+ OK} \\
+        TEST: [[ Product.Stock\_count accepts ``99999'' ]]  \\
+        \>  \textcolor{test green}{+ OK} \\
+        TEST: [[ Product.Restock\_level accepts ``0'' ]]  \\
+        \>  \textcolor{test red}{- FAILED! Column Product.Restock\_level won't accept legal value 0.} \\
+        \textcolor{test red}{Failed asserting that false is true.} \\
+        TEST: [[ Product.Restock\_level accepts ``99999'' ]]  \\
+        \>  \textcolor{test green}{+ OK} \\
+        TEST: [[ Product.Minimum\_level accepts ``0'' ]]  \\
+        \>  \textcolor{test red}{- FAILED! Column Product.Minimum\_level won't accept legal value 0.} \\
+        \textcolor{test red}{Failed asserting that false is true.} \\
+        TEST: [[ Product.Minimum\_level accepts ``653'' ]]  \\
+        \>  \textcolor{test green}{+ OK} \\[\dotvskip]
+        \hspace*{\dothskip}\vdots \\
+        \tcbox[colback=test red, coltext=test grey]{--- FAILED: 2 of 8 legal values tested were rejected by a CHECK constraint.}
     \end{tabbing}
     \caption{Example of output}
 \end{table}
