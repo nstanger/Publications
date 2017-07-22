@@ -1,6 +1,10 @@
 \documentclass[sigconf, authordraft]{acmart}
 
 \usepackage{tcolorbox}
+\usepackage{listings}
+
+\lstloadlanguages{PHP}
+\lstset{language=PHP,basicstyle=\footnotesize\ttfamily}
 
 
 % \title{(Mis)using unit testing to semi-automatically grade SQL schemas}
@@ -61,6 +65,10 @@ The requirements specification for the assessment is tightly defined, which mean
 \section{Architecture}
 \label{sec-architecture}
 
+% System was implmented in PHP in order to speed development of web interface. Also because of ready availability of database unit testing framework PHPunit (a PHP implementation of the DBunit testing framework for Java).
+% Main program can be launched from either a console program or a web application. Console application uses a single database user: student's schema loaded into DBMS (assuming error-free), then console app is run. Web application: students supply their DBMS credentials and the system connect directly to their schema, with output appearing in the web browser.
+% Project specification is encoded as a collection of PHP classes, one per table. These classes encode the expected name, a range of possible data types, minimum and maximum lengths, nullability, etc., of the table and its columns. It also includes specification of simple constraints such as minimum and maximum values. Valid and invalid values can also be supplied.
+
 % ANSI terminal colours for Terminal.app; see https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
 % grey 203, 204, 205
 % green 37 188 36
@@ -80,6 +88,7 @@ The requirements specification for the assessment is tightly defined, which mean
 
 \begin{table}
     \ttfamily\scriptsize
+    \hrule
     \begin{tabbing}
         0123\=\kill
         \tcbox[colback=test grey]{NOTE: Checking structure of table Product.} \\[\codeskip]
@@ -126,7 +135,66 @@ The requirements specification for the assessment is tightly defined, which mean
         \hspace*{\dothskip}\vdots \\
         \tcbox[colback=test red, coltext=test grey]{--- FAILED: 2 of 8 legal values tested were rejected by a CHECK constraint.}
     \end{tabbing}
+    \hrule
     \caption{Example of output}
+\end{table}
+
+\begin{table}
+    \footnotesize
+    \hrule
+    \begin{verbatim}
+public function getTableName()
+{
+    return 'PRODUCT';
+}
+
+public function getColumnList()
+{
+    return array(
+        'PRODUCT_CODE' => array(
+            'generic_type' => 'NUMBER',
+            'sql_type' => array('NUMBER', 'INTEGER'),
+            'min_length' => 8, 'max_length' => 8, 'decimals' => 0,
+            'test_value' => 87654321, 'nullable' => false),
+        'DESCRIPTION' => array( ... ),
+        'STOCK_COUNT' => array(
+            'generic_type' => 'NUMBER',
+            'sql_type' => array('NUMBER', 'INTEGER'),
+            'min_length' => 5, 'max_length' => 6, 'decimals' => 0,
+            'underflow' => -1, 'overflow' => 100000,
+            'legal_values' => array(0, 99999), 'test_value' => 456,
+            'nullable' => false),
+        'RESTOCK_LEVEL' => array( ... ),
+        'MINIMUM_LEVEL' => array( ... ),
+        'LIST_PRICE' => array(
+            'generic_type' => 'NUMBER',
+            'sql_type' => array('NUMBER', 'INTEGER'),
+            'min_length' => 7, 'max_length' => 8, 'decimals' => 2,
+            'underflow' => -0.01, 'overflow' => 100000.00,
+            'legal_values' => array(0, 99999.99), 'test_value' => 123.99,
+            'nullable' =>  false),
+        'ASSEMBLY_MANUAL' => array(
+            'generic_type' => 'BINARY',
+            'sql_type' => array('BLOB'),
+            'test_value'    =>  "NULL",
+            'nullable' => true),
+        'ASSEMBLY_PROGRAM' => array( ... )
+    );
+
+}
+
+public function getPKColumnList()
+{
+    return array( 'PRODUCT_CODE' );
+}
+
+public function getFKColumnList()
+{
+    return array();
+}
+    \end{verbatim}
+    \hrule
+    \caption{Example of table specification}
 \end{table}
 
 \section{Evaluation}
