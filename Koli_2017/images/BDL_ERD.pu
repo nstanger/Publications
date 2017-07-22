@@ -1,0 +1,34 @@
+@startuml
+
+hide empty members
+
+skinparam {
+    Style strictuml
+    Monochrome true
+    LineType ortho
+}
+
+entity Customer
+entity Staff
+entity Supplier
+entity Sale_Head
+entity Sale_Line
+entity Order_Head
+entity Order_Line
+entity Product
+entity Assembly
+entity Component
+
+Customer ||--o{ Sale_Head
+Sale_Head }o-|| Staff
+Staff ||-o{ Order_Head
+Sale_Head ||--|{ Sale_Line
+Order_Head ||--|{ Order_Line
+Order_Head }o--|| Supplier
+Sale_Line }o--|| Product
+Order_Line }o--|| Component
+Supplier ||--o{ Component
+Product ||-|{ Assembly
+Assembly }|-|| Component
+
+@enduml
