@@ -2,6 +2,13 @@
 
 \usepackage{tcolorbox}
 \usepackage{listings}
+\usepackage{tikz}
+
+\usetikzlibrary{calc}
+\usetikzlibrary{graphs}
+\usetikzlibrary{shapes}
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows.meta}
 
 \lstloadlanguages{PHP}
 \lstset{language=PHP,basicstyle=\footnotesize\ttfamily}
@@ -53,7 +60,7 @@ The third approach was used from 2009 until 2016 (?dates), and was what inspired
 
 Prior approaches to grading SQL DDL have focused on the \texttt{CREATE TABLE} syntax, but we have taken a different approach, where we verify that the implemented schema conforms to the behaviour expected from the original specification. If the student achieves this, then by definition the DDL syntax must be correct (weakness: we do not consider coding style). This enables us to focus less on the specifics of the syntax and more on whether students have implemnted the requirements correctly.
 
-The requirements specification for the assessment is tightly defined, which means it can be readily codified in machine-readable form. Rather than attempt to parse and check the \texttt{CREATE TABLE} statements directly, we instead issue queries against the schema's metadata (catalog), and compare the results of these queries against the machine-readable version of the specification. The process then effectively becomes one of unit testing the schema against the original requirements. In our implementation, we used the PHPunit database unit testing framework to carry out this process, albeit in a somewhat unorthodox way (see Section~\ref{sec-architecture}).
+The requirements specification for the assessment is tightly defined, which means it can be readily codified in machine-readable form. Rather than attempt to parse and check the \texttt{CREATE TABLE} statements directly, we instead issue queries against the schema's metadata (catalog), and compare the results of these queries against the machine-readable version of the specification. The process then effectively becomes one of unit testing the schema against the original requirements. In our implementation, we used the PHPunit database unit testing framework to carry out this process, albeit in a somewhat unorthodox way (see Section~\ref{sec-design}).
 
 % original schema is codified in machine-readable form
 % rather than attempt to parse CREATE TABLE statements, simply execute the DDL code to generate the database schema in the target DBMS, then run queries against the schema's metadata
@@ -62,12 +69,14 @@ The requirements specification for the assessment is tightly defined, which mean
 \section{Prior work}
 \label{sec-literature}
 
-\section{Architecture}
-\label{sec-architecture}
+
+\section{System design}
+\label{sec-design}
 
 % System was implmented in PHP in order to speed development of web interface. Also because of ready availability of database unit testing framework PHPunit (a PHP implementation of the DBunit testing framework for Java).
 % Main program can be launched from either a console program or a web application. Console application uses a single database user: student's schema loaded into DBMS (assuming error-free), then console app is run. Web application: students supply their DBMS credentials and the system connect directly to their schema, with output appearing in the web browser.
-% Project specification is encoded as a collection of PHP classes, one per table. These classes encode the expected name, a range of possible data types, minimum and maximum lengths, nullability, etc., of the table and its columns. It also includes specification of simple constraints such as minimum and maximum values. Valid and invalid values can also be supplied.
+% Project specification is encoded as a collection of PHP classes, one per table (subclass of PHPunit TestCase class). These classes encode the expected name, a range of possible data types, minimum and maximum lengths, nullability, etc., of the table and its columns. It also includes specification of simple constraints such as minimum and maximum values. Valid and invalid values can also be supplied.
+% Each table also includes two sets of tests to run on the database, one to test the structural requirements of the table (columns, data types, etc.), the other to test the data requirements (constraints). Empty and known-valid fixtures are also included.
 
 % ANSI terminal colours for Terminal.app; see https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
 % grey 203, 204, 205
@@ -88,7 +97,7 @@ The requirements specification for the assessment is tightly defined, which mean
 
 \begin{table}
     \ttfamily\scriptsize
-    \hrule
+%     \hrule
     \begin{tabbing}
         0123\=\kill
         \tcbox[colback=test grey]{NOTE: Checking structure of table Product.} \\[\codeskip]
@@ -135,13 +144,13 @@ The requirements specification for the assessment is tightly defined, which mean
         \hspace*{\dothskip}\vdots \\
         \tcbox[colback=test red, coltext=test grey]{--- FAILED: 2 of 8 legal values tested were rejected by a CHECK constraint.}
     \end{tabbing}
-    \hrule
+%     \hrule
     \caption{Example of output}
 \end{table}
 
 \begin{table}
     \footnotesize
-    \hrule
+%     \hrule
     \begin{verbatim}
 public function getTableName()
 {
@@ -191,11 +200,48 @@ public function getPKColumnList()
 public function getFKColumnList()
 {
     return array();
-}
-    \end{verbatim}
-    \hrule
+}   \end{verbatim}
+%     \hrule
     \caption{Example of table specification}
 \end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\columnwidth, keepaspectratio]{images/BDL_ERD.pdf} 
+    \caption{ERD of schema}
+\end{figure}
+
+\begin{figure}
+    \sffamily
+    \begin{tikzpicture}[every node/.style={draw, minimum height=7.5mm, inner sep=1em}]
+        \node (console) {Console app};
+        \coordinate[below=3mm of console.south] (console port);
+        
+        \node[anchor=north west, minimum width=6cm] (driver) at ($(console.south west) - (0,3mm)$) {Main driver};
+        
+        \node[anchor=south east] (web) at ($(driver.north east) + (0,3mm)$) {Web app};
+        \coordinate[below=3mm of web.south] (web port);
+        
+        \node[below=5mm of driver] (phpunit) {PHPunit};
+        
+        \node[left=5mm of phpunit] (spec) {\shortstack{Schema \\ spec.}};
+        
+        \node[cylinder, shape border rotate=90, below=5mm of phpunit, aspect=0.1] (database) {Database};
+        
+        \path (database.before top) -- (database.after top) coordinate[midway] (dbtop);
+        
+        \node[right=5mm of database] (schema) {\shortstack{Student's \\ schema}};
+        
+        \graph { [edges={draw, arrows={-{Stealth}}}]
+            {(console), (web)} -> {(console port), (web port)},
+            {(driver), (spec)} -> (phpunit),
+            (phpunit) -> (dbtop),
+            (schema) -> (database),
+        };
+    \end{tikzpicture}
+    \caption{System architecture}
+\end{figure}
+
 
 \section{Evaluation}
 \label{sec-evaluation}
@@ -203,7 +249,7 @@ public function getFKColumnList()
 \section{Conclusions \& future work}
 \label{sec-conclusion}
 
-\newpage
+\newpage\mbox{}\newpage
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{Koli_2017_Stanger}
 
