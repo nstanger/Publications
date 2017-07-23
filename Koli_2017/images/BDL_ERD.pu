@@ -9,6 +9,7 @@ skinparam {
     Monochrome true
     LineType ortho
     RankSep 40
+    ClassBorderThickness 0.7
 }
 
 entity Customer
