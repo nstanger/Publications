@@ -3,9 +3,12 @@
 hide empty members
 
 skinparam {
+    DefaultFontName "Linux Biolinum O"
+    DefaultFontSize 9
     Style strictuml
     Monochrome true
     LineType ortho
+    RankSep 40
 }
 
 entity Customer
@@ -19,15 +22,16 @@ entity Product
 entity Assembly
 entity Component
 
-Customer ||--o{ Sale_Head
-Sale_Head }o-|| Staff
-Staff ||-o{ Order_Head
+Customer ||..o{ Sale_Head
+Supplier -[hidden]- Order_Head
+Supplier ||..o{ Order_Head
+Sale_Head }o.|| Staff
+Staff ||.o{ Order_Head
 Sale_Head ||--|{ Sale_Line
 Order_Head ||--|{ Order_Line
-Order_Head }o--|| Supplier
 Sale_Line }o--|| Product
+Supplier ||..o{ Component
 Order_Line }o--|| Component
-Supplier ||--o{ Component
 Product ||-|{ Assembly
 Assembly }|-|| Component
 
