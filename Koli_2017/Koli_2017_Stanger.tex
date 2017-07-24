@@ -34,14 +34,13 @@
 
 \maketitle
 
-\cite{Bhangdiya.A-2015a-XDa-TA,Chandra.B-2015a-Data,Chandra.B-2016a-Partial,Dekeyser.S-2007a-Computer,Kearns.R-1997a-A-teaching,Prior.J-2004a-Backwash,Russell.G-2005a-Online,Gong.A-2015a-CS-121-Automation,Farre.C-2008a-SVTe,Dietrich.S-1997a-WinRDBI,Binnig.C-2008a-Multi-RQP,Chays.D-2008a-Query-based,Marcozzi.M-2012a-Test,Haller.K-2010a-Test,Vatanawood.W-2004a-Formal,Lukovic.I-2003a-Proceedings,Bench-Capon.T-1998a-Report,Spivey.J-1989a-An-introduction,Choppella.V-2006a-Constructing,Ambler.S-2006a-Database}
 
 \section{Introduction}
 
 Any introductory database course needs to cover several core concepts, including what is a database, what is a logical data model, and how to create and interact with a database. Typically such courses will focus on the Relational Model and its embodiment in SQL database management systems (DBMSs). This is partly because the Relational Model provides a sound theoretical framework for discussing key database concepts [cite], and partly because SQL DBMSs are still widely used. The shadow of SQL is so strong that even non-relational systems have adopted some form of SQL-like language in order to leverage existing knowledge (e.g., OQL \cite{Cattell.R-2000a-ODMG3}, HiveQL \cite{Apache-2017a-Hive}, and CQL \cite{Apache-2017a-CQL}).
 
 Courses that teach SQL usually include one or more assessments that test students' SQL skills. These test students' ability to 
-create a database using SQL data definition (DDL) statements, and to interact with the database using SQL data manipulation (DML) statements. Manually grading such code can be a slow, tedious, and potentially error-prone process. Automating the grading process enables faster turnaround times and greater consistency [cite]. If the grading can be done in real time, the grading tool could become part of a larger, interactive SQL learning environment \cite{Kenny.C-2005a-Automated,Kleiner.C-2013a-Automated,Mitrovic.A-1998a-Learning,Russell.G-2004a-Improving,Sadiq.S-2004a-SQLator}.
+create a database using SQL data definition (DDL) statements, and to interact with the database using SQL data manipulation (DML) statements. Manually grading such code can be a slow, tedious, and potentially error-prone process. Automating the grading process enables faster turnaround times and greater consistency [cite]. If the grading can be done in real time, the grading tool could become part of a larger, interactive SQL learning environment (e.g.,  \cite{Kenny.C-2005a-Automated,Kleiner.C-2013a-Automated,Mitrovic.A-1998a-Learning,Russell.G-2004a-Improving,Sadiq.S-2004a-SQLator}).
 
 There have been many prior efforts to automatically grade SQL DML (see Section~\ref{sec-literature}), we have been unable to find any similar systems for automatically grading SQL DDL.
 
@@ -58,7 +57,12 @@ Over the years that these two papers were offered, we tried several different ap
 
 The third approach was used from 2009 until 2016 (?dates), and was what inspired the work discussed in this paper. The third approach is also the most amenable to autmoation, as much of the assessment specification is fixed in advance, with less room for deviation.
 
-Prior approaches to grading SQL DDL have focused on the \texttt{CREATE TABLE} syntax, but we have taken a different approach, where we verify that the implemented schema conforms to the behaviour expected from the original specification. If the student achieves this, then by definition the DDL syntax must be correct (weakness: we do not consider coding style). This enables us to focus less on the specifics of the syntax and more on whether students have implemnted the requirements correctly.
+% Can be difficult for students to know whether they are on the right track with regards to a specification
+
+One obvious approach to grading SQL DDL is syntax checking of \texttt{CREATE TABLE} statements. We feel that this is already effectively catered for by the syntax checking built into every SQL DBMS (although it is fair to say that the errors produced by such checkers can sometimes be obscure and unhelpful). While it might be feasible to build an SQL DDL syntax checker that provides more helpful feedback, this misses a key element of database design and implementation: that the database should meet the requirements of the problem being solved. A database schema is normally designed and implemented within the context of a specific set of requirements, so checking that the implemented SQL schema fulfils these requirements would seem to be a more helpful approach to learning the principles of database design and implementation. If a student's schema conforms to the behaviour expected from the original specification, then by definition the DDL syntax must be correct. This enables us to focus more on the student's understanding of the problem than on details of SQL syntax.
+% weakness: we do not consider coding style
+
+% Prior approaches to grading SQL DDL have focused on the \texttt{CREATE TABLE} syntax, but we have taken a different approach, where we verify that the implemented schema conforms to the behaviour expected from the original specification. If the student achieves this, then by definition the DDL syntax must be correct (weakness: we do not consider coding style). This enables us to focus less on the specifics of the syntax and more on whether students have implemnted the requirements correctly.
 
 The requirements specification for the assessment is tightly defined, which means it can be readily codified in machine-readable form. Rather than attempt to parse and check the \texttt{CREATE TABLE} statements directly, we instead issue queries against the schema's metadata (catalog), and compare the results of these queries against the machine-readable version of the specification. The process then effectively becomes one of unit testing the schema against the original requirements. In our implementation, we used the PHPunit database unit testing framework to carry out this process, albeit in a somewhat unorthodox way (see Section~\ref{sec-design}).
 
@@ -69,6 +73,38 @@ The requirements specification for the assessment is tightly defined, which mean
 \section{Prior work}
 \label{sec-literature}
 
+There have been many prior efforts to build learning systems for SQL. However, these have focused almost exclusively on SQL queries using the \texttt{SELECT} statement (i.e., DML) rather than schema definitions (DDL). This is unsurprising given the relative complexity of the \texttt{SELECT} statement compared to most other SQL statements.
+
+\citeauthor{Kearns.R-1997a-A-teaching}'s \emph{esql} \cite{Kearns.R-1997a-A-teaching} supported students in learning the fundamental concepts underlying SQL. It could parse and execute \texttt{CREATE}, \texttt{DROP}, \texttt{ALTER}, \texttt{DELETE}, \texttt{INSERT}, and \texttt{SELECT} statements, but all of these except \texttt{SELECT} were simply passed through to the DBMS. The system enabled students to better understand the steps in the execution of a query by visualizing the intermediate tables generated by each step of the query. It did not provide feedback on students' attempts beyond basic syntax checking and displaying query results.
+
+\citeauthor{Dietrich.S-1993a-An-educational}'s \emph{RDBI} \cite{Dietrich.S-1993a-An-educational} was a Prolog-based interpreter for relational algebra, tuple and domain relational calculus, and SQL. It focused primarily on queries, and used its own non-SQL data definition language. RDBI did not provide feedback on students' attempts beyond basic syntax checking and displaying query results. 
+
+\citeauthor{Mitrovic.A-1998a-Learning}'s \emph{SQL-Tutor} \cite{Mitrovic.A-1998a-Learning} was an intelligent teaching system  that provided students with a guided discovery learning environment for SQL queries. It supported only the \texttt{SELECT} statement, and used constraint-based modeling \cite{Ohlsson.S-1992a-Constraint-based,Ohlsson.S-2016a-Constraint-based} to provide feedback to students on both syntactic and semantic SQL errors.
+
+\citeauthor{Sadiq.S-2004a-SQLator} \emph{SQLator} \cite{Sadiq.S-2004a-SQLator} was a web-based interactive tool for learning SQL. Students were presented with a series of questions in English, and had to write SQL \texttt{SELECT} statements to answer these questions. SQLator used an ``equivalence engine'' to determine whether an SQL query fulfilled the requirements of the original English question. SQLator supported only the \texttt{SELECT} statement, and provided only basic feedback (correct or incorrect) to students. SQLator was able to automatically mark about a third of submitted queries as correct, thus improving the speed of grading. 
+
+\citeauthor{Prior.J-2004a-Backwash}'s \emph{AsseSQL} \cite{Prior.J-2004a-Backwash} was an online examination environment for evaluating students' ability to formulate SQL queries. Students would write and execute their queries, and the data set produced by their query would be compared against the correct data set. The answer would then be flagged as correct or incorrect as appropriate. AsseSQL supported only the \texttt{SELECT} statement.
+
+\citeauthor{Russell.G-2004a-Improving}'s \emph{ActiveSQL}\footnote{\url{https://db.grussell.org/}} \cite{Russell.G-2004a-Improving,Russell.G-2005a-Online} was an online interactive learning environment for SQL that provided immediate feedback to students. ActiveSQL measured the accuracy of a query in a similar way to \citeauthor{Prior.J-2004a-Backwash}'s AsseSQL, but instead of a simple correct/incorrect answer, it computed an accuracy score based on the differences between the query output and the correct answer. It was also able to detect ``hard-coded'' queries that produced the desired result, but would fail if the data set changed \cite{Russell.G-2005a-Online}. ActiveSQL supported only the \texttt{SELECT} statement.
+
+\citeauthor{Dekeyser.S-2007a-Computer}'s \emph{SQLify} \cite{Dekeyser.S-2007a-Computer} was another online SQL learning system that incorporated semantic feedback and automatic assessment. SQLify evaluated each query on an eight-level scale that covered query syntax, output schema, and query semantics. Instructors could use this information to award an overall grade. Again, SQLify supported only the \texttt{SELECT} statement.
+
+\citeauthor{Brusilovsky.P-2010a-Learning}'s \emph{SQL Exploratorium} \cite{Brusilovsky.P-2010a-Learning} took an interesting approach to generating problems, using parameterised query templates to generate the questions given to students. Again, the SQL Exploratorium supported only the \texttt{SELECT} statement.
+
+\citeauthor{Kleiner.C-2013a-Automated}'s \emph{aSQLg} \cite{Kleiner.C-2013a-Automated} was an automated assessment tool that provided feedback to students. This enabled students to improve their learning by making further submissions after incorporating this feedback. The aSQLg system checked queries for syntax, efficiency (cost), result correctness, and statement style. Again, aSQLg supported only the \texttt{SELECT} statement.
+
+\citeauthor{Kenny.C-2005a-Automated} \cite{Kenny.C-2005a-Automated} described an SQL learning system similar to those already described, which also incorporated an assessment of a student's previous progress. This enabled a more personalized and adaptive approach to student learning, where feedback was tailored according to student progress. Again, this system supported only the \texttt{SELECT} statement.
+
+\citeauthor{Bhangdiya.A-2015a-XDa-TA}'s \emph{XDa-TA}\footnote{\url{http://www.cse.iitb.ac.in/infolab/xdata/}} extended the idea of automated grading of SQL by adding the ability to generate data sets designed to catch common errors. These data sets were automatically derived from a set of correct SQL queries \cite{Bhangdiya.A-2015a-XDa-TA,Chandra.B-2015a-Data}. Later work \cite{Chandra.B-2016a-Partial} added support for awarding partial marks.
+
+\citeauthor{Gong.A-2015a-CS-121-Automation}'s ``CS 121 Automation Tool'' \cite{Gong.A-2015a-CS-121-Automation} was a tool designed to semi-automate the grading of SQL assessments, again focusing on SQL DML statements. Interestingly, the system appears to be extensible and could thus potentially be modified to support grading of \texttt{CREATE TABLE} statements.
+
+There is relatively little work on unit testing of databases. Most authors working in this area have focused on testing database \emph{applications} rather than the database itself (e.g., \cite{Binnig.C-2008a-Multi-RQP,Chays.D-2008a-Query-based,Marcozzi.M-2012a-Test,Haller.K-2010a-Test}). \citeauthor{Ambler.S-2006a-Database} discusses how to test the functionality of a database \cite{Ambler.S-2006a-Database}, while \citeauthor{Farre.C-2008a-SVTe} test the ``correctness'' of a schema \cite{Farre.C-2008a-SVTe}, focusing mainly on consistency of constraints. Neither consider whether the database schema meets the specified requirements.
+
+To our knowledge there has been no work on automated grading of SQL \texttt{CREATE TABLE} statements. While dealing with these is simpler than dealing with \emph{SELECT} statements, the ability to at least semi-automate the grading of SQL schema definitions should reap rewards in terms of more consistent application of grading criteria, and faster turnaround time.
+
+Only a couple of the systems discussed in this section [which?] have considered a more ``functional'' approach to checking SQL code, i.e., verifying that the code written fulfils the requirements of the problem, rather than focusing on the code itself. Given the relatively static nature of an SQL schema, we feel this is the most appropriate way of approaching an automated grading system. This sounds like it should be a useful application of formal methods \cite{Spivey.J-1989a-An-introduction}, but work with formal methods and databases seems to have focused either on \emph{generating} a valid schema from a specification (e.g., \cite{Vatanawood.W-2004a-Formal,Lukovic.I-2003a-Proceedings,Choppella.V-2006a-Constructing}), or on verifying schema transformation and evolution \cite{Bench-Capon.T-1998a-Report}.
+
 
 \section{System design}
 \label{sec-design}
@@ -77,6 +113,14 @@ The requirements specification for the assessment is tightly defined, which mean
 % Main program can be launched from either a console program or a web application. Console application uses a single database user: student's schema loaded into DBMS (assuming error-free), then console app is run. Web application: students supply their DBMS credentials and the system connect directly to their schema, with output appearing in the web browser.
 % Project specification is encoded as a collection of PHP classes, one per table (subclass of PHPunit TestCase class). These classes encode the expected name, a range of possible data types, minimum and maximum lengths, nullability, etc., of the table and its columns. It also includes specification of simple constraints such as minimum and maximum values. Valid and invalid values can also be supplied.
 % Each table also includes two sets of tests to run on the database, one to test the structural requirements of the table (columns, data types, etc.), the other to test the data requirements (constraints). Empty and known-valid fixtures are also included.
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\columnwidth, keepaspectratio]{images/BDL_ERD.pdf} 
+    \caption{ERD of schema}
+\end{figure}
+
 
 % ANSI terminal colours for Terminal.app; see https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
 % grey 203, 204, 205
@@ -95,9 +139,8 @@ The requirements specification for the assessment is tightly defined, which mean
 \newlength{\codeskip}
 \setlength{\codeskip}{-0.5ex}
 
-\begin{table}
+\begin{figure}
     \ttfamily\scriptsize
-%     \hrule
     \begin{tabbing}
         0123\=\kill
         \tcbox[colback=test grey]{NOTE: Checking structure of table Product.} \\[\codeskip]
@@ -144,9 +187,15 @@ The requirements specification for the assessment is tightly defined, which mean
         \hspace*{\dothskip}\vdots \\
         \tcbox[colback=test red, coltext=test grey]{--- FAILED: 2 of 8 legal values tested were rejected by a CHECK constraint.}
     \end{tabbing}
-%     \hrule
-    \caption{Example of output}
-\end{table}
+    \vskip-1ex
+    \caption{Example of console output}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=0.95\columnwidth,keepaspectratio]{images/web_output.png}
+    \caption{Example of web output}
+\end{figure}
+
 
 \begin{table}
     \footnotesize
@@ -206,12 +255,6 @@ public function getFKColumnList()
 \end{table}
 
 \begin{figure}
-    \centering
-    \includegraphics[width=0.85\columnwidth, keepaspectratio]{images/BDL_ERD.pdf} 
-    \caption{ERD of schema}
-\end{figure}
-
-\begin{figure}
     \sffamily
     \begin{tikzpicture}[every node/.style={draw, minimum height=7.5mm, inner sep=1em}]
         \node (console) {Console app};
@@ -241,6 +284,7 @@ public function getFKColumnList()
     \end{tikzpicture}
     \caption{System architecture}
 \end{figure}
+
 
 
 \section{Evaluation}
