@@ -1,15 +1,15 @@
 Numerous prior systems for automatic grading of student queries, but these are all focused on the DML side of things.
 
-• esql (Kearns et al., 2008) supports CREATE TABLE only as a pass-through to set up or modify a schema. It uses its own internal DBMS.
-• aSQLg (Kleiner et al., 2013) only supports SELECT. Works with any back end DBMS. Uses the DBMS as a syntax checker.
-• (Kenny & Pahl, 2005) queries only.
-• ActiveSQL (Cumming & Russell, 2005; Russell & Cumming, 2005) only supports SELECT.
-• SQLify (Dekeyser et al., 2007) only supports SELECT.
-• XData (Bhangdiya et al., 2015, Chandra et al., 2015; Chandra et al., 2016) only supports SELECT.
+• RDBI (Dietrich 1993) supports relational algebra, domain and tuple relational calculus, and SQL (SELECT only). Uses its own internal DBMS.
+• esql (Kearns et al., 1997) supports CREATE TABLE only as a pass-through to set up or modify a schema. It uses its own internal DBMS.
 • SQL-Tutor (Mitrovic, 1998) is an intelligent tutoring system that only only supports SELECT.
 • SQLator (Sadiq et al., 2004) only supports SELECT.
 • AsseSQL (Prior & Lister, 2004) only supports SELECT.
-• RDBI (Dietrich et al., 1997) supports relational algebra, domain and tuple relational calculus, and SQL (SELECT only). Uses its own internal DBMS.
+• ActiveSQL (Cumming & Russell, 2005; Russell & Cumming, 2005) only supports SELECT.
+• SQLify (Dekeyser et al., 2007) only supports SELECT.
+• aSQLg (Kleiner et al., 2013) only supports SELECT. Works with any back end DBMS. Uses the DBMS as a syntax checker.
+• (Kenny & Pahl, 2005) queries only.
+• XData (Bhangdiya et al., 2015, Chandra et al., 2015; Chandra et al., 2016) only supports SELECT.
 • “CS 121 Automation Tool” (anjoola, cs12x-automate, GitHub, last updated 2015) Automated marking system for SQL that appears be customisable for all kinds of statements? However the code to test CREATE TABLE “Simply executes the CREATE TABLE statements to make sure they have the correct syntax”. It doesn't check against any form of specification.
 
 On the pure testing side of things:
