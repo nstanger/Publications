@@ -1,4 +1,4 @@
-\documentclass[sigconf, authordraft]{acmart}
+\documentclass[sigconf, authordraft, capitalise]{acmart}
 
 \usepackage{tcolorbox}
 \usepackage{listings}
@@ -37,47 +37,27 @@
 
 \section{Introduction}
 
-Any introductory database course needs to cover several core concepts, including what is a database, what is a logical data model, and how to create and interact with a database. Typically such courses will focus on the Relational Model and its embodiment in SQL database management systems (DBMSs). This is partly because the Relational Model provides a sound theoretical framework for discussing key database concepts [cite], and partly because SQL DBMSs are still widely used. The shadow of SQL is so strong that even non-relational systems have adopted some form of SQL-like language in order to leverage existing knowledge (e.g., OQL \cite{Cattell.R-2000a-ODMG3}, HiveQL \cite{Apache-2017a-Hive}, and CQL \cite{Apache-2017a-CQL}).
+Any introductory database course needs to cover several core concepts, such as what is a database, what is a logical data model, and how to create and interact with a database. Typically such courses focus on the Relational Model and its embodiment in SQL database management systems (DBMSs). This is partly because the Relational Model provides a sound theoretical framework for discussing key database concepts \cite{Date.C-2009a-SQL-and-Relational}, and partly because SQL DBMSs are still widely used. The shadow of SQL is so strong that even non-relational systems have adopted some form of SQL-like language in order to leverage existing knowledge (e.g., OQL \cite{Cattell.R-2000a-ODMG3}, HiveQL \cite{Apache-2017a-Hive}, and CQL \cite{Apache-2017a-CQL}).
 
-Courses that teach SQL usually include one or more assessments that test students' SQL skills. These test students' ability to 
-create a database using SQL data definition (DDL) statements, and to interact with the database using SQL data manipulation (DML) statements. Manually grading such code can be a slow, tedious, and potentially error-prone process. Automating the grading process enables faster turnaround times and greater consistency [cite]. If the grading can be done in real time, the grading tool could become part of a larger, interactive SQL learning environment (e.g.,  \cite{Kenny.C-2005a-Automated,Kleiner.C-2013a-Automated,Mitrovic.A-1998a-Learning,Russell.G-2004a-Improving,Sadiq.S-2004a-SQLator}).
+Courses that teach SQL usually include one or more assessments that test students' ability to create a database using SQL data definition (DDL) statements, and to interact with the database using SQL data manipulation (DML) statements. Manually grading the code submitted for such assessments can be a slow, tedious, and potentially error-prone process. Automated or semi-automated grading has been shown to improve turnaround time and consistency, and is generally received positively by students \cite{Douce.C-2005a-Automatic,Russell.G-2004a-Improving,Dekeyser.S-2007a-Computer,Prior.J-2004a-Backwash}. If the grading can be done in real time, the grading tool can even become part of a larger, interactive SQL learning environment (e.g.,  \cite{Kenny.C-2005a-Automated,Kleiner.C-2013a-Automated,Mitrovic.A-1998a-Learning,Russell.G-2004a-Improving,Sadiq.S-2004a-SQLator}).
 
-There have been many prior efforts to automatically grade SQL DML (see Section~\ref{sec-literature}), we have been unable to find any similar systems for automatically grading SQL DDL.
-
-In our department, we offered typical introductory papers on database systems. INFO 212 was offered from 1997(?) to 2011, and was a dedicated semester-long course (13 weeks). It was replaced by INFO 214 in 2012, which included 6\(\frac{1}{2}\) weeks of core database material (the remainder of the paper covered data communications and networking). It was discontinued at the end of 2016.
-
-Over the years that these two papers were offered, we tried several different approaches to formulating and grading SQL DDL assessments. The three most significant were:
-\begin{enumerate}
-    \item Allow students to choose and code their own scenario. It could be argued that this could boost student interest in the assessment, as they can work on a problem domain that interests them. It does however mean that every student's submission is different, and makes the grading process harder.
+While there have been many prior efforts to automatically grade SQL DML (see \cref{sec-literature}), there appear to be no similar systems designed to automatically grade SQL \emph{DDL}. There are generally two main aspects that need to be considered when grading an SQL schema implementation. First, is the DDL code (i.e., \texttt{CREATE} statements) syntactically correct? This is already dealt with quite effectively by the syntax checkers built into every SQL DBMS (although it is fair to say that the errors produced by such checkers can sometimes be obscure and unhelpful). Any student who submits syntactically invalid code cannot expect to score well. A related aspect is code style (e.g., naming, formatting, indentation), but we do not consider this here.
     
-    \item Assign a standard scenario, but leave some elements under-specified. This improves the grading experience, but there is still the possibility of variation among student submissions, as they may interpret the under-specified elements in different ways. This is particularly problematic to automate if they choose different names for tables and columns, or implement a different structure.
-    
-    \item Provide a detailed specification of a standard scenario. This can be presented as the detailed output from the requirements analysis phase. Students are told that they need to adhere closely to the specification, as other developers will be independently using the same specification to implement end-user applications. Students still have some room to alter things, but such changes cannot affect the view of the database seen by clients. This approach tests both the studnets' ability to write SQL DDL, and to interpret and correctly convert a written database specification into a corresponding SQL schema.
-\end{enumerate}
+Second, does the schema meet the requirements of the problem being solved? A database schema is normally designed and implemented within the context of a specific set of requirements, so verifying that the implemented SQL schema fulfils these requirements is an effective way to grade the implementation, and also provides a useful framework for providing feedback to students. The requirements for a database schema can usually be loosely divided into \emph{structure} (e.g., tables, columns, data types), \emph{integrity} (e.g., keys, constraints), and \emph{behaviour} (e.g., sequences, triggers).
 
-The third approach was used from 2009 until 2016 (?dates), and was what inspired the work discussed in this paper. The third approach is also the most amenable to autmoation, as much of the assessment specification is fixed in advance, with less room for deviation.
+In this paper we describe a system that semi-automates the grading of SQL schema implementations. The system takes as input a machine-readable specification of the assessment requirements and a live instance of a submitted student schema, and checks whether the schema conforms to the requirements. Rather than attempt to parse and check the \texttt{CREATE TABLE} statements directly, the system instead issues queries on the schema's metadata (catalog), and compare the results of these queries against the machine-readable specification. The process effectively becomes one of unit testing the schema using the specification as a framework. We use the PHPunit database unit testing framework to carry out this process, albeit in a somewhat unorthodox way (see \cref{sec-design}).
 
-% Can be difficult for students to know whether they are on the right track with regards to a specification
+The remainder of the paper is structured as follows. In the next section we discuss related work and identify gaps, while \cref{sec-motivation} discusses the motivation for our approach. \Cref{sec-design} discusses the design of our system, and \cref{sec-evaluation} evaluates its effectiveness. We conclude in \cref{sec-conclusion}.
 
-One obvious approach to grading SQL DDL is syntax checking of \texttt{CREATE TABLE} statements. We feel that this is already effectively catered for by the syntax checking built into every SQL DBMS (although it is fair to say that the errors produced by such checkers can sometimes be obscure and unhelpful). While it might be feasible to build an SQL DDL syntax checker that provides more helpful feedback, this misses a key element of database design and implementation: that the database should meet the requirements of the problem being solved. A database schema is normally designed and implemented within the context of a specific set of requirements, so checking that the implemented SQL schema fulfils these requirements would seem to be a more helpful approach to learning the principles of database design and implementation. If a student's schema conforms to the behaviour expected from the original specification, then by definition the DDL syntax must be correct. This enables us to focus more on the student's understanding of the problem than on details of SQL syntax.
-% weakness: we do not consider coding style
 
-% Prior approaches to grading SQL DDL have focused on the \texttt{CREATE TABLE} syntax, but we have taken a different approach, where we verify that the implemented schema conforms to the behaviour expected from the original specification. If the student achieves this, then by definition the DDL syntax must be correct (weakness: we do not consider coding style). This enables us to focus less on the specifics of the syntax and more on whether students have implemnted the requirements correctly.
-
-The requirements specification for the assessment is tightly defined, which means it can be readily codified in machine-readable form. Rather than attempt to parse and check the \texttt{CREATE TABLE} statements directly, we instead issue queries against the schema's metadata (catalog), and compare the results of these queries against the machine-readable version of the specification. The process then effectively becomes one of unit testing the schema against the original requirements. In our implementation, we used the PHPunit database unit testing framework to carry out this process, albeit in a somewhat unorthodox way (see Section~\ref{sec-design}).
-
-% original schema is codified in machine-readable form
-% rather than attempt to parse CREATE TABLE statements, simply execute the DDL code to generate the database schema in the target DBMS, then run queries against the schema's metadata
-% use a database unit testing framework (PHPUnit) to automate
-
-\section{Prior work}
+\section{Related work}
 \label{sec-literature}
 
 There have been many prior efforts to build learning systems for SQL. However, these have focused almost exclusively on SQL queries using the \texttt{SELECT} statement (i.e., DML) rather than schema definitions (DDL). This is unsurprising given the relative complexity of the \texttt{SELECT} statement compared to most other SQL statements.
 
-\citeauthor{Kearns.R-1997a-A-teaching}'s \emph{esql} \cite{Kearns.R-1997a-A-teaching} supported students in learning the fundamental concepts underlying SQL. It could parse and execute \texttt{CREATE}, \texttt{DROP}, \texttt{ALTER}, \texttt{DELETE}, \texttt{INSERT}, and \texttt{SELECT} statements, but all of these except \texttt{SELECT} were simply passed through to the DBMS. The system enabled students to better understand the steps in the execution of a query by visualizing the intermediate tables generated by each step of the query. It did not provide feedback on students' attempts beyond basic syntax checking and displaying query results.
-
 \citeauthor{Dietrich.S-1993a-An-educational}'s \emph{RDBI} \cite{Dietrich.S-1993a-An-educational} was a Prolog-based interpreter for relational algebra, tuple and domain relational calculus, and SQL. It focused primarily on queries, and used its own non-SQL data definition language. RDBI did not provide feedback on students' attempts beyond basic syntax checking and displaying query results. 
+
+\citeauthor{Kearns.R-1997a-A-teaching}'s \emph{esql} \cite{Kearns.R-1997a-A-teaching} supported students in learning the fundamental concepts underlying SQL. It could parse and execute \texttt{CREATE}, \texttt{DROP}, \texttt{ALTER}, \texttt{DELETE}, \texttt{INSERT}, and \texttt{SELECT} statements, but all of these except \texttt{SELECT} were simply passed through to the DBMS. The system enabled students to better understand the steps in the execution of a query by visualizing the intermediate tables generated by each step of the query. It did not provide feedback on students' attempts beyond basic syntax checking and displaying query results.
 
 \citeauthor{Mitrovic.A-1998a-Learning}'s \emph{SQL-Tutor} \cite{Mitrovic.A-1998a-Learning} was an intelligent teaching system  that provided students with a guided discovery learning environment for SQL queries. It supported only the \texttt{SELECT} statement, and used constraint-based modeling \cite{Ohlsson.S-1992a-Constraint-based,Ohlsson.S-2016a-Constraint-based} to provide feedback to students on both syntactic and semantic SQL errors.
 
@@ -104,6 +84,25 @@ There is relatively little work on unit testing of databases. Most authors worki
 To our knowledge there has been no work on automated grading of SQL \texttt{CREATE TABLE} statements. While dealing with these is simpler than dealing with \emph{SELECT} statements, the ability to at least semi-automate the grading of SQL schema definitions should reap rewards in terms of more consistent application of grading criteria, and faster turnaround time.
 
 Only a couple of the systems discussed in this section [which?] have considered a more ``functional'' approach to checking SQL code, i.e., verifying that the code written fulfils the requirements of the problem, rather than focusing on the code itself. Given the relatively static nature of an SQL schema, we feel this is the most appropriate way of approaching an automated grading system. This sounds like it should be a useful application of formal methods \cite{Spivey.J-1989a-An-introduction}, but work with formal methods and databases seems to have focused either on \emph{generating} a valid schema from a specification (e.g., \cite{Vatanawood.W-2004a-Formal,Lukovic.I-2003a-Proceedings,Choppella.V-2006a-Constructing}), or on verifying schema transformation and evolution \cite{Bench-Capon.T-1998a-Report}.
+
+
+\section{Motivation}
+\label{sec-motivation}
+
+In our department, we offered typical introductory papers on database systems. INFO 212 was offered from 1997(?) to 2011, and was a dedicated semester-long course (13 weeks). It was replaced by INFO 214 in 2012, which included 6\(\frac{1}{2}\) weeks of core database material (the remainder of the paper covered data communications and networking). It was discontinued at the end of 2016.
+
+Over the years that these two papers were offered, we tried several different approaches to formulating and grading SQL DDL assessments. The three most significant were:
+\begin{enumerate}
+    \item Allow students to choose and code their own scenario. It could be argued that this could boost student interest in the assessment, as they can work on a problem domain that interests them. It does however mean that every student's submission is different, and makes the grading process harder.
+    
+    \item Assign a standard scenario, but leave some elements under-specified. This improves the grading experience, but there is still the possibility of variation among student submissions, as they may interpret the under-specified elements in different ways. This is particularly problematic to automate if they choose different names for tables and columns, or implement a different structure.
+    
+    \item Provide a detailed specification of a standard scenario. This can be presented as the detailed output from the requirements analysis phase. Students are told that they need to adhere closely to the specification, as other developers will be independently using the same specification to implement end-user applications. Students still have some room to alter things, but such changes cannot affect the view of the database seen by clients. This approach tests both the studnets' ability to write SQL DDL, and to interpret and correctly convert a written database specification into a corresponding SQL schema.
+\end{enumerate}
+
+The third approach was used from 2009 until 2016 (?dates), and was what inspired the work discussed in this paper. The third approach is also the most amenable to autmoation, as much of the assessment specification is fixed in advance, with less room for deviation.
+
+% Can be difficult for students to know whether they are on the right track with regards to a specification
 
 
 \section{System design}
