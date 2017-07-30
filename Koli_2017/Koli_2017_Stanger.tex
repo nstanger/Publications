@@ -3,6 +3,7 @@
 \usepackage{tcolorbox}
 \usepackage{listings}
 \usepackage{tikz}
+\usepackage{flafter}
 
 \usetikzlibrary{calc}
 \usetikzlibrary{graphs}
@@ -89,20 +90,24 @@ Only a couple of the systems discussed in this section [which?] have considered 
 \section{Motivation}
 \label{sec-motivation}
 
-In our department, we offered typical introductory papers on database systems. INFO 212 was offered from 1997(?) to 2011, and was a dedicated semester-long course (13 weeks). It was replaced by INFO 214 in 2012, which included 6\(\frac{1}{2}\) weeks of core database material (the remainder of the paper covered data communications and networking). It was discontinued at the end of 2016.
+Over the last 20 years, our department has offered several different iterations of an introductory database paper. These have all included coverage of core topics such as the relational model, relational algebra, data integrity, SQL (DDL and DML), and other miscellaneous aspects such as transactions, concurrency control, and security. Assessment of SQL skills was typically carried out by means of a database design and implementation assignment for DDL, and a practical on-computer examination for DML.
 
-Over the years that these two papers were offered, we tried several different approaches to formulating and grading SQL DDL assessments. The three most significant were:
-\begin{enumerate}
-    \item Allow students to choose and code their own scenario. It could be argued that this could boost student interest in the assessment, as they can work on a problem domain that interests them. It does however mean that every student's submission is different, and makes the grading process harder.
-    
-    \item Assign a standard scenario, but leave some elements under-specified. This improves the grading experience, but there is still the possibility of variation among student submissions, as they may interpret the under-specified elements in different ways. This is particularly problematic to automate if they choose different names for tables and columns, or implement a different structure.
-    
-    \item Provide a detailed specification of a standard scenario. This can be presented as the detailed output from the requirements analysis phase. Students are told that they need to adhere closely to the specification, as other developers will be independently using the same specification to implement end-user applications. Students still have some room to alter things, but such changes cannot affect the view of the database seen by clients. This approach tests both the studnets' ability to write SQL DDL, and to interpret and correctly convert a written database specification into a corresponding SQL schema.
-\end{enumerate}
+Over time we have tried various different approaches to formulating and grading SQL DDL assessments. One approach was to allow students to choose and implement their own database scenario, which could be real or fictional. The argument was that this could boost student interest in the assessment, as they could work on a problem domain that interests them. It did however mean that every student's submission was different, which made it much harder to consistently grade, and essentially impossible to automate. This approach was only used for a couple of years before it was discontinuted, due to the grading workload required.
 
-The third approach was used from 2009 until 2016 (?dates), and was what inspired the work discussed in this paper. The third approach is also the most amenable to autmoation, as much of the assessment specification is fixed in advance, with less room for deviation.
+A second---and probably typical---approach was to assign each student the same fictional scenario, but to leave some elements incompletely specified. This improved the grading experience, but there was still the possibility of variation among student submissions, due to different interpretations of the under-specified elements. This was problematic to automate when students chose different database structures, or different names for tables and columns, than what we expected. This was the approach we followed until about 2010. [?check] Grading was never automated in any significant sense.
 
-% Can be difficult for students to know whether they are on the right track with regards to a specification
+A third approach, which we have followed since 2010 [?check] was to provide each student with a highly-detailed specification of the same fictional scenario. An entity-relationship diagram (ERD) of a typical scenario used is shown in \cref{fig-ERD}. The scenario posed the student as a database developer involved in a larger project, and that the specification was the output of the requirements analysis phase. The student was required to adhere closely to the specification, on the basis that other (fictional) developers were independently using the same specification to program end-user applications. Any variation from the specification would therefore break those applications. Students still had some flexibility to alter things, as long as the changes did not affect the view of the database seen by client programs. This approach tested both the student's ability to write SQL DDL, and to interpret and correctly convert a written database specification into a corresponding SQL schema.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\columnwidth, keepaspectratio]{images/BDL_ERD.pdf} 
+    \caption{ERD of typical database scenario used in assessing SQL DDL skills (Information Engineering notation).}
+    \label{fig-ERD}
+\end{figure}
+
+The third approach seemed effective, but maintaining consistent grading standards across all submissions was more difficult, due the large number of distinct gradable elements in the schema. This required a complex and highly-detailed rubric to be constructed so that no element was missed, and the grading process took a significant amount of time. In 2013 [?check] changing teaching workloads and increased time pressure prompted interest in the possibility of at least semi-automating the grading of this assessment. Due to the more constrained nature of the project specification, automation seemed more feasible than with the other approaches.
+
+Another motivation for automation was that it can sometimes be difficult for novices to know whether they are on the right track when implementing a specification. If the grading tool were avaialble (in a reduced form) to students, it could also be used to provide feedback on whether they were proceeding correctly. The approach we took was to specify a minimum set of requirements for the assessment, which could be tested by the student-facing version of the system before submission. If the student could satisfy these minimum requirements, they would be guaranteed to score 50\%. Marks beyond that would then be assigned using the teacher-facing version of the system after students submitted their work.
 
 
 \section{System design}
@@ -113,12 +118,6 @@ The third approach was used from 2009 until 2016 (?dates), and was what inspired
 % Project specification is encoded as a collection of PHP classes, one per table (subclass of PHPunit TestCase class). These classes encode the expected name, a range of possible data types, minimum and maximum lengths, nullability, etc., of the table and its columns. It also includes specification of simple constraints such as minimum and maximum values. Valid and invalid values can also be supplied.
 % Each table also includes two sets of tests to run on the database, one to test the structural requirements of the table (columns, data types, etc.), the other to test the data requirements (constraints). Empty and known-valid fixtures are also included.
 
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.85\columnwidth, keepaspectratio]{images/BDL_ERD.pdf} 
-    \caption{ERD of schema}
-\end{figure}
 
 
 % ANSI terminal colours for Terminal.app; see https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
