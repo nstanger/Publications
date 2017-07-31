@@ -90,34 +90,147 @@ Only a couple of the systems discussed in this section [which?] have considered 
 \section{Motivation}
 \label{sec-motivation}
 
-Over the last 20 years, our department has offered several different iterations of an introductory database paper. These have all included coverage of core topics such as the relational model, relational algebra, data integrity, SQL (DDL and DML), and other miscellaneous aspects such as transactions, concurrency control, and security. Assessment of SQL skills was typically carried out by means of a database design and implementation assignment for DDL, and a practical on-computer examination for DML.
+Since 1989, our department has offered some form of introductory database paper, typically one semester during the second year of study.\footnote{New Zealand Bachelor's degrees comprise three years of study.} These papers all included coverage of core topics such as the relational model, relational algebra, data integrity, SQL (DDL and DML), and other miscellaneous aspects such as transactions, concurrency control, and security. Assessment of SQL skills was typically carried out using a mixture of assignments and tests.
 
-Over time we have tried various different approaches to formulating and grading SQL DDL assessments. One approach was to allow students to choose and implement their own database scenario, which could be real or fictional. The argument was that this could boost student interest in the assessment, as they could work on a problem domain that interests them. It did however mean that every student's submission was different, which made it much harder to consistently grade, and essentially impossible to automate. This approach was only used for a couple of years before it was discontinuted, due to the grading workload required.
+From 2001 to 2003, we assessed students' SQL DDL skills in an online practical test under strict examination conditions. Students were given a fictional scenario specification, and had 100 minutes in which to modify a provided schema template with additional tables, constraints, etc. The test was generally easier to grade than a more ``realistic'' assignment, as the scenario specification tended to be more tightly specified and thus less open to interpretation. However, the test experience was quite stressful to students due to the limited timeframe and limited access to online references. We did not attempt to automate the grading of these tests.
 
-A second---and probably typical---approach was to assign each student the same fictional scenario, but to leave some elements incompletely specified. This improved the grading experience, but there was still the possibility of variation among student submissions, due to different interpretations of the under-specified elements. This was problematic to automate when students chose different database structures, or different names for tables and columns, than what we expected. This was the approach we followed until about 2010. [?check] Grading was never automated in any significant sense.
-
-A third approach, which we have followed since 2010 [?check] was to provide each student with a highly-detailed specification of the same fictional scenario. An entity-relationship diagram (ERD) of a typical scenario used is shown in \cref{fig-ERD}. The scenario posed the student as a database developer involved in a larger project, and that the specification was the output of the requirements analysis phase. The student was required to adhere closely to the specification, on the basis that other (fictional) developers were independently using the same specification to program end-user applications. Any variation from the specification would therefore break those applications. Students still had some flexibility to alter things, as long as the changes did not affect the view of the database seen by client programs. This approach tested both the student's ability to write SQL DDL, and to interpret and correctly convert a written database specification into a corresponding SQL schema.
-
-\begin{figure}
+The most common approach we used to assess SQL DDL skills was a practical assignment, where students had a few weeks in which to implement a database schema based on a specification of a fictional scenario. The scenario posed that the student was a database developer involved in a larger project, and that the specification was the output of the requirements analysis phase. An entity-relationship diagram (ERD) of a typical scenario is shown in \cref{fig-ERD}.
+ 
+\begin{figure}[hb]
     \centering
     \includegraphics[width=0.85\columnwidth, keepaspectratio]{images/BDL_ERD.pdf} 
     \caption{ERD of typical database scenario used in assessing SQL DDL skills (Information Engineering notation).}
     \label{fig-ERD}
 \end{figure}
 
-The third approach seemed effective, but maintaining consistent grading standards across all submissions was more difficult, due the large number of distinct gradable elements in the schema. This required a complex and highly-detailed rubric to be constructed so that no element was missed, and the grading process took a significant amount of time. In 2013 [?check] changing teaching workloads and increased time pressure prompted interest in the possibility of at least semi-automating the grading of this assessment. Due to the more constrained nature of the project specification, automation seemed more feasible than with the other approaches.
+Up until 2000, the scenario specifications for these assignments were somewhat loosely defined and often contained areas that were under-specified or ambiguous. This led to significant variation across student submissions, due to differing interpretations of the under-specified elements. This was problematic to automate when students chose different database structures, or different names for tables and columns, than what we expected. We therefore did not make any significant attempt to automate grading under this approach.
 
-Another motivation for automation was that it can sometimes be difficult for novices to know whether they are on the right track when implementing a specification. If the grading tool were avaialble (in a reduced form) to students, it could also be used to provide feedback on whether they were proceeding correctly. The approach we took was to specify a minimum set of requirements for the assessment, which could be tested by the student-facing version of the system before submission. If the student could satisfy these minimum requirements, they would be guaranteed to score 50\%. Marks beyond that would then be assigned using the teacher-facing version of the system after students submitted their work.
+From 2004, we tightened up the scenario specifications to minimise any ambiguity. The specification was considered ``frozen'', and students were not permitted to make changes without strong justification, and even then only if the changes did not affect the view of the database seen by client programs. The rationale was that other (fictional) developers were independently using the same specification to code end-user applications. Any variation from the specification would therefore break those applications. This approach tested both the student's ability to write SQL DDL, and to interpret and correctly convert a written database specification into a corresponding SQL schema.
+
+This approach seemed effective, but maintaining consistent grading standards across all submissions was difficult, due the large number of distinct gradable elements implied by the specification. This required a complex and highly-detailed rubric to be constructed so that no element was missed, and the grading process took a significant amount of time. In 2012 changing teaching workloads and increased time pressure prompted interest in the possibility of at least semi-automating the grading of this assessment. Due to the more constrained nature of the project specification, automation seemed more feasible than with earlier approaches.
+
+Another motivation for automation was that it can sometimes be difficult for novices to know whether they are on the right track when implementing a specification. If a reduced functionality version of the grading tool were available to students, it could also be used to provide feedback on whether they were proceeding correctly. The approach we took was to specify a minimum set of requirements [TODO specify] for the assessment, which were tested by a student-facing web application before submission. If the student satisfied these minimum requirements, they were guaranteed to score 50\%. Marks beyond that minimum would then be assigned using a teacher-facing console application after students submitted their work.
+
+We implemented and tested a prototype of the teacher-facing application in 2012. The student-facing application was rolled out to students in 2013, and the entire system was further enhanced for the 2014 and 2016 offerings. (The system was not used in 2015 due to staff being on research leave.)
 
 
 \section{System design}
 \label{sec-design}
 
-% System was implmented in PHP in order to speed development of web interface. Also because of ready availability of database unit testing framework PHPunit (a PHP implementation of the DBunit testing framework for Java).
-% Main program can be launched from either a console program or a web application. Console application uses a single database user: student's schema loaded into DBMS (assuming error-free), then console app is run. Web application: students supply their DBMS credentials and the system connect directly to their schema, with output appearing in the web browser.
-% Project specification is encoded as a collection of PHP classes, one per table (subclass of PHPunit TestCase class). These classes encode the expected name, a range of possible data types, minimum and maximum lengths, nullability, etc., of the table and its columns. It also includes specification of simple constraints such as minimum and maximum values. Valid and invalid values can also be supplied.
-% Each table also includes two sets of tests to run on the database, one to test the structural requirements of the table (columns, data types, etc.), the other to test the data requirements (constraints). Empty and known-valid fixtures are also included.
+The architecture of our system is shown in \cref{fig-architecture}. The core function of our system is to check whether a student has adhered to the assignment specification, by automatically comparing their schema submission against a machine-readable version of the specification. This is essentially a unit testing approach, so we used a unit testing framework (PHPUnit) to implement this core functionality.
 
+\begin{figure}
+    \sffamily
+    \begin{tikzpicture}[every node/.style={draw, minimum height=7.5mm, inner sep=1em}]
+        \node (console) {\shortstack{Console app \\ \footnotesize(staff mode)}};
+        \coordinate[below=3mm of console.south] (console port);
+        
+        \node[anchor=north west, minimum width=6cm] (driver) at ($(console.south west) - (0,3mm)$) {Main driver};
+        
+        \node[anchor=south east] (web) at ($(driver.north east) + (0,3mm)$) {\shortstack{Web app \\ \footnotesize(student mode)}};
+        \coordinate[below=3mm of web.south] (web port);
+        
+        \node[below=5mm of driver] (phpunit) {PHPunit};
+        
+        \node[left=5mm of phpunit] (spec) {\shortstack{Schema \\ spec.}};
+        
+        \node[right=5mm of phpunit] (reporting) {Reporting};
+        \coordinate[above=5mm of reporting.north] (reporting port);
+        
+        \node[cylinder, shape border rotate=90, below=5mm of phpunit, aspect=0.1] (database) {Database};
+        
+        \path (database.before top) -- (database.after top) coordinate[midway] (dbtop);
+        
+        \node[right=5mm of database] (schema) {\shortstack{Student's \\ schema}};
+        
+        \graph { [edges={draw, arrows={-{Stealth}}}]
+            {(console), (web), (reporting)} -> {(console port), (web port), (reporting port)},
+            {(driver), (spec)} -> (phpunit),
+            (phpunit) -> (dbtop),
+            (schema) -> (database),
+        };
+    \end{tikzpicture}
+    \caption{System architecture.}
+    \label{fig-architecture}
+\end{figure}
+
+There are surprisingly few frameworks for performing unit tests that interact with a database, probably due to the complexities involved. In conventional application unit testing it is relatively simple to create mocked interfaces for testing purposes. With a database, however, we need to create tables, populate them with appropriate test data, verify the state of the database after each test has run, and clean up the database for each new test \cite{Bergmann.S-2017a-PHPUnit}. Cleaning up is particularly crucial, as the order of tests is normally non-deterministic. Tests that change the state of the database may therefore affect the results of later tests in unpredictable ways.
+
+We are only aware of four unit testing frameworks that provide specific support for database unit tests: DbUnit for Java,\footnote{http://dbunit.sourceforge.net/} DbUnit.NET,\footnote{http://dbunit-net.sourceforge.net/} Test::DBUnit for Perl,\footnote{http://search.cpan.org/~adrianwit/Test-DBUnit-0.20/lib/Test/DBUnit.pm} and PHPUnit.\footnote{https://phpunit.de/} We chose to implement the system in PHP, as it enabled us to quickly prototype the system and simplified development of the student-facing web application.
+
+The system can be easily adapted for use with any DBMS supported by PHP's PDO extension.
+
+
+\subsection{The main driver}
+
+The core of the system is the \emph{main driver} component shown in \cref{fig-architecture}. This can execute in either \emph{student mode}, which runs only a subset of the available tests, or in \emph{staff mode}, which runs all available tests. The mode is determined by the client application, as shown in \ref{fig-architecture}. Currently student mode is accessed through a web application, while staff mode is accessed through a console application.
+
+The main driver uses the \textbf{reporting} module to generate test output in either HTML (student mode) or plain text (staff mode).
+
+
+\subsection{Encoding the assignment specification}
+
+The assignment specification is encoded as a collection of subclasses of the PHPUnit TestCase class. Each class specifies the properties of a particular database table. \Cref{fig-test-class} shows a fragment of the class corresponding to the \textsf{Product} table from \cref{fig-ERD}. The methods of this class return various properties of the table as follows:
+
+\begin{description}
+    \item[\texttt{getTableName()}] returns the expected name of the table.
+    \item[\texttt{getColumnList()}] returns an array of column specifications, keyed by expected column name. Each column specification includes a generic data type (text, number, date, or binary), a list of corresponding SQL data types (e.g., \texttt{varchar}, \texttt{decimal}), whether the column permits nulls, and a known legal value for general testing. Where applicable, it may also include minimum and maximum column lengths, number of decimal places, underflow and overflow values, and a list of known legal values. The last two are intended for testing the boundary conditions of integrity constraints.
+    \item[\texttt{getPKColumnList()}] returns the list of columns that comprise the primary key of the table.
+    \item[\texttt{getFKColumnList()}] returns an array of foreign key specifications (where applicable), keyed by the name of the referenced table. Each specification contains the list of columns that comprise that foreign key. 
+\end{description}
+
+\begin{table}
+    \footnotesize
+%     \hrule
+    \begin{verbatim}
+public function getTableName() {
+  return 'PRODUCT';
+}
+
+public function getColumnList() {
+  return array(
+    'PRODUCT_CODE' => array(
+      'generic_type' => 'NUMBER',
+      'sql_type' => array('NUMBER', 'INTEGER'),
+      'min_length' => 8, 'max_length' => 8, 'decimals' => 0,
+      'test_value' => 87654321, 'nullable' => false),
+    'DESCRIPTION' => array( ... ),
+    'STOCK_COUNT' => array(
+      'generic_type' => 'NUMBER',
+      'sql_type' => array('NUMBER', 'INTEGER'),
+      'min_length' => 5, 'max_length' => 6, 'decimals' => 0,
+      'underflow' => -1, 'overflow' => 100000,
+      'legal_values' => array(0, 99999), 'test_value' => 456,
+      'nullable' => false),
+    'RESTOCK_LEVEL' => array( ... ),
+    'MINIMUM_LEVEL' => array( ... ),
+    'LIST_PRICE' => array(
+      'generic_type' => 'NUMBER',
+      'sql_type' => array('NUMBER', 'INTEGER'),
+      'min_length' => 7, 'max_length' => 8, 'decimals' => 2,
+      'underflow' => -0.01, 'overflow' => 100000.00,
+      'legal_values' => array(0, 99999.99), 'test_value' => 123.99,
+      'nullable' =>  false),
+    'ASSEMBLY_MANUAL' => array(
+      'generic_type' => 'BINARY',
+      'sql_type' => array('BLOB'),
+      'test_value'    =>  "NULL",
+      'nullable' => true),
+    'ASSEMBLY_PROGRAM' => array( ... )
+  );
+}
+
+public function getPKColumnList() {
+  return array( 'PRODUCT_CODE' );
+}
+
+public function getFKColumnList() {
+  return array();   // no FKs in this table
+}   \end{verbatim}
+%     \hrule
+    \caption{Fragment of the \textsf{Product} table specification.}
+    \label{fig-test-class}
+\end{table}
 
 
 % ANSI terminal colours for Terminal.app; see https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
@@ -129,6 +242,22 @@ Another motivation for automation was that it can sometimes be difficult for nov
 \definecolor{test red}{rgb}{0.761,0.212,0.129}
 
 \tcbset{boxsep=0pt, boxrule=0pt, arc=0pt, left=0pt, right=0pt, top=0.5pt, bottom=0.5pt}
+
+
+\subsection{Student mode (web application)}
+
+In student mode, a student enters their database login credentials into a web form, enabling the main driver to access their schema directly. A subset of tests corresponding to the minimum requirement is then run, and the output of the tests appears in the web browser. \Cref{fig-student-output} shows an example of the kind of output produced in student mode.
+
+\begin{figure}
+    \includegraphics[width=0.95\columnwidth,keepaspectratio]{images/web_output.png}
+    \caption{Example of student mode output (web app). Grey indicates informative notes, green indicates passed tests, and red indicates failed tests.}
+    \label{fig-student-output}
+\end{figure}
+
+
+\subsection{Staff mode (console application)}
+
+In staff mode, the database login credentials of the teacher doing the grading are specified in the console application's configuration file. The teacher loads the student's submitted SQL code into the DBMS, then runs the console application. The main driver connects to the teacher's schema, and runs all available tests. The output of the tests appears in the terminal window. \Cref{fig-staff-output} shows an example of the kind of output produced in staff mode.
 
 \newlength{\dothskip}
 \setlength{\dothskip}{0.72cm}
@@ -186,102 +315,16 @@ Another motivation for automation was that it can sometimes be difficult for nov
         \tcbox[colback=test red, coltext=test grey]{--- FAILED: 2 of 8 legal values tested were rejected by a CHECK constraint.}
     \end{tabbing}
     \vskip-1ex
-    \caption{Example of console output}
+    \caption{Example of staff mode output (console app).}
+    \label{fig-staff-output}
 \end{figure}
 
-\begin{figure}
-    \includegraphics[width=0.95\columnwidth,keepaspectratio]{images/web_output.png}
-    \caption{Example of web output}
-\end{figure}
+% Main program can be launched from either a console program or a web application. Console application uses a single database user: student's schema loaded into DBMS (assuming error-free), then console app is run. Web application: students supply their DBMS credentials and the system connect directly to their schema, with output appearing in the web browser.
+% Project specification is encoded as a collection of PHP classes, one per table (subclass of PHPunit TestCase class). These classes encode the expected name, a range of possible data types, minimum and maximum lengths, nullability, etc., of the table and its columns. It also includes specification of simple constraints such as minimum and maximum values. Valid and invalid values can also be supplied.
+% Each table also includes two sets of tests to run on the database, one to test the structural requirements of the table (columns, data types, etc.), the other to test the data requirements (constraints). Empty and known-valid fixtures are also included.
 
 
-\begin{table}
-    \footnotesize
-%     \hrule
-    \begin{verbatim}
-public function getTableName()
-{
-    return 'PRODUCT';
-}
 
-public function getColumnList()
-{
-    return array(
-        'PRODUCT_CODE' => array(
-            'generic_type' => 'NUMBER',
-            'sql_type' => array('NUMBER', 'INTEGER'),
-            'min_length' => 8, 'max_length' => 8, 'decimals' => 0,
-            'test_value' => 87654321, 'nullable' => false),
-        'DESCRIPTION' => array( ... ),
-        'STOCK_COUNT' => array(
-            'generic_type' => 'NUMBER',
-            'sql_type' => array('NUMBER', 'INTEGER'),
-            'min_length' => 5, 'max_length' => 6, 'decimals' => 0,
-            'underflow' => -1, 'overflow' => 100000,
-            'legal_values' => array(0, 99999), 'test_value' => 456,
-            'nullable' => false),
-        'RESTOCK_LEVEL' => array( ... ),
-        'MINIMUM_LEVEL' => array( ... ),
-        'LIST_PRICE' => array(
-            'generic_type' => 'NUMBER',
-            'sql_type' => array('NUMBER', 'INTEGER'),
-            'min_length' => 7, 'max_length' => 8, 'decimals' => 2,
-            'underflow' => -0.01, 'overflow' => 100000.00,
-            'legal_values' => array(0, 99999.99), 'test_value' => 123.99,
-            'nullable' =>  false),
-        'ASSEMBLY_MANUAL' => array(
-            'generic_type' => 'BINARY',
-            'sql_type' => array('BLOB'),
-            'test_value'    =>  "NULL",
-            'nullable' => true),
-        'ASSEMBLY_PROGRAM' => array( ... )
-    );
-
-}
-
-public function getPKColumnList()
-{
-    return array( 'PRODUCT_CODE' );
-}
-
-public function getFKColumnList()
-{
-    return array();
-}   \end{verbatim}
-%     \hrule
-    \caption{Example of table specification}
-\end{table}
-
-\begin{figure}
-    \sffamily
-    \begin{tikzpicture}[every node/.style={draw, minimum height=7.5mm, inner sep=1em}]
-        \node (console) {Console app};
-        \coordinate[below=3mm of console.south] (console port);
-        
-        \node[anchor=north west, minimum width=6cm] (driver) at ($(console.south west) - (0,3mm)$) {Main driver};
-        
-        \node[anchor=south east] (web) at ($(driver.north east) + (0,3mm)$) {Web app};
-        \coordinate[below=3mm of web.south] (web port);
-        
-        \node[below=5mm of driver] (phpunit) {PHPunit};
-        
-        \node[left=5mm of phpunit] (spec) {\shortstack{Schema \\ spec.}};
-        
-        \node[cylinder, shape border rotate=90, below=5mm of phpunit, aspect=0.1] (database) {Database};
-        
-        \path (database.before top) -- (database.after top) coordinate[midway] (dbtop);
-        
-        \node[right=5mm of database] (schema) {\shortstack{Student's \\ schema}};
-        
-        \graph { [edges={draw, arrows={-{Stealth}}}]
-            {(console), (web)} -> {(console port), (web port)},
-            {(driver), (spec)} -> (phpunit),
-            (phpunit) -> (dbtop),
-            (schema) -> (database),
-        };
-    \end{tikzpicture}
-    \caption{System architecture}
-\end{figure}
 
 
 
