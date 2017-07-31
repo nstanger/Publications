@@ -107,9 +107,9 @@ Up until 2000, the scenario specifications for these assignments were somewhat l
 
 From 2004, we tightened up the scenario specifications to minimise any ambiguity. The specification was considered ``frozen'', and students were not permitted to make changes without strong justification, and even then only if the changes did not affect the view of the database seen by client programs. The rationale was that other (fictional) developers were independently using the same specification to code end-user applications. Any variation from the specification would therefore break those applications. This approach tested both the student's ability to write SQL DDL, and to interpret and correctly convert a written database specification into a corresponding SQL schema.
 
-This approach seemed effective, but maintaining consistent grading standards across all submissions was difficult, due the large number of distinct gradable elements implied by the specification. This required a complex and highly-detailed rubric to be constructed so that no element was missed, and the grading process took a significant amount of time. In 2012 changing teaching workloads and increased time pressure prompted interest in the possibility of at least semi-automating the grading of this assessment. Due to the more constrained nature of the project specification, automation seemed more feasible than with earlier approaches.
+This approach seemed effective, but maintaining consistent grading standards across all submissions was difficult, due the large number of distinct gradable elements implied by the specification. This required a complex and highly-detailed rubric to be constructed so that no element was missed, and the grading process took a significant amount of time. In 2012 a significant change to the structure of the paper resulting in higher grading workloads and increased time pressure prompted interest in the possibility of at least semi-automating the grading of this assessment. Due to the more constrained nature of the project specification, automation seemed more feasible than with earlier approaches.
 
-Another motivation for automation was that it can sometimes be difficult for novices to know whether they are on the right track when implementing a specification. If a reduced functionality version of the grading tool were available to students, it could also be used to provide feedback on whether they were proceeding correctly. The approach we took was to specify a minimum set of requirements [TODO specify] for the assessment, which were tested by a student-facing web application before submission. If the student satisfied these minimum requirements, they were guaranteed to score 50\%. Marks beyond that minimum would then be assigned using a teacher-facing console application after students submitted their work.
+Another motivation for automation was that it can sometimes be difficult for novices to know whether they are on the right track when implementing a specification. If a reduced functionality version of the grading tool were available to students, it could also be used to provide feedback on whether they were proceeding correctly. The approach we took was to specify a minimum set of requirements for the assessment, which were tested by a student-facing web application before submission. If the student satisfied these minimum requirements, they were guaranteed to score 50\%. Marks beyond that minimum would then be assigned using a teacher-facing console application after students submitted their work. We set the minimum requirement to be that their SQL code should be syntactically correct, and include all tables and columns---with correct names and appropriate data types---as detailed in the specification.
 
 We implemented and tested a prototype of the teacher-facing application in 2012. The student-facing application was rolled out to students in 2013, and the entire system was further enhanced for the 2014 and 2016 offerings. (The system was not used in 2015 due to staff being on research leave.)
 
@@ -154,7 +154,7 @@ The architecture of our system is shown in \cref{fig-architecture}. The core fun
     \label{fig-architecture}
 \end{figure}
 
-There are surprisingly few frameworks for performing unit tests that interact with a database, probably due to the complexities involved. In conventional application unit testing it is relatively simple to create mocked interfaces for testing purposes. With a database, however, we need to create tables, populate them with appropriate test data, verify the state of the database after each test has run, and clean up the database for each new test \cite{Bergmann.S-2017a-PHPUnit}. Cleaning up is particularly crucial, as the order of tests is normally non-deterministic. Tests that change the state of the database may therefore affect the results of later tests in unpredictable ways.
+There are surprisingly few frameworks for performing unit tests that interact with a database, probably due to the complexities involved. In conventional application unit testing it is relatively simple to create mocked interfaces for testing purposes. With a database, however, we need to create tables, populate them with appropriate test data, verify the state of the database after each test has run, and clean up the database for each new test \cite{Bergmann.S-2017a-PHPUnit}. Cleaning up is particularly crucial, as the order of tests is not guaranteed to be deterministic. Tests that change the state of the database may therefore affect the results of later tests in unpredictable ways.
 
 We are only aware of four unit testing frameworks that provide specific support for database unit tests: DbUnit for Java,\footnote{http://dbunit.sourceforge.net/} DbUnit.NET,\footnote{http://dbunit-net.sourceforge.net/} Test::DBUnit for Perl,\footnote{http://search.cpan.org/~adrianwit/Test-DBUnit-0.20/lib/Test/DBUnit.pm} and PHPUnit.\footnote{https://phpunit.de/} We chose to implement the system in PHP, as it enabled us to quickly prototype the system and simplified development of the student-facing web application.
 
@@ -174,10 +174,12 @@ The assignment specification is encoded as a collection of subclasses of the PHP
 
 \begin{description}
     \item[\texttt{getTableName()}] returns the expected name of the table.
-    \item[\texttt{getColumnList()}] returns an array of column specifications, keyed by expected column name. Each column specification includes a generic data type (text, number, date, or binary), a list of corresponding SQL data types (e.g., \texttt{varchar}, \texttt{decimal}), whether the column permits nulls, and a known legal value for general testing. Where applicable, it may also include minimum and maximum column lengths, number of decimal places, underflow and overflow values, and a list of known legal values. The last two are intended for testing the boundary conditions of integrity constraints.
+    \item[\texttt{getColumnList()}] returns an array of column specifications, keyed by expected column name. Each column specification includes a generic data type (text, number, date, or binary), a list of corresponding SQL data types (e.g., \texttt{varchar}, \texttt{decimal}), whether the column permits nulls, and a known legal value for general testing. Where applicable, it may also include minimum and maximum column lengths, and the number of decimal places. Underflow and overflow values, and lists of known legal and illegal values can be used for test the boundary conditions of integrity constraints.
     \item[\texttt{getPKColumnList()}] returns the list of columns that comprise the primary key of the table.
     \item[\texttt{getFKColumnList()}] returns an array of foreign key specifications (where applicable), keyed by the name of the referenced table. Each specification contains the list of columns that comprise that foreign key. 
 \end{description}
+
+% Teacher has complete control over what tests are run, so quite feasible to add custom properties beyond those already specified.
 
 \begin{table}
     \footnotesize
@@ -233,6 +235,13 @@ public function getFKColumnList() {
 \end{table}
 
 
+\subsection{Specifying tests}
+
+Each table specification also requires two separate sets of tests to run on the database. The first set of tests verifies the structural elements of the table (columns, data types, etc.), thus verifying the submission meets the minimum requirement. An empty data fixture is required to support this set of tests.
+
+The second set of tests verifies the behavioural elements of the table, i.e., it's constraints. The only integrity constraints that are tested directly are nullability, and primary and foreign keys. The behaviour of all other constraints is tested by specifying appropriate lists of legal and illegal values, which is consistent with standard unit testing techniques. A known-valid data fixture is required to support this set of tests.
+
+
 % ANSI terminal colours for Terminal.app; see https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
 % grey 203, 204, 205
 % green 37 188 36
@@ -246,7 +255,7 @@ public function getFKColumnList() {
 
 \subsection{Student mode (web application)}
 
-In student mode, a student enters their database login credentials into a web form, enabling the main driver to access their schema directly. A subset of tests corresponding to the minimum requirement is then run, and the output of the tests appears in the web browser. \Cref{fig-student-output} shows an example of the kind of output produced in student mode.
+After creating tables under their personal database acccount, a student enters their database login credentials into a web form, which enables the main driver to access their schema directly. Only the structural tests are run, and their output appears in the web browser. \Cref{fig-student-output} shows an example of the kind of output produced in student mode.
 
 \begin{figure}
     \includegraphics[width=0.95\columnwidth,keepaspectratio]{images/web_output.png}
@@ -257,7 +266,7 @@ In student mode, a student enters their database login credentials into a web fo
 
 \subsection{Staff mode (console application)}
 
-In staff mode, the database login credentials of the teacher doing the grading are specified in the console application's configuration file. The teacher loads the student's submitted SQL code into the DBMS, then runs the console application. The main driver connects to the teacher's schema, and runs all available tests. The output of the tests appears in the terminal window. \Cref{fig-staff-output} shows an example of the kind of output produced in staff mode.
+In staff mode, the database login credentials of the teacher doing the grading are specified in the console application's configuration file. The teacher loads the student's submitted SQL code into the DBMS, and then runs the console application (assuming, of course, that there are no syntax errors in the code). The main driver connects to the teacher's schema, and runs all available tests. The output of the tests appears in the terminal window. \Cref{fig-staff-output} shows an example of the kind of output produced in staff mode.
 
 \newlength{\dothskip}
 \setlength{\dothskip}{0.72cm}
@@ -319,17 +328,19 @@ In staff mode, the database login credentials of the teacher doing the grading a
     \label{fig-staff-output}
 \end{figure}
 
-% Main program can be launched from either a console program or a web application. Console application uses a single database user: student's schema loaded into DBMS (assuming error-free), then console app is run. Web application: students supply their DBMS credentials and the system connect directly to their schema, with output appearing in the web browser.
-% Project specification is encoded as a collection of PHP classes, one per table (subclass of PHPunit TestCase class). These classes encode the expected name, a range of possible data types, minimum and maximum lengths, nullability, etc., of the table and its columns. It also includes specification of simple constraints such as minimum and maximum values. Valid and invalid values can also be supplied.
-% Each table also includes two sets of tests to run on the database, one to test the structural requirements of the table (columns, data types, etc.), the other to test the data requirements (constraints). Empty and known-valid fixtures are also included.
-
-
-
-
-
 
 \section{Evaluation}
 \label{sec-evaluation}
+
+Unfortunately, the system was implemented more as a practical solution to a perceived problem, without consideration for any formal evaluation. We therefore did not carry out any formal evaluations with students.
+
+% We have student results data from before and after the system was implemented, plus remember that the system wasn't used at all in 2015, and the student system wasn't available in 2016 (only the teacher mode was used). 2013 is also somewhat different, in that the proejct specification wasn't stated as being frozen that year.
+% Anecdotal evidence from students?
+
+% known issues:
+% There's currently no control over the messages generated by PHPUnit assertions. You can put a meaningful message up front, but PHPUnit will still always generate something like ``Failed asserting that 0 matches expected 1.'' This can be particularly misleading when you, e.g., don't specify a precision for a numeric column, and the DBMS uses the default precision (e.g., Oracle's NUMBER defaults to 38 significant digits).
+% A partial schema causes a large number of errors, as tables don't exist. This could be alleviated by more careful exception handling?
+% Students in the first iteration tended to misuse the web application as a ``schema compiler'', fixing only one issue before re-submitting, rather than attempting to as many of the reported problems as possible. The system wasn't written to handle concurrent requests (as it wasn't expected that the request rate would be that high), leading to waits and timeouts. A workaround was to enable logging, and warn students who were abusing the system.
 
 \section{Conclusions \& future work}
 \label{sec-conclusion}
