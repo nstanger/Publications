@@ -71,7 +71,7 @@ There have been many prior efforts to build learning systems for SQL. However, t
 
 \citeauthor{Dekeyser.S-2007a-Computer}'s \emph{SQLify} \cite{Dekeyser.S-2007a-Computer} was another online SQL learning system that incorporated semantic feedback and automatic assessment. SQLify evaluated each query on an eight-level scale that covered query syntax, output schema, and query semantics. Instructors could use this information to award an overall grade. Again, SQLify supported only the \texttt{SELECT} statement.
 
-\citeauthor{Brusilovsky.P-2010a-Learning}'s \emph{SQL Exploratorium} \cite{Brusilovsky.P-2010a-Learning} took an interesting approach to generating problems, using parameterised query templates to generate the questions given to students. Again, the SQL Exploratorium supported only the \texttt{SELECT} statement.
+\citeauthor{Brusilovsky.P-2010a-Learning}'s \emph{SQL Exploratorium} \cite{Brusilovsky.P-2010a-Learning} took an interesting approach to generating problems, using parameterized query templates to generate the questions given to students. Again, the SQL Exploratorium supported only the \texttt{SELECT} statement.
 
 \citeauthor{Kleiner.C-2013a-Automated}'s \emph{aSQLg} \cite{Kleiner.C-2013a-Automated} was an automated assessment tool that provided feedback to students. This enabled students to improve their learning by making further submissions after incorporating this feedback. The aSQLg system checked queries for syntax, efficiency (cost), result correctness, and statement style. Again, aSQLg supported only the \texttt{SELECT} statement.
 
@@ -91,34 +91,41 @@ Only a couple of the systems discussed in this section [which?] have considered 
 \section{Motivation}
 \label{sec-motivation}
 
-Since 1989, our department has offered some form of introductory database paper, typically one semester during the second year of study.\footnote{New Zealand Bachelor's degrees comprise three years of study.} These papers all included coverage of core topics such as the relational model, relational algebra, data integrity, SQL (DDL and DML), and other miscellaneous aspects such as transactions, concurrency control, and security. Assessment of SQL skills was typically carried out using a mixture of assignments and tests.
+Since 1989, our department has offered a mandatory database concepts paper of some form, typically one semester during the second year\footnote{New Zealand Bachelor's degrees normally comprise three years of study.} of study, building on a brief introduction to basic data management concepts in the first year. Typical of papers of this nature, it covered core topics such as the relational model, relational algebra, data integrity, SQL (DDL and DML), and a varying mixture of other database topics such as transactions, concurrency control, triggers, and security. Assessment of SQL skills was typically carried out using a mixture of assignments and tests.
 
-From 2001 to 2003, we assessed students' SQL DDL skills in an online practical test under strict examination conditions. Students were given a fictional scenario specification, and had 100 minutes in which to modify a provided schema template with additional tables, constraints, etc. The test was generally easier to grade than a more ``realistic'' assignment, as the scenario specification tended to be more tightly specified and thus less open to interpretation. However, the test experience was quite stressful to students due to the limited timeframe and limited access to online references. We did not attempt to automate the grading of these tests.
+From 2001 to 2003, we assessed students' SQL DDL skills with an in-lab practical examination. Students were given a fictional scenario specification, and had 100 minutes in which to modify a provided schema template with additional tables, constraints, etc. The test was generally easier to grade than a more ``realistic'' practical assignment, as the scenario specification tended to be quite tightly specified and thus less open to (mis)interpretation. However, the test experience was quite stressful to students due to the limited timeframe and limited access to online references. We did not attempt to automate the grading of these tests.
 
-The most common approach we used to assess SQL DDL skills was a practical assignment, where students had a few weeks in which to implement a database schema based on a specification of a fictional scenario. The scenario posed that the student was a database developer involved in a larger project, and that the specification was the output of the requirements analysis phase. An entity-relationship diagram (ERD) of a typical scenario is shown in \cref{fig-ERD}.
+The most common approach we have used to assess students' SQL DDL skills was with a practical assignment, where students had 3--4 weeks in which to implement a database schema based on a fictional scenario specification. The scenario posed that the student was a database developer involved in a larger project, and that the specification was the output of the requirements analysis phase. An entity-relationship diagram (ERD) of a typical scenario that we used (known as the ``BDL'' scenario) is shown in \cref{fig-ERD}.
+ 
  
 \begin{figure}[hb]
     \centering
     \includegraphics[width=0.85\columnwidth, keepaspectratio]{images/BDL_ERD.pdf} 
-    \caption{ERD of typical database scenario (``BDL'') used in assessing SQL DDL skills (Information Engineering notation).}
+    \caption{ERD of the ``BDL'' scenario used to assess SQL DDL skills (Information Engineering notation).}
     \label{fig-ERD}
 \end{figure}
 
-Up until 2000, the scenario specifications for these assignments were somewhat loosely defined and often contained areas that were under-specified or ambiguous. This led to significant variation across student submissions, due to differing interpretations of the under-specified elements. This was problematic to automate when students chose different database structures, or different names for tables and columns, than what we expected. We therefore did not make any significant attempt to automate grading under this approach.
 
-From 2004, we tightened up the scenario specifications to minimise any ambiguity. The specification was considered ``frozen'', and students were not permitted to make changes without strong justification, and even then only if the changes did not affect the view of the database seen by client programs. The rationale was that other (fictional) developers were independently using the same specification to code end-user applications. Any variation from the specification would therefore break those applications. This approach tested both the student's ability to write SQL DDL, and to interpret and correctly convert a written database specification into a corresponding SQL schema.
+Prior to 2001, the specifications for the scenarios used in this assignment were deliberately somewhat loosely defined and often contained areas that were under-specified or ambiguous. At the time we also had some data modeling content in the paper, so this approach enabled students to explore the different ways that a conceptual model could be converted into an implementation. This of course led to variation across student submissions, due to differing interpretations of the under-specified elements. Automation of grading was problematic, especially when students chose different database structures, or different names for tables and columns, than what we expected. We therefore did not make any significant attempt to automate grading under this approach.
 
-This approach seemed effective, but maintaining consistent grading standards across all submissions was difficult, due the large number of distinct gradable elements implied by the specification. This required a complex and highly-detailed rubric to be constructed so that no element was missed, and the grading process took a significant amount of time. In 2012 a significant change to the structure of the paper resulting in higher grading workloads and increased time pressure prompted interest in the possibility of at least semi-automating the grading of this assessment. Due to the more constrained nature of the project specification, automation seemed more feasible than with earlier approaches.
+By 2004 the data modeling content was being migrated into other papers, so we began to tighten up the scenario specifications to reduce ambiguity. In 2013 we took the step of ``freezing'' the specification, i.e., students were not permitted to make arbitrary changes to the specification without strong justification, and even then only if the changes did not impact how client programs interacted with the database. For example, if a column needed to be restricted to a discrete set of values, they could choose to go beyond the specification and enforce this requirement using a separate lookup table, as long as this did not change the structure of the original table.
 
-Another motivation for automation was that it can sometimes be difficult for novices to know whether they are on the right track when implementing a specification. If a reduced functionality version of the grading tool were available to students, it could also be used to provide feedback on whether they were proceeding correctly. The approach we took was to specify a minimum set of requirements for the assessment, which were tested by a student-facing web application before submission. If the student satisfied these minimum requirements, they were guaranteed to score 50\%. Marks beyond that minimum would then be assigned using a teacher-facing console application after students submitted their work. We set the minimum requirement to be that their SQL code should be syntactically correct, and include all tables and columns---with correct names and appropriate data types---as detailed in the specification.
+The in-scenario rationale for freezing the specification was that other developers were independently using the same specification to code end-user applications. Any significant variation from the specification would therefore break those applications. This approach tested not only the student's ability to write SQL DDL, but also their ability to correctly interpret and convert a natural language database specification into a corresponding SQL schema.
 
-We implemented and tested a prototype of the teacher-facing application in 2012. The student-facing application was rolled out to students in 2013, and the entire system was further enhanced for the 2014 and 2016 offerings. (The system was not used in 2015 due to staff being on research leave.)
+This approach seemed effective, but maintaining consistent grading standards across all submissions was difficult, due the often large number of distinct gradable elements implied by the specification. This required a complex and highly-detailed rubric to be constructed so that no element was missed, and the grading process consequently took a significant amount of time. In 2012 a significant change to the structure of the paper resulted in higher grading workloads and increased time pressure, prompting interest in the possibility of at least semi-automating the grading of this assignment. This was now more feasible than in earlier years due to the tightly constrained nature of the project specification.
+
+Another motivation for automation was that it can sometimes be difficult for novices to know whether they are on the right track while implementing a specification. If a limited version of the grading tool were available to students, it could be used to provide feedback on their progress.
+
+We decided to define a minimum set of requirements for the assignment: students' SQL code should be syntactically correct, and it should include all tables and columns---with correct names and appropriate data types---as detailed in the specification. If a student satisfied these minimum requirements, they were guaranteed to score 50\%. They could check whether their schema met the requirements prior to the deadline by submitting their schema to a web application we developed. That way they (and we) could be sure that at least the basic structure of their schema was correct. After the deadline, teaching staff used a console application to check for correct implementation of other aspects of the schema such as integrity constraints.
+
+We implemented and trialed a prototype of the staff-facing application in 2012, and rolled out the student-facing application in 2013.
 
 
 \section{System design}
 \label{sec-design}
 
-The architecture of our system is shown in \cref{fig-architecture}. The core function of our system is to check whether a student has adhered to the assignment specification, by automatically comparing their schema submission against a machine-readable version of the specification. This is essentially a unit testing approach, so we used a unit testing framework (PHPUnit) to implement this core functionality.
+The architecture of our system is shown in \cref{fig-architecture}. Its core function is to check whether a student has conformed to the assignment specification, by automatically comparing their schema submission against a machine-readable version of the specification. This is essentially a unit testing approach, so we decided to build the system on top of an existing unit testing framework.
+
 
 \begin{figure}
     \sffamily
@@ -133,7 +140,7 @@ The architecture of our system is shown in \cref{fig-architecture}. The core fun
         
         \node[below=5mm of driver] (phpunit) {PHPunit};
         
-        \node[left=5mm of phpunit] (spec) {\shortstack{Schema \\ spec.}};
+        \node[left=5mm of phpunit] (spec) {\shortstack{Assign. \\ spec.}};
         
         \node[right=5mm of phpunit] (reporting) {Reporting};
         \coordinate[above=5mm of reporting.north] (reporting port);
@@ -155,36 +162,28 @@ The architecture of our system is shown in \cref{fig-architecture}. The core fun
     \label{fig-architecture}
 \end{figure}
 
+
 There are surprisingly few frameworks for performing unit tests that interact with a database, probably due to the complexities involved. In conventional application unit testing it is relatively simple to create mocked interfaces for testing purposes. With a database, however, we need to create tables, populate them with appropriate test data, verify the state of the database after each test has run, and clean up the database for each new test \cite{Bergmann.S-2017a-PHPUnit}. Cleaning up is particularly crucial, as the order of tests is not guaranteed to be deterministic. Tests that change the state of the database may therefore affect the results of later tests in unpredictable ways.
 
-We are only aware of four unit testing frameworks that provide specific support for database unit tests: DbUnit for Java,\footnote{http://dbunit.sourceforge.net/} DbUnit.NET,\footnote{http://dbunit-net.sourceforge.net/} Test::DBUnit for Perl,\footnote{http://search.cpan.org/~adrianwit/Test-DBUnit-0.20/lib/Test/DBUnit.pm} and PHPUnit.\footnote{https://phpunit.de/} We chose to implement the system in PHP, as it enabled us to quickly prototype the system and simplified development of the student-facing web application.
+We are only aware of four unit testing frameworks that provide specific support for database unit tests: DbUnit for Java,\footnote{http://dbunit.sourceforge.net/} DbUnit.NET,\footnote{http://dbunit-net.sourceforge.net/} Test::DBUnit for Perl,\footnote{http://search.cpan.org/~adrianwit/Test-DBUnit-0.20/lib/Test/DBUnit.pm} and PHPUnit.\footnote{https://phpunit.de/} We chose to implement the system in PHP, as it enabled us to quickly prototype the system and simplified development of the student-facing web application. A similar approach could be taken with any of the other three frameworks, however.
 
 The system can be easily adapted for use with any DBMS supported by PHP's PDO extension.
 
+The core of the system is the \textsf{Main driver} component shown in \cref{fig-architecture}. This can execute in either \emph{student mode}, which runs only a subset of the available tests, or in \emph{staff mode}, which runs all available tests (the nature of these tests will be discussed shortly). The mode is determined by the client application, as shown in \ref{fig-architecture}. Currently student mode is accessed through a web application, while staff mode is accessed through a console application. The main driver uses the \textsf{Reporting} module to generate test output in either HTML (student mode) or plain text (staff mode).
 
-\subsection{The main driver}
-
-The core of the system is the \emph{main driver} component shown in \cref{fig-architecture}. This can execute in either \emph{student mode}, which runs only a subset of the available tests, or in \emph{staff mode}, which runs all available tests. The mode is determined by the client application, as shown in \ref{fig-architecture}. Currently student mode is accessed through a web application, while staff mode is accessed through a console application.
-
-The main driver uses the \textbf{reporting} module to generate test output in either HTML (student mode) or plain text (staff mode).
-
-
-\subsection{Encoding the assignment specification}
-
-The assignment specification is encoded as a collection of subclasses of the PHPUnit TestCase class. Each class specifies the properties of a particular database table. \Cref{fig-test-class} shows a fragment of the class corresponding to the \textsf{Product} table from \cref{fig-ERD}. The methods of this class return various properties of the table as follows:
+The assignment specification (\textsf{Assign.\ spec.} in \cref{fig-architecture}) is encoded as a collection of subclasses of PHPUnit's \texttt{TestCase} class. Each class specifies the properties of one database table. \Cref{fig-test-class} shows a fragment of the class corresponding to the \textsf{Product} table in \cref{fig-ERD}. The methods of this class return various properties of the table:
 
 \begin{description}
     \item[\texttt{getTableName()}] returns the expected name of the table.
-    \item[\texttt{getColumnList()}] returns an array of column specifications, keyed by expected column name. Each column specification includes a generic data type (text, number, date, or binary), a list of corresponding SQL data types (e.g., \texttt{varchar}, \texttt{decimal}), whether the column permits nulls, and a known legal value for general testing. Where applicable, it may also include minimum and maximum column lengths, and the number of decimal places. Underflow and overflow values, and lists of known legal and illegal values can be used for test the boundary conditions of integrity constraints.
-    \item[\texttt{getPKColumnList()}] returns the list of columns that comprise the primary key of the table.
-    \item[\texttt{getFKColumnList()}] returns an array of foreign key specifications (where applicable), keyed by the name of the referenced table. Each specification contains the list of columns that comprise that foreign key. 
+    \item[\texttt{getColumnList()}] returns an array of column specifications, keyed by expected column name. Each column specification includes a generic data type (text, number, date, or binary), a list of corresponding SQL data types (e.g., \texttt{VARCHAR}, \texttt{DECIMAL}), whether the column permits nulls, and a known legal value for general testing. Where applicable, it may include minimum and maximum column lengths, and the number of decimal places. Underflow and overflow values, and lists of known legal and illegal values can also be used to test the boundary conditions of integrity constraints.
+    \item[\texttt{getPKColumnList()}] returns the list of column names that comprise the primary key of the table.
+    \item[\texttt{getFKColumnList()}] returns an array of foreign key specifications (where applicable), keyed by the name of the referenced table. Each specification contains the list of column names that comprise that foreign key. 
 \end{description}
 
-% Teacher has complete control over what tests are run, so quite feasible to add custom properties beyond those already specified.
 
 \begin{table}
     \footnotesize
-%     \hrule
+    \hrule
     \begin{verbatim}
 public function getTableName() {
   return 'PRODUCT';
@@ -230,17 +229,19 @@ public function getPKColumnList() {
 public function getFKColumnList() {
   return array();   // no FKs in this table
 }   \end{verbatim}
-%     \hrule
+    \vskip2pt\hrule\vskip2pt
     \caption{Fragment of the \textsf{Product} table specification.}
     \label{fig-test-class}
 \end{table}
 
 
-\subsection{Specifying tests}
+Each table specification also requires the definition of two distinct sets of tests to be run on the database. The first set verifies the structural elements of the table (columns, data types, etc.), thus verifying that a schema meets the minimum requirements of the assignment. When in student mode, only this set of tests is run. An empty data fixture (specified using an XML document) is also required to support this set of tests.
 
-Each table specification also requires two separate sets of tests to run on the database. The first set of tests verifies the structural elements of the table (columns, data types, etc.), thus verifying the submission meets the minimum requirement. An empty data fixture is required to support this set of tests.
+The second set of tests verifies the behavioural elements of the table, i.e., it's constraints. The only integrity constraints that are directly tested are nullability (\texttt{NOT NULL}), and primary and foreign keys. The behaviour of all other constraints is tested by specifying appropriate lists of legal and illegal values, consistent with typical unit testing practice. When in staff mode, both this set of tests and the set of structural tests are run. A known-valid data fixture is also required to support this set of tests.
 
-The second set of tests verifies the behavioural elements of the table, i.e., it's constraints. The only integrity constraints that are tested directly are nullability, and primary and foreign keys. The behaviour of all other constraints is tested by specifying appropriate lists of legal and illegal values, which is consistent with standard unit testing techniques. A known-valid data fixture is required to support this set of tests.
+The way that the system runs the tests is somewhat unusual. In typical unit testing, the tests are essentially standalone code units that are automatically executed in an indeterminate order by the unit testing framework. The framework handles dependencies and collation of test results internally, reporting only the final results back to the client. Our system effectively inverts (or perhaps subverts) this approach. The main driver explicitly creates test suites itself and executes them directly, listening for the results of each test and collating them. This is because we need to be able to control the order in which tests are executed. If the structural tests fail, there is little point in running the behavioural tests, as they will only generate a stream of errors. Similarly, if a column is missing, there is no point in running the data type and length tests.
+
+It is quite feasible to add table properties and tests beyond those already mentioned, as the coding of the specification is entirely under the teacher's control and not constrained in any way by the system. All the teacher needs to do is add the custom properties to the table specification, and add tests that use those properties.
 
 
 % ANSI terminal colours for Terminal.app; see https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
@@ -254,9 +255,8 @@ The second set of tests verifies the behavioural elements of the table, i.e., it
 \tcbset{boxsep=0pt, boxrule=0pt, arc=0pt, left=0pt, right=0pt, top=0.5pt, bottom=0.5pt}
 
 
-\subsection{Student mode (web application)}
+Students can check their schema (\textsf{Student's schema} in \cref{fig-architecture}) by loading it under their personal database acccount (thus creating the tables), then entering their database login credentials into a web application (\textsf{Web app} in \cref{fig-architecture}). This calls the main driver in student mode and accesses the student's schema directly. Only the structural tests are run, and the output is displayed in the web browser. \Cref{fig-student-output} shows an example of the output produced by student mode.
 
-After creating tables under their personal database acccount, a student enters their database login credentials into a web form, which enables the main driver to access their schema directly. Only the structural tests are run, and their output appears in the web browser. \Cref{fig-student-output} shows an example of the kind of output produced in student mode.
 
 \begin{figure}
     \includegraphics[width=0.95\columnwidth,keepaspectratio]{images/web_output.png}
@@ -265,9 +265,11 @@ After creating tables under their personal database acccount, a student enters t
 \end{figure}
 
 
-\subsection{Staff mode (console application)}
 
-In staff mode, the database login credentials of the teacher doing the grading are specified in the console application's configuration file. The teacher loads the student's submitted SQL code into the DBMS, and then runs the console application (assuming, of course, that there are no syntax errors in the code). The main driver connects to the teacher's schema, and runs all available tests. The output of the tests appears in the terminal window. \Cref{fig-staff-output} shows an example of the kind of output produced in staff mode.
+A teacher can check further aspects of a students schema using staff mode (\textsf{Console app} in \cref{fig-architecture}). To ensure a clean testing environment, the teacher does not connect directly to the student's database account (the student may continue using it for other coursework, for example). Instead, the teacher uses the student's submitted code to create a copy of the schema under a separate account used only for grading purposes. The login credentials for this account are specified in the console application's configuration file.
+
+Assuming that there are no syntax errors in the student's code,\footnote{If there are, then the student clearly has not met the minimum requirements!} the teacher then runs the console application, which calls the main driver in staff mode. The main driver connects to the teacher's schema, runs all the available tests, and displays the output in the terminal window. \Cref{fig-staff-output} shows an example of the output produced by staff mode.
+
 
 \newlength{\dothskip}
 \setlength{\dothskip}{0.72cm}
@@ -333,14 +335,15 @@ In staff mode, the database login credentials of the teacher doing the grading a
 \section{Evaluation}
 \label{sec-evaluation}
 
-Unfortunately, the system was implemented more as a practical solution to a perceived problem, without consideration for any formal evaluation. We therefore did not carry out any formal evaluations with students.
+Unfortunately, the system was implemented as a practical solution to a perceived problem, rather than with any formal evaluation in mind. We therefore did not carry out any user evaluations with students that used the system.
 
-However, we did have detailed records of student performance on the relevant assignment, which was of the nature discussed in \cref{sec-motivation}. The assignment was counted for 15\% of the overall grade in 2009 and 2010, and 10\% in the years following.  We extracted data for the period 2009--2016, which encompassed several different permutations of scenario and system components used, as summarised in \cref{tab-data}.
+However, we did have accees to data regarding student performance on the relevant assignment, which was of the nature discussed in \cref{sec-motivation}. We collated data for the period 2009--2016, which encompassed several different permutations of scenario and available system modes, as summarized in \cref{tab-data}. The assignment counted for 15\% of the total grade in 2009 and 2010, and 10\% in subsequent years.
+
 
 \begin{table}
     \begin{tabular}{rrrll}
         \toprule
-                        &   \textbf{Cohort} &   \textbf{Mean}   &                       &   \textbf{Components}  \\
+                        &   \textbf{Class}  &   \textbf{Mean}   &                       &   \textbf{Modes}  \\
         \textbf{Year}   &   \textbf{size}   &   \textbf{(\%)}   &   \textbf{Scenario}   &   \textbf{used}\\
         \midrule
         2009    &   46  &   77.5    &   ``postgrad''        &   --  \\
@@ -355,33 +358,41 @@ However, we did have detailed records of student performance on the relevant ass
         2016    &   75  &   71.0    &   ``BDL''             &   staff   \\
         \bottomrule
     \end{tabular}
-    \caption{Characteristics of student grade data.}
+    \caption{Historical characteristics of the database implementation assignment, 2009--2016.}
     \label{tab-data}
 \end{table}
 
-The two horizontal rules in \cref{tab-data} indicate two major transitions during this period. The first marks a significant reorgansation of the paper's curriculum (and a switch from first to second semester\footnote{Semesters at the University of Otago run from March to June and July to October.}) in 2012, the year the prototype of our system was developed. The second marks a shift from second semester back to first semester in 2014. Note that the system was not used at all in 2015 due to different staff teaching the paper. The student component was not used in 2016 due to technical issues. This natural experiment provides us with some interesting points for comparison.
 
-Grades for the assignment drifted slowly downwards from 2009 to 2012. This changed dramatically in 2013, however, the year that the student component of our system was introduced. The grades are not normally distributed (they typically have negative skew), so we performed a Wilcoxon signed-rank test to check whether this difference in mean was statistically significant. The difference proved to be highly significant (\(p \approx 10^{-9}\)). The 2013 grades were also significantly higher than those of 2010 (\(p \approx 0.0002\)) and 2011 (\(p \approx 10^{-6}\)), but not significantly higher than 2009. The mean dropped significantly again in 2014, the second year that the system was used (\(p \approx 0.0012\)), and again in 2015 (\(p \approx 0.0005\)), when the system was not used at all. There was no significant change from 2015 to 2016.
+The two horizontal rules in \cref{tab-data} indicate two major transitions during this period. The first marks a significant reorganization of the paper's curriculum (and also a switch from first to second semester\footnote{Semesters at the University of Otago run from March to June and July to October.}) in 2012, the year we developed the prototype of our system. The second marks a shift from second semester back to first semester in 2014. Note that the system was not used at all in 2015 due to different staff teaching the paper. Student mode was not made available in 2016 due to technical issues. These differences provide us with a natural experiment with some interesting points for comparison.
 
-More interesting, if we compare the performance between the years that the student component was available (2013--2014, mean 81.7\%) and the years it was not (2009--2012, 2015, 2016, mean 71.6\%), there is again a highly statistically significant difference in the mean (\(p \approx 10^{-8}\)). This suggests that the student component may have had a positive effect on students' ability to complete the assignment more effectively.
+The mean grade for the assignment drifted slowly downwards from 2009 to 2012. This changed dramatically in 2013, however, the year we rolled out student mode. The grades are not normally distributed (they typically have negative skew), so we performed a Wilcoxon signed-rank test. This showed that the increase in the mean was highly statistically significant (\(p \approx 10^{-9}\)). The 2013 mean was also significantly higher than both 2010 (\(p \approx 0.0002\)) and 2011 (\(p \approx 10^{-6}\)), but not significantly higher than 2009. The mean decreased significantly again in 2014 (\(p \approx 0.0012\)), the second year that the system was used, and even more dramatically in 2015 (\(p \approx 0.0005\)), when the system was not used at all. There was no significant change from 2015 to 2016.
 
-\subsection{Potential confounding factors}
+Even more interesting, if we compare the performance between the years that student mode was available (2013--2014, mean 81.7\%) and the years it was not (2009--2012 and 2015--2016, mean 71.6\%), there is again a highly statistically significant decrease in the mean (\(p \approx 10^{-8}\)). This strongly suggests that the introduction of student mode may have had a positive impact on students' ability to complete the assignment more effectively.
 
-2013 was also the first year that the assignment specification was enforced as being ``frozen''. It could be argued that this improved grades due to students having less flexibility, and thus less opportunity for misinterpretation, than in previous years. However, the assignment specification was also ``frozen'' from 2014--2016, and there is notable variation in the grades achieved over this period. It therefore seems unlikely that this is a factor in improved assignment performance.
+There are some potential confounding factors to consider, however. First, not only was 2013 the first year that student mode was available, it was also the first year that the assignment specification was ``frozen'' (as discussed in \cref{sec-motivation}). It could be argued that this improved grades due to students having less flexibility, and thus less opportunity for misinterpretation, than in previous years. However, the assignment specification was also ``frozen'' from 2014--2016, and there is consderable variation in the grades achieved over this period, especially in 2015. It therefore seems unlikely that this affected assignment performance.
 
-Results for first semester offerings of the paper (2009--2011 and 2014--2016, mean 72.9\%) were significantly lower (\(p \approx 0.014\)) than those for second semester offerings (2012--2013, mean 76.9\%). However, since the paper was only offered twice in the second semester over this period, this seems unlikely to be cause the difference. The higher results are more likely due to the large jump in grades in 2013, which had the highest grades over the entire period.
+Second, the switch to second semester in 2012--2013 could have negatively impacted students' performance by increasing the length of time between their exposure to basic data management concepts in first year, and their entry into the second year database paper. In effect, they had longer to forget relevant material they learned in first year. If so, we could reasonably expect the grades in second semester offerings of the paper to be lower. However, grades for first semester offerings of the paper (2009--2011 and 2014--2016, mean 72.9\%) were significantly \emph{lower} (\(p \approx 0.014\)) than those for second semester offerings (2012--2013, mean 76.9\%). This should not be surprising, given that 2013 (second semester) had the highest grades of the entire period. This effectively rules out semester changes as a factor in the performance differences.
+
+Third, perhaps the years with higher grades used less complex scenarios. To test this, we computed a collection of different database complexity metrics \cite{Jamil.B-2010a-SMARtS,Piattini.M-2001a-Table,Pavlic.M-2008a-Database,Calero.C-2001a-Database,Sinha.B-2014a-Estimation} for each of the four scenarios used across the period. These showed that the ``BDL'', ``used cars'', and ``student records'' scenarios were all of similar complexity, while the ``postgrad'' scenario was much less complex (about \(\frac{2}{3}\)). It therefore seems unlikely that scenario complexity is a factor in the performance differences. It is also interesting to note that the ``used cars'' scenario was used in both 2014 and 2015, and yet the 2015 grades were significantly \emph{lower} than those for 2014. The only clear difference here is that our system was not used in 2015.
+
+Fourth, class size could be a factor. We might plausibly expect a smaller class to have a more collegial atmosphere that promotes mutual collaboration amongst students. However, if we look at the sizes of the classes in \cref{tab-data}, we can see no discernable pattern between class size and performance. Indeed, both the best (2013) and worst (2012, 2015) performances came from classes with similar sizes (75, 77, and 71, respectively).
+
+Finally, perhaps the different weightings of the assignment (15\% in 2009--2010 vs.\ 10\% in 2011--2016) affected student motivation. It could be argued that the higher weighting in 2009--2010 provided a greater incentive for students to work more, as the potential reward was greater. If so, we should expect better performance in 2009--2010. Indeed, we do find this: the mean for 2009--2010 is 75.1\%, while that for 2011--2016 is 73.9\%, a statistically significant decrease (\(p \approx 0.034\)). However, this may be misleading, as the mean of the 2011--2016 grades is dragged down considerably by the particularly poor performances in 2012 and 2015. If we exclude these, there is no significant difference between the 10\% and 15\% weightings. This suggests that the weighting of the assignment is not a major factor in grade performance.
 
 % Anecdotal evidence from students?
+% Didn't substantially reduce grading time, but did improve consistency, as there was much less opportunity to miss or forget something.
+
+
+
+\section{Conclusions \& future work}
+\label{sec-conclusion}
 
 % known issues:
 % There's currently no control over the messages generated by PHPUnit assertions. You can put a meaningful message up front, but PHPUnit will still always generate something like ``Failed asserting that 0 matches expected 1.'' This can be particularly misleading when you, e.g., don't specify a precision for a numeric column, and the DBMS uses the default precision (e.g., Oracle's NUMBER defaults to 38 significant digits).
 % A partial schema causes a large number of errors, as tables don't exist. This could be alleviated by more careful exception handling?
 % Students in the first iteration tended to misuse the web application as a ``schema compiler'', fixing only one issue before re-submitting, rather than attempting to fix as many of the reported problems as possible. The system wasn't written to handle concurrent requests (as it wasn't expected that the request rate would be that high), leading to waits and timeouts. A workaround was to enable logging, and warn students who were abusing the system.
-
-Another possibility is that grade performance is related to the complexity of the scenario. We computed a few different database complexity metrics \cite{Jamil.B-2010a-SMARtS,Piattini.M-2001a-Table,Pavlic.M-2008a-Database,Calero.C-2001a-Database,Sinha.B-2014a-Estimation} for each of the four scenarios used. According to the metrics, the ``BDL'', ``used cars'', and ``student records'' scenarios all had similar levels of complexity, while the ``postgrad'' scenario had a complexity score about \(\frac{2}{3}\) that of the other three. It therefore seems unlikely that scenario complexity is a factor in the difference in grades. It's also interesting to note that the ``used cars'' scenario was used in both 2014 and 2015, and that the 2015 results are significantly lower than those for 2014. The only obvious difference here is that our system was not used at all in 2015.
-
-\section{Conclusions \& future work}
-\label{sec-conclusion}
+% Current version doesn't automatically assign marks, but it would be a simple extension to do so. We've already implemented the core functionality to support this.
+% As of 2017, the main introduction to database content and SQL has moved to first year. With class sizes of 100--200, automation of grading is essential. We will look at rolling out a new version of the system to this class in 2018.
 
 
 \bibliographystyle{ACM-Reference-Format}
