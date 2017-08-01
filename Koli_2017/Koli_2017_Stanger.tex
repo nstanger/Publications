@@ -4,6 +4,7 @@
 \usepackage{listings}
 \usepackage{tikz}
 \usepackage{flafter}
+\usepackage{booktabs}
 
 \usetikzlibrary{calc}
 \usetikzlibrary{graphs}
@@ -99,7 +100,7 @@ The most common approach we used to assess SQL DDL skills was a practical assign
 \begin{figure}[hb]
     \centering
     \includegraphics[width=0.85\columnwidth, keepaspectratio]{images/BDL_ERD.pdf} 
-    \caption{ERD of typical database scenario used in assessing SQL DDL skills (Information Engineering notation).}
+    \caption{ERD of typical database scenario (``BDL'') used in assessing SQL DDL skills (Information Engineering notation).}
     \label{fig-ERD}
 \end{figure}
 
@@ -334,18 +335,55 @@ In staff mode, the database login credentials of the teacher doing the grading a
 
 Unfortunately, the system was implemented more as a practical solution to a perceived problem, without consideration for any formal evaluation. We therefore did not carry out any formal evaluations with students.
 
-% We have student results data from before and after the system was implemented, plus remember that the system wasn't used at all in 2015, and the student system wasn't available in 2016 (only the teacher mode was used). 2013 is also somewhat different, in that the proejct specification wasn't stated as being frozen that year.
+However, we did have detailed records of student performance on the relevant assignment, which was of the nature discussed in \cref{sec-motivation}. The assignment was counted for 15\% of the overall grade in 2009 and 2010, and 10\% in the years following.  We extracted data for the period 2009--2016, which encompassed several different permutations of scenario and system components used, as summarised in \cref{tab-data}.
+
+\begin{table}
+    \begin{tabular}{rrrll}
+        \toprule
+                        &   \textbf{Cohort} &   \textbf{Mean}   &                       &   \textbf{Components}  \\
+        \textbf{Year}   &   \textbf{size}   &   \textbf{(\%)}   &   \textbf{Scenario}   &   \textbf{used}\\
+        \midrule
+        2009    &   46  &   77.5    &   ``postgrad''        &   --  \\
+        2010    &   68  &   73.4    &   ``student records'' &   --  \\
+        2011    &   64  &   71.8    &   ``used cars''       &   --  \\
+        \midrule
+        2012    &   75  &   69.2    &   ``BDL''             &   staff   \\
+        2013    &   77  &   84.3    &   ``student records'' &   student/staff \\
+        \midrule
+        2014    &   49  &   77.6    &   ``used cars''       &   student/staff \\
+        2015    &   71  &   69.2    &   ``used cars''       &   --  \\
+        2016    &   75  &   71.0    &   ``BDL''             &   staff   \\
+        \bottomrule
+    \end{tabular}
+    \caption{Characteristics of student grade data.}
+    \label{tab-data}
+\end{table}
+
+The two horizontal rules in \cref{tab-data} indicate two major transitions during this period. The first marks a significant reorgansation of the paper's curriculum (and a switch from first to second semester\footnote{Semesters at the University of Otago run from March to June and July to October.}) in 2012, the year the prototype of our system was developed. The second marks a shift from second semester back to first semester in 2014. Note that the system was not used at all in 2015 due to different staff teaching the paper. The student component was not used in 2016 due to technical issues. This natural experiment provides us with some interesting points for comparison.
+
+Grades for the assignment drifted slowly downwards from 2009 to 2012. This changed dramatically in 2013, however, the year that the student component of our system was introduced. The grades are not normally distributed (they typically have negative skew), so we performed a Wilcoxon signed-rank test to check whether this difference in mean was statistically significant. The difference proved to be highly significant (\(p \approx 10^{-9}\)). The 2013 grades were also significantly higher than those of 2010 (\(p \approx 0.0002\)) and 2011 (\(p \approx 10^{-6}\)), but not significantly higher than 2009. The mean dropped significantly again in 2014, the second year that the system was used (\(p \approx 0.0012\)), and again in 2015 (\(p \approx 0.0005\)), when the system was not used at all. There was no significant change from 2015 to 2016.
+
+More interesting, if we compare the performance between the years that the student component was available (2013--2014, mean 81.7\%) and the years it was not (2009--2012, 2015, 2016, mean 71.6\%), there is again a highly statistically significant difference in the mean (\(p \approx 10^{-8}\)). This suggests that the student component may have had a positive effect on students' ability to complete the assignment more effectively.
+
+\subsection{Potential confounding factors}
+
+2013 was also the first year that the assignment specification was enforced as being ``frozen''. It could be argued that this improved grades due to students having less flexibility, and thus less opportunity for misinterpretation, than in previous years. However, the assignment specification was also ``frozen'' from 2014--2016, and there is notable variation in the grades achieved over this period. It therefore seems unlikely that this is a factor in improved assignment performance.
+
+Results for first semester offerings of the paper (2009--2011 and 2014--2016, mean 72.9\%) were significantly lower (\(p \approx 0.014\)) than those for second semester offerings (2012--2013, mean 76.9\%). However, since the paper was only offered twice in the second semester over this period, this seems unlikely to be cause the difference. The higher results are more likely due to the large jump in grades in 2013, which had the highest grades over the entire period.
+
 % Anecdotal evidence from students?
 
 % known issues:
 % There's currently no control over the messages generated by PHPUnit assertions. You can put a meaningful message up front, but PHPUnit will still always generate something like ``Failed asserting that 0 matches expected 1.'' This can be particularly misleading when you, e.g., don't specify a precision for a numeric column, and the DBMS uses the default precision (e.g., Oracle's NUMBER defaults to 38 significant digits).
 % A partial schema causes a large number of errors, as tables don't exist. This could be alleviated by more careful exception handling?
-% Students in the first iteration tended to misuse the web application as a ``schema compiler'', fixing only one issue before re-submitting, rather than attempting to as many of the reported problems as possible. The system wasn't written to handle concurrent requests (as it wasn't expected that the request rate would be that high), leading to waits and timeouts. A workaround was to enable logging, and warn students who were abusing the system.
+% Students in the first iteration tended to misuse the web application as a ``schema compiler'', fixing only one issue before re-submitting, rather than attempting to fix as many of the reported problems as possible. The system wasn't written to handle concurrent requests (as it wasn't expected that the request rate would be that high), leading to waits and timeouts. A workaround was to enable logging, and warn students who were abusing the system.
+
+Another possibility is that grade performance is related to the complexity of the scenario. We computed a few different database complexity metrics \cite{Jamil.B-2010a-SMARtS,Piattini.M-2001a-Table,Pavlic.M-2008a-Database,Calero.C-2001a-Database,Sinha.B-2014a-Estimation} for each of the four scenarios used. According to the metrics, the ``BDL'', ``used cars'', and ``student records'' scenarios all had similar levels of complexity, while the ``postgrad'' scenario had a complexity score about \(\frac{2}{3}\) that of the other three. It therefore seems unlikely that scenario complexity is a factor in the difference in grades. It's also interesting to note that the ``used cars'' scenario was used in both 2014 and 2015, and that the 2015 results are significantly lower than those for 2014. The only obvious difference here is that our system was not used at all in 2015.
 
 \section{Conclusions \& future work}
 \label{sec-conclusion}
 
-\newpage\mbox{}\newpage
+
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{Koli_2017_Stanger}
 
