@@ -341,22 +341,25 @@ However, we did have accees to data regarding student performance on the relevan
 
 
 \begin{table}
-    \begin{tabular}{rrrll}
+    \begin{tabular}{rrrrll}
         \toprule
-                        &   \textbf{Class}  &   \textbf{Mean}   &                       &   \textbf{Modes}  \\
-        \textbf{Year}   &   \textbf{size}   &   \textbf{(\%)}   &   \textbf{Scenario}   &   \textbf{used}\\
+                &   Class   &   Median                          &   Mean                            &               &   Modes   \\
+        Year    &   size    &   GPA\textsuperscript{\emph{a}}   &   (\%)\textsuperscript{\emph{b}}  &   Scenario    &   used    \\
         \midrule
-        2009    &   46  &   77.5    &   ``postgrad''        &   --  \\
-        2010    &   68  &   73.4    &   ``student records'' &   --  \\
-        2011    &   64  &   71.8    &   ``used cars''       &   --  \\
+        2009    &   46  &   --\textsuperscript{\emph{c}} &   77.5    &   ``postgrad''        &   --  \\
+        2010    &   68  &   3.4 &   73.4    &   ``student records'' &   --  \\
+        2011    &   64  &   3.9 &   71.8    &   ``used cars''       &   --  \\
         \midrule
-        2012    &   75  &   69.2    &   ``BDL''             &   staff   \\
-        2013    &   77  &   84.3    &   ``student records'' &   student/staff \\
+        2012    &   75  &   3.4 &   69.2    &   ``BDL''             &   staff   \\
+        2013    &   77  &   3.2 &   84.3    &   ``student records'' &   both \\
         \midrule
-        2014    &   49  &   77.6    &   ``used cars''       &   student/staff \\
-        2015    &   71  &   69.2    &   ``used cars''       &   --  \\
-        2016    &   75  &   71.0    &   ``BDL''             &   staff   \\
+        2014    &   49  &   3.4 &   77.6    &   ``used cars''       &   both \\
+        2015    &   71  &   3.0 &   69.2    &   ``used cars''       &   neither  \\
+        2016    &   75  &   3.5 &   71.0    &   ``BDL''             &   staff   \\
         \bottomrule
+        \multicolumn{6}{l}{\footnotesize \textsuperscript{\emph{a}} On a 9-point scale where C-- = 1, A+ = 9. Value is for the specified year only.}    \\
+        \multicolumn{6}{l}{\footnotesize \textsuperscript{\emph{b}} For students who submitted the assignment.}    \\
+        \multicolumn{6}{l}{\footnotesize \textsuperscript{\emph{c}} Complete GPA data for 2009 were not available.}    \\
     \end{tabular}
     \caption{Historical characteristics of the database implementation assignment, 2009--2016.}
     \label{tab-data}
@@ -371,21 +374,23 @@ Even more interesting, if we compare the performance between the years that stud
 
 There are some potential confounding factors to consider, however. First, not only was 2013 the first year that student mode was available, it was also the first year that the assignment specification was ``frozen'' (as discussed in \cref{sec-motivation}). It could be argued that this improved grades due to students having less flexibility, and thus less opportunity for misinterpretation, than in previous years. However, the assignment specification was also ``frozen'' from 2014--2016, and there is consderable variation in the grades achieved over this period, especially in 2015. It therefore seems unlikely that this affected assignment performance.
 
-Second, the switch to second semester in 2012--2013 could have negatively impacted students' performance by increasing the length of time between their exposure to basic data management concepts in first year, and their entry into the second year database paper. In effect, they had longer to forget relevant material they learned in first year. If so, we could reasonably expect the grades in second semester offerings of the paper to be lower. However, grades for first semester offerings of the paper (2009--2011 and 2014--2016, mean 72.9\%) were significantly \emph{lower} (\(p \approx 0.014\)) than those for second semester offerings (2012--2013, mean 76.9\%). This should not be surprising, given that 2013 (second semester) had the highest grades of the entire period. This effectively rules out semester changes as a factor in the performance differences.
+Second, the switch to second semester in 2012--2013 could have negatively impacted students' performance by increasing the length of time between their exposure to basic data management concepts in first year, and their entry into the second year database paper. In effect, they had longer to forget relevant material they learned in first year. If so, we could reasonably expect the grades in second semester offerings of the paper to be lower. However, grades for second semester offerings of the paper (2012--2013, mean 76.9\%) were significantly \emph{higher} (\(p \approx 0.015\)) than those for second semester offerings (2009--2011 and 2014--2016, mean 72.9\%). This should not be surprising, given that 2013 (second semester) had the highest grades of the entire period. This effectively rules out semester changes as a factor in the performance differences.
 
-Third, perhaps the years with higher grades used less complex scenarios. To test this, we computed a collection of different database complexity metrics \cite{Jamil.B-2010a-SMARtS,Piattini.M-2001a-Table,Pavlic.M-2008a-Database,Calero.C-2001a-Database,Sinha.B-2014a-Estimation} for each of the four scenarios used across the period. These showed that the ``BDL'', ``used cars'', and ``student records'' scenarios were all of similar complexity, while the ``postgrad'' scenario was much less complex (about \(\frac{2}{3}\)). It therefore seems unlikely that scenario complexity is a factor in the performance differences. It is also interesting to note that the ``used cars'' scenario was used in both 2014 and 2015, and yet the 2015 grades were significantly \emph{lower} than those for 2014. The only clear difference here is that our system was not used in 2015.
+Third, perhaps the years with higher grades used less complex scenarios. To test this, we computed a collection of different database complexity metrics \cite{Jamil.B-2010a-SMARtS,Piattini.M-2001a-Table,Pavlic.M-2008a-Database,Calero.C-2001a-Database,Sinha.B-2014a-Estimation} for each of the four scenarios used across the period. These showed that the ``BDL'', ``used cars'', and ``student records'' scenarios were all of similar complexity, while the ``postgrad'' scenario was about \(\frac{2}{3}\) the complexity of the others. It therefore seems unlikely that scenario complexity is a factor in the performance differences. It is also interesting to note that the ``used cars'' scenario was used in 2014 and 2015, and yet the 2015 grades were significantly \emph{lower} than those for 2014. The only clear difference is that our system was not used in 2015.
 
-Fourth, class size could be a factor. We might plausibly expect a smaller class to have a more collegial atmosphere that promotes mutual collaboration amongst students. However, if we look at the sizes of the classes in \cref{tab-data}, we can see no discernable pattern between class size and performance. Indeed, both the best (2013) and worst (2012, 2015) performances came from classes with similar sizes (75, 77, and 71, respectively).
+Fourth, class size could be a factor. We might plausibly expect a smaller class to have a more collegial atmosphere that promotes better learning. However, if we look at the sizes of the classes in \cref{tab-data}, we can see no discernable pattern between class size and performance. Indeed, both the best (2013) and worst (2012, 2015) performances came from classes of similar size (75, 77, and 71, respectively).
 
-Finally, perhaps the different weightings of the assignment (15\% in 2009--2010 vs.\ 10\% in 2011--2016) affected student motivation. It could be argued that the higher weighting in 2009--2010 provided a greater incentive for students to work more, as the potential reward was greater. If so, we should expect better performance in 2009--2010. Indeed, we do find this: the mean for 2009--2010 is 75.1\%, while that for 2011--2016 is 73.9\%, a statistically significant decrease (\(p \approx 0.034\)). However, this may be misleading, as the mean of the 2011--2016 grades is dragged down considerably by the particularly poor performances in 2012 and 2015. If we exclude these, there is no significant difference between the 10\% and 15\% weightings. This suggests that the weighting of the assignment is not a major factor in grade performance.
+Fifth, it could be that better performance occurred in years where the students were just more capable in general. We obtained GPA data for the students enrolled in each year, and computed the median as an indication of the general capability of the class. Looking at \cref{tab-data}, we can immediately see that the year with the best results (2013) was also the year with the second-lowest median GPA (3.2). Constrast this with the poor performance in 2012, where the median GPA was 3.4. Indeed, in both years that student mode was available, median GPA was lower than many other years, yet performance was better even than years with higher median GPA. This argues against the idea that we simply had a class full of very capable students in the years with better performance.
+
+Finally, perhaps the different weightings of the assignment (15\% in 2009--2010 vs.\ 10\% in 2011--2016) affected student motivation. It could be argued that the higher weighting in 2009--2010 provided a greater incentive for students to work more, as the potential reward was greater. If so, we should expect better performance in 2009--2010. Indeed, we do find this: the mean for 2009--2010 is 75.1\%, while that for 2011--2016 is 73.9\%, a statistically significant decrease (\(p \approx 0.034\)). However, since this change occurred well before our system was even implemented, it cannot be a factor in the improved performance seen in 2013 and 2014.
 
 % Anecdotal evidence from students?
 % Didn't substantially reduce grading time, but did improve consistency, as there was much less opportunity to miss or forget something.
 
 
 
-\section{Conclusions \& future work}
-\label{sec-conclusion}
+\section{Discussion \& future work}
+\label{sec-discussion}
 
 % known issues:
 % There's currently no control over the messages generated by PHPUnit assertions. You can put a meaningful message up front, but PHPUnit will still always generate something like ``Failed asserting that 0 matches expected 1.'' This can be particularly misleading when you, e.g., don't specify a precision for a numeric column, and the DBMS uses the default precision (e.g., Oracle's NUMBER defaults to 38 significant digits).
@@ -393,6 +398,10 @@ Finally, perhaps the different weightings of the assignment (15\% in 2009--2010 
 % Students in the first iteration tended to misuse the web application as a ``schema compiler'', fixing only one issue before re-submitting, rather than attempting to fix as many of the reported problems as possible. The system wasn't written to handle concurrent requests (as it wasn't expected that the request rate would be that high), leading to waits and timeouts. A workaround was to enable logging, and warn students who were abusing the system.
 % Current version doesn't automatically assign marks, but it would be a simple extension to do so. We've already implemented the core functionality to support this.
 % As of 2017, the main introduction to database content and SQL has moved to first year. With class sizes of 100--200, automation of grading is essential. We will look at rolling out a new version of the system to this class in 2018.
+
+
+\section{Conclusion}
+\label{sec-conclusion}
 
 
 \bibliographystyle{ACM-Reference-Format}
