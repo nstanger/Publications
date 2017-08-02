@@ -1,4 +1,5 @@
 \documentclass[sigconf, authordraft, capitalise]{acmart}
+% capitalise option is for cleveref
 
 \usepackage{tcolorbox}
 \usepackage{listings}
@@ -16,8 +17,32 @@
 \lstset{language=PHP,basicstyle=\footnotesize\ttfamily}
 
 
-% \title{(Mis)using unit testing to semi-automatically grade SQL schemas}
-\title{Semi-automated grading of SQL schemas \\ by (mis)use of database unit testing}
+% Copyright
+%\setcopyright{none}
+%\setcopyright{acmcopyright}
+%\setcopyright{acmlicensed}
+\setcopyright{rightsretained}
+%\setcopyright{usgov}
+%\setcopyright{usgovmixed}
+%\setcopyright{cagov}
+%\setcopyright{cagovmixed}
+
+
+% DOI
+\acmDOI{}
+
+% ISBN
+\acmISBN{}
+
+%Conference
+\acmConference[Koli Calling '17]{17th Koli Calling International Conference on Computing Education Research}{November 2017}{Koli, Finland} 
+\acmYear{2017}
+\copyrightyear{2017}
+
+\acmPrice{}
+
+
+\title{Semi-automated grading of SQL \\ schemas using database unit testing}
 \author{Nigel Stanger}
 \orcid{orcid.org/0000-0003-3450-7443}
 \affiliation{
@@ -33,6 +58,44 @@
 \begin{abstract}
     abstract
 \end{abstract}
+
+\begin{CCSXML}
+<ccs2012>
+<concept>
+<concept_id>10003456.10003457.10003527.10003540</concept_id>
+<concept_desc>Social and professional topics~Student assessment</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10002951.10002952.10003197.10010822.10010823</concept_id>
+<concept_desc>Information systems~Structured Query Language</concept_desc>
+<concept_significance>300</concept_significance>
+</concept>
+<concept>
+<concept_id>10002951.10002952.10003190.10003206</concept_id>
+<concept_desc>Information systems~Integrity checking</concept_desc>
+<concept_significance>100</concept_significance>
+</concept>
+<concept>
+<concept_id>10010405.10010489.10010490</concept_id>
+<concept_desc>Applied computing~Computer-assisted instruction</concept_desc>
+<concept_significance>300</concept_significance>
+</concept>
+<concept>
+<concept_id>10011007.10011074.10011099.10011102.10011103</concept_id>
+<concept_desc>Software and its engineering~Software testing and debugging</concept_desc>
+<concept_significance>100</concept_significance>
+</concept>
+</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Social and professional topics~Student assessment}
+\ccsdesc[300]{Information systems~Structured Query Language}
+\ccsdesc[100]{Information systems~Integrity checking}
+\ccsdesc[300]{Applied computing~Computer-assisted instruction}
+\ccsdesc[100]{Software and its engineering~Software testing and debugging}
+
+\keywords{automated grading, SQL, database schema, data definition language (DDL), student performance, unit testing}
 
 \maketitle
 
@@ -85,7 +148,7 @@ There is relatively little work on unit testing of databases. Most authors worki
 
 To our knowledge there has been no work on automated grading of SQL DDL statements. While dealing with these is simpler than dealing with \emph{SELECT} statements, the ability to at least semi-automate the grading of SQL schema definitions should reap rewards in terms of more consistent application of grading criteria, and faster turnaround time.
 
-Only a couple of the systems discussed in this section [which?] have considered a more ``functional'' approach to checking SQL code, i.e., verifying that the code written fulfills the requirements of the problem, rather than focusing on the code itself. Given the relatively static nature of an SQL schema, we feel this is the most appropriate way of approaching an automated grading system. This sounds like it should be a useful application of formal methods \cite{Spivey.J-1989a-An-introduction}, but work with formal methods and databases has mainly focused either on \emph{generating} a valid schema from a specification (e.g., \cite{Vatanawood.W-2004a-Formal,Lukovic.I-2003a-Proceedings,Choppella.V-2006a-Constructing}), or on verifying schema transformation and evolution \cite{Bench-Capon.T-1998a-Report}.
+Several of the systems discussed in this section \cite{Sadiq.S-2004a-SQLator,Prior.J-2004a-Backwash,Russell.G-2004a-Improving,Dekeyser.S-2007a-Computer,Kleiner.C-2013a-Automated} have considered a more ``functional'' approach to checking SQL code, i.e., verifying that the code written fulfills the requirements of the problem, rather than focusing on the code itself. Mainly this has focused on how much the result set of a student's query differs from the correct result set. Given the relatively static nature of an SQL schema, we feel this verification approach is the most appropriate way of approaching an automated grading system. This sounds like it should be a useful application of formal methods \cite{Spivey.J-1989a-An-introduction}, but work with formal methods and databases has mainly focused either on \emph{generating} a valid schema from a specification (e.g., \cite{Vatanawood.W-2004a-Formal,Lukovic.I-2003a-Proceedings,Choppella.V-2006a-Constructing}), or on verifying schema transformation and evolution \cite{Bench-Capon.T-1998a-Report}.
 
 
 \section{Motivation}
