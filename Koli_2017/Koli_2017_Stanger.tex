@@ -4,7 +4,7 @@
 \usepackage{tcolorbox}
 \usepackage{listings}
 \usepackage{tikz}
-\usepackage{flafter}
+% \usepackage{flafter}
 \usepackage{booktabs}
 
 \usetikzlibrary{calc}
@@ -14,7 +14,7 @@
 \usetikzlibrary{arrows.meta}
 
 \lstloadlanguages{PHP}
-\lstset{language=PHP,basicstyle=\footnotesize\ttfamily}
+\lstset{language=PHP,basicstyle=\small\ttfamily}
 
 
 % Copyright
@@ -56,7 +56,7 @@
 \begin{document}
 
 \begin{abstract}
-    abstract
+    A key skill that students must learn when studying relational database concepts is how to design and implement a database schema in SQL. This skill is often tested using an assignment where students create an SQL schema derived from a natural language specification. Grading of such assignments can be complex and time-consuming, and novice database students often lack the skills to evaluate whether their implementation accurately reflects the specification's requirements. In this paper we describe a novel semi-automated system for grading student-created SQL schemas, based on a unit testing model. The system verifies whether the schema conforms to a machine-readable version of the specification, and runs in two modes: a staff mode for grading, and a reduced functionality student mode that students can use to check whether their schema meets minimum requirements. Analysis of student performance over the period this system was in use appears to show improved grades as a result of students using the system.
 \end{abstract}
 
 \begin{CCSXML}
@@ -245,9 +245,8 @@ The assignment specification (\textsf{Assign.\ spec.} in \cref{fig-architecture}
 
 
 \begin{table}
-    \footnotesize
-    \hrule
-    \begin{verbatim}
+%     \hrule
+    \begin{lstlisting}
 public function getTableName() {
   return 'PRODUCT';
 }
@@ -257,24 +256,35 @@ public function getColumnList() {
     'PRODUCT_CODE' => array(
       'generic_type' => 'NUMBER',
       'sql_type' => array('NUMBER', 'INTEGER'),
-      'min_length' => 8, 'max_length' => 8, 'decimals' => 0,
-      'test_value' => 87654321, 'nullable' => false),
+      'min_length' => 8,
+      'max_length' => 8,
+      'decimals' => 0,
+      'test_value' => 87654321,
+      'nullable' => false),
     'DESCRIPTION' => array( ... ),
     'STOCK_COUNT' => array(
       'generic_type' => 'NUMBER',
       'sql_type' => array('NUMBER', 'INTEGER'),
-      'min_length' => 5, 'max_length' => 6, 'decimals' => 0,
-      'underflow' => -1, 'overflow' => 100000,
-      'legal_values' => array(0, 99999), 'test_value' => 456,
+      'min_length' => 5,
+      'max_length' => 6,
+      'decimals' => 0,
+      'underflow' => -1,
+      'overflow' => 100000,
+      'legal_values' => array(0, 99999),
+      'test_value' => 456,
       'nullable' => false),
     'RESTOCK_LEVEL' => array( ... ),
     'MINIMUM_LEVEL' => array( ... ),
     'LIST_PRICE' => array(
       'generic_type' => 'NUMBER',
       'sql_type' => array('NUMBER', 'INTEGER'),
-      'min_length' => 7, 'max_length' => 8, 'decimals' => 2,
-      'underflow' => -0.01, 'overflow' => 100000.00,
-      'legal_values' => array(0, 99999.99), 'test_value' => 123.99,
+      'min_length' => 7,
+      'max_length' => 8,
+      'decimals' => 2,
+      'underflow' => -0.01,
+      'overflow' => 100000.00,
+      'legal_values' => array(0, 99999.99),
+      'test_value' => 123.99,
       'nullable' =>  false),
     'ASSEMBLY_MANUAL' => array(
       'generic_type' => 'BINARY',
@@ -291,8 +301,8 @@ public function getPKColumnList() {
 
 public function getFKColumnList() {
   return array();   // no FKs in this table
-}   \end{verbatim}
-    \vskip2pt\hrule\vskip2pt
+}   \end{lstlisting}
+    \vskip2pt%\hrule\vskip2pt
     \caption{Fragment of the \textsf{Product} table specification.}
     \label{fig-test-class}
 \end{table}
@@ -302,9 +312,23 @@ Each table specification also requires the definition of two distinct sets of te
 
 The second set of tests verifies the integrity elements of the table, i.e., it's constraints. The only integrity constraints that are directly tested are nullability (\texttt{NOT NULL}), and primary and foreign keys, which are again verified using queries against the schema metadata. The remaining constraints are tested behaviorally by inserting lists of known legal and illegal values, an approach consistent with normal unit testing practice. When in staff mode, both this set of tests and the set of structural tests are run. A known-valid data fixture is also required to support this set of tests.
 
+
+\begin{figure}
+    \includegraphics[width=0.95\columnwidth,keepaspectratio]{images/web_output.png}
+    \caption{Example of student mode output (web app).}
+    \label{fig-student-output}
+\end{figure}
+
+
 The way that the system runs the tests is somewhat unusual. In typical unit testing, the tests are essentially standalone code units that are automatically executed in an indeterminate order by the unit testing framework. The framework handles dependencies and collation of test results internally, reporting only the final results back to the client. Our system effectively inverts (or perhaps subverts) this approach. The main driver explicitly creates test suites itself and executes them directly, listening for the results of each test and collating them. This is because we need to be able to control the order in which tests are executed. If the structural tests fail, there is little point in running the integrity tests, as they will only generate a stream of errors. Similarly, if a column is missing, there is no point in running the data type and length tests.
 
 It is quite feasible to add table properties and tests beyond those already mentioned, as the coding of the specification is entirely under the teacher's control and not constrained in any way by the system. All the teacher needs to do is add the custom properties to the table specification, and add tests that use those properties.
+
+Students can check their schema (\textsf{Student's schema} in \cref{fig-architecture}) by loading it under their personal database account (thus creating the tables), then entering their database login credentials into a web application (\textsf{Web app} in \cref{fig-architecture}). This calls the main driver in student mode and accesses the student's schema directly. Only the structural tests are run, and the output is displayed in the web browser. \Cref{fig-student-output} shows an example of the output produced by student mode.
+
+A teacher can check further aspects of a students schema using staff mode (\textsf{Console app} in \cref{fig-architecture}). To ensure a clean testing environment, the teacher does not connect directly to the student's database account (the student may continue using it for other coursework, for example). Instead, the teacher uses the student's submitted code to create a copy of the schema under a separate account used only for grading purposes. The login credentials for this account are specified in the console application's configuration file.
+
+Assuming that there are no syntax errors in the student's code,\footnote{If there are, then the student clearly has not met the minimum requirements!} the teacher then runs the console application, which calls the main driver in staff mode. The main driver connects to the teacher's schema, runs all the available tests, and displays the output in the terminal window. \Cref{fig-staff-output} shows an example of the output produced by staff mode.
 
 
 % ANSI terminal colours for Terminal.app; see https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
@@ -316,23 +340,6 @@ It is quite feasible to add table properties and tests beyond those already ment
 \definecolor{test red}{rgb}{0.761,0.212,0.129}
 
 \tcbset{boxsep=0pt, boxrule=0pt, arc=0pt, left=0pt, right=0pt, top=0.5pt, bottom=0.5pt}
-
-
-Students can check their schema (\textsf{Student's schema} in \cref{fig-architecture}) by loading it under their personal database account (thus creating the tables), then entering their database login credentials into a web application (\textsf{Web app} in \cref{fig-architecture}). This calls the main driver in student mode and accesses the student's schema directly. Only the structural tests are run, and the output is displayed in the web browser. \Cref{fig-student-output} shows an example of the output produced by student mode.
-
-
-\begin{figure}
-    \includegraphics[width=0.95\columnwidth,keepaspectratio]{images/web_output.png}
-    \caption{Example of student mode output (web app). \textcolor{gray}{Gray} indicates informative notes, \textcolor{green!45!black}{green} indicates passed tests, and \textcolor{red!90!black}{red} indicates failed tests.}
-    \label{fig-student-output}
-\end{figure}
-
-
-
-A teacher can check further aspects of a students schema using staff mode (\textsf{Console app} in \cref{fig-architecture}). To ensure a clean testing environment, the teacher does not connect directly to the student's database account (the student may continue using it for other coursework, for example). Instead, the teacher uses the student's submitted code to create a copy of the schema under a separate account used only for grading purposes. The login credentials for this account are specified in the console application's configuration file.
-
-Assuming that there are no syntax errors in the student's code,\footnote{If there are, then the student clearly has not met the minimum requirements!} the teacher then runs the console application, which calls the main driver in staff mode. The main driver connects to the teacher's schema, runs all the available tests, and displays the output in the terminal window. \Cref{fig-staff-output} shows an example of the output produced by staff mode.
-
 
 \newlength{\dothskip}
 \setlength{\dothskip}{0.72cm}
