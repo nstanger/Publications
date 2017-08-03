@@ -455,7 +455,25 @@ Second, the observed effect may be due to the imposition of minimum requirements
 
 Third, the switch to second semester in 2012--2013 could have negatively impacted students' performance by increasing the length of time between their exposure to basic data management concepts in first year, and their entry into the second year database course. In effect, they had longer to forget relevant material they learned in first year. If so, we could reasonably expect the grades in second semester offerings of the course to be lower. However, grades for second semester offerings of the course (2012--2013, mean 76.9\%) were significantly \emph{higher} (\(p \approx 0.015\)) than those for first semester offerings (2009--2011 and 2014--2016, mean 72.9\%). This should not be surprising, given that 2013 (second semester) had the highest grades overall. This effectively rules out semester changes as a factor.
 
-Fourth, perhaps the years with higher grades used less complex scenarios. To test this, we computed a collection of different database complexity metrics \cite{Jamil.B-2010a-SMARtS,Piattini.M-2001a-Table,Pavlic.M-2008a-Database,Calero.C-2001a-Database,Sinha.B-2014a-Estimation} for each of the four scenarios used across the period. These showed that the ``BDL'', ``used cars'', and ``student records'' scenarios were all of similar complexity, while the ``postgrad'' scenario was about \(\frac{2}{3}\) the complexity of the others. It therefore seems unlikely that scenario complexity is a factor in performance differences. It is also interesting to note that the ``used cars'' scenario was used in 2014 and 2015, and yet the 2015 grades were significantly \emph{lower} than those for 2014. The only clear difference here is that our system was not used in 2015.
+Fourth, perhaps the years with higher grades used less complex---and therefore easier---scenarios. To test this, we computed the following database complexity metrics for each of the four scenarios used: database complexity index (DCI) \cite{Sinha.B-2014a-Estimation}; referential degree (RD), depth of referential tree (DRT), and number of attributes (NA) \cite{Calero.C-2001a-Database,Piattini.M-2001a-Table}; database complexity (DC) \cite{Pavlic.M-2008a-Database}; and ``Software Metric Analyzer for Relational Database Systems'' (SMARtS)
+\cite{Jamil.B-2010a-SMARtS}. The results are shown in \cref{tab-metrics}. All but the DRT metric showed that the ``BDL'', ``used cars'', and ``student records'' scenarios were of comparable complexity, while the ``postgrad'' scenario was less complex. It therefore seems unlikely that scenario complexity is a factor in the performance differences. It is also interesting to note that the ``used cars'' scenario was used in 2014 and 2015, and yet the 2015 grades were significantly \emph{lower} than those for 2014. The only clear difference here is that our system was not used in 2015.
+
+
+\begin{table}
+    \begin{tabular}{lrrrrrr}
+        \toprule
+            Scenario            &   DCI &   RD  &   NA  &   DRT &   DC  &   SMARtS  \\
+            \midrule
+            ``postgrad''        &   277 &   9   &   32  &   7   &   37  &   28.75   \\
+            ``student records'' &   367 &   12  &   43  &   9   &   61  &   38.25   \\
+            ``BDL''             &   370 &   11  &   50  &   8   &   59  &   40.75   \\
+            ``used cars''       &   380 &   13  &   46  &   7   &   53  &   36.50    \\
+        \bottomrule
+    \end{tabular}
+    \caption{Database complexity metrics for the scenarios used over the period 2009--2016.}
+    \label{tab-metrics}
+\end{table}
+
 
 Fifth, class size could be a factor. We might plausibly expect a smaller class to have a more collegial atmosphere that promotes better learning. However, if we look at the sizes of the classes in \cref{tab-data}, we can see no discernible pattern between class size and performance. Indeed, both the best (2013) and worst (2012, 2015) performances came from classes of similar size (75, 77, and 71, respectively).
 
