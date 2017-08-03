@@ -249,8 +249,7 @@ The assignment specification (\textsf{Assign.\ spec.} in \cref{fig-architecture}
 \end{description}
 
 
-\begin{table}
-%     \hrule
+\begin{figure}
     \begin{lstlisting}
 public function getTableName() {
   return 'PRODUCT';
@@ -307,10 +306,9 @@ public function getPKColumnList() {
 public function getFKColumnList() {
   return array();   // no FKs in this table
 }   \end{lstlisting}
-    \vskip2pt%\hrule\vskip2pt
     \caption{Fragment of the \textsf{Product} table specification.}
     \label{fig-test-class}
-\end{table}
+\end{figure}
 
 
 Each table specification also requires the definition of two distinct sets of tests that will be run on the database. The first set verifies the structural elements of the table (columns, data types, etc.), thus verifying that a schema meets the minimum requirements of the assignment. This is done by issuing queries against the metadata (catalog) of the schema for elements like tables, columns, and data types. When in student mode, only this set of tests is run. An empty data fixture (specified using a separate XML document) is also required to support this set of tests.
@@ -420,6 +418,8 @@ We were able, however, to analyse whether use of the system had any impact on st
 
 
 \begin{table}
+    \caption{Historical characteristics of the database implementation assignment, 2009--2016.}
+    \label{tab-data}
     \begin{tabular}{rrrrll}
         \toprule
                 &   Class   &   Median                          &   Mean                            &               &   Modes   \\
@@ -440,8 +440,6 @@ We were able, however, to analyse whether use of the system had any impact on st
         \multicolumn{6}{l}{\footnotesize \textsuperscript{\emph{b}} For students who submitted the assignment.}    \\
         \multicolumn{6}{l}{\footnotesize \textsuperscript{\emph{c}} Complete GPA data for 2009 were not available.}    \\
     \end{tabular}
-    \caption{Historical characteristics of the database implementation assignment, 2009--2016.}
-    \label{tab-data}
 \end{table}
 
 
@@ -462,6 +460,8 @@ Fourth, perhaps the years with higher grades used less complex---and therefore e
 
 
 \begin{table}
+    \caption{Database complexity metrics for the scenarios used over the period 2009--2016.}
+    \label{tab-metrics}
     \begin{tabular}{lrrrrrr}
         \toprule
             Scenario            &   DCI &   RD  &   NA  &   DRT &   DC  &   SMARtS  \\
@@ -472,8 +472,6 @@ Fourth, perhaps the years with higher grades used less complex---and therefore e
             ``used cars''       &   380 &   13  &   46  &   7   &   53  &   36.50    \\
         \bottomrule
     \end{tabular}
-    \caption{Database complexity metrics for the scenarios used over the period 2009--2016.}
-    \label{tab-metrics}
 \end{table}
 
 
