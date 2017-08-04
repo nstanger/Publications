@@ -17,6 +17,11 @@
 \lstloadlanguages{PHP}
 \lstset{language=PHP,basicstyle=\small\ttfamily}
 
+\newcommand{\anoninstitution}{Anonymous Institution}
+% \newcommand{\anoninstitution}{University of Otago}
+\newcommand{\anoncountry}{Anonymous Country}
+% \newcommand{\anoncountry}{New Zealand}
+
 
 % Copyright
 %\setcopyright{none}
@@ -139,7 +144,7 @@ There is relatively little prior work on unit testing of databases. Most authors
 \section{Motivation}
 \label{sec-motivation}
 
-Since 1989, our department has offered some form of mandatory database concepts course, typically one semester during the second year\footnote{New Zealand Bachelor's degrees normally comprise three years of study.} of study, building on a short introduction to basic data management concepts in the first year. Typical of courses of this nature, it covered core topics such as the relational model, relational algebra, data integrity, SQL DDL and DML, and a varying mixture of other database topics such as transactions, concurrency control, triggers, and security. Assessment of SQL skills was typically carried out using a mixture of assignments and tests.
+Since 1989, our department has offered some form of mandatory database concepts course, typically one semester during the second year\footnote{\anoncountry\ Bachelor's degrees normally comprise three years of study.} of study, building on a short introduction to basic data management concepts in the first year. Typical of courses of this nature, it covered core topics such as the relational model, relational algebra, data integrity, SQL DDL and DML, and a varying mixture of other database topics such as transactions, concurrency control, triggers, and security. Assessment of SQL skills was typically carried out using a mixture of assignments and tests.
 
 From 2001 to 2003, we assessed students' SQL DDL skills with an in-lab practical examination. Students were given a fictional scenario specification, and had 100 minutes in which to modify a provided schema template with additional tables, constraints, etc. The test was generally easier to grade than the more ``realistic'' practical assignment that we had used in earlier years, as the scenario specification tended to be quite tightly specified and thus less open to (mis)interpretation. However, the test experience was quite stressful to students due to the limited timeframe and limited access to online references. We did not attempt to automate the grading of these tests.
 
@@ -435,7 +440,7 @@ However, we were able to analyze whether use of the system had any impact on stu
 \end{figure}
 
 
-The horizontal rule in \cref{tab-data} between 2011 and 2012 marks a significant reorganization of the course's curriculum, and also a switch from first to second semester.\footnote{First semester at the University of Otago runs from March to June, second semester from July to October.} (2012 was also the year we deployed the first prototype of staff mode.) The horizontal rule between 2013 and 2014 marks a shift from second semester back to first semester. The system was not used at all in 2015 due to different staff teaching the course, and student mode was not made available in 2016 due to technical issues delaying its deployment beyond the point where it would be useful. These differences have provided us with a natural experiment with some interesting points for comparison.
+The horizontal rule in \cref{tab-data} between 2011 and 2012 marks a significant reorganization of the course's curriculum, and also a switch from first to second semester.\footnote{First semester at the \anoninstitution\ runs from March to June, second semester from July to October.} (2012 was also the year we deployed the first prototype of staff mode.) The horizontal rule between 2013 and 2014 marks a shift from second semester back to first semester. The system was not used at all in 2015 due to different staff teaching the course, and student mode was not made available in 2016 due to technical issues delaying its deployment beyond the point where it would be useful. These differences have provided us with a natural experiment with some interesting points for comparison.
 
 The mean grade for the assignment drifted slowly downwards from 2009 to 2012. This reversed dramatically in 2013, however, the year we first deployed student mode. As can be seen in \cref{fig-distributions}, the grades are not normally distributed (they typically have negative skew), so we used a Mann-Whitney \emph{U} test to determine whether the increase in mean from 2012 to 2013 was statistically significant. This showed that the increase was highly significant (\(p \approx 10^{-9}\)). The 2013 mean was also significantly higher than both 2010 (\(p \approx 0.0002\)) and 2011 (\(p \approx 10^{-6}\)), but not significantly higher than 2009. The mean decreased significantly again in 2014 (\(p \approx 0.0012\)), the second year that the system was used, and even more dramatically in 2015 (\(p \approx 0.0005\)), when the system was not used at all. The increase from 2015 to 2016 was not significant.
 
