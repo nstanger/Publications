@@ -6,6 +6,7 @@
 \usepackage{tikz}
 % \usepackage{flafter}
 \usepackage{booktabs}
+\usepackage{subfig}
 
 \usetikzlibrary{calc}
 \usetikzlibrary{graphs}
@@ -414,7 +415,7 @@ Unfortunately, the system was conceived as a practical solution to a perceived t
 
 From the perspective of the teaching staff, we found that the total amount of time taken to grade the relevant assignment was reduced only a little, as the system only semi-automated the grading process, and we still needed to convert the system's output into corresponding grades and meaningful feedback (see \cref{sec-issues} for further discussion of this). There was also a surprising number of submissions that did not meet the minimum requirements and thus had to be manually graded. On a more positive note, the system did automatically ensure that all gradable elements were checked, which improved consistency, and made the subjective experience of grading much less painful.
 
-We were able, however, to analyse whether use of the system had any impact on student performance in the relevant assignment, as we had extensive historical data of student grades. We collated data for the period 2009--2016 (there are no data for 2017 because the course has been discontinued; see \cref{sec-issues}), which encompassed several different permutations of scenario and available system modes, as summarized in \cref{tab-data}. The assignment counted for 15\% of a student's total grade in 2009 and 2010, and 10\% in subsequent years.
+We were able, however, to analyse whether use of the system had any impact on student performance in the relevant assignment, as we had extensive historical data of student grades. We collated data for the period 2009--2016 (there are no data for 2017 because the course has been discontinued; see \cref{sec-issues}), which encompassed several different permutations of scenario and available system modes, as summarized in \cref{tab-data}. The assignment counted for 15\% of a student's total grade in 2009 and 2010, and 10\% in subsequent years. The grade distributions for the assignment in each year are shown in \cref{fig-distributions}.
 
 
 \begin{table}
@@ -443,11 +444,28 @@ We were able, however, to analyse whether use of the system had any impact on st
 \end{table}
 
 
+\begin{figure}
+    \includegraphics[width=\columnwidth,keepaspectratio]{grades_all_years.pdf}
+    \caption{Comparison of grade distributions for database assignment, 2009--2016.}
+    \label{fig-distributions}
+\end{figure}
+
+
 The horizontal rule in \cref{tab-data} between 2011 and 2012 marks a significant reorganization of the course's curriculum, and also a switch from first to second semester.\footnote{First semester at the University of Otago runs from March to June, second semester from July to October.} (2012 was also the year we deployed the first prototype of staff mode.) The horizontal rule between 2013 and 2014 marks a shift from second semester back to first semester. The system was not used at all in 2015 due to different staff teaching the course, and student mode was not made available in 2016 due to technical issues delaying its deployment beyond the point where it would be useful. These differences have provided us with a natural experiment with some interesting points for comparison.
 
 The mean grade for the assignment drifted slowly downwards from 2009 to 2012. This reversed dramatically in 2013, however, the year we first deployed student mode. The grades are not normally distributed (they typically have negative skew), so we used a Mann-Whitney \emph{U} test to determine whether the increase in mean from 2012 to 2013 was statistically significant. This showed that the increase was highly significant (\(p \approx 10^{-9}\)). The 2013 mean was also significantly higher than both 2010 (\(p \approx 0.0002\)) and 2011 (\(p \approx 10^{-6}\)), but not significantly higher than 2009. The mean decreased significantly again in 2014 (\(p \approx 0.0012\)), the second year that the system was used, and even more dramatically in 2015 (\(p \approx 0.0005\)), when the system was not used at all. The change from 2015 to 2016 was not significant.
 
-Even more interesting, if we compare the performance between the years that student mode was not available (2009--2012 and 2015--2016, mean 71.6\%) and the years it was (2013--2014, mean 81.7\%), there is again a highly statistically significant increase in the mean (\(p \approx 10^{-8}\)). This strongly suggests that the introduction of student mode had a positive impact on students' ability to complete the assignment more effectively.
+Even more interesting, if we compare the performance between the years that student mode was not available (2009--2012 and 2015--2016, mean 71.6\%) and the years it was (2013--2014, mean 81.7\%), there is again a highly statistically significant increase in the mean (\(p \approx 10^{-8}\)). This difference is strikingly illustrated in \cref{fig-distribution-comparison}, which compares the grade distributions for both periods. During the period that student mode was available, the lowest grade awarded was 46\%, contrasted with a much longer tail of lower grades when student mode was not available. This strongly suggests that the introduction of student mode had a positive impact on students' ability to complete the assignment more effectively.
+
+
+\begin{figure*}
+    \centering
+    \subfloat[]{\includegraphics[trim=0 0 0 72,scale=0.6]{grades_without_student_mode.pdf}} \qquad
+    \subfloat[]{\includegraphics[trim=0 0 0 72,scale=0.6]{grades_with_student_mode.pdf}}
+    \caption{Comparison of grade distributions (a) without student mode, (b) with student mode.}
+    \label{fig-distribution-comparison}
+\end{figure*}
+
 
 There are some potential confounding factors to consider, however. First, not only was 2013 the first year that student mode was available, it was also the first year that the assignment specification was ``frozen'' (as discussed in \cref{sec-motivation}). It could be argued that this improved grades due to students having less flexibility, and thus less opportunity for misinterpretation, than in previous years. However, the assignment specification was also ``frozen'' in all subsequent years, and there is considerable variation in the grades achieved over this period, especially in 2015. It therefore seems unlikely that this was a factor in student performance.
 
